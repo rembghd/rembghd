@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Ultra Pro - Zero Edge Fix</title>
+    <title>RemBghd Ultra Pro - Edge Fix</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #050a14; }
@@ -33,7 +33,7 @@
 
         <div class="grid" id="pGrid">
             <div><p style="font-size:10px; color:#64748b;">ORIGINAL</p><img id="vOriginal"></div>
-            <div><p style="font-size:10px; color:#64748b;">ULTRA HD</p><canvas id="vCanvas"></canvas></div>
+            <div><p style="font-size:10px; color:#64748b;">HD RESULT</p><canvas id="vCanvas"></canvas></div>
         </div>
 
         <div class="controls" id="ctrlPanel">
@@ -73,16 +73,15 @@
             const s = document.getElementById('sharpSlider').value;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Step 1: Create a Shrinked (Eroded) Mask to kill black edges
+            // ARM FIX: Shrinking the mask edges to remove background bleed
             const mCanvas = document.createElement('canvas');
             mCanvas.width = canvas.width; mCanvas.height = canvas.height;
             const mCtx = mCanvas.getContext('2d');
             
-            // Contrast(2.5) mask ko andar shrink kar deta hai, black line khatam ho jati hai
-            mCtx.filter = 'blur(1.2px) contrast(2.5) brightness(0.9)'; 
+            // Contrast(2.8) mask ko andar shrink kar deta hai, black line khatam ho jati hai
+            mCtx.filter = 'blur(1.5px) contrast(2.8) brightness(0.9)'; 
             mCtx.drawImage(rawMask, 0, 0, canvas.width, canvas.height);
 
-            // Step 2: Main Composition
             const temp = document.createElement('canvas');
             temp.width = canvas.width; temp.height = canvas.height;
             const tCtx = temp.getContext('2d');
@@ -96,21 +95,3 @@
         }
 
         dropZone.onclick = () => fileIn.click();
-
-        fileIn.onchange = (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            status.innerText = "Analyzing Pixels...";
-            const url = URL.createObjectURL(file);
-            document.getElementById('vOriginal').src = url;
-            const img = new Image();
-            img.src = url;
-            img.onload = () => ai.send({image: img});
-        };
-
-        document.getElementById('sharpSlider').oninput = drawFinal;
-
-        function downloadImg() {
-            const link = document.createElement('a');
-            link.download = `rembghd_final_${Date.now()}.png`;
-            link.href = canvas.toDataURL();
