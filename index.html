@@ -11,7 +11,7 @@
             --dark-bg: #0b0f19; 
         }
         
-        /* Poori screen ko black kar diya */
+        /* Full Black Background for PC and Mobile */
         body { 
             margin: 0; 
             padding: 0; 
@@ -23,7 +23,7 @@
         }
         
         header { 
-            padding: 20px 0 30px 0; 
+            padding: 20px 0 25px 0; 
             background: var(--dark-bg); 
         }
         .logo-text { 
@@ -40,34 +40,35 @@
         }
 
         .main-container { 
-            max-width: 1100px; 
+            max-width: 1150px; 
             margin: 0 auto; 
             padding: 0 10px; 
         }
         
+        /* Tool card box with shadow */
         .tool-card { 
             width: 100%; 
-            height: 850px; 
+            height: 880px; /* Increased height for PC view */
             background: #111827; 
             border-radius: 28px; 
             overflow: hidden; 
             margin-bottom: 60px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             border: 1px solid #1f2937;
         }
         
         iframe { 
             width: 100%; 
-            height: 1400px; 
+            height: 1500px; 
             border: none; 
-            /* PC par faltu text hide karne aur shade dikhane ki setting */
-            margin-top: -155px; 
+            /* PC Settings: Text hide karne aur frame niche karne ke liye */
+            margin-top: -160px; 
             background: #111827;
         }
 
-        /* MOBILE SETTING (NO CHANGES - AS REQUESTED) */
+        /* MOBILE SETTING (NO CHANGES - STAYING PERFECT) */
         @media (max-width: 600px) {
-            header { padding: 15px 0 25px 0; }
+            header { padding: 15px 0 20px 0; }
             .logo-text { font-size: 40px; }
             
             .tool-card { 
@@ -102,7 +103,7 @@
 
     <footer>
         <p style="color:var(--gold); font-weight:700; margin-bottom:10px;">RembgHD Premium AI</p>
-        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Quality Guaranteed</p>
+        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | AI Background Removal</p>
     </footer>
 
 </body>
