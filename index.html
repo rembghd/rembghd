@@ -3,82 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd - AI Background Remover</title>
+    <title>rembghd Pro - Smooth Edges</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
         :root { --blue: #007bff; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fff; overflow-x: hidden; }
         .nav { padding: 30px 60px; }
         .logo { font-size: 26px; font-weight: 900; color: #000; text-decoration: none; }
-
         .hero { display: flex; align-items: center; justify-content: center; gap: 60px; max-width: 1200px; margin: 0 auto; min-height: 85vh; padding: 20px; }
-        
         .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
-        .window { 
-            width: 500px; height: 350px; background: #fff; position: relative; 
-            border-radius: 28px; overflow: hidden; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.06);
-        }
-        
-        /* Permanent Checkerboard Background */
-        .checker { 
-            position: absolute; width: 100%; height: 100%; z-index: 1;
-            background-image: linear-gradient(45deg, #f2f2f2 25%, transparent 25%), linear-gradient(-45deg, #f2f2f2 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f2f2f2 75%), linear-gradient(-45deg, transparent 75%, #f2f2f2 75%);
-            background-size: 20px 20px;
-        }
-        
-        /* Container for the image and its white background toggle */
-        .demo-wrap {
-            width: 100%; height: 100%; position: absolute; z-index: 3;
-            display: flex; align-items: center; justify-content: center;
-            background-color: #ffffff; /* This is what we animate */
-        }
-
-        /* The Animation that removes the background */
+        .window { width: 500px; height: 380px; background: #fff; position: relative; border-radius: 28px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 45px rgba(0,0,0,0.06); }
+        .checker { position: absolute; width: 100%; height: 100%; z-index: 1; background-image: linear-gradient(45deg, #f2f2f2 25%, transparent 25%), linear-gradient(-45deg, #f2f2f2 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f2f2f2 75%), linear-gradient(-45deg, transparent 75%, #f2f2f2 75%); background-size: 20px 20px; }
+        .demo-wrap { width: 100%; height: 100%; position: absolute; z-index: 3; display: flex; align-items: center; justify-content: center; background-color: #ffffff; }
         .looping .demo-wrap { animation: removeBg 2.5s infinite alternate ease-in-out; }
-
-        @keyframes removeBg {
-            0%, 40% { background-color: #ffffff; }
-            60%, 100% { background-color: transparent; }
-        }
-
-        /* Using a stable placeholder that will show even if link fails */
+        @keyframes removeBg { 0%, 40% { background-color: #ffffff; } 60%, 100% { background-color: transparent; } }
         .demo-img { max-width: 80%; max-height: 80%; object-fit: contain; }
-
         .upload-side { flex: 1; }
-        h1 { font-size: 64px; font-weight: 800; line-height: 1.05; margin-bottom: 30px; color: #1a1a1a; }
+        h1 { font-size: 64px; font-weight: 800; line-height: 1.05; margin-bottom: 30px; }
         .upload-card { background: #fff; padding: 50px 40px; border-radius: 35px; border: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; }
-        .upload-btn { background: var(--blue); color: #fff; padding: 22px 65px; border-radius: 50px; font-size: 24px; font-weight: 700; cursor: pointer; width: 100%; text-align: center; border: none; }
-        
+        .upload-btn { background: var(--blue); color: #fff; padding: 20px 60px; border-radius: 50px; font-size: 24px; font-weight: 700; cursor: pointer; width: 100%; text-align: center; border: none; }
         .status-msg { margin-top: 20px; font-size: 11px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 2px; }
         canvas { max-width: 100%; max-height: 100%; position: absolute; z-index: 10; display: none; }
         #dlBtn { margin-top: 20px; background: #000; color: #fff; padding: 14px 40px; border-radius: 50px; cursor: pointer; border: none; font-weight: 700; display: none; width: 100%; }
     </style>
 </head>
 <body>
-
     <div class="nav"><a href="#" class="logo">rembghd</a></div>
-
     <div class="hero">
         <div class="image-side">
             <div class="window looping" id="mainBox">
                 <div class="checker"></div>
                 <div class="demo-wrap" id="demoLayer">
-                    <img class="demo-img" src="https://www.remove.bg/images/samples/combined/woman-1.jpg" onerror="this.src='https://via.placeholder.com/300x400?text=Demo+Image'">
+                    <img class="demo-img" src="https://www.remove.bg/images/samples/combined/woman-1.jpg">
                 </div>
                 <canvas id="resCanvas"></canvas>
             </div>
-            <div class="status-msg" id="status">Demo Mode Active</div>
+            <div id="status" class="status-msg">Demo Mode</div>
         </div>
-
         <div class="upload-side">
-            <h1>Remove Image<br>Background</h1>
+            <h1>Smooth Edge<br>AI Remover</h1>
             <div class="upload-card">
-                <label class="upload-btn">
-                    Upload Image
-                    <input type="file" id="inp" hidden accept="image/*">
-                </label>
-                <button id="dlBtn" onclick="download()">Download Result</button>
+                <label class="upload-btn">Upload Image<input type="file" id="inp" hidden accept="image/*"></label>
+                <button id="dlBtn" onclick="download()">Download PNG</button>
             </div>
         </div>
     </div>
@@ -100,15 +66,22 @@
         ai.onResults((res) => {
             cvs.width = res.image.width;
             cvs.height = res.image.height;
+            
             ctx.save();
             ctx.clearRect(0, 0, cvs.width, cvs.height);
+            
+            // Step 1: Draw the full image
             ctx.drawImage(res.image, 0, 0, cvs.width, cvs.height);
+            
+            // Step 2: Smooth Edge Logic (Mask Refinement)
             ctx.globalCompositeOperation = 'destination-in';
+            ctx.filter = 'blur(1.5px)'; // Yahan se edges naram hote hain
             ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
+            
             ctx.restore();
             
             cvs.style.display = 'block';
-            status.innerText = "Processing Complete";
+            status.innerText = "Task Complete (Edges Refined)";
             dlBtn.style.display = 'block';
         });
 
@@ -117,7 +90,7 @@
             if(!file) return;
             box.classList.remove('looping');
             layer.style.display = 'none';
-            status.innerText = "AI is Processing...";
+            status.innerText = "Refining Edges...";
             const url = URL.createObjectURL(file);
             const img = new Image();
             img.src = url;
@@ -126,7 +99,7 @@
 
         function download() {
             const link = document.createElement('a');
-            link.download = 'rembghd_output.png';
+            link.download = 'rembghd_refined.png';
             link.href = cvs.toDataURL();
             link.click();
         }
