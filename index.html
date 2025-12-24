@@ -20,7 +20,7 @@
 
         .tool-card { 
             width: 100%; 
-            height: 720px; /* Height adjusted for a tighter look */
+            height: 700px; /* Tighter container */
             background: #111827; 
             border-radius: 30px; 
             overflow: hidden; 
@@ -34,8 +34,8 @@
             width: 100%; 
             height: 1500px; 
             border: none; 
-            /* Balanced Margin: Hides top text AND shows full labels */
-            margin-top: -155px; 
+            /* THE MAGIC NUMBER: Hides top commercial text, keeps labels safe */
+            margin-top: -152px; 
             display: block;
             background: #111827;
         }
@@ -45,7 +45,7 @@
 
         @media (max-width: 768px) {
             .logo-text { font-size: 38px; }
-            .tool-card { height: 1000px; }
+            .tool-card { height: 950px; }
             iframe { margin-top: -270px; height: 2500px; }
         }
 
