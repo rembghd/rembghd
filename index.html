@@ -3,62 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd - Outclass HD</title>
+    <title>RembgHD - Free Background Remover</title>
     <style>
-        body { margin: 0; padding: 0; background: #f4f7f6; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
-        .app-container { height: 100vh; display: flex; flex-direction: column; }
+        /* Modern & Clean UI */
+        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: #f8f9fa; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* Header & Ad Space */
-        .top-bar { background: #fff; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; }
-        .ad-slot { background: #fafafa; border: 1px dashed #ccc; padding: 5px; font-size: 11px; color: #999; margin-top: 5px; }
+        /* Header Section */
+        header { background: #fff; padding: 20px 10px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        h1 { margin: 0; color: #007bff; font-size: 28px; letter-spacing: -1px; }
+        p.slogan { margin: 5px 0 0; color: #6c757d; font-size: 14px; font-weight: 500; }
 
-        /* The AI Engine Window */
-        .engine-wrapper { flex-grow: 1; position: relative; }
+        /* Balanced Iframe Container */
+        .engine-container { 
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px;
+        }
+        .wrapper { 
+            width: 100%; 
+            max-width: 900px; /* PC par size chota kar diya */
+            height: 600px; /* Balanced height */
+            background: #fff; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
+        }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Watermark Overlay (Screenshot Protection) */
-        .watermark-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* User can click through it to use the tool */
-            z-index: 50;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" opacity="0.1"><text x="0" y="100" font-size="20" transform="rotate(-45 100 100)">rembghd.com</text></svg>');
+        /* Watermark Overlay */
+        .watermark { 
+            position: absolute; inset: 0; pointer-events: none; z-index: 10; 
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" opacity="0.05"><text x="20" y="100" font-size="18" transform="rotate(-45 100 100)">RembgHD</text></svg>');
         }
 
-        /* Internet Error Guard */
-        #offline-notice {
-            position: fixed; inset: 0; background: white; z-index: 1000;
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-        }
+        /* Footer */
+        footer { padding: 15px; text-align: center; color: #adb5bd; font-size: 13px; }
+        footer strong { color: #495057; }
     </style>
 </head>
 <body>
 
-    <div id="offline-notice">
-        <h2>⚠️ No Internet Connection</h2>
-        <p>Internet is required for Outclass HD processing.</p>
-        <button onclick="location.reload()" style="padding:10px 20px; border-radius:20px; border:none; background:#007bff; color:white;">Retry</button>
-    </div>
+    <header>
+        <h1>RembgHD</h1>
+        <p class="slogan">It's free and always will be</p>
+    </header>
 
-    <div class="app-container">
-        <div class="top-bar">
-            <h2 style="margin:0; color:#007bff;">rembghd <span style="color:#333;">ULTRA</span></h2>
-            <div class="ad-slot">[ Top Banner Ad - Money Area ]</div>
-        </div>
-
-        <div class="engine-wrapper">
-            <div class="watermark-overlay"></div>
+    <div class="engine-container">
+        <div class="wrapper">
+            <div class="watermark"></div>
             <iframe src="https://briaai-bria-rmbg-1-4.hf.space"></iframe>
         </div>
     </div>
 
-    <script>
-        // Lock: Bina internet ke model load nahi hoga
-        if (!navigator.onLine) {
-            document.getElementById('offline-notice').style.display = 'flex';
-        }
-        window.addEventListener('offline', () => {
-            document.getElementById('offline-notice').style.display = 'flex';
-        });
-    </script>
+    <footer>
+        Powered by <strong>SadSha</strong>
+    </footer>
+
 </body>
 </html>
