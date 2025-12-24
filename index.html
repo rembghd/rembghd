@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RembgHD - Free HD AI Background Remover</title>
     <style>
-        :root { --gold: #FFD700; --dark-bg: #0b0f19; }
+       :root { --gold: #FFD700; --dark-bg: #0b0f19; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; }
         
-        /* Header Fix: Isay ab koi cheez hide nahi karegi */
+        /* Header ko fixed space di hai */
         header { 
-            padding: 40px 0; 
+            padding: 50px 0 20px 0; 
             background: var(--dark-bg);
             position: relative;
-            z-index: 10;
+            z-index: 100;
         }
         .logo-container { display: flex; align-items: center; justify-content: center; gap: 15px; }
         .logo-icon { width: 50px; height: 50px; fill: var(--gold); }
@@ -22,11 +22,10 @@
 
         .main-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-        /* Tool Card Fix: Iframe ko iske andar rakha hai */
-       /* Tool Card Container */
+        /* Tool Card ki height barha di taake niche se kuch na katey */
         .tool-card { 
             width: 100%; 
-            height: 800px; /* Height thori barha di hai taake tool poora aye */
+            height: 950px; /* PC par height barha di */
             background: #111827; 
             border-radius: 35px; 
             overflow: hidden; 
@@ -38,19 +37,20 @@
         
         iframe { 
             width: 100%; 
-            height: 1500px; 
+            height: 1800px; 
             border: none; 
-            /* PC FIX: -160 se kam kar ke -135 kar diya hai taake labels nazar ayein */
-            margin-top: -135px; 
+            /* PC: Margin kam kiya taake labels (image/output) nazar ayein */
+            margin-top: -110px; 
             position: relative;
             background: #111827;
         }
 
-        /* MOBILE FIX: Mobile par 265 perfect tha */
+        /* MOBILE FIX */
         @media (max-width: 600px) {
+            header { padding: 30px 0 10px 0; }
             .logo-text { font-size: 40px; }
-            .tool-card { height: 950px; }
-            iframe { margin-top: -265px; height: 2100px; }
+            .tool-card { height: 1100px; } /* Mobile par zyada height chahiye */
+            iframe { margin-top: -260px; height: 2500px; }
         }
         
         iframe { 
@@ -85,4 +85,5 @@
     </div>
     </body>
 </html>
+
 
