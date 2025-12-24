@@ -9,14 +9,11 @@
         :root { --primary-color: #007bff; --bg-gray: #f8f9fa; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg-gray); text-align: center; }
         
-        /* Dark Professional Header */
         header { background: #001529; padding: 15px; color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo-text { font-size: 24px; font-weight: 800; letter-spacing: 1px; }
 
-        /* Main Container with no ads */
         .main-container { max-width: 1000px; margin: 30px auto; padding: 0 10px; position: relative; }
         
-        /* Tool Card Styling */
         .tool-card { 
             width: 100%; 
             height: 650px; 
@@ -29,11 +26,11 @@
         }
         iframe { width: 100%; height: 1100px; border: none; margin-top: -185px; }
 
-        /* FIXED & HIGHER Blinking Pointer */
+        /* Adjusted Pointer: Higher and more to the Left */
         .download-pointer {
             position: absolute;
-            top: -15px; /* Mazeed upar kar diya hai */
-            right: 110px; 
+            top: -25px; /* Mazeed upar */
+            right: 135px; /* 110px se badha kar 135px kiya taake LEFT ho jaye */
             z-index: 999;
             color: #ff4757;
             font-weight: 800;
@@ -43,7 +40,6 @@
             align-items: center;
             animation: blink 1.2s infinite;
             pointer-events: none;
-            text-shadow: 0px 1px 2px rgba(0,0,0,0.1);
         }
         .arrow-icon { font-size: 30px; margin-top: -5px; }
 
@@ -53,9 +49,7 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Instructions Section */
-        .footer-note { margin-top: 25px; font-size: 14px; color: #555; background: #fff; padding: 15px; border-radius: 10px; display: inline-block; border: 1px dashed #ccc; }
-
+        .footer-note { margin: 25px auto; font-size: 14px; color: #555; background: #fff; padding: 15px; border-radius: 10px; display: inline-block; border: 1px dashed #ccc; }
         footer { margin-top: 50px; padding: 20px; border-top: 1px solid #eee; color: #999; font-size: 12px; }
     </style>
 </head>
@@ -76,12 +70,12 @@
         </div>
 
         <div class="footer-note">
-            🚀 <b>Pro Tip:</b> Process your image and click the <b>Arrow Icon</b> pointed above to save your HD result.
+            🚀 <b>Quick Guide:</b> After processing, click the <b>Arrow Icon</b> pointed above to download.
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 RembgHD.com | The Cleanest AI Background Remover</p>
+        <p>&copy; 2025 RembgHD.com | Fast & Safe AI Remover</p>
     </footer>
 
 </body>
