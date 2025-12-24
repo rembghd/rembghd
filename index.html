@@ -21,7 +21,7 @@
         }
         
         header { 
-            padding: 20px 0 60px 0; /* Gap between name and tool */
+            padding: 20px 0 60px 0; /* Logo top par, tool niche push kiya */
             background: var(--dark-bg); 
             position: relative; 
             z-index: 99;
@@ -47,44 +47,44 @@
         
         .tool-card { 
             width: 100%; 
-            height: 750px; 
+            height: 780px; /* Height barhai taake footer niche jaye */
             background: var(--dark-bg); 
             border-radius: 24px; 
             overflow: hidden; 
-            margin-bottom: 0; 
+            margin-bottom: 40px; /* Footer se mazeed door kiya */
         }
         
         iframe { 
             width: 100%; 
             height: 1200px; 
             border: none; 
-            /* PC par cutting fix karne ke liye margin kam kiya */
-            margin-top: -120px; 
+            /* PC par top label dikhane ke liye margin mazeed set kiya */
+            margin-top: -110px; 
         }
 
-        /* MOBILE FIX: NO CUTTING + PRECISE VIEW */
+        /* MOBILE OPTIMIZATION: NO TOP CUT + SPACED FOOTER */
         @media (max-width: 600px) {
             header { padding: 25px 0 60px 0; }
             .logo-text { font-size: 42px; }
             
             .tool-card { 
-                height: 820px; 
+                height: 850px; /* Mobile par tool ke niche space */
                 margin-top: 10px;
                 overflow: hidden;
             }
             iframe { 
-                /* Is value ko mazeed kam kiya taake tool ka TOP nazar aaye */
-                margin-top: -310px; 
-                height: 1900px; 
+                /* Is value ko mazeed kam kiya taake "image" tag aur icons poore dikhein */
+                margin-top: -300px; 
+                height: 1950px; 
             }
         }
 
         footer { 
-            padding: 40px 20px; 
+            padding: 60px 20px; /* Footer ki apni height barha di */
             background: #05070a; 
             border-top: 1px solid #151921;
-            margin-top: 0; /* Removing extra gap before footer */
         }
+        .footer-heading { color: var(--gold); font-weight: 700; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -101,7 +101,8 @@
     </div>
 
     <footer>
-        <p style="color:var(--gold); font-weight:700; margin-bottom:5px;">RembgHD Premium AI</p>
+        <div class="footer-heading">RembgHD Premium AI</div>
+        <p style="color:#666; font-size:14px; margin-bottom: 15px;">Professional Quality HD Background Removal</p>
         <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com</p>
     </footer>
 
