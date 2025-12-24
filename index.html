@@ -3,90 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - Free HD Background Remover</title>
+    <title>RembgHD - Ultra HD Background Remover (Free Online)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: #f4f7f6; display: flex; flex-direction: column; min-height: 100vh; }
+        :root { --primary-color: #007bff; --bg-gray: #f8f9fa; --card-shadow: 0 10px 30px rgba(0,0,0,0.08); }
         
-        header { background: #fff; padding: 15px 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        h1 { margin: 0; color: #007bff; font-size: 26px; font-weight: 800; }
-        p.slogan { margin: 3px 0 0; color: #6c757d; font-size: 13px; font-weight: 500; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg-gray); color: #333; scroll-behavior: smooth; }
+        
+        /* Navigation / Header */
+        header { background: #fff; padding: 20px; text-align: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; }
+        .logo { margin: 0; color: var(--primary-color); font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+        .slogan { margin: 5px 0 0; color: #6c757d; font-size: 14px; font-weight: 500; }
 
-        .main-content { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column;
-            justify-content: center; 
-            align-items: center; 
-            padding: 20px;
-        }
+        /* Main Container */
+        .main-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; text-align: center; }
 
-        /* 100% Perfect Alignment Wrapper */
-        .iframe-wrapper { 
+        /* The AI Tool Box (Perfectly Aligned) */
+        .tool-card { 
             width: 100%; 
-            max-width: 850px; 
-            height: 680px; /* Thori aur height barha di taake Examples bhi sahi nazar ayen */
+            height: 680px; 
             background: #fff; 
-            border-radius: 25px; 
+            border-radius: 20px; 
             overflow: hidden; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            position: relative;
+            box-shadow: var(--card-shadow);
             border: 1px solid #eee;
+            position: relative;
         }
-        
-        iframe { 
-            width: 100%; 
-            height: 1100px; 
-            border: none; 
-            /* Is value ko -180px kiya hai taake Upload box bilkul perfect center ho jaye */
-            margin-top: -180px; 
-        }
+        iframe { width: 100%; height: 1100px; border: none; margin-top: -185px; } /* Clean Tool Crop */
 
-        .action-bar { margin-top: 25px; text-align: center; }
-        .download-btn { 
-            background: #28a745; 
-            color: white; 
-            padding: 14px 45px; 
-            border-radius: 50px; 
-            text-decoration: none; 
-            font-weight: 700; 
-            display: inline-block;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 17px;
-            box-shadow: 0 5px 20px rgba(40, 167, 69, 0.3);
+        /* Ad & Action Section */
+        .action-area { margin: 30px 0; }
+        .btn-download { 
+            background: #28a745; color: #fff; padding: 16px 50px; border-radius: 50px; 
+            font-weight: 700; font-size: 18px; text-decoration: none; display: inline-block;
+            transition: 0.3s; border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(40,167,69,0.3);
         }
-        .download-btn:hover { background: #218838; transform: scale(1.05); }
+        .btn-download:hover { background: #218838; transform: translateY(-2px); }
 
-        footer { padding: 15px; text-align: center; color: #999; font-size: 12px; }
-        footer strong { color: #333; }
+        /* SEO & Network Approval Content Section */
+        .seo-content { text-align: left; background: #fff; padding: 40px; border-radius: 20px; margin-top: 50px; border: 1px solid #eee; }
+        .seo-content h2 { color: #222; margin-top: 0; font-weight: 800; }
+        .seo-content p { line-height: 1.8; color: #555; margin-bottom: 20px; }
+
+        /* Footer & Legal Links */
+        footer { background: #fff; padding: 40px 20px; margin-top: 80px; border-top: 1px solid #eee; text-align: center; }
+        .footer-links a { color: #6c757d; text-decoration: none; margin: 0 15px; font-size: 14px; }
+        .footer-links a:hover { color: var(--primary-color); }
+        .copyright { margin-top: 20px; font-size: 12px; color: #adb5bd; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>RembgHD</h1>
+        <div class="logo">RembgHD</div>
         <p class="slogan">It's free and always will be</p>
     </header>
 
-    <div class="main-content">
-        <div class="iframe-wrapper">
+    <div class="main-container">
+        <div class="tool-card">
             <iframe src="https://briaai-bria-rmbg-1-4.hf.space" scrolling="no"></iframe>
         </div>
 
-        <div class="action-bar">
-            <button class="download-btn" onclick="triggerAdsterra()">Download Ultra HD Result</button>
+        <div class="action-area">
+            <button class="btn-download" onclick="startDownload()">Download HD Transparent PNG</button>
+            <p style="font-size: 12px; color: #999; margin-top: 10px;">Note: Files up to 10MB are supported for original quality.</p>
+        </div>
+
+        <div class="seo-content">
+            <h2>About RembgHD AI Tool</h2>
+            <p>RembgHD is a professional-grade online background remover powered by the latest Bria AI technology. We believe in providing high-end creative tools for free. Our system is optimized to handle high-resolution images, giving you clean cutouts even in complex areas like hair or transparent objects.</p>
+            
+            <h2>How to Use?</h2>
+            <p>1. Upload your photo in the box above.<br>
+               2. Wait a few seconds for our AI to process the image.<br>
+               3. Preview the result and click the "Download" button to save your high-resolution transparent PNG.</p>
+
+            <h2>Privacy & Security</h2>
+            <p>Your privacy is our priority. RembgHD does not store your images on its servers. All processing is done via secure API calls, and your files are temporarily handled in your browser session only. Once you close the tab, your data is gone.</p>
         </div>
     </div>
 
     <footer>
-        Powered by <strong>SadSha</strong>
+        <div class="footer-links">
+            <a href="#privacy">Privacy Policy</a>
+            <a href="#terms">Terms of Service</a>
+            <a href="#contact">Contact Us</a>
+        </div>
+        <p class="copyright">Powered by <strong>SadSha</strong> | &copy; 2025 RembgHD.com</p>
     </footer>
 
     <script>
-        function triggerAdsterra() {
-            alert("Preparing HD File... Please stay on this page.");
-            // Paisa kamane wala link yahan ayega
+        function startDownload() {
+            // Future Ad Link Placeholder
+            alert("Preparing your HD file for download. Please stay on the page...");
+            console.log("Download Clicked - Ready for Ad Integration");
         }
     </script>
 
