@@ -6,31 +6,74 @@
     <title>rembghd - AI Background Remover</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
-        :root { --bg: #ffffff; --text: #1a1a1a; --blue: #007bff; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; overflow-x: hidden; }
+        :root { --bg: #ffffff; --blue: #007bff; }
         
-        .navbar { width: 100%; padding: 25px 80px; display: flex; align-items: center; box-sizing: border-box; }
-        .logo { font-size: 28px; font-weight: 800; color: #000; text-decoration: none; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: #000; margin: 0; padding: 0; }
+        
+        /* Clean Top Navigation */
+        .nav { width: 100%; padding: 30px 60px; display: flex; align-items: center; box-sizing: border-box; }
+        .logo { font-size: 26px; font-weight: 900; color: #000; text-decoration: none; letter-spacing: -1px; }
 
-        .hero { display: flex; align-items: center; justify-content: center; gap: 100px; max-width: 1300px; margin: 0 auto; min-height: 85vh; padding: 40px; box-sizing: border-box; }
+        /* Solid White Hero Section */
+        .hero { display: flex; align-items: center; justify-content: center; gap: 80px; max-width: 1200px; margin: 0 auto; min-height: 80vh; padding: 20px; box-sizing: border-box; }
         
-        /* LEFT SIDE: Image Loop Area */
-        .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
-        .window { width: 550px; height: 380px; background: var(--bg); border-radius: 30px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; }
+        /* LEFT: The Solid Image Window */
+        .image-container { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
+        .window { width: 500px; height: 350px; background: var(--bg); display: flex; align-items: center; justify-content: center; position: relative; }
         
-        /* Transparent Checkerboard ONLY when background is removed */
-        .checkerboard { background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%); background-size: 20px 20px; }
+        /* Checkerboard ONLY appears during the "Removed" phase of the loop */
+        .checker { background-image: linear-gradient(45deg, #f9f9f9 25%, transparent 25%), linear-gradient(-45deg, #f9f9f9 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f9f9f9 75%), linear-gradient(-45deg, transparent 75%, #f9f9f9 75%); background-size: 20px 20px; border-radius: 20px; }
         
         img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; }
         
-        /* RIGHT SIDE: Upload & Text */
+        /* RIGHT: Minimalist Upload Side */
         .upload-side { flex: 1; text-align: left; }
-        .upload-side h1 { font-size: 68px; line-height: 1.1; margin: 0 0 30px 0; font-weight: 800; color: #1a1a1a; }
+        .upload-side h1 { font-size: 62px; line-height: 1.1; margin: 0 0 25px 0; font-weight: 800; color: #333; }
         
-        .upload-card { background: #fff; padding: 50px; border-radius: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: center; border: 1px solid #f2f2f2; width: 400px; }
+        .upload-card { background: #fff; display: flex; flex-direction: column; align-items: flex-start; width: 400px; }
         
-        .upload-btn { background: var(--blue); color: white; padding: 22px 60px; border-radius: 100px; font-size: 26px; font-weight: bold; cursor: pointer; border: none; transition: all 0.3s ease; text-align: center; width: 100%; box-sizing: border-box; box-shadow: 0 10px 20px rgba(0,123,255,0.2); }
-        .upload-btn:hover { background: #0056b3; transform: translateY(-3px); box-shadow: 0 15px 25px rgba(0,123,255,0.3); }
+        .upload-btn { background: var(--blue); color: white; padding: 20px 50px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; text-align: center; width: 100%; box-sizing: border-box; }
+        .upload-btn:hover { background: #0056b3; }
         
-        .drop-text { margin-top: 20px; font-size: 16px; color: #999; font-weight: 500; }
-        .status-tag { margin-top: 25
+        .drop-text { margin-top: 15px; font-size: 15px; color: #999; width: 100%; text-align: center; }
+        .status-msg { margin-top: 20px; font-size: 12px; font-weight: bold; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
+
+        #dlBtn { margin-top: 15px; background: #000; color: #fff; padding: 10px 25px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="nav">
+        <a href="#" class="logo">rembghd</a>
+    </div>
+
+    <div class="hero">
+        <div class="image-container">
+            <div class="window" id="displayBox">
+                <img id="viewImg" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80">
+                <canvas id="resCanvas" style="display:none;"></canvas>
+            </div>
+            <div id="status" class="status-msg">Demo Mode</div>
+        </div>
+
+        <div class="upload-side">
+            <h1>Remove Image<br>Background</h1>
+            <div class="upload-card">
+                <label class="upload-btn">
+                    Upload Image
+                    <input type="file" id="inp" hidden accept="image/*">
+                </label>
+                <div class="drop-text">or drop a file</div>
+                <button id="dlBtn" onclick="download()">Download PNG</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inp = document.getElementById('inp');
+        const cvs = document.getElementById('resCanvas');
+        const ctx = cvs.getContext('2d');
+        const viewImg = document.getElementById('viewImg');
+        const box = document.getElementById('displayBox');
+        const status = document.getElementById('status');
+        const dlBtn = document.getElementById('dlBtn');
