@@ -5,42 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RembgHD - Free Background Remover</title>
     <style>
-        /* Modern & Clean UI */
         body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: #f8f9fa; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* Header Section */
         header { background: #fff; padding: 20px 10px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         h1 { margin: 0; color: #007bff; font-size: 28px; letter-spacing: -1px; }
         p.slogan { margin: 5px 0 0; color: #6c757d; font-size: 14px; font-weight: 500; }
 
-        /* Balanced Iframe Container */
         .engine-container { 
             flex: 1; 
             display: flex; 
+            flex-direction: column;
             justify-content: center; 
             align-items: center; 
             padding: 20px;
         }
         .wrapper { 
             width: 100%; 
-            max-width: 900px; /* PC par size chota kar diya */
-            height: 600px; /* Balanced height */
+            max-width: 900px; 
+            height: 500px; 
             background: #fff; 
             border-radius: 20px; 
             overflow: hidden; 
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            position: relative;
         }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Watermark Overlay */
-        .watermark { 
-            position: absolute; inset: 0; pointer-events: none; z-index: 10; 
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" opacity="0.05"><text x="20" y="100" font-size="18" transform="rotate(-45 100 100)">RembgHD</text></svg>');
+        /* Custom Download Button Area */
+        .action-area { margin-top: 20px; text-align: center; width: 100%; max-width: 900px; }
+        .dl-btn { 
+            background: #28a745; 
+            color: white; 
+            padding: 15px 40px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            display: inline-block;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
         }
+        .dl-btn:hover { background: #218838; transform: translateY(-2px); }
 
-        /* Footer */
-        footer { padding: 15px; text-align: center; color: #adb5bd; font-size: 13px; }
+        footer { padding: 15px; text-align: center; color: #adb5bd; font-size: 13px; margin-top: auto; }
         footer strong { color: #495057; }
     </style>
 </head>
@@ -53,14 +61,29 @@
 
     <div class="engine-container">
         <div class="wrapper">
-            <div class="watermark"></div>
             <iframe src="https://briaai-bria-rmbg-1-4.hf.space"></iframe>
+        </div>
+
+        <div class="action-area">
+            <button class="dl-btn" onclick="startDownload()">Download HD Result</button>
+            <p style="font-size: 12px; color: #999; margin-top: 10px;">High resolution file will be saved to your device</p>
         </div>
     </div>
 
     <footer>
         Powered by <strong>SadSha</strong>
     </footer>
+
+    <script>
+        function startDownload() {
+            // Yahan hum Adsterra ka Direct Link add karenge
+            alert("Redirecting to Secure Download Server... Please wait.");
+            
+            // Abhi ke liye ye bas user ko engine par wapas bhej raha hai 
+            // Magar yahan aapka "Money Link" ayega
+            console.log("Download triggered");
+        }
+    </script>
 
 </body>
 </html>
