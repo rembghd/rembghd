@@ -10,38 +10,41 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; padding: 20px; }
         
         .header { margin-bottom: 30px; }
-        .header h1 { font-size: 40px; margin: 0; letter-spacing: 2px; }
-        .slogan { font-size: 14px; opacity: 0.6; }
+        .header h1 { font-size: 42px; margin: 0; font-weight: 900; }
+        .slogan { font-size: 14px; opacity: 0.6; margin-top: 5px; }
 
-        .main-container { max-width: 1000px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
+        .main-container { max-width: 1100px; margin: auto; display: flex; flex-direction: column; gap: 25px; }
 
-        /* Top Upload Section */
-        .upload-section { background: var(--card); padding: 40px; border-radius: 25px; border: 1px solid #2d3748; display: flex; align-items: center; justify-content: center; gap: 40px; }
-        .upload-btn { background: #334155; padding: 10px 25px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 10px; border: none; color: white; transition: 0.3s; }
+        /* Top Bar from unnamed.jpg */
+        .upload-section { background: var(--card); padding: 35px; border-radius: 25px; border: 1px solid #2d3748; display: flex; align-items: center; justify-content: space-between; text-align: left; }
+        .upload-btn { background: #334155; padding: 12px 30px; border-radius: 50px; cursor: pointer; border: none; color: white; display: inline-flex; align-items: center; gap: 10px; font-weight: bold; transition: 0.3s; }
         .upload-btn:hover { background: var(--accent); color: black; }
 
-        /* Monitor / Preview Grid */
+        /* Preview Grid */
         .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .monitor-box { background: var(--card); padding: 30px; border-radius: 25px; position: relative; border: 1px solid #2d3748; min-height: 350px; }
+        .monitor-box { background: var(--card); padding: 30px; border-radius: 25px; position: relative; border: 1px solid #2d3748; min-height: 400px; }
         
-        .screen { background: #050a14; border: 8px solid #2d3748; border-radius: 10px; height: 200px; width: 85%; margin: 0 auto 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .screen img, .screen canvas { width: 100%; height: 100%; object-fit: contain; display: none; }
-        .monitor-stand { width: 40px; height: 20px; background: #2d3748; margin: -21px auto 0; border-radius: 0 0 5px 5px; }
-        
-        /* The Static Cats (Load State) */
-        .cat-helper { position: absolute; font-size: 60px; bottom: 60px; pointer-events: none; transition: 0.5s; }
-        .cat-left { left: 10px; transform: scaleX(-1); }
-        .cat-right { right: 10px; }
+        /* The Screens */
+        .screen { background: #050a14; border: 10px solid #2d3748; border-radius: 12px; height: 220px; width: 85%; margin: 0 auto 20px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .screen img, .screen canvas { width: 100%; height: 100%; object-fit: contain; display: none; z-index: 10; }
+        .placeholder-text { opacity: 0.2; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Labels */
-        .label-pills { display: inline-flex; align-items: center; background: #1e293b; padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: bold; gap: 10px; }
-        .dot-hd { width: 25px; height: 25px; background: var(--accent); color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; }
+        /* Standing Cats */
+        .cat-helper { position: absolute; font-size: 70px; bottom: 80px; z-index: 100; pointer-events: none; transition: 0.3s; }
+        .cat-left { left: 15px; transform: scaleX(-1); }
+        .cat-right { right: 15px; }
 
-        .footer { margin-top: 50px; font-size: 30px; letter-spacing: 15px; opacity: 0.2; text-transform: uppercase; }
+        /* Animation */
+        .cleaning { animation: move-cat 0.8s infinite alternate ease-in-out; }
+        @keyframes move-cat { from { transform: translate(0,0) scaleX(-1); } to { transform: translate(20px, -20px) scaleX(-1); } }
+        @keyframes move-cat-right { from { transform: translate(0,0); } to { transform: translate(-20px, -20px); } }
+        .cleaning-right { animation: move-cat-right 0.8s infinite alternate ease-in-out; }
 
-        /* Animation class */
-        .cleaning { animation: scrub 1s infinite; }
-        @keyframes scrub { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(15px, -15px); } }
+        /* Pills */
+        .pill { display: inline-flex; align-items: center; background: #1e293b; padding: 10px 20px; border-radius: 50px; font-size: 14px; gap: 12px; }
+        .blue-dot { width: 28px; height: 28px; background: var(--accent); color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; }
+
+        .footer { margin-top: 60px; font-size: 35px; letter-spacing: 20px; opacity: 0.15; text-transform: uppercase; font-weight: 100; }
     </style>
 </head>
 <body>
@@ -53,55 +56,51 @@
 
     <div class="main-container">
         <div class="upload-section">
-            <div style="text-align: left;">
-                <h2 style="margin:0;">AI Background Remover</h2>
-                <p style="opacity:0.6; font-size:14px;">Upload an image to see the magic!</p>
+            <div>
+                <h2 style="margin:0; font-size: 24px;">AI Image Upload Image</h2>
+                <p style="opacity:0.5; font-size:13px; margin: 10px 0 20px;">Ready to clear your background instantly?</p>
                 <label class="upload-btn">
                     <span>✓ Upload</span>
-                    <input type="file" id="imageInput" hidden accept="image/*">
+                    <input type="file" id="fileIn" hidden accept="image/*">
                 </label>
             </div>
-            <div style="font-size: 80px;">🐱</div>
+            <div style="font-size: 100px;">🐱</div>
         </div>
 
         <div class="preview-grid">
             <div class="monitor-box">
-                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ORIGINAL</p>
+                <p style="font-size: 14px; margin-bottom: 20px; letter-spacing: 2px; font-weight: bold;">ORIGINAL</p>
                 <div class="screen">
-                    <img id="origDisplay">
-                    <div id="placeholder1" style="opacity: 0.3; font-size: 12px;">No Image Loaded</div>
+                    <img id="origImg">
+                    <div class="placeholder-text" id="p1">Screen Ready</div>
                 </div>
-                <div class="monitor-stand"></div>
-                <div class="cat-helper cat-left" id="cat1">🐱🧽</div>
-                
-                <div class="label-pills">
-                    <div class="dot-hd">HD</div> (High Definition)
+                <div class="cat-helper cat-left" id="c1">🐱🧽</div>
+                <div class="pill">
+                    <div class="blue-dot">HD</div> (High Definition)
                 </div>
             </div>
 
             <div class="monitor-box">
-                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ULTRA 4K PROCESSED</p>
+                <p style="font-size: 14px; margin-bottom: 20px; letter-spacing: 2px; font-weight: bold;">ULTRA 4K PROCESSED</p>
                 <div class="screen">
-                    <canvas id="resCanvas"></canvas>
-                    <div id="placeholder2" style="opacity: 0.3; font-size: 12px;">Waiting for Upload...</div>
+                    <canvas id="outCanvas"></canvas>
+                    <div class="placeholder-text" id="p2">Waiting...</div>
                 </div>
-                <div class="monitor-stand"></div>
-                <div class="cat-helper cat-right" id="cat2">🐈🧹</div>
-                
-                <div class="label-pills" style="background: rgba(255,255,255,0.05);">
+                <div class="cat-helper cat-right" id="c2">🐈🧹</div>
+                <div class="pill" style="opacity: 0.8;">
                     ULTRA 4K Processed!
                 </div>
             </div>
         </div>
         
-        <button id="dlBtn" class="upload-btn" style="display:none; margin: 20px auto; background: var(--accent); color: black;" onclick="download()">Download Result</button>
+        <button id="dl" class="upload-btn" style="display:none; margin: 20px auto; background: var(--accent); color: black;" onclick="download()">Download PNG</button>
     </div>
 
     <div class="footer">SadSha</div>
 
     <script>
-        const input = document.getElementById('imageInput');
-        const canvas = document.getElementById('resCanvas');
+        const fileIn = document.getElementById('fileIn');
+        const canvas = document.getElementById('outCanvas');
         const ctx = canvas.getContext('2d');
         let activeImg = null;
 
@@ -119,40 +118,32 @@
             ctx.drawImage(res.image, 0, 0);
             
             setTimeout(() => {
-                document.getElementById('cat1').classList.remove('cleaning');
-                document.getElementById('cat2').classList.remove('cleaning');
-                document.getElementById('dlBtn').style.display = 'block';
+                document.getElementById('c1').classList.remove('cleaning');
+                document.getElementById('c2').classList.remove('cleaning-right');
+                document.getElementById('dl').style.display = 'inline-flex';
             }, 3000);
         });
 
-        input.onchange = (e) => {
+        fileIn.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
             const url = URL.createObjectURL(file);
             
-            // Setup Visuals
-            document.getElementById('placeholder1').style.display = 'none';
-            document.getElementById('placeholder2').style.display = 'none';
-            const img = document.getElementById('origDisplay');
+            // Visual Setup
+            document.getElementById('p1').style.display = 'none';
+            document.getElementById('p2').style.display = 'none';
+            const img = document.getElementById('origImg');
             img.src = url;
             img.style.display = 'block';
             canvas.style.display = 'block';
             
             // Start Cats
-            document.getElementById('cat1').classList.add('cleaning');
-            document.getElementById('cat2').classList.add('cleaning');
+            document.getElementById('c1').classList.add('cleaning');
+            document.getElementById('c2').classList.add('cleaning-right');
             
             activeImg = new Image();
             activeImg.src = url;
             activeImg.onload = () => ai.send({image: activeImg});
         };
 
-        function download() {
-            const a = document.createElement('a');
-            a.download = 'rembghd_SadSha.png';
-            a.href = canvas.toDataURL();
-            a.click();
-        }
-    </script>
-</body>
-</html>
+        function
