@@ -9,12 +9,12 @@
         :root { --primary-blue: #007bff; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; text-align: center; }
         
-        /* Fixed Header so it stays on top */
+        /* HEADER FIX: Solid background and high z-index */
         header { 
             padding: 30px 0 20px 0; 
             background: #f8f9fa; 
             position: relative; 
-            z-index: 10; /* Tool se oopar rahega */
+            z-index: 99; /* Is se logo iframe ke oopar rahega */
         }
         .logo-text { font-size: 36px; font-weight: 800; color: var(--primary-blue); margin: 0; }
         .tagline { color: #666; font-size: 15px; margin-top: 5px; }
@@ -24,7 +24,7 @@
             margin: 0 auto; 
             padding: 0 10px; 
             position: relative; 
-            z-index: 5; 
+            z-index: 1; /* Iframe niche rahega */
         }
         
         .tool-card { 
@@ -35,31 +35,31 @@
             overflow: hidden; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
             border: 1px solid #eee; 
+            position: relative;
         }
         
         iframe { width: 100%; height: 1150px; border: none; margin-top: -185px; }
 
-        /* MOBILE HEADER & ALIGNMENT FIX */
+        /* MOBILE FIX: HIDE TEXT BUT KEEP LOGO VISIBLE */
         @media (max-width: 600px) {
-            header { padding: 20px 0 10px 0; }
+            header { padding: 25px 0 15px 0; background: #f8f9fa; }
             .logo-text { font-size: 28px; }
-            
+            .tagline { font-size: 13px; }
+
             .tool-card { 
                 height: auto; 
                 min-height: 750px; 
                 overflow: visible; 
-                margin-top: -20px; /* Header ke kareeb karne ke liye */
+                margin-top: 10px; /* Space from header */
             }
             iframe { 
-                /* Text hide karne ke liye adjustment */
-                margin-top: -410px; 
+                margin-top: -390px; /* To hide HF text */
                 height: 1800px; 
             }
         }
 
-        footer { margin-top: 50px; padding: 50px 20px; background: #fff; border-top: 1px solid #eee; color: #444; position: relative; z-index: 10; }
+        footer { margin-top: 50px; padding: 50px 20px; background: #fff; border-top: 1px solid #eee; position: relative; z-index: 99; }
         .footer-wrap { max-width: 850px; margin: 0 auto; }
-        .footer-heading { font-size: 20px; font-weight: 700; color: #222; }
         .copyright { color: #aaa; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
@@ -78,8 +78,8 @@
 
     <footer>
         <div class="footer-wrap">
-            <div class="footer-heading">Professional AI Background Removal</div>
-            <p>&copy; 2025 RembgHD.com | Quality AI Solutions</p>
+            <p><b>RembgHD</b> - Professional Background Removal</p>
+            <p class="copyright">&copy; 2025 RembgHD.com</p>
         </div>
     </footer>
 
