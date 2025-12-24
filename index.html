@@ -3,53 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd - AI</title>
+    <title>rembghd - AI Background Remover</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #0b1120; --card: #161e2f; }
-        body { font-family: sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; padding: 20px; }
         
-        .header { margin-bottom: 25px; }
-        .header h1 { font-size: 42px; margin: 0; font-weight: 900; letter-spacing: 1px; }
-        .slogan { font-size: 13px; opacity: 0.6; }
+        .header { margin-bottom: 30px; }
+        .header h1 { font-size: 45px; font-weight: 900; margin: 0; letter-spacing: 1px; }
+        .slogan { font-size: 14px; opacity: 0.6; }
 
-        .main-container { max-width: 1050px; margin: auto; }
+        .main-container { max-width: 1000px; margin: auto; }
 
-        /* Main Branding Box */
+        /* Branding Box */
         .brand-box { background: var(--card); padding: 35px; border-radius: 25px; border: 1px solid #2d3748; display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; text-align: left; }
-        .upload-btn { background: #334155; padding: 14px 35px; border-radius: 50px; cursor: pointer; color: white; font-weight: bold; border: 1px solid #444; transition: 0.3s; display: inline-block; }
+        .upload-btn { background: #334155; padding: 12px 30px; border-radius: 50px; cursor: pointer; color: white; font-weight: bold; border: 1px solid #444; transition: 0.3s; }
         .upload-btn:hover { background: var(--accent); color: black; }
 
-        /* Monitor Layout */
-        .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        .monitor-box { background: var(--card); padding: 30px; border-radius: 25px; position: relative; border: 1px solid #2d3748; min-height: 380px; }
+        /* Monitor Grid */
+        .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .monitor-box { background: var(--card); padding: 25px; border-radius: 25px; position: relative; border: 1px solid #2d3748; min-height: 420px; }
         
-        /* The Screens */
-        .screen { background: #050a14; border: 10px solid #2d3748; border-radius: 12px; height: 230px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; width: 90%; margin: 0 auto 15px; }
+        /* The Mirror/Screen */
+        .screen { background: #050a14; border: 10px solid #2d3748; border-radius: 12px; height: 240px; width: 90%; margin: 0 auto 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         canvas, .orig-view { width: 100%; height: 100%; object-fit: contain; display: none; }
 
-        /* Painter Cat - Placed in Front of Screen (Mirror Style) */
+        /* THE PAINTER CAT (Front of Screen) */
         .painter-cat { 
             position: absolute; 
-            width: 160px; /* Bili ka size bara kar diya */
-            bottom: 40px; 
-            right: 0px; 
-            z-index: 1000; /* Stays in front like the girl in the mirror image */
+            width: 180px; /* Big size like example */
+            bottom: 30px; 
+            right: -10px; 
+            z-index: 1000; /* Stays in front of the screen layer */
             pointer-events: none;
             display: block; 
         }
 
-        /* Cleaning Animation (Scrubbing Motion) */
-        .is-cleaning { animation: scrub-motion 0.7s infinite alternate ease-in-out; }
-        @keyframes scrub-motion {
-            from { transform: translate(0, 0) rotate(-5deg); }
-            to { transform: translate(-15px, -25px) rotate(5deg); }
+        /* Mirror Cleaning Motion (Like the girl example) */
+        .cleaning-motion { animation: mirror-scrub 0.6s infinite alternate ease-in-out; }
+        @keyframes mirror-scrub {
+            0% { transform: translate(0, 0) rotate(-3deg); }
+            100% { transform: translate(-20px, -35px) rotate(3deg); }
         }
 
-        .pill-label { background: #1e293b; padding: 8px 20px; border-radius: 50px; font-size: 13px; display: inline-flex; align-items: center; gap: 10px; }
-        .blue-dot { background: var(--accent); color: black; width: 24px; height: 24px; border-radius: 50%; font-size: 9px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+        .pill { background: #1e293b; padding: 8px 20px; border-radius: 50px; font-size: 13px; display: inline-flex; align-items: center; gap: 10px; }
+        .blue-dot { background: var(--accent); color: black; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
 
-        .footer { margin-top: 60px; font-size: 35px; letter-spacing: 20px; opacity: 0.15; text-transform: uppercase; font-weight: 100; }
+        .footer { margin-top: 60px; font-size: 32px; letter-spacing: 18px; opacity: 0.15; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -63,96 +63,34 @@
         <div class="brand-box">
             <div>
                 <h2 style="margin:0;">AI Image Upload</h2>
-                <p style="opacity:0.5; font-size:14px; margin: 10px 0 20px;">Your files are secure and processed instantly.</p>
+                <p style="opacity:0.5; font-size:14px; margin: 10px 0 20px;">Ready to clear your background instantly?</p>
                 <label class="upload-btn">
                     <span>✓ Upload</span>
-                    <input type="file" id="imageInput" hidden accept="image/*">
+                    <input type="file" id="fileIn" hidden accept="image/*">
                 </label>
             </div>
-            <img src="https://i.ibb.co/LzNfXF7/image-65166d.png" style="width:130px;">
+            <img src="https://i.ibb.co/LzNfXF7/image-65166d.png" style="width:140px;">
         </div>
 
         <div class="preview-grid">
             <div class="monitor-box">
-                <p style="font-size:12px; margin-bottom:15px; font-weight: bold; letter-spacing: 1px;">ORIGINAL</p>
+                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ORIGINAL</p>
                 <div class="screen">
-                    <img id="origImg" class="orig-view">
-                    <div id="p1" style="opacity:0.2; font-size: 12px;">Screen Ready</div>
+                    <img id="origDisplay" class="orig-view">
+                    <div id="p1" style="opacity: 0.2;">Screen Ready</div>
                 </div>
-                <div class="pill-label">
+                <div class="pill">
                     <div class="blue-dot">HD</div> (High Definition)
                 </div>
             </div>
 
             <div class="monitor-box">
-                <p style="font-size:12px; margin-bottom:15px; font-weight: bold; letter-spacing: 1px;">ULTRA 4K PROCESSED</p>
+                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ULTRA 4K PROCESSED</p>
                 <div class="screen">
                     <canvas id="resCanvas"></canvas>
-                    <div id="p2" style="opacity:0.2; font-size: 12px;">Waiting for Input...</div>
+                    <div id="p2" style="opacity: 0.2;">Waiting for Input...</div>
                 </div>
-                <img src="https://i.ibb.co/LzNfXF7/image-65166d.png" class="painter-cat" id="catAnim">
-                <div class="pill-label" style="opacity: 0.8;">ULTRA 4K Processed!</div>
-            </div>
-        </div>
-        
-        <button id="dl" class="upload-btn" style="display:none; margin: 30px auto; background:var(--accent); color:black;" onclick="download()">Download Result</button>
-    </div>
-
-    <div class="footer">SadSha</div>
-
-    <script>
-        const input = document.getElementById('imageInput');
-        const canvas = document.getElementById('resCanvas');
-        const ctx = canvas.getContext('2d');
-        const cat = document.getElementById('catAnim');
-        let activeImg = null;
-
-        const ai = new SelfieSegmentation({
-            locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
-        });
-        ai.setOptions({ modelSelection: 1 });
-
-        ai.onResults((res) => {
-            canvas.width = res.image.width;
-            canvas.height = res.image.height;
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
-            ctx.globalCompositeOperation = 'source-in';
-            ctx.drawImage(res.image, 0, 0);
-            
-            setTimeout(() => {
-                cat.classList.remove('is-cleaning');
-                document.getElementById('dl').style.display = 'inline-block';
-            }, 3000);
-        });
-
-        input.onchange = (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            
-            const url = URL.createObjectURL(file);
-            document.getElementById('p1').style.display = 'none';
-            document.getElementById('p2').style.display = 'none';
-            
-            const imgEl = document.getElementById('origImg');
-            imgEl.src = url;
-            imgEl.style.display = 'block';
-            canvas.style.display = 'block';
-            
-            // Mirror-style cleaning animation start
-            cat.classList.add('is-cleaning');
-            
-            activeImg = new Image();
-            activeImg.src = url;
-            activeImg.onload = () => ai.send({image: activeImg});
-        };
-
-        function download() {
-            const a = document.createElement('a');
-            a.download = 'rembghd_SadSha.png';
-            a.href = canvas.toDataURL();
-            a.click();
-        }
-    </script>
-</body>
-</html>
+                
+                <img src="https://i.ibb.co/LzNfXF7/image-65166d.png" class="painter-cat" id="painterCat">
+                
+                <div class="pill" style="opacity:
