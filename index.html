@@ -3,52 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Pro - Edge Perfect Edition</title>
+    <title>RemBghd Pro - Fixed & Perfect</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #050a14; }
         body { font-family: sans-serif; background: var(--bg); color: white; text-align: center; padding: 15px; }
         .main-card { max-width: 850px; margin: auto; background: #0f172a; padding: 25px; border-radius: 25px; border: 1px solid #1e293b; }
-        .upload-zone { border: 2px dashed #334155; padding: 40px; border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.01); }
+        .upload-zone { border: 2px dashed #334155; padding: 40px; border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.01); transition: 0.3s; }
+        .upload-zone:hover { border-color: var(--accent); background: rgba(0,242,254,0.05); }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; display: none; }
-        canvas, img { max-width: 100%; border-radius: 12px; background: #070d19; }
+        canvas, img { max-width: 100%; border-radius: 12px; background: #070d19; display: block; margin: auto; }
         .controls { display: none; margin-top: 20px; background: #070d19; padding: 20px; border-radius: 15px; border: 1px solid #1e293b; }
         .btn { background: var(--accent); color: #000; padding: 15px; border-radius: 10px; border: none; font-weight: 900; width: 100%; cursor: pointer; margin-top: 15px; }
-        input[type=range] { width: 100%; accent-color: var(--accent); }
+        input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+        #status { margin: 15px; color: var(--accent); font-weight: bold; font-size: 14px; }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <h1 style="font-weight: 900;">ULTRA <span style="color: var(--accent)">AI EDITOR</span></h1>
+    <h1 style="font-weight: 900; letter-spacing: -1px;">ULTRA <span style="color: var(--accent)">AI EDITOR</span></h1>
 
     <div class="main-card">
-        <div class="upload-zone" onclick="document.getElementById('fileIn').click()">
-            <p>Click to Upload Image</p>
+        <div class="upload-zone" id="dropZone">
+            <h3 style="margin:0;">Select High-Res Image</h3>
+            <p style="font-size: 11px; opacity: 0.5; margin-top: 10px;">Click here to start processing</p>
             <input type="file" id="fileIn" hidden accept="image/*">
         </div>
 
-        <div id="status" style="margin:15px; color:var(--accent); font-weight:bold;">System Ready</div>
+        <div id="status">System Ready</div>
 
         <div class="grid" id="pGrid">
-            <div><p style="font-size:10px;">ORIGINAL</p><img id="vOriginal"></div>
-            <div><p style="font-size:10px;">ULTRA HD</p><canvas id="vCanvas"></canvas></div>
+            <div><p style="font-size:10px; color:#64748b;">ORIGINAL</p><img id="vOriginal"></div>
+            <div><p style="font-size:10px; color:#64748b;">ULTRA HD</p><canvas id="vCanvas"></canvas></div>
         </div>
 
         <div class="controls" id="ctrlPanel">
-            <label style="font-size:12px; display:block; text-align:left; margin-bottom:5px;">ADJUST QUALITY / SHARPNESS</label>
-            <input type="range" id="sharpSlider" min="1" max="1.4" step="0.05" value="1.1" oninput="drawFinal()">
+            <label style="font-size:11px; display:block; text-align:left; margin-bottom:8px; color:#64748b;">ADJUST FACE SHARPNESS</label>
+            <input type="range" id="sharpSlider" min="1" max="1.4" step="0.05" value="1.1">
             <button class="btn" onclick="downloadImg()">DOWNLOAD MASTER HD</button>
         </div>
     </div>
 
     <script>
         const fileIn = document.getElementById('fileIn');
+        const dropZone = document.getElementById('dropZone');
         const canvas = document.getElementById('vCanvas');
         const ctx = canvas.getContext('2d', {willReadFrequently: true});
         const status = document.getElementById('status');
         
         let rawImg = null, rawMask = null;
 
+        // Initialize AI engine correctly
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
         });
@@ -71,10 +77,48 @@
             const s = document.getElementById('sharpSlider').value;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // ARM FIX: Clean Edge Compositing
+            // Refined Mask Processing to fix arm shadows
             const mCanvas = document.createElement('canvas');
             mCanvas.width = canvas.width; mCanvas.height = canvas.height;
             const mCtx = mCanvas.getContext('2d');
+            mCtx.filter = 'blur(0.8px) contrast(1.15)'; 
+            mCtx.drawImage(rawMask, 0, 0, canvas.width, canvas.height);
+
+            const temp = document.createElement('canvas');
+            temp.width = canvas.width; temp.height = canvas.height;
+            const tCtx = temp.getContext('2d');
             
-            // Halka sa blur bazoo ki black line ko original skin se blend karta hai
-            mCtx.filter = 'blur(0.8px) contrast(1.1
+            tCtx.drawImage(mCanvas, 0, 0);
+            tCtx.globalCompositeOperation = 'source-in';
+            tCtx.filter = `contrast(${s}) saturate(1.1) brightness(1.02)`;
+            tCtx.drawImage(rawImg, 0, 0);
+
+            ctx.drawImage(temp, 0, 0);
+        }
+
+        // Trigger file input
+        dropZone.onclick = () => fileIn.click();
+
+        fileIn.onchange = (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            status.innerText = "Processing Ultra HD...";
+            const url = URL.createObjectURL(file);
+            document.getElementById('vOriginal').src = url;
+            const img = new Image();
+            img.src = url;
+            img.onload = () => ai.send({image: img});
+        };
+
+        // Live slider update
+        document.getElementById('sharpSlider').oninput = drawFinal;
+
+        function downloadImg() {
+            const link = document.createElement('a');
+            link.download = `rembghd_ultra_${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
+            link.click();
+        }
+    </script>
+</body>
+</html>
