@@ -9,51 +9,40 @@
         :root { --primary-color: #007bff; --bg-gray: #f8f9fa; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg-gray); text-align: center; }
         
-        header { background: #001529; padding: 15px; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        header { background: #001529; padding: 15px; color: white; display: flex; align-items: center; justify-content: center; }
         .logo-text { font-size: 24px; font-weight: 800; }
 
-        .ad-container { margin: 10px auto; max-width: 728px; height: 90px; display: flex; justify-content: center; align-items: center; background: #fff; overflow: hidden; border-bottom: 1px solid #eee; }
+        .ad-container { margin: 10px auto; max-width: 728px; height: 90px; display: flex; justify-content: center; align-items: center; background: #fff; border-bottom: 1px solid #eee; }
 
         .main-container { max-width: 1000px; margin: 20px auto; padding: 0 10px; position: relative; }
         
-        /* Tool Card */
-        .tool-card { 
-            width: 100%; 
-            height: 650px; 
-            background: #fff; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
-            border: 1px solid #eee; 
-            position: relative; 
-        }
+        .tool-card { width: 100%; height: 650px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eee; position: relative; }
         iframe { width: 100%; height: 1100px; border: none; margin-top: -185px; }
 
-        /* Blinking Pointer Logic */
+        /* Adjusted Blinking Pointer - Moved UP */
         .download-pointer {
             position: absolute;
-            top: 25px; 
+            top: 5px; /* Pehle 25px tha, ab 5px kar diya taake upar jaye */
             right: 115px; 
             z-index: 999;
             color: #ff0000;
             font-weight: 800;
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             flex-direction: column;
             align-items: center;
             animation: blink 1s infinite;
             pointer-events: none;
         }
-        .arrow-icon { font-size: 30px; margin-bottom: -5px; }
+        .arrow-icon { font-size: 28px; margin-top: -2px; }
 
         @keyframes blink {
             0% { opacity: 1; transform: translateY(0); }
-            50% { opacity: 0.3; transform: translateY(-5px); }
+            50% { opacity: 0.4; transform: translateY(-3px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        .footer-info { margin-top: 20px; font-size: 13px; color: #666; padding: 20px; }
-        footer { background: #fff; padding: 20px; border-top: 1px solid #eee; color: #777; font-size: 12px; }
+        footer { background: #fff; padding: 20px; border-top: 1px solid #eee; color: #777; font-size: 12px; margin-top: 30px; }
     </style>
 </head>
 <body>
@@ -79,12 +68,8 @@
         </div>
     </div>
 
-    <div class="footer-info">
-        <p><strong>Note:</strong> After processing your image, use the red arrow pointed icon inside the box to download your transparent PNG.</p>
-    </div>
-
     <footer>
-        <p>&copy; 2025 RembgHD.com | Fast AI Background Remover</p>
+        <p>&copy; 2025 RembgHD.com | AI Background Remover</p>
     </footer>
 
 </body>
