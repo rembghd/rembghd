@@ -7,33 +7,36 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #0b1120; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; overflow-x: hidden; }
         
+        /* Header & Slogan */
         .header { margin-top: 40px; }
-        .header h1 { font-size: 40px; font-weight: 900; margin-bottom: 5px; text-transform: lowercase; }
-        .slogan { font-size: 14px; opacity: 0.7; letter-spacing: 1px; }
+        .header h1 { font-size: 42px; font-weight: 900; margin-bottom: 2px; }
+        .slogan { font-size: 14px; opacity: 0.8; letter-spacing: 1px; margin-bottom: 30px; }
 
-        .main-container { max-width: 900px; margin: 30px auto; background: #161e2f; padding: 40px; border-radius: 25px; border: 1px solid #2d3748; position: relative; min-height: 400px; }
+        .main-card { max-width: 900px; margin: 20px auto; background: #161e2f; padding: 30px; border-radius: 25px; border: 1px solid #2d3748; position: relative; min-height: 450px; }
         
-        /* Upload Area */
-        #dropZone { border: 2px dashed #334155; padding: 80px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        #dropZone:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
+        /* Upload Zone */
+        .upload-zone { border: 2px dashed #334155; padding: 100px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .upload-zone:hover { border-color: var(--accent); background: rgba(0,242,254,0.05); }
 
-        /* The Cat Popup - Custom Style from Screenshot */
-        #catPopup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #162431; padding: 30px; border-radius: 25px; border: 2px solid var(--accent); z-index: 1000; width: 320px; box-shadow: 0 0 40px rgba(0,0,0,0.7); }
+        /* The Cat Popup Logic */
+        #catPopup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #162431; padding: 30px; border-radius: 25px; border: 2px solid var(--accent); z-index: 1000; width: 320px; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
         .cat-btn { background: var(--accent); color: #000; border: none; padding: 12px; margin: 8px 0; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; }
-        .cat-btn:hover { transform: scale(1.02); opacity: 0.9; }
+        .cat-btn:hover { transform: scale(1.03); }
 
-        /* Preview Grid */
-        #previewArea { display: none; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; position: relative; }
-        canvas, img { width: 100%; border-radius: 15px; background: #0b1120; }
+        /* Grid View */
+        .preview-grid { display: none; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; position: relative; }
+        canvas, .img-view { width: 100%; border-radius: 15px; background: #050a14; border: 1px solid #1e293b; min-height: 300px; object-fit: contain; }
 
-        /* Cat Animations */
-        .cat-worker { position: absolute; font-size: 50px; z-index: 50; pointer-events: none; display: none; }
-        @keyframes scrub { 0%, 100% { transform: translate(0,0) rotate(-10deg); } 50% { transform: translate(30px, 20px) rotate(10deg); } }
-        @keyframes group-work { 0% { left: 10%; top: 20%; } 50% { left: 80%; top: 60%; } 100% { left: 10%; top: 20%; } }
+        /* Animated Cats */
+        .cat-container { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; display: none; z-index: 100; }
+        .cleaning-cat { position: absolute; font-size: 60px; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
 
-        .footer-name { margin-top: 60px; font-size: 26px; letter-spacing: 10px; opacity: 0.4; padding-bottom: 40px; }
+        @keyframes sweep { 0%, 100% { transform: translate(0,0) rotate(-10deg); } 50% { transform: translate(40px, 30px) rotate(10deg); } }
+        @keyframes chaos { 0% { top: 10%; left: 10%; } 25% { top: 60%; left: 70%; } 50% { top: 20%; left: 80%; } 75% { top: 70%; left: 20%; } 100% { top: 10%; left: 10%; } }
+
+        .footer-tag { margin-top: 60px; font-size: 28px; font-weight: 200; letter-spacing: 12px; color: rgba(255,255,255,0.2); padding-bottom: 50px; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -43,84 +46,30 @@
         <div class="slogan">its free and always will be...</div>
     </div>
 
-    <div class="main-container">
-        <div id="dropZone">
-            <p>Click or Drop Image to Start</p>
-            <input type="file" id="fileInput" hidden accept="image/*">
+    <div class="main-card">
+        <div class="upload-zone" id="dropZone">
+            <p style="font-size: 18px;">Click or Drop Image to Start</p>
+            <input type="file" id="fileIn" hidden accept="image/*">
         </div>
 
-        <div id="previewArea">
+        <div class="preview-grid" id="mainGrid">
             <div style="position:relative;">
-                <span id="label-orig" style="position:absolute; top:10px; left:10px; background:rgba(0,0,0,0.5); padding:2px 8px; font-size:10px; border-radius:5px;">ORIGINAL</span>
-                <img id="imgOrig">
+                <img id="origImg" class="img-view">
+                <div style="position:absolute; bottom:10px; left:10px; font-size:10px; opacity:0.5;">ORIGINAL</div>
             </div>
-            <div style="position:relative;">
-                <span id="label-proc" style="position:absolute; top:10px; left:10px; background:var(--accent); color:black; padding:2px 8px; font-size:10px; border-radius:5px; font-weight:bold;">RESULT</span>
+            <div style="position:relative;" id="canvasParent">
                 <canvas id="outCanvas"></canvas>
-                <div id="cat1" class="cat-worker">🐱🧽</div>
-                <div id="cat2" class="cat-worker" style="animation-delay: 0.5s;">🐈🧹</div>
-                <div id="cat3" class="cat-worker" style="animation-delay: 1s;">🐈‍⬛🧽</div>
+                <div class="cat-container" id="catWork">
+                    <div id="c1" class="cleaning-cat">🐱🧽</div>
+                    <div id="c2" class="cleaning-cat" style="display:none; animation: chaos 3s infinite linear;">🐈🧹</div>
+                    <div id="c3" class="cleaning-cat" style="display:none; animation: chaos 4s infinite reverse;">🐈‍⬛🧽</div>
+                </div>
             </div>
         </div>
+
+        <button id="dlBtn" class="cat-btn" style="display:none; width:220px; margin:30px auto;" onclick="saveImg()">Download Result</button>
 
         <div id="catPopup">
-            <h3 style="margin:0 0 10px 0;">Hi! I'm your AI Cat 🐱</h3>
-            <p style="font-size:12px; margin-bottom:20px;">What quality do you want?</p>
-            <button class="cat-btn" onclick="process('same')">Same Resolution (Kapra 🧽)</button>
-            <button class="cat-btn" onclick="process('hd')">HD Quality (Wiper 🧹)</button>
-            <button class="cat-btn" onclick="process('4k')">4K Ultimate (Cat Gang 🐈🐈‍⬛)</button>
-        </div>
-        
-        <button id="dlBtn" class="cat-btn" style="display:none; width:200px; margin:20px auto;" onclick="download()">Download Result</button>
-    </div>
-
-    <div class="footer-name">SadSha</div>
-
-    <script>
-        const fileInput = document.getElementById('fileInput');
-        const dropZone = document.getElementById('dropZone');
-        const catPopup = document.getElementById('catPopup');
-        const previewArea = document.getElementById('previewArea');
-        const canvas = document.getElementById('outCanvas');
-        const ctx = canvas.getContext('2d');
-        let activeImage = null;
-
-        const ai = new SelfieSegmentation({
-            locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
-        });
-        ai.setOptions({ modelSelection: 1 });
-
-        ai.onResults((res) => {
-            canvas.width = res.image.width;
-            canvas.height = res.image.height;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
-            ctx.globalCompositeOperation = 'source-in';
-            ctx.drawImage(res.image, 0, 0);
-            
-            // Wait for cats to finish cleaning
-            setTimeout(() => {
-                stopCats();
-                document.getElementById('dlBtn').style.display = 'block';
-            }, 3000);
-        });
-
-        dropZone.onclick = () => fileInput.click();
-
-        fileInput.onchange = (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            const url = URL.createObjectURL(file);
-            document.getElementById('imgOrig').src = url;
-            activeImage = new Image();
-            activeImage.src = url;
-            
-            // Show preview area but keep it empty/blurred until cat starts
-            dropZone.style.display = 'none';
-            previewArea.style.display = 'grid';
-            catPopup.style.display = 'block';
-        };
-
-        function process(mode) {
-            catPopup.style.display = 'none';
-            const c1 =
+            <h3 style="margin-top:0;">Hi! I'm your AI Cat 🐱</h3>
+            <p style="font-size:12px; margin-bottom:20px;">Choose your cleaning style:</p>
+            <button class="cat-btn"
