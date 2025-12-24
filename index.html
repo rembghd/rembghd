@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - Ultra HD Background Remover</title>
+    <title>RembgHD - Professional AI Background Remover</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary-color: #007bff; --bg-gray: #f8f9fa; }
@@ -12,10 +12,22 @@
         header { background: #001529; padding: 15px; color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo-text { font-size: 24px; font-weight: 800; letter-spacing: 1px; }
 
-        .main-container { max-width: 1000px; margin: 30px auto; padding: 0 10px; position: relative; }
+        .main-container { max-width: 1100px; margin: 30px auto; padding: 0 10px; position: relative; display: flex; flex-direction: column; align-items: center; }
         
+        /* Layout for Tool and Preview */
+        .content-wrapper { display: flex; width: 100%; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+        /* Left Side: Example Preview */
+        .preview-side { flex: 1; min-width: 300px; background: #fff; border-radius: 20px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #eee; text-align: left; }
+        .preview-side h3 { margin-top: 0; color: #333; font-size: 18px; }
+        .example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .example-box { border-radius: 10px; overflow: hidden; border: 1px solid #eee; }
+        .example-box img { width: 100%; display: block; filter: grayscale(20%); }
+
+        /* Right Side: The Tool */
         .tool-card { 
-            width: 100%; 
+            flex: 2; 
+            min-width: 600px;
             height: 650px; 
             background: #fff; 
             border-radius: 20px; 
@@ -24,29 +36,13 @@
             border: 1px solid #eee; 
             position: relative; 
         }
-        
-        /* Iframe styling */
-        iframe { width: 100%; height: 1100px; border: none; margin-top: -185px; position: relative; z-index: 2; background: transparent; }
+        iframe { width: 100%; height: 1100px; border: none; margin-top: -185px; }
 
-        /* Preview Image for empty left side */
-        .preview-placeholder {
-            position: absolute;
-            top: 150px;
-            left: 50px;
-            width: 400px;
-            height: 400px;
-            background: url('https://www.transparentpng.com/download/user/user-logo-png-free-download--21.png') no-repeat center;
-            background-size: contain;
-            opacity: 0.1; /* Light watermark look */
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        /* Blinking Pointer: Higher and Left of Share Button */
+        /* The Perfect Pointer */
         .download-pointer {
             position: absolute;
-            top: -25px; 
-            right: 145px; /* Moved more left to avoid share button */
+            top: -30px; 
+            right: 155px; 
             z-index: 999;
             color: #ff4757;
             font-weight: 800;
@@ -55,7 +51,6 @@
             flex-direction: column;
             align-items: center;
             animation: blink 1.2s infinite;
-            pointer-events: none;
         }
         .arrow-icon { font-size: 30px; margin-top: -5px; }
 
@@ -65,8 +60,7 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        .footer-note { margin: 25px auto; font-size: 14px; color: #555; background: #fff; padding: 15px; border-radius: 10px; display: inline-block; border: 1px dashed #ccc; }
-        footer { margin-top: 50px; padding: 20px; border-top: 1px solid #eee; color: #999; font-size: 12px; }
+        footer { margin-top: 50px; width: 100%; padding: 25px; background: #fff; border-top: 1px solid #eee; color: #999; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -76,24 +70,32 @@
     </header>
 
     <div class="main-container">
-        <div class="preview-placeholder"></div>
+        <div class="content-wrapper">
+            
+            <div class="preview-side">
+                <h3>Try These Examples</h3>
+                <p style="font-size: 13px; color: #666;">Experience HD background removal for any object instantly.</p>
+                <div class="example-grid">
+                    <div class="example-box"><img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=200&h=200&fit=crop" alt="Lion"></div>
+                    <div class="example-box"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=200&h=200&fit=crop" alt="Car"></div>
+                    <div class="example-box"><img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&h=200&fit=crop" alt="Person"></div>
+                    <div class="example-box"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&h=200&fit=crop" alt="Girl"></div>
+                </div>
+            </div>
 
-        <div class="download-pointer">
-            <span>CLICK TO SAVE HD</span>
-            <div class="arrow-icon">⬇</div>
-        </div>
+            <div class="tool-card">
+                <div class="download-pointer">
+                    <span>CLICK TO SAVE HD</span>
+                    <div class="arrow-icon">⬇</div>
+                </div>
+                <iframe src="https://briaai-bria-rmbg-1-4.hf.space" scrolling="no"></iframe>
+            </div>
 
-        <div class="tool-card">
-            <iframe src="https://briaai-bria-rmbg-1-4.hf.space" scrolling="no"></iframe>
-        </div>
-
-        <div class="footer-note">
-            🚀 <b>Quick Guide:</b> After processing, click the <b>Arrow Icon</b> pointed above to download.
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 RembgHD.com | Fast & Safe AI Remover</p>
+        <p>&copy; 2025 RembgHD.com | AI-Powered Image Processing</p>
     </footer>
 
 </body>
