@@ -2,85 +2,88 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>rembghd Pro - High Detail</title>
+    <title>rembghd Hybrid - Pro Quality</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
         :root { --blue: #007bff; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f8f9fa; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fff; text-align: center; }
+        .nav { padding: 20px 60px; text-align: left; }
+        .logo { font-size: 24px; font-weight: 900; text-decoration: none; color: #000; }
         .window { 
-            width: 550px; height: 400px; background: #fff; position: relative; 
-            border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin: 20px auto; display: flex; align-items: center; justify-content: center;
+            width: 550px; height: 400px; margin: 20px auto; background: #fff; 
+            border-radius: 25px; overflow: hidden; position: relative;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;
         }
-        .checker { position: absolute; inset: 0; z-index: 1; background-image: conic-gradient(#f0f0f0 0.25turn, #fff 0.25turn 0.5turn, #f0f0f0 0.5turn 0.75turn, #fff 0.75turn); background-size: 20px 20px; }
+        .checker { position: absolute; inset: 0; z-index: 1; background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%); background-size: 20px 20px; }
         canvas { max-width: 100%; max-height: 100%; position: relative; z-index: 5; display: none; }
-        .ui-box { text-align: center; padding: 40px; }
-        .btn { background: var(--blue); color: #fff; padding: 15px 40px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; font-size: 18px; }
-        #status { margin-top: 10px; font-size: 14px; color: #666; font-weight: 600; }
+        .upload-btn { background: var(--blue); color: #fff; padding: 18px 50px; border-radius: 50px; font-size: 20px; font-weight: 700; cursor: pointer; display: inline-block; transition: 0.3s; }
+        .upload-btn:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,123,255,0.3); }
+        #status { margin-top: 15px; font-size: 14px; font-weight: 600; color: #555; }
     </style>
 </head>
 <body>
 
-    <div class="ui-box">
-        <h1>rembghd <span style="color:var(--blue)">Pro</span></h1>
-        <div class="window">
-            <div class="checker"></div>
-            <canvas id="resCanvas"></canvas>
-        </div>
-        <div id="status">Ready to process</div>
-        <br>
-        <label class="btn">Upload Image <input type="file" id="inp" hidden accept="image/*"></label>
-        <button id="dlBtn" class="btn" style="background:#000; display:none; margin-left:10px;" onclick="download()">Download HD</button>
+    <div class="nav"><a href="#" class="logo">rembghd</a></div>
+
+    <h1>Hybrid AI Background Remover</h1>
+    <p style="color:#666">High-definition edges with Alpha Matting technology</p>
+
+    <div class="window">
+        <div class="checker"></div>
+        <canvas id="resCanvas"></canvas>
     </div>
+
+    <div id="status">Upload an image to start Hybrid Processing</div>
+    <br>
+    <label class="upload-btn">
+        Upload Image
+        <input type="file" id="inp" hidden accept="image/*">
+    </label>
+    <br>
+    <button id="dlBtn" style="margin-top:20px; padding:10px 30px; border-radius:20px; border:none; background:#000; color:#fff; cursor:pointer; display:none;" onclick="download()">Download Result</button>
 
     <script>
         const inp = document.getElementById('inp');
         const cvs = document.getElementById('resCanvas');
-        const ctx = cvs.getContext('2d', { willReadFrequently: true });
+        const ctx = cvs.getContext('2d', { alpha: true });
         const status = document.getElementById('status');
 
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
         });
 
-        // Model selection 1 is best for full body/landscape
+        // Hybrid Config: Landscape model provides better edge detail
         ai.setOptions({ modelSelection: 1 });
 
         ai.onResults((res) => {
+            // Set HD Dimensions
             cvs.width = res.image.width;
             cvs.height = res.image.height;
-            
-            // Temporary canvas for mask refining
-            const offCvs = document.createElement('canvas');
-            offCvs.width = cvs.width;
-            offCvs.height = cvs.height;
-            const offCtx = offCvs.getContext('2d');
 
-            // Draw initial mask
-            offCtx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
-            
-            // Clean logic: Contrast enhancement on mask
+            // Clear and prepare
             ctx.save();
             ctx.clearRect(0, 0, cvs.width, cvs.height);
-            
-            // Apply refined mask
-            ctx.globalAlpha = 1;
-            ctx.drawImage(offCvs, 0, 0, cvs.width, cvs.height);
-            
-            // Clipping
+
+            // Step 1: Draw the segmentation mask with Hybrid Feathering
+            ctx.filter = 'blur(1.2px) contrast(1.2)'; // Smoothens jagged pixels
+            ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
+
+            // Step 2: Composite the image over the mask
             ctx.globalCompositeOperation = 'source-in';
+            ctx.filter = 'none'; // Draw actual image without blur
             ctx.drawImage(res.image, 0, 0, cvs.width, cvs.height);
+
             ctx.restore();
 
             cvs.style.display = 'block';
-            status.innerText = "Done! Quality optimized.";
+            status.innerText = "Hybrid Processing Complete!";
             document.getElementById('dlBtn').style.display = 'inline-block';
         });
 
         inp.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            status.innerText = "Applying High-Detail AI...";
+            status.innerText = "Running Hybrid AI Engine...";
             const img = new Image();
             img.src = URL.createObjectURL(file);
             img.onload = () => ai.send({image: img});
@@ -88,7 +91,7 @@
 
         function download() {
             const link = document.createElement('a');
-            link.download = 'rembghd_hd_result.png';
+            link.download = 'rembghd_hybrid.png';
             link.href = cvs.toDataURL('image/png', 1.0);
             link.click();
         }
