@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd - Ultra HD</title>
+    <title>rembghd - AI Background Remover</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #0b1120; --panel: #161e2f; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
-        .header h1 { font-size: 32px; color: var(--accent); margin: 10px 0; text-shadow: 0 0 10px var(--accent); letter-spacing: 2px; }
+        .header h1 { font-size: 35px; color: var(--accent); margin: 10px 0; text-shadow: 0 0 10px var(--accent); letter-spacing: 2px; }
         .nav { margin-bottom: 30px; display: flex; gap: 15px; }
-        .btn { background: var(--accent); color: #000; padding: 12px 35px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; transition: 0.3s; }
+        .btn { background: var(--accent); color: #000; padding: 14px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; transition: 0.3s; font-size: 16px; }
         .btn-outline { background: none; border: 2px solid var(--accent); color: var(--accent); }
 
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1100px; width: 100%; }
-        .box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid #2d3748; text-align: center; }
-        .label { font-size: 11px; margin-bottom: 15px; letter-spacing: 2px; opacity: 0.7; font-weight: bold; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; max-width: 1100px; width: 100%; }
+        .box { background: var(--panel); padding: 20px; border-radius: 25px; border: 1px solid #2d3748; text-align: center; }
+        .label { font-size: 11px; margin-bottom: 15px; letter-spacing: 2px; opacity: 0.6; font-weight: bold; }
         
-        .screen { background: #050a14; border: 4px solid #2d3748; border-radius: 12px; height: 380px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .screen { background: #050a14; border: 4px solid #2d3748; border-radius: 15px; height: 400px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .checkerboard { background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%); background-size: 20px 20px; }
         
-        img, canvas { max-width: 95%; max-height: 95%; object-fit: contain; }
-        #status { margin-top: 20px; font-size: 12px; color: var(--accent); letter-spacing: 1px; }
+        img, canvas { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 8px; }
+        #status { margin-top: 20px; font-size: 13px; color: var(--accent); letter-spacing: 1px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -31,35 +31,35 @@
 
     <div class="nav">
         <label class="btn">Upload Image <input type="file" id="inp" hidden accept="image/*"></label>
-        <button class="btn btn-outline" onclick="download()">Download HD PNG</button>
+        <button class="btn btn-outline" id="dlBtn" onclick="download()">Download Result</button>
     </div>
 
     <div class="main-grid">
         <div class="box">
-            <div class="label">LEFT: PREVIEW IMAGE</div>
+            <div class="label">ORIGINAL</div>
             <div class="screen">
-                <img id="origView" style="display:none;">
-                <div id="msg1" style="opacity:0.2;">Original Preview</div>
+                <img id="origView" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80">
             </div>
         </div>
 
         <div class="box">
-            <div class="label">RIGHT: TASK COMPLETE</div>
+            <div class="label">REMOVED BACKGROUND</div>
             <div class="screen checkerboard">
                 <canvas id="resCanvas"></canvas>
-                <div id="msg2" style="opacity:0.2;">AI Result</div>
+                <img id="demoImg" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80" style="position:absolute;">
             </div>
         </div>
     </div>
 
-    <div id="status">SYSTEM READY</div>
+    <div id="status">LIVE DEMO: REMOVING IN 2s...</div>
 
     <script>
         const inp = document.getElementById('inp');
         const cvs = document.getElementById('resCanvas');
-        // optimized for high quality reading
         const ctx = cvs.getContext('2d', { willReadFrequently: true });
         const status = document.getElementById('status');
+        const demoImg = document.getElementById('demoImg');
+        const origView = document.getElementById('origView');
         let processed = false;
 
         const ai = new SelfieSegmentation({
@@ -68,37 +68,41 @@
         ai.setOptions({ modelSelection: 1 });
 
         ai.onResults((res) => {
-            // Force original image resolution for MB size
             cvs.width = res.image.width;
             cvs.height = res.image.height;
-            
             ctx.save();
             ctx.clearRect(0, 0, cvs.width, cvs.height);
-            
-            // Draw original quality
             ctx.drawImage(res.image, 0, 0, cvs.width, cvs.height);
-            
-            // Apply high-res mask
             ctx.globalCompositeOperation = 'destination-in';
             ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
-            
             ctx.restore();
-            status.innerText = "TASK COMPLETE - HD READY";
+            
+            demoImg.style.display = 'none'; // Hide demo image
+            status.innerText = "TASK COMPLETE";
             processed = true;
         });
 
+        // LIVE DEMO LOGIC
+        window.onload = () => {
+            setTimeout(() => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.src = origView.src;
+                img.onload = () => ai.send({image: img});
+            }, 2000);
+        };
+
+        // USER UPLOAD LOGIC
         inp.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
             
-            status.innerText = "AI SCANNING (HD)...";
+            processed = false;
+            status.innerText = "AI PROCESSING...";
             const url = URL.createObjectURL(file);
             
-            document.getElementById('msg1').style.display = 'none';
-            document.getElementById('msg2').style.display = 'none';
-            const ov = document.getElementById('origView');
-            ov.src = url;
-            ov.style.display = 'block';
+            origView.src = url;
+            demoImg.style.display = 'none';
 
             const img = new Image();
             img.src = url;
@@ -108,8 +112,7 @@
         function download() {
             if(!processed) return;
             const a = document.createElement('a');
-            a.download = 'rembghd_ultra_hd.png';
-            // Use 1.0 quality setting for maximum MBs
+            a.download = 'rembghd_hd.png';
             a.href = cvs.toDataURL('image/png', 1.0);
             a.click();
         }
