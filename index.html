@@ -10,27 +10,25 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
         /* Header & Navigation */
-        .header h1 { font-size: 32px; color: var(--accent); margin: 10px 0; text-shadow: 0 0 10px var(--accent); }
+        .header h1 { font-size: 32px; color: var(--accent); margin: 10px 0; text-shadow: 0 0 10px var(--accent); letter-spacing: 2px; }
         .nav { margin-bottom: 30px; display: flex; gap: 15px; }
-        .btn { background: var(--accent); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; }
+        .btn { background: var(--accent); color: #000; padding: 12px 35px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; transition: 0.3s; }
         .btn-outline { background: none; border: 2px solid var(--accent); color: var(--accent); }
+        .btn:hover { transform: scale(1.05); }
 
         /* Main Split Container */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1100px; width: 100%; }
         .box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid #2d3748; text-align: center; }
-        .label { font-size: 11px; margin-bottom: 10px; letter-spacing: 1px; opacity: 0.7; }
+        .label { font-size: 11px; margin-bottom: 15px; letter-spacing: 2px; opacity: 0.7; font-weight: bold; }
         
-        .screen { background: #050a14; border: 4px solid #2d3748; border-radius: 12px; height: 350px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .screen { background: #050a14; border: 4px solid #2d3748; border-radius: 12px; height: 380px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         
-        /* Checkerboard for Transparency */
+        /* Transparent Checkerboard for Results */
         .checkerboard { background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%); background-size: 20px 20px; }
         
-        img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; }
+        img, canvas { max-width: 95%; max-height: 95%; object-fit: contain; }
 
-        /* Color Controls */
-        .controls { margin-top: 25px; display: flex; gap: 12px; background: #000; padding: 10px 20px; border-radius: 50px; }
-        .dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid #2d3748; transition: 0.2s; }
-        .dot:hover { transform: scale(1.15); border-color: white; }
+        #status { margin-top: 20px; font-size: 12px; color: var(--accent); letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -53,90 +51,70 @@
 
         <div class="box">
             <div class="label">RIGHT: TASK COMPLETE</div>
-            <div class="screen checkerboard" id="resScreen">
+            <div class="screen checkerboard">
                 <canvas id="resCanvas"></canvas>
-                <div id="msg2" style="opacity:0.2;">AI Processing View</div>
+                <div id="msg2" style="opacity:0.2;">AI Result</div>
             </div>
         </div>
     </div>
 
-    <div class="controls">
-        <div class="dot" style="background:transparent; border: 1px dashed #fff;" onclick="setBG('transparent')"></div>
-        <div class="dot" style="background:#ff0055;" onclick="setBG('#ff0055')"></div>
-        <div class="dot" style="background:#00ff88;" onclick="setBG('#00ff88')"></div>
-        <div class="dot" style="background:#000;" onclick="setBG('#000')"></div>
-    </div>
+    <div id="status">SYSTEM READY</div>
 
     <script>
         const inp = document.getElementById('inp');
         const cvs = document.getElementById('resCanvas');
         const ctx = cvs.getContext('2d');
-        const resScreen = document.getElementById('resScreen');
-        let currentBG = 'transparent';
-        let lastResult = null;
+        const status = document.getElementById('status');
+        let processed = false;
 
-        // Correct AI Initialization
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
         });
         ai.setOptions({ modelSelection: 1 });
 
         ai.onResults((res) => {
-            lastResult = res;
-            render();
-        });
-
-        function render() {
-            if(!lastResult) return;
-            cvs.width = lastResult.image.width;
-            cvs.height = lastResult.image.height;
+            cvs.width = res.image.width;
+            cvs.height = res.image.height;
             
             ctx.save();
             ctx.clearRect(0, 0, cvs.width, cvs.height);
-
-            // 1. Logic: First Draw the Image
-            ctx.drawImage(lastResult.image, 0, 0, cvs.width, cvs.height);
-
-            // 2. Logic: Use Mask to Cut (Fixes the "Red Person" issue)
+            
+            // Step 1: Draw the image
+            ctx.drawImage(res.image, 0, 0, cvs.width, cvs.height);
+            
+            // Step 2: Extract only the subject using the mask
             ctx.globalCompositeOperation = 'destination-in';
-            ctx.drawImage(lastResult.segmentationMask, 0, 0, cvs.width, cvs.height);
-
-            // 3. Logic: Draw Background behind the cut
-            ctx.globalCompositeOperation = 'destination-over';
-            if(currentBG !== 'transparent') {
-                ctx.fillStyle = currentBG;
-                ctx.fillRect(0, 0, cvs.width, cvs.height);
-            }
+            ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
+            
             ctx.restore();
-        }
+            status.innerText = "TASK COMPLETE";
+            processed = true;
+        });
 
         inp.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
+            
+            status.innerText = "AI SCANNING...";
             const url = URL.createObjectURL(file);
             
-            // Show original image on the left
+            // Update left preview
             document.getElementById('msg1').style.display = 'none';
             document.getElementById('msg2').style.display = 'none';
             const ov = document.getElementById('origView');
             ov.src = url;
             ov.style.display = 'block';
 
-            // Send to AI for right side processing
+            // Process for right preview
             const img = new Image();
             img.src = url;
             img.onload = () => ai.send({image: img});
         };
 
-        function setBG(color) {
-            currentBG = color;
-            render();
-        }
-
         function download() {
-            if(!lastResult) return;
+            if(!processed) return;
             const a = document.createElement('a');
-            a.download = 'rembghd_result.png';
+            a.download = 'rembghd_transparent.png';
             a.href = cvs.toDataURL();
             a.click();
         }
