@@ -3,39 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd | AI Pro</title>
+    <title>rembghd | AI Pro Fixed</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --neon: #00f2fe; --bg: #050810; --panel: #0d121f; }
         body { font-family: sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .header h1 { font-size: 40px; color: var(--neon); text-shadow: 0 0 15px var(--neon); margin: 20px 0; }
+        .header h1 { font-size: 40px; color: var(--neon); text-shadow: 0 0 15px var(--neon); margin: 20px 0; letter-spacing: 2px; }
         .nav { margin-bottom: 25px; display: flex; gap: 15px; }
-        .btn { background: var(--neon); color: black; padding: 12px 30px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; }
+        .btn { background: var(--neon); color: black; padding: 12px 35px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; }
+        
         .main-container { display: flex; gap: 20px; max-width: 1100px; width: 100%; height: 550px; }
         
-        /* Editor Area with Checkerboard for Transparency */
-        .editor-area { flex: 3; background: var(--panel); background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px; border: 2px solid #1e293b; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        canvas { max-width: 95%; max-height: 95%; border-radius: 10px; z-index: 5; }
+        /* Editor Area with Transparency Pattern */
+        .editor-area { flex: 3; background: var(--panel); background-image: radial-gradient(#1e293b 1px, transparent 1px); background-size: 20px 20px; border: 2px solid #1e293b; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        canvas { max-width: 95%; max-height: 95%; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
         .sidebar { flex: 1; background: var(--panel); border-radius: 20px; border: 2px solid #1e293b; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .bg-card { height: 65px; border-radius: 10px; border: 3px solid #1e293b; cursor: pointer; transition: 0.2s; }
+        .bg-card { height: 65px; border-radius: 10px; border: 3px solid #1e293b; cursor: pointer; transition: 0.2s; position: relative; }
         .bg-card.active { border-color: var(--neon); box-shadow: 0 0 15px var(--neon); }
+        .bg-card:hover { border-color: #334155; }
     </style>
 </head>
 <body>
     <div class="header"><h1>rembghd</h1></div>
+    
     <div class="nav">
         <label class="btn">SELECT IMAGE <input type="file" id="up" hidden accept="image/*"></label>
-        <button class="btn" onclick="save()" style="background:none; border:1px solid var(--neon); color:var(--neon);">DOWNLOAD PNG</button>
+        <button class="btn" onclick="save()" style="background:none; border:2px solid var(--neon); color:var(--neon);">DOWNLOAD PNG</button>
     </div>
+
     <div class="main-container">
         <div class="editor-area"><canvas id="canvas"></canvas></div>
+        
         <div class="sidebar">
-            <div style="font-size:12px; color:var(--neon); margin-bottom:5px; letter-spacing:1px;">BACKGROUNDS</div>
-            <div class="bg-card active" style="background:transparent; border: 2px dashed #444; display:flex; align-items:center; justify-content:center; font-size:10px;" onclick="setBG('transparent', this)">NONE</div>
+            <div style="font-size:12px; color:var(--neon); margin-bottom:5px; font-weight:bold;">ENVIRONMENTS</div>
+            <div class="bg-card active" style="background:transparent; border: 2px dashed #444; display:flex; align-items:center; justify-content:center; font-size:10px;" onclick="setBG('transparent', this)">TRANSPARENT</div>
             <div class="bg-card" style="background:#ff0055;" onclick="setBG('#ff0055', this)"></div>
             <div class="bg-card" style="background:#00ff88;" onclick="setBG('#00ff88', this)"></div>
             <div class="bg-card" style="background:#000;" onclick="setBG('#000', this)"></div>
+            <div class="bg-card" style="background:linear-gradient(to bottom, #00f2fe, #4facfe);" onclick="setBG('gradient', this)"></div>
         </div>
     </div>
 
@@ -43,64 +49,12 @@
         const up = document.getElementById('up');
         const cvs = document.getElementById('canvas');
         const ctx = cvs.getContext('2d');
+        
+        // Secondary canvas for clean cutting
+        const offCanvas = document.createElement('canvas');
+        const offCtx = offCanvas.getContext('2d');
+
         let currentBG = 'transparent';
-        let latestResult = null;
+        let latestRes = null;
 
         const ai = new SelfieSegmentation({
-            locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
-        });
-        ai.setOptions({ modelSelection: 1 });
-        
-        ai.onResults((res) => {
-            latestResult = res;
-            render();
-        });
-
-        function render() {
-            if(!latestResult) return;
-            cvs.width = latestResult.image.width;
-            cvs.height = latestResult.image.height;
-            
-            ctx.save();
-            ctx.clearRect(0, 0, cvs.width, cvs.height);
-
-            // 1. Draw Background First
-            if(currentBG !== 'transparent') {
-                ctx.fillStyle = currentBG;
-                ctx.fillRect(0, 0, cvs.width, cvs.height);
-            }
-
-            // 2. Use Mask to Draw Foreground
-            ctx.globalCompositeOperation = 'destination-in';
-            ctx.drawImage(latestResult.segmentationMask, 0, 0, cvs.width, cvs.height);
-            
-            ctx.globalCompositeOperation = 'destination-over';
-            ctx.drawImage(latestResult.image, 0, 0);
-            
-            ctx.restore();
-        }
-
-        up.onchange = (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            img.onload = () => ai.send({image: img});
-        };
-
-        function setBG(val, el) {
-            currentBG = val;
-            document.querySelectorAll('.bg-card').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-            render(); // Force re-render with the existing AI mask
-        }
-
-        function save() {
-            const link = document.createElement('a');
-            link.download = 'rembghd_final.png';
-            link.href = cvs.toDataURL('image/png');
-            link.click();
-        }
-    </script>
-</body>
-</html>
