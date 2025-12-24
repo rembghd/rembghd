@@ -3,53 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd | AI Future</title>
+    <title>rembghd | AI Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --neon: #00f2fe; --bg: #050810; --panel: #0d121f; }
         body { font-family: sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        
         .header h1 { font-size: 40px; color: var(--neon); text-shadow: 0 0 15px var(--neon); margin: 20px 0; }
-        
-        .main-container { display: flex; gap: 20px; max-width: 1100px; width: 100%; height: 500px; }
-
-        /* Output Window */
-        .editor-area { flex: 3; background: var(--panel); border: 2px solid #1e293b; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        canvas { max-width: 95%; max-height: 95%; border-radius: 10px; z-index: 5; background: #000; }
-
-        /* Sidebar */
-        .sidebar { flex: 1; background: var(--panel); border-radius: 20px; border: 2px solid #1e293b; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .bg-card { height: 60px; border-radius: 8px; border: 2px solid #1e293b; cursor: pointer; transition: 0.3s; background-size: cover; background-position: center; }
-        .bg-card:hover, .bg-card.active { border-color: var(--neon); box-shadow: 0 0 10px var(--neon); }
-
-        /* UI Buttons */
         .nav { margin-bottom: 25px; display: flex; gap: 15px; }
         .btn { background: var(--neon); color: black; padding: 12px 30px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; }
+        .main-container { display: flex; gap: 20px; max-width: 1100px; width: 100%; height: 550px; }
         
-        #status-msg { position: absolute; color: var(--neon); font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+        /* Editor Area with Checkerboard for Transparency */
+        .editor-area { flex: 3; background: var(--panel); background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px; border: 2px solid #1e293b; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        canvas { max-width: 95%; max-height: 95%; border-radius: 10px; z-index: 5; }
+        
+        .sidebar { flex: 1; background: var(--panel); border-radius: 20px; border: 2px solid #1e293b; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .bg-card { height: 65px; border-radius: 10px; border: 3px solid #1e293b; cursor: pointer; transition: 0.2s; }
+        .bg-card.active { border-color: var(--neon); box-shadow: 0 0 15px var(--neon); }
     </style>
 </head>
 <body>
-
     <div class="header"><h1>rembghd</h1></div>
-
     <div class="nav">
         <label class="btn">SELECT IMAGE <input type="file" id="up" hidden accept="image/*"></label>
-        <button class="btn" onclick="save()" style="background:none; border:1px solid var(--neon); color:var(--neon);">DOWNLOAD</button>
+        <button class="btn" onclick="save()" style="background:none; border:1px solid var(--neon); color:var(--neon);">DOWNLOAD PNG</button>
     </div>
-
     <div class="main-container">
-        <div class="editor-area">
-            <div id="status-msg">SYSTEM READY: WAITING FOR UPLOAD</div>
-            <canvas id="canvas"></canvas>
-        </div>
-
+        <div class="editor-area"><canvas id="canvas"></canvas></div>
         <div class="sidebar">
-            <div style="font-size:12px; color:var(--neon); margin-bottom:10px;">BACKGROUNDS</div>
-            <div class="bg-card active" style="background:#000;" onclick="setBG('transparent', this)"></div>
+            <div style="font-size:12px; color:var(--neon); margin-bottom:5px; letter-spacing:1px;">BACKGROUNDS</div>
+            <div class="bg-card active" style="background:transparent; border: 2px dashed #444; display:flex; align-items:center; justify-content:center; font-size:10px;" onclick="setBG('transparent', this)">NONE</div>
             <div class="bg-card" style="background:#ff0055;" onclick="setBG('#ff0055', this)"></div>
             <div class="bg-card" style="background:#00ff88;" onclick="setBG('#00ff88', this)"></div>
-            <div class="bg-card" style="background:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=200');" onclick="setBG('space', this)"></div>
+            <div class="bg-card" style="background:#000;" onclick="setBG('#000', this)"></div>
         </div>
     </div>
 
@@ -57,45 +43,46 @@
         const up = document.getElementById('up');
         const cvs = document.getElementById('canvas');
         const ctx = cvs.getContext('2d');
-        const msg = document.getElementById('status-msg');
         let currentBG = 'transparent';
-        let resData = null;
+        let latestResult = null;
 
-        // Initialize AI with Error Handling
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
         });
-
         ai.setOptions({ modelSelection: 1 });
         
         ai.onResults((res) => {
-            resData = res;
+            latestResult = res;
             render();
-            msg.style.display = 'none';
         });
 
         function render() {
-            if(!resData) return;
-            cvs.width = resData.image.width;
-            cvs.height = resData.image.height;
-            ctx.clearRect(0,0,cvs.width,cvs.height);
+            if(!latestResult) return;
+            cvs.width = latestResult.image.width;
+            cvs.height = latestResult.image.height;
+            
+            ctx.save();
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
 
+            // 1. Draw Background First
             if(currentBG !== 'transparent') {
-                ctx.fillStyle = currentBG.startsWith('#') ? currentBG : '#0a0a0a';
-                ctx.fillRect(0,0,cvs.width,cvs.height);
+                ctx.fillStyle = currentBG;
+                ctx.fillRect(0, 0, cvs.width, cvs.height);
             }
 
-            ctx.drawImage(resData.segmentationMask, 0, 0, cvs.width, cvs.height);
-            ctx.globalCompositeOperation = 'source-in';
-            ctx.drawImage(resData.image, 0, 0);
-            ctx.globalCompositeOperation = 'source-over';
+            // 2. Use Mask to Draw Foreground
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.drawImage(latestResult.segmentationMask, 0, 0, cvs.width, cvs.height);
+            
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.drawImage(latestResult.image, 0, 0);
+            
+            ctx.restore();
         }
 
         up.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            msg.innerText = "AI SCANNING...";
-            
             const img = new Image();
             img.src = URL.createObjectURL(file);
             img.onload = () => ai.send({image: img});
@@ -105,14 +92,14 @@
             currentBG = val;
             document.querySelectorAll('.bg-card').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
-            render();
+            render(); // Force re-render with the existing AI mask
         }
 
         function save() {
-            const a = document.createElement('a');
-            a.download = 'rembghd_output.png';
-            a.href = cvs.toDataURL();
-            a.click();
+            const link = document.createElement('a');
+            link.download = 'rembghd_final.png';
+            link.href = cvs.toDataURL('image/png');
+            link.click();
         }
     </script>
 </body>
