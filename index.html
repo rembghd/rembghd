@@ -18,13 +18,12 @@
             background: var(--dark-bg); 
             text-align: center; 
             color: #fff;
+            overflow-x: hidden;
         }
         
         header { 
-            padding: 25px 0 80px 0; /* More gap between name and tool */
+            padding: 30px 0 60px 0; /* Premium top space */
             background: var(--dark-bg); 
-            position: relative; 
-            z-index: 99;
         }
         .logo-text { 
             font-size: 52px; 
@@ -36,7 +35,7 @@
         .tagline { 
             color: #888; 
             font-size: 18px; 
-            margin-top: 10px; 
+            margin: 10px 0 0 0; 
         }
 
         .main-container { 
@@ -45,51 +44,68 @@
             padding: 0 15px; 
         }
         
-        /* Tool card height increased to show full frame and shade */
+        /* Tool container with shadow and proper height */
         .tool-card { 
             width: 100%; 
-            height: 820px; 
-            background: var(--dark-bg); 
+            height: 750px; 
+            background: #111827; 
             border-radius: 24px; 
             overflow: hidden; 
-            margin-bottom: 80px; /* Pushing footer way down */
-            box-shadow: 0px 10px 40px rgba(0,0,0,0.5); /* Adding extra shade */
+            margin-bottom: 100px; /* Space for footer */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border: 1px solid #1f2937;
         }
         
         iframe { 
             width: 100%; 
-            height: 1300px; 
+            height: 1200px; 
             border: none; 
-            /* PC Margin mazeed kam kiya taake shade dikhe */
-            margin-top: -90px; 
+            /* PC alignment fix to show top shade */
+            margin-top: -95px; 
         }
 
         /* MOBILE OPTIMIZATION */
         @media (max-width: 600px) {
-            header { padding: 30px 0 75px 0; }
+            header { padding: 40px 0 50px 0; }
             .logo-text { font-size: 44px; }
             
             .tool-card { 
-                height: 880px; /* Extra height for mobile shade */
-                margin-top: 10px;
+                height: 850px; 
+                margin-top: 20px;
             }
             iframe { 
-                /* Mobile margin adjusted for "image" label + shade visibility */
-                margin-top: -275px; 
-                height: 2100px; 
+                /* Fixed margin to show the "image" label clearly */
+                margin-top: -285px; 
+                height: 1950px; 
             }
         }
 
         footer { 
-            padding: 80px 20px; /* Deep premium footer */
+            padding: 80px 20px; 
             background: #05070a; 
             border-top: 1px solid #151921;
         }
-        .footer-heading { color: var(--gold); font-weight: 700; margin-bottom: 10px; font-size: 22px; }
+        .footer-heading { color: var(--gold); font-weight: 700; font-size: 22px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo-text">RembgHD</h1>
-        <p class="tagline">
+        <p class="tagline">Free High Definition AI Background Remover</p>
+    </header>
+
+    <div class="main-container">
+        <div class="tool-card">
+            <iframe src="https://briaai-bria-rmbg-1-4.hf.space"></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-heading">RembgHD Premium AI</div>
+        <p style="color:#666; font-size:15px; margin-bottom: 30px;">Professional AI-powered background removal for HD results.</p>
+        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Fast & Free</p>
+    </footer>
+
+</body>
+</html>
