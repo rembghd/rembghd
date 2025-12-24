@@ -18,74 +18,71 @@
             background: var(--dark-bg); 
             text-align: center; 
             color: #fff;
-            overflow-x: hidden;
         }
         
         header { 
-            padding: 30px 0 65px 0; /* Premium spacing below title */
+            padding: 20px 0 30px 0; /* Gap kam kar diya: Header aur Frame kareeb aa gaye */
             background: var(--dark-bg); 
         }
         .logo-text { 
-            font-size: 52px; 
+            font-size: 48px; 
             font-weight: 800; 
             color: var(--gold); 
             margin: 0; 
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            text-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
         }
         .tagline { 
             color: #888; 
-            font-size: 18px; 
-            margin-top: 10px; 
+            font-size: 16px; 
+            margin-top: 5px; 
         }
 
         .main-container { 
             max-width: 1000px; 
             margin: 0 auto; 
-            padding: 0 15px; 
+            padding: 0 10px; 
         }
         
-        /* Card with shadow and enough height to push footer down */
+        /* Container ko bara kiya taake nichla hissa auto dikhe */
         .tool-card { 
             width: 100%; 
-            height: 780px; 
+            height: auto; 
+            min-height: 850px; /* Ensures space for all buttons */
             background: #111827; 
             border-radius: 28px; 
             overflow: hidden; 
-            margin-bottom: 120px; /* Big gap before footer */
-            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+            margin-bottom: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             border: 1px solid #1f2937;
         }
         
         iframe { 
             width: 100%; 
-            height: 1250px; 
+            height: 1300px; /* Iframe ki height barha di taake cutting na ho */
             border: none; 
-            /* PC pe top border aur "image" label dikhane ke liye setting */
-            margin-top: -85px; 
+            margin-top: -85px; /* Top border visibility fix */
         }
 
-        /* MOBILE FIX: NO CUTTING + PERFECT SHADE */
+        /* MOBILE OPTIMIZATION */
         @media (max-width: 600px) {
-            header { padding: 40px 0 55px 0; }
-            .logo-text { font-size: 44px; }
+            header { padding: 15px 0 25px 0; }
+            .logo-text { font-size: 40px; }
             
             .tool-card { 
-                height: 870px; 
-                margin-top: 15px;
+                min-height: 950px; /* Mobile par nichle buttons ke liye mazeed jagah */
+                margin-top: 10px;
             }
             iframe { 
-                /* Mobile margin adjusted to show full top border & image tag */
-                margin-top: -270px; 
-                height: 2000px; 
+                margin-top: -270px; /* Frame shade and top label fix */
+                height: 2200px; /* Bohat zyada height taake scroll auto ho */
             }
         }
 
         footer { 
-            padding: 80px 20px; 
+            padding: 50px 20px; 
             background: #05070a; 
             border-top: 1px solid #151921;
         }
-        .footer-heading { color: var(--gold); font-weight: 700; font-size: 22px; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -102,9 +99,8 @@
     </div>
 
     <footer>
-        <div class="footer-heading">RembgHD Premium AI</div>
-        <p style="color:#666; font-size:15px; margin-bottom: 30px;">World-class HD Background Removal powered by Bria AI.</p>
-        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Fast, Secure & Free</p>
+        <p style="color:var(--gold); font-weight:700; margin-bottom:10px;">RembgHD Premium AI</p>
+        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Full HD Quality</p>
     </footer>
 
 </body>
