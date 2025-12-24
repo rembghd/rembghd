@@ -6,62 +6,73 @@
     <title>rembghd - AI Background Remover</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
-        :root { --accent: #00f2fe; --bg: #0b1120; --panel: #161e2f; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        :root { --accent: #00f2fe; --bg: #ffffff; --text: #2d2d2d; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
         
-        .header h1 { font-size: 32px; color: var(--accent); margin: 10px 0; text-shadow: 0 0 10px var(--accent); }
-        .nav { margin-bottom: 30px; display: flex; gap: 15px; }
-        .btn { background: var(--accent); color: #000; padding: 12px 35px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; text-transform: uppercase; }
+        .navbar { width: 100%; padding: 25px 50px; display: flex; align-items: center; box-sizing: border-box; }
+        .logo { font-size: 26px; font-weight: 900; color: #000; text-decoration: none; letter-spacing: -1px; }
 
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1100px; width: 100%; }
-        .box { background: var(--panel); padding: 15px; border-radius: 20px; border: 1px solid #2d3748; text-align: center; }
-        .label { font-size: 11px; margin-bottom: 10px; letter-spacing: 1px; opacity: 0.7; }
+        .hero { display: flex; align-items: center; justify-content: center; gap: 80px; max-width: 1200px; width: 100%; min-height: 80vh; padding: 40px; box-sizing: border-box; }
         
-        .screen { background: #050a14; border: 4px solid #2d3748; border-radius: 12px; height: 350px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .checkerboard { background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%); background-size: 20px 20px; }
+        /* LEFT: The Image Window */
+        .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: flex-end; }
+        .window { width: 500px; height: 350px; background: #f7f7f7; border-radius: 24px; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.08); border: 1px solid #eee; }
+        .checkerboard { background-image: linear-gradient(45deg, #e0e0e0 25%, transparent 25%), linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e0e0e0 75%), linear-gradient(-45deg, transparent 75%, #e0e0e0 75%); background-size: 20px 20px; }
         
-        img, canvas { max-width: 95%; max-height: 95%; object-fit: contain; }
-        #status { margin-top: 15px; font-size: 12px; color: var(--accent); font-weight: bold; }
+        img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; transition: opacity 0.5s; }
+        
+        /* RIGHT: Clean Upload Content */
+        .upload-side { flex: 1; text-align: left; }
+        .upload-side h1 { font-size: 64px; line-height: 1; margin: 0 0 30px 0; color: #1a1a1a; font-weight: 800; }
+        
+        .upload-card { background: #fff; padding: 40px; border-radius: 32px; box-shadow: 0 25px 60px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; border: 1px solid #f0f0f0; width: 380px; }
+        
+        .upload-btn { background: #007bff; color: white; padding: 20px 50px; border-radius: 60px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; margin-bottom: 20px; text-align: center; width: 100%; box-sizing: border-box; }
+        .upload-btn:hover { background: #0056b3; transform: scale(1.02); }
+        .drop-text { font-size: 15px; color: #999; font-weight: 500; }
+
+        .status-msg { margin-top: 20px; font-size: 13px; font-weight: 700; color: #007bff; letter-spacing: 1px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="header"><h1>rembghd</h1></div>
+    <nav class="navbar">
+        <a href="#" class="logo">rembghd</a>
+    </nav>
 
-    <div class="nav">
-        <label class="btn">Upload Image <input type="file" id="inp" hidden accept="image/*"></label>
-        <button class="btn" style="background:none; border:1px solid var(--accent); color:var(--accent);" onclick="download()">Download PNG</button>
-    </div>
-
-    <div class="main-grid">
-        <div class="box">
-            <div class="label">LEFT: PREVIEW IMAGE</div>
-            <div class="screen" id="leftScreen">
-                <img id="origView" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80">
+    <div class="hero">
+        <div class="image-side">
+            <div class="window" id="win">
+                <img id="viewImg" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80">
+                <canvas id="resCanvas" style="display:none;"></canvas>
             </div>
+            <div id="status" class="status-msg">Demo Mode</div>
         </div>
 
-        <div class="box">
-            <div class="label">RIGHT: TASK COMPLETE</div>
-            <div class="screen checkerboard" id="rightScreen">
-                <canvas id="resCanvas"></canvas>
-                <img id="demoImg" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80" style="position:absolute;">
+        <div class="upload-side">
+            <h1>Remove Image<br>Background</h1>
+            <div class="upload-card">
+                <label class="upload-btn">
+                    Upload Image
+                    <input type="file" id="inp" hidden accept="image/*">
+                </label>
+                <div class="drop-text">or drop a file, paste image or URL</div>
+                <button id="dlBtn" style="display:none; margin-top:15px; background:none; border:1px solid #007bff; color:#007bff; padding:10px 20px; border-radius:30px; cursor:pointer;" onclick="download()">Download Result</button>
             </div>
         </div>
     </div>
-
-    <div id="status">DEMO MODE: LOOPING...</div>
 
     <script>
         const inp = document.getElementById('inp');
         const cvs = document.getElementById('resCanvas');
-        const ctx = cvs.getContext('2d', { willReadFrequently: true });
+        const ctx = cvs.getContext('2d');
+        const viewImg = document.getElementById('viewImg');
+        const win = document.getElementById('win');
         const status = document.getElementById('status');
-        const demoImg = document.getElementById('demoImg');
-        const origView = document.getElementById('origView');
-        
-        let isUserUpload = false;
-        let loopInterval;
+        const dlBtn = document.getElementById('dlBtn');
+
+        let userUploaded = false;
+        let loopTimer;
 
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
@@ -78,55 +89,64 @@
             ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
             ctx.restore();
             
-            if(isUserUpload) {
-                demoImg.style.display = 'none';
-                status.innerText = "TASK COMPLETE";
+            // Switch to result
+            viewImg.style.opacity = '0';
+            cvs.style.display = 'block';
+            win.classList.add('checkerboard');
+            if(userUploaded) {
+                status.innerText = "Task Complete";
+                dlBtn.style.display = 'block';
             }
         });
 
-        // LOOP LOGIC for Demo
-        function startDemoLoop() {
-            let showRemoved = false;
-            loopInterval = setInterval(() => {
-                if(isUserUpload) return;
-                showRemoved = !showRemoved;
-                if(showRemoved) {
+        // Loop Logic
+        function runLoop() {
+            if(userUploaded) return;
+            let step = 0;
+            loopTimer = setInterval(() => {
+                if(userUploaded) return;
+                if(step === 0) { // To Removed
                     const img = new Image();
                     img.crossOrigin = "anonymous";
-                    img.src = origView.src;
+                    img.src = viewImg.src;
                     img.onload = () => ai.send({image: img});
-                    demoImg.style.opacity = "0"; // Hide original on right
-                } else {
-                    demoImg.style.opacity = "1"; // Show original on right
-                    ctx.clearRect(0,0,cvs.width,cvs.height);
+                    step = 1;
+                } else { // To Original
+                    cvs.style.display = 'none';
+                    viewImg.style.opacity = '1';
+                    win.classList.remove('checkerboard');
+                    step = 0;
                 }
             }, 3000);
         }
 
-        window.onload = startDemoLoop;
+        window.onload = runLoop;
 
-        // USER UPLOAD
         inp.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
             
-            isUserUpload = true;
-            clearInterval(loopInterval);
-            status.innerText = "PROCESSING...";
+            userUploaded = true;
+            clearInterval(loopTimer);
+            status.innerText = "AI Processing...";
             
             const url = URL.createObjectURL(file);
-            origView.src = url; // 1. Show Preview on Left
-            demoImg.style.display = 'none';
+            win.classList.remove('checkerboard');
+            cvs.style.display = 'none';
+            viewImg.src = url;
+            viewImg.style.opacity = '1';
 
-            const img = new Image();
-            img.src = url;
-            img.onload = () => ai.send({image: img}); // 2. Show Result on Right
+            // Process after small delay to show preview first
+            setTimeout(() => {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => ai.send({image: img});
+            }, 1000);
         };
 
         function download() {
-            if(!isUserUpload) return;
             const a = document.createElement('a');
-            a.download = 'rembghd_hd.png';
+            a.download = 'rembghd_final.png';
             a.href = cvs.toDataURL('image/png', 1.0);
             a.click();
         }
