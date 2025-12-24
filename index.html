@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - Free Background Remover</title>
+    <title>RembgHD - Free HD Background Remover</title>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: #f8f9fa; display: flex; flex-direction: column; min-height: 100vh; }
+        /* Global Styles */
+        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: #f4f7f6; display: flex; flex-direction: column; min-height: 100vh; }
         
-        header { background: #fff; padding: 20px 10px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        h1 { margin: 0; color: #007bff; font-size: 28px; letter-spacing: -1px; }
-        p.slogan { margin: 5px 0 0; color: #6c757d; font-size: 14px; font-weight: 500; }
+        /* Header */
+        header { background: #fff; padding: 15px 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        h1 { margin: 0; color: #007bff; font-size: 26px; font-weight: 800; }
+        p.slogan { margin: 3px 0 0; color: #6c757d; font-size: 13px; font-weight: 500; }
 
-        .engine-container { 
+        /* The Tool Container */
+        .main-content { 
             flex: 1; 
             display: flex; 
             flex-direction: column;
@@ -19,37 +22,48 @@
             align-items: center; 
             padding: 20px;
         }
-        .wrapper { 
-            width: 100%; 
-            max-width: 900px; 
-            height: 500px; 
-            background: #fff; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-        iframe { width: 100%; height: 100%; border: none; }
 
-        /* Custom Download Button Area */
-        .action-area { margin-top: 20px; text-align: center; width: 100%; max-width: 900px; }
-        .dl-btn { 
+        /* Iframe Cropping Magic */
+        .iframe-wrapper { 
+            width: 100%; 
+            max-width: 850px; 
+            height: 520px; /* Fixed height for clean look */
+            background: #fff; 
+            border-radius: 25px; 
+            overflow: hidden; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            border: 1px solid #eee;
+        }
+        
+        iframe { 
+            width: 100%; 
+            height: 900px; /* Longer iframe to hide text */
+            border: none; 
+            margin-top: -335px; /* Adjust this to hide/show specific parts */
+        }
+
+        /* Bottom Action Section */
+        .action-bar { margin-top: 25px; text-align: center; }
+        .download-btn { 
             background: #28a745; 
             color: white; 
-            padding: 15px 40px; 
+            padding: 14px 45px; 
             border-radius: 50px; 
             text-decoration: none; 
-            font-weight: bold; 
+            font-weight: 700; 
             display: inline-block;
-            transition: 0.3s;
+            transition: all 0.3s ease;
             border: none;
             cursor: pointer;
-            font-size: 18px;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            font-size: 17px;
+            box-shadow: 0 5px 20px rgba(40, 167, 69, 0.3);
         }
-        .dl-btn:hover { background: #218838; transform: translateY(-2px); }
+        .download-btn:hover { background: #218838; transform: scale(1.05); }
 
-        footer { padding: 15px; text-align: center; color: #adb5bd; font-size: 13px; margin-top: auto; }
-        footer strong { color: #495057; }
+        /* Professional Footer */
+        footer { padding: 15px; text-align: center; color: #999; font-size: 12px; }
+        footer strong { color: #333; }
     </style>
 </head>
 <body>
@@ -59,14 +73,14 @@
         <p class="slogan">It's free and always will be</p>
     </header>
 
-    <div class="engine-container">
-        <div class="wrapper">
-            <iframe src="https://briaai-bria-rmbg-1-4.hf.space"></iframe>
+    <div class="main-content">
+        <div class="iframe-wrapper">
+            <iframe src="https://briaai-bria-rmbg-1-4.hf.space" scrolling="no"></iframe>
         </div>
 
-        <div class="action-area">
-            <button class="dl-btn" onclick="startDownload()">Download HD Result</button>
-            <p style="font-size: 12px; color: #999; margin-top: 10px;">High resolution file will be saved to your device</p>
+        <div class="action-bar">
+            <button class="download-btn" onclick="triggerAdsterra()">Download Ultra HD Result</button>
+            <p style="font-size: 11px; color: #aaa; margin-top: 8px;">File size might be large (Up to 10MB) for original quality</p>
         </div>
     </div>
 
@@ -75,13 +89,13 @@
     </footer>
 
     <script>
-        function startDownload() {
-            // Yahan hum Adsterra ka Direct Link add karenge
-            alert("Redirecting to Secure Download Server... Please wait.");
+        function triggerAdsterra() {
+            // Jab apko Adsterra ka Direct Link mile, yahan paste kar dein
+            console.log("Ad Clicked & Download Started");
+            alert("Preparing HD File... Please stay on this page.");
             
-            // Abhi ke liye ye bas user ko engine par wapas bhej raha hai 
-            // Magar yahan aapka "Money Link" ayega
-            console.log("Download triggered");
+            // Simulation: Yahan apka Ad link open hoga
+            // window.open('https://your-adsterra-link.com', '_blank');
         }
     </script>
 
