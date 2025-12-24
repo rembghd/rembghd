@@ -8,22 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; display: flex; flex-direction: column; min-height: 100vh; }
-        header { padding: 50px 0 25px 0; background: var(--dark-bg); z-index: 100; }
-        .logo-container { display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .logo-icon { width: 55px; height: 55px; fill: var(--gold); }
-        .logo-text { font-size: 58px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
-        .slogan { color: #aaa; font-size: 20px; margin-top: 10px; font-style: italic; }
-        .main-container { max-width: 1100px; margin: 0 auto; padding: 0 15px; flex: 1; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
         
-        /* ADJUSTED CONTAINER */
+        header { padding: 40px 0 20px 0; background: var(--dark-bg); }
+        .logo-container { display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .logo-icon { width: 50px; height: 50px; fill: var(--gold); }
+        .logo-text { font-size: 52px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
+        .slogan { color: #aaa; font-size: 18px; margin-top: 8px; font-style: italic; }
+
+        /* PC PAR WIDE LOOK KE LIYE */
+        .main-container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 0 20px; flex: 1; box-sizing: border-box; }
+
         .tool-card { 
             width: 100%; 
-            height: 850px; /* Thora aur neche karne ke liye height barha di */
+            height: 780px; 
             background: #111827; 
-            border-radius: 40px; 
+            border-radius: 35px; 
             overflow: hidden; 
-            margin-bottom: 50px; 
+            margin: 20px 0 50px 0; 
             box-shadow: 0 30px 80px rgba(0,0,0,0.9); 
             border: 1px solid #1f2937; 
             position: relative;
@@ -31,27 +33,28 @@
         
         iframe { 
             width: 100%; 
-            height: 1600px; 
+            height: 1550px; 
             border: none; 
-            /* PC: Margin adjusted to hide extra text and show labels perfectly */
-            margin-top: -155px; 
+            /* PC Margin optimized to hide top text while keeping labels visible */
+            margin-top: -160px; 
             display: block;
             background: #111827;
         }
 
-        .content-section { text-align: left; background: #111827; padding: 35px; border-radius: 30px; margin-bottom: 60px; border: 1px solid #1f2937; }
-        .content-section h2 { color: var(--gold); margin-top: 25px; }
-        
-        /* Mobile Fix */
-        @media (max-width: 600px) {
-            header { padding: 40px 0 15px 0; }
-            .logo-text { font-size: 42px; }
-            .tool-card { height: 1000px; }
-            iframe { margin-top: -275px; height: 2600px; }
+        .content-section { text-align: left; background: #111827; padding: 35px; border-radius: 25px; margin-bottom: 60px; border: 1px solid #1f2937; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .content-section h2 { color: var(--gold); margin-top: 20px; }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 768px) {
+            header { padding: 30px 0 15px 0; }
+            .logo-text { font-size: 38px; }
+            .tool-card { height: 1000px; border-radius: 20px; }
+            iframe { margin-top: -270px; height: 2500px; }
+            .main-container { padding: 0 10px; }
         }
 
-        footer { padding: 60px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
-        .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 15px; font-size: 15px; }
+        footer { padding: 50px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
+        .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 15px; font-size: 14px; font-weight: 600; }
         .sadsha { color: var(--gold); font-weight: 800; }
     </style>
 </head>
@@ -69,18 +72,18 @@
             <iframe src="https://briaai-bria-rmbg-1-4.hf.space?__theme=dark"></iframe>
         </div>
         <div class="content-section">
-            <h2>High Definition AI Background Removal</h2>
-            <p>Professional HD background removal powered by <strong>SadSha</strong>.</p>
+            <h2>Professional HD Background Removal</h2>
+            <p>Experience studio-quality background removal instantly. Powered by <strong>SadSha</strong> AI technology.</p>
         </div>
     </div>
 
     <footer>
         <div class="footer-links">
             <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms</a>
-            <a href="contact.html">Contact</a>
+            <a href="terms.html">Terms & Conditions</a>
+            <a href="contact.html">Contact Us</a>
         </div>
-        <p style="margin-top:20px;">Powered by <span class="sadsha">SadSha</span></p>
+        <p style="margin-top:20px; font-size: 13px; color: #555;">Powered by <span class="sadsha">SadSha</span></p>
     </footer>
 </body>
 </html>
