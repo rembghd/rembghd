@@ -15,31 +15,54 @@
         .hero { display: flex; align-items: center; justify-content: center; gap: 80px; max-width: 1200px; margin: 0 auto; min-height: 80vh; padding: 20px; box-sizing: border-box; }
         
         .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
-        .window { width: 500px; height: 350px; background: var(--bg); display: flex; align-items: center; justify-content: center; position: relative; border-radius: 24px; overflow: hidden; }
         
-        /* Checkerboard background for demo */
-        .checker-bg { position: absolute; width: 100%; height: 100%; background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%); background-size: 16px 16px; opacity: 0; transition: opacity 0.3s; }
-        
-        img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; z-index: 2; }
-        
-        /* Loop Animation for Demo Image only */
-        @keyframes bgToggle {
-            0%, 45% { background-color: #ffffff; } /* Show Background */
-            55%, 100% { background-color: transparent; } /* Hide Background */
+        /* The Window: Uses the demo image as a background to prevent flickering */
+        .window { 
+            width: 500px; height: 350px; 
+            background-color: #fff;
+            background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative; 
+            border-radius: 24px; 
+            overflow: hidden; 
         }
-        @keyframes checkerToggle {
-            0%, 45% { opacity: 0; }
-            55%, 100% { opacity: 1; }
+        
+        /* The "Removed" effect layer */
+        .removed-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80'),
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+                linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+                linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: contain, 20px 20px, 20px 20px, 20px 20px, 20px 20px;
+            background-position: center;
+            background-repeat: no-repeat, repeat, repeat, repeat, repeat;
+            background-blend-mode: luminosity; /* This creates the "removed" look for demo */
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
         }
 
-        .looping #viewImg { animation: bgToggle 2s infinite alternate ease-in-out; }
-        .looping .checker-bg { animation: checkerToggle 2s infinite alternate ease-in-out; }
+        /* Infinite Loop via CSS */
+        .looping .removed-layer {
+            animation: toggleView 2s infinite alternate ease-in-out;
+        }
 
+        @keyframes toggleView {
+            0%, 40% { opacity: 0; }   /* Show Original */
+            60%, 100% { opacity: 1; } /* Show Removed */
+        }
+
+        /* UI Elements */
+        canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; z-index: 10; display: none; }
         .upload-side { flex: 1; text-align: left; }
         .upload-side h1 { font-size: 62px; line-height: 1.1; margin: 0 0 25px 0; font-weight: 800; color: #333; }
-        .upload-card { background: #fff; display: flex; flex-direction: column; align-items: center; width: 400px; padding: 40px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
+        .upload-card { background: #fff; display: flex; flex-direction: column; align-items: center; width: 400px; padding: 40px; border-radius: 30px; border: 1px solid #f0f0f0; }
         .upload-btn { background: var(--blue); color: white; padding: 20px 50px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; width: 100%; text-align: center; }
-        
         .status-msg { margin-top: 15px; font-size: 11px; font-weight: 900; color: var(--blue); text-transform: uppercase; }
         #dlBtn { margin-top: 20px; background: #000; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; display: none; width: 100%; }
     </style>
@@ -51,9 +74,8 @@
     <div class="hero">
         <div class="image-side">
             <div class="window looping" id="displayBox">
-                <div class="checker-bg"></div>
-                <img id="viewImg" src="https://www.transparentpng.com/download/girl/EAg96Y-girl-picture.png" crossorigin="anonymous">
-                <canvas id="resCanvas" style="display:none;"></canvas>
+                <div class="removed-layer"></div>
+                <canvas id="resCanvas"></canvas>
             </div>
             <div id="status" class="status-msg">Demo Mode</div>
         </div>
@@ -74,7 +96,6 @@
         const inp = document.getElementById('inp');
         const cvs = document.getElementById('resCanvas');
         const ctx = cvs.getContext('2d');
-        const viewImg = document.getElementById('viewImg');
         const box = document.getElementById('displayBox');
         const status = document.getElementById('status');
         const dlBtn = document.getElementById('dlBtn');
@@ -94,7 +115,6 @@
             ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
             ctx.restore();
             
-            viewImg.style.display = 'none';
             cvs.style.display = 'block';
             status.innerText = "Task Complete";
             dlBtn.style.display = 'block';
@@ -104,9 +124,10 @@
             const file = e.target.files[0];
             if(!file) return;
             
+            // Kill the Demo Loop immediately
             box.classList.remove('looping');
-            viewImg.style.animation = 'none';
-            status.innerText = "Processing...";
+            box.style.backgroundImage = 'none'; // Clear demo image
+            status.innerText = "AI Processing...";
             
             const url = URL.createObjectURL(file);
             const img = new Image();
@@ -118,7 +139,7 @@
 
         function download() {
             const a = document.createElement('a');
-            a.download = 'rembghd_pro.png';
+            a.download = 'rembghd_output.png';
             a.href = cvs.toDataURL('image/png', 1.0);
             a.click();
         }
