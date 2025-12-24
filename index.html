@@ -11,7 +11,6 @@
             --dark-bg: #0b0f19; 
         }
         
-        /* Full Black Background for PC and Mobile */
         body { 
             margin: 0; 
             padding: 0; 
@@ -19,11 +18,10 @@
             background: var(--dark-bg); 
             text-align: center; 
             color: #fff;
-            overflow-x: hidden;
         }
         
         header { 
-            padding: 20px 0 25px 0; 
+            padding: 20px 0 30px 0; 
             background: var(--dark-bg); 
         }
         .logo-text { 
@@ -45,10 +43,9 @@
             padding: 0 10px; 
         }
         
-        /* Tool card box with shadow */
         .tool-card { 
             width: 100%; 
-            height: 880px; /* Increased height for PC view */
+            height: 900px; /* PC height barha di taake scroll na ho */
             background: #111827; 
             border-radius: 28px; 
             overflow: hidden; 
@@ -59,26 +56,19 @@
         
         iframe { 
             width: 100%; 
-            height: 1500px; 
+            height: 1600px; 
             border: none; 
-            /* PC Settings: Text hide karne aur frame niche karne ke liye */
-            margin-top: -160px; 
+            /* PC: Margin mazeed barha diya taake text pakka hide ho jaye */
+            margin-top: -190px; 
             background: #111827;
         }
 
-        /* MOBILE SETTING (NO CHANGES - STAYING PERFECT) */
+        /* MOBILE: Keeping your perfect mobile settings */
         @media (max-width: 600px) {
             header { padding: 15px 0 20px 0; }
             .logo-text { font-size: 40px; }
-            
-            .tool-card { 
-                min-height: 950px; 
-                margin-top: 10px;
-            }
-            iframe { 
-                margin-top: -270px; 
-                height: 2200px; 
-            }
+            .tool-card { min-height: 950px; margin-top: 10px; }
+            iframe { margin-top: -270px; height: 2200px; }
         }
 
         footer { 
@@ -97,7 +87,7 @@
 
     <div class="main-container">
         <div class="tool-card">
-            <iframe src="https://briaai-bria-rmbg-1-4.hf.space" style="background: #111827;"></iframe>
+            <iframe src="https://briaai-bria-rmbg-1-4.hf.space"></iframe>
         </div>
     </div>
 
