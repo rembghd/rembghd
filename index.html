@@ -9,61 +9,57 @@
         :root { --primary-color: #007bff; --bg-gray: #f8f9fa; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg-gray); text-align: center; }
         
-        header { background: #fff; padding: 20px; border-bottom: 1px solid #eee; }
-        .logo { color: var(--primary-color); font-size: 28px; font-weight: 800; margin: 0; }
-        .slogan { margin: 5px 0 0; font-size: 13px; color: #777; }
+        header { background: #fff; padding: 10px; border-bottom: 1px solid #eee; }
+        .logo { color: var(--primary-color); font-size: 24px; font-weight: 800; margin: 0; }
+        .slogan { margin: 0; font-size: 11px; color: #777; }
 
-        /* Banner Ad Container */
+        /* Ad Container - Fixed to 90px to prevent white space */
         .ad-container { 
-            margin: 20px auto; 
+            margin: 10px auto; 
             max-width: 728px; 
-            min-height: 90px; 
+            height: 90px; /* Force height to stop white space */
             display: flex; 
             justify-content: center; 
             align-items: center; 
             background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-bottom: 1px solid #eee;
         }
 
-        .main-container { max-width: 1000px; margin: 10px auto; padding: 0 20px; }
+        .main-container { max-width: 1000px; margin: 5px auto; padding: 0 10px; }
         
-        /* Perfect Tool Alignment */
+        /* Tool Box - Pushed up */
         .tool-card { 
             width: 100%; 
-            height: 680px; 
+            height: 650px; 
             background: #fff; 
-            border-radius: 20px; 
+            border-radius: 15px; 
             overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
             border: 1px solid #eee; 
             position: relative; 
         }
-        iframe { width: 100%; height: 1100px; border: none; margin-top: -185px; }
+        iframe { width: 100%; height: 1100px; border: none; margin-top: -190px; }
 
         .btn-download { 
-            background: #28a745; color: #fff; padding: 16px 50px; border-radius: 50px; 
-            font-weight: 700; font-size: 18px; text-decoration: none; display: inline-block; 
-            margin-top: 25px; cursor: pointer; border: none; box-shadow: 0 6px 20px rgba(40,167,69,0.3); 
-            transition: 0.3s; 
+            background: #28a745; color: #fff; padding: 12px 40px; border-radius: 50px; 
+            font-weight: 700; font-size: 16px; text-decoration: none; display: inline-block; 
+            margin-top: 15px; cursor: pointer; border: none; box-shadow: 0 4px 12px rgba(40,167,69,0.2); 
         }
-        .btn-download:hover { transform: scale(1.05); background: #218838; }
         
-        /* SEO Content */
-        .info-section { text-align: left; max-width: 1000px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 15px; border: 1px solid #eee; }
-        
-        footer { background: #fff; padding: 30px; border-top: 1px solid #eee; color: #6c757d; font-size: 13px; }
+        .info-section { text-align: left; max-width: 1000px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 10px; font-size: 14px; border: 1px solid #eee; }
+        footer { background: #fff; padding: 20px; border-top: 1px solid #eee; color: #6c757d; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">RembgHD</div>
-        <p class="slogan">Free High Definition AI Background Remover</p>
+        <p class="slogan">Free AI Background Remover</p>
     </header>
 
     <div class="ad-container">
-        <ins style="width: 0px;height:0px" data-width="0" data-height="0" class="jf254a08a6a" data-domain="//data527.click" data-affquery="/78bd9ded140f692814bb/f254a08a6a/?placementName=default">
+        <ins style="width: 728px;height:90px" data-width="728" data-height="90" class="jf254a08a6a" data-domain="//data527.click" data-affquery="/78bd9ded140f692814bb/f254a08a6a/?placementName=default">
             <script src="//data527.click/js/responsive.js" async></script>
         </ins>
     </div>
@@ -74,30 +70,22 @@
         </div>
 
         <button class="btn-download" onclick="triggerDownload()">Download HD Result</button>
-        <p style="font-size: 12px; color: #888; margin-top: 10px;">Click to unlock HD download, then use the arrow icon inside the tool.</p>
     </div>
 
     <div class="info-section">
         <h3>About RembgHD</h3>
-        <p>RembgHD is a professional AI-powered tool for removing backgrounds from any image instantly. We provide high-quality HD output for designers and creators globally for free.</p>
-        <h3>Privacy Policy</h3>
-        <p>Your privacy is important to us. Images are processed securely and are never stored on our servers. RembgHD is a 100% safe browser-based utility.</p>
+        <p>Professional AI-powered background removal tool. HD output, secure and free.</p>
     </div>
 
     <footer>
-        <p>&copy; 2025 RembgHD.com | Powered by <strong>SadSha</strong></p>
+        <p>&copy; 2025 RembgHD.com | Powered by SadSha</p>
     </footer>
 
     <script>
         function triggerDownload() {
-            // Your Advertica Smartlink
             var smartLink = "https://data527.click/f403280eec7c46d61ee6/02975ab252/?placementName=default"; 
-            
-            // Open ad in new tab
             window.open(smartLink, '_blank');
-            
-            // Instruction for the real download button inside the tool
-            alert("Step 1: HD Link Unlocked in new tab!\nStep 2: Now click the 'Small Arrow Icon' on top of your result image inside the tool box to save.");
+            alert("Step 1: HD Link Unlocked!\nStep 2: Click the 'Arrow Icon' inside the tool to save.");
         }
     </script>
 
