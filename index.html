@@ -3,49 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd Pro - Smooth Edges</title>
+    <title>rembghd Ultra - Sharp Edges</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
         :root { --blue: #007bff; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fff; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fff; }
         .nav { padding: 30px 60px; }
         .logo { font-size: 26px; font-weight: 900; color: #000; text-decoration: none; }
-        .hero { display: flex; align-items: center; justify-content: center; gap: 60px; max-width: 1200px; margin: 0 auto; min-height: 85vh; padding: 20px; }
+        .hero { display: flex; align-items: center; justify-content: center; gap: 60px; max-width: 1200px; margin: 0 auto; min-height: 80vh; padding: 20px; }
         .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
         .window { width: 500px; height: 380px; background: #fff; position: relative; border-radius: 28px; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 15px 45px rgba(0,0,0,0.06); }
         .checker { position: absolute; width: 100%; height: 100%; z-index: 1; background-image: linear-gradient(45deg, #f2f2f2 25%, transparent 25%), linear-gradient(-45deg, #f2f2f2 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f2f2f2 75%), linear-gradient(-45deg, transparent 75%, #f2f2f2 75%); background-size: 20px 20px; }
-        .demo-wrap { width: 100%; height: 100%; position: absolute; z-index: 3; display: flex; align-items: center; justify-content: center; background-color: #ffffff; }
-        .looping .demo-wrap { animation: removeBg 2.5s infinite alternate ease-in-out; }
-        @keyframes removeBg { 0%, 40% { background-color: #ffffff; } 60%, 100% { background-color: transparent; } }
-        .demo-img { max-width: 80%; max-height: 80%; object-fit: contain; }
-        .upload-side { flex: 1; }
-        h1 { font-size: 64px; font-weight: 800; line-height: 1.05; margin-bottom: 30px; }
-        .upload-card { background: #fff; padding: 50px 40px; border-radius: 35px; border: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; }
-        .upload-btn { background: var(--blue); color: #fff; padding: 20px 60px; border-radius: 50px; font-size: 24px; font-weight: 700; cursor: pointer; width: 100%; text-align: center; border: none; }
-        .status-msg { margin-top: 20px; font-size: 11px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 2px; }
         canvas { max-width: 100%; max-height: 100%; position: absolute; z-index: 10; display: none; }
+        .upload-side { flex: 1; }
+        .upload-btn { background: var(--blue); color: #fff; padding: 20px 60px; border-radius: 50px; font-size: 24px; font-weight: 700; cursor: pointer; display: inline-block; }
         #dlBtn { margin-top: 20px; background: #000; color: #fff; padding: 14px 40px; border-radius: 50px; cursor: pointer; border: none; font-weight: 700; display: none; width: 100%; }
+        .status { margin-top: 15px; font-weight: bold; color: var(--blue); }
     </style>
 </head>
 <body>
     <div class="nav"><a href="#" class="logo">rembghd</a></div>
     <div class="hero">
         <div class="image-side">
-            <div class="window looping" id="mainBox">
+            <div class="window">
                 <div class="checker"></div>
-                <div class="demo-wrap" id="demoLayer">
-                    <img class="demo-img" src="https://www.remove.bg/images/samples/combined/woman-1.jpg">
-                </div>
                 <canvas id="resCanvas"></canvas>
             </div>
-            <div id="status" class="status-msg">Demo Mode</div>
+            <div id="status" class="status">Waiting for image...</div>
         </div>
         <div class="upload-side">
-            <h1>Smooth Edge<br>AI Remover</h1>
-            <div class="upload-card">
-                <label class="upload-btn">Upload Image<input type="file" id="inp" hidden accept="image/*"></label>
-                <button id="dlBtn" onclick="download()">Download PNG</button>
-            </div>
+            <h1>Sharp Edge<br>AI Remover</h1>
+            <label class="upload-btn">Upload Image<input type="file" id="inp" hidden accept="image/*"></label>
+            <button id="dlBtn" onclick="download()">Download Result</button>
         </div>
     </div>
 
@@ -53,14 +42,14 @@
         const inp = document.getElementById('inp');
         const cvs = document.getElementById('resCanvas');
         const ctx = cvs.getContext('2d');
-        const box = document.getElementById('mainBox');
-        const layer = document.getElementById('demoLayer');
         const status = document.getElementById('status');
         const dlBtn = document.getElementById('dlBtn');
 
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
         });
+
+        // "modelSelection: 1" use karein jo landscape/general images ke liye behtar hai
         ai.setOptions({ modelSelection: 1 });
 
         ai.onResults((res) => {
@@ -70,27 +59,26 @@
             ctx.save();
             ctx.clearRect(0, 0, cvs.width, cvs.height);
             
-            // Step 1: Draw the full image
-            ctx.drawImage(res.image, 0, 0, cvs.width, cvs.height);
-            
-            // Step 2: Smooth Edge Logic (Mask Refinement)
-            ctx.globalCompositeOperation = 'destination-in';
-            ctx.filter = 'blur(1.5px)'; // Yahan se edges naram hote hain
+            // Step 1: Draw Mask with slightly less blur for sharpness
+            ctx.filter = 'blur(0.5px)'; 
             ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
+            
+            // Step 2: Use the mask to clip the image
+            ctx.globalCompositeOperation = 'source-in';
+            ctx.filter = 'none'; 
+            ctx.drawImage(res.image, 0, 0, cvs.width, cvs.height);
             
             ctx.restore();
             
             cvs.style.display = 'block';
-            status.innerText = "Task Complete (Edges Refined)";
+            status.innerText = "Processing Done!";
             dlBtn.style.display = 'block';
         });
 
         inp.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            box.classList.remove('looping');
-            layer.style.display = 'none';
-            status.innerText = "Refining Edges...";
+            status.innerText = "Analyzing pixels...";
             const url = URL.createObjectURL(file);
             const img = new Image();
             img.src = url;
@@ -99,7 +87,7 @@
 
         function download() {
             const link = document.createElement('a');
-            link.download = 'rembghd_refined.png';
+            link.download = 'rembghd_ultra.png';
             link.href = cvs.toDataURL();
             link.click();
         }
