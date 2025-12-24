@@ -21,7 +21,7 @@
         }
         
         header { 
-            padding: 20px 0 30px 0; 
+            padding: 20px 0 25px 0; 
             background: var(--dark-bg); 
         }
         .logo-text { 
@@ -38,37 +38,44 @@
         }
 
         .main-container { 
-            max-width: 1150px; 
+            max-width: 1200px; 
             margin: 0 auto; 
             padding: 0 10px; 
         }
         
         .tool-card { 
             width: 100%; 
-            height: 900px; 
+            height: 850px; 
             background: #111827; 
             border-radius: 28px; 
-            overflow: hidden; 
+            overflow: hidden; /* Yeh oopar walay text ko kaat dega */
             margin-bottom: 60px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             border: 1px solid #1f2937;
+            position: relative;
         }
         
         iframe { 
             width: 100%; 
-            height: 1700px; 
+            height: 1500px; 
             border: none; 
-            /* PC: Is value ko -220px kiya hai taake iframe mazeed NECHY jaye aur text hide ho */
-            margin-top: -220px; 
-            background: #111827;
+            /* PC: Positive margin iframe ko NECHY push karega aur oopar wala text hide karega */
+            margin-top: -165px; 
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
-        /* MOBILE: Keeping your perfect mobile settings intact */
+        /* MOBILE: Keeping your perfect mobile settings untouched */
         @media (max-width: 600px) {
             header { padding: 15px 0 20px 0; }
             .logo-text { font-size: 40px; }
-            .tool-card { min-height: 950px; margin-top: 10px; }
-            iframe { margin-top: -270px; height: 2200px; }
+            .tool-card { min-height: 950px; margin-top: 10px; overflow: hidden; }
+            iframe { 
+                margin-top: -270px; 
+                height: 2200px; 
+                position: relative;
+            }
         }
 
         footer { 
@@ -93,7 +100,7 @@
 
     <footer>
         <p style="color:var(--gold); font-weight:700; margin-bottom:10px;">RembgHD Premium AI</p>
-        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | AI Background Removal</p>
+        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Fast & Secure Removal</p>
     </footer>
 
 </body>
