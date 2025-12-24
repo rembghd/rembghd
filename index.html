@@ -7,50 +7,57 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #0b1120; --card: #161e2f; }
-        body { font-family: sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
-        .header { text-align: center; margin-bottom: 20px; }
-        .app-container { display: flex; gap: 20px; max-width: 1100px; width: 100%; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 40px; font-weight: 900; margin: 0; }
 
-        /* Left Side: Main Viewport */
-        .main-editor { flex: 3; background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #2d3748; position: relative; }
-        .viewport { background: #000; border: 10px solid #2d3748; border-radius: 15px; height: 450px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        /* Main Container: Editor + Sidebar */
+        .app-container { display: flex; gap: 20px; max-width: 1200px; width: 100%; align-items: flex-start; }
+
+        /* Left side: Large Output Screen */
+        .main-editor { flex: 3; background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #2d3748; position: relative; }
+        .viewport { background: #000; border: 8px solid #2d3748; border-radius: 12px; height: 500px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         canvas { max-width: 100%; max-height: 100%; z-index: 5; position: relative; }
         
-        /* The Mirror Cat */
-        .painter-cat { position: absolute; width: 180px; bottom: 20px; right: 20px; z-index: 100; pointer-events: none; }
-        .scrubbing { animation: scrub 0.7s infinite alternate ease-in-out; }
-        @keyframes scrub { from { transform: translate(0,0) rotate(-5deg); } to { transform: translate(-20px, -30px) rotate(5deg); } }
+        /* The Painter Cat (Standing outside like the girl in the mirror) */
+        .painter-cat { position: absolute; width: 180px; bottom: 10px; right: 10px; z-index: 100; pointer-events: none; }
+        .scrubbing { animation: scrub 0.6s infinite alternate ease-in-out; }
+        @keyframes scrub { from { transform: translate(0,0) rotate(-5deg); } to { transform: translate(-25px, -35px) rotate(5deg); } }
 
-        /* Right Side: Background Options */
-        .side-panel { flex: 1; background: var(--card); padding: 20px; border-radius: 25px; border: 1px solid #2d3748; display: flex; flex-direction: column; gap: 15px; }
-        .bg-option { height: 70px; border-radius: 12px; cursor: pointer; border: 2px solid transparent; overflow: hidden; transition: 0.3s; background-size: cover; background-position: center; }
-        .bg-option:hover { border-color: var(--accent); }
-        .bg-option.active { border-color: var(--accent); box-shadow: 0 0 15px var(--accent); }
+        /* Right side: Background Sidebar (remove.bg style) */
+        .sidebar { flex: 1; background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid #2d3748; max-height: 550px; overflow-y: auto; }
+        .section-title { font-size: 12px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; color: var(--accent); }
+        
+        .bg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .bg-item { height: 60px; border-radius: 8px; cursor: pointer; border: 2px solid #2d3748; transition: 0.2s; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+        .bg-item:hover { border-color: var(--accent); }
+        .bg-item.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent); }
 
-        .upload-btn { background: var(--accent); color: #000; padding: 15px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; margin-bottom: 20px; }
-        .footer { margin-top: 40px; font-size: 30px; letter-spacing: 15px; opacity: 0.1; }
+        .upload-btn { background: var(--accent); color: #000; padding: 15px 40px; border-radius: 50px; font-weight: 800; cursor: pointer; border: none; margin-bottom: 25px; transition: 0.3s; }
+        .upload-btn:hover { transform: scale(1.05); }
+
+        .footer { margin-top: 50px; font-size: 30px; letter-spacing: 20px; opacity: 0.1; font-weight: 100; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1 style="margin:0;">rembghd</h1>
-        <p style="opacity:0.5;">One-click AI Background Replacement</p>
+        <h1>rembghd</h1>
     </div>
 
     <label class="upload-btn">
-        ✓ Upload Image
-        <input type="file" id="fileIn" hidden accept="image/*">
+        UPLOAD IMAGE
+        <input type="file" id="imageInput" hidden accept="image/*">
     </label>
 
     <div class="app-container">
         <div class="main-editor">
-            <div class="viewport" id="view">
-                <canvas id="out"></canvas>
-                <img src="https://i.ibb.co/LzNfXF7/image-65166d.png" class="painter-cat" id="cat">
-                <div id="loader" style="opacity:0.3;">Waiting for Image...</div>
+            <div class="viewport">
+                <canvas id="outCanvas"></canvas>
+                <img src="https://i.ibb.co/LzNfXF7/image-65166d.png" class="painter-cat" id="catAnim">
+                <div id="status" style="opacity:0.2;">Waiting for image...</div>
             </div>
             <div style="margin-top:20px; display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:12px; opacity:0.6;">ULTRA 4K AI OUTPUT</span>
-                <button onclick="download
+                <span style="font-size:11px; opacity:0.5; letter-spacing:1px;">ULTRA 4K AI OUTPUT</span>
+                <button onclick="download()" style
