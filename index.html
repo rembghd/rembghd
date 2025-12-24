@@ -3,36 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd - Auto AI</title>
+    <title>rembghd - AI Background Remover</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
-        :root { --accent: #00f2fe; --bg: #0b1120; }
-        body { font-family: sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; }
+        :root { --accent: #00f2fe; --bg: #0b1120; --card: #161e2f; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; padding: 20px; }
         
-        .header { margin-top: 40px; }
-        .header h1 { font-size: 45px; font-weight: 900; margin: 0; }
-        .slogan { font-size: 14px; opacity: 0.7; margin-bottom: 30px; }
+        .header { margin-bottom: 30px; }
+        .header h1 { font-size: 40px; margin: 0; letter-spacing: 2px; }
+        .slogan { font-size: 14px; opacity: 0.6; }
 
-        .main-card { max-width: 900px; margin: auto; background: #161e2f; padding: 30px; border-radius: 25px; border: 1px solid #2d3748; min-height: 450px; position: relative; }
+        .main-container { max-width: 1000px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
+
+        /* Top Upload Section */
+        .upload-section { background: var(--card); padding: 40px; border-radius: 25px; border: 1px solid #2d3748; display: flex; align-items: center; justify-content: center; gap: 40px; }
+        .upload-btn { background: #334155; padding: 10px 25px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 10px; border: none; color: white; transition: 0.3s; }
+        .upload-btn:hover { background: var(--accent); color: black; }
+
+        /* Monitor / Preview Grid */
+        .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .monitor-box { background: var(--card); padding: 30px; border-radius: 25px; position: relative; border: 1px solid #2d3748; min-height: 350px; }
         
-        .upload-box { border: 2px dashed #334155; padding: 100px 20px; border-radius: 20px; cursor: pointer; display: block; }
-        .upload-box:hover { border-color: var(--accent); background: rgba(0,242,254,0.05); }
+        .screen { background: #050a14; border: 8px solid #2d3748; border-radius: 10px; height: 200px; width: 85%; margin: 0 auto 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .screen img, .screen canvas { width: 100%; height: 100%; object-fit: contain; display: none; }
+        .monitor-stand { width: 40px; height: 20px; background: #2d3748; margin: -21px auto 0; border-radius: 0 0 5px 5px; }
+        
+        /* The Static Cats (Load State) */
+        .cat-helper { position: absolute; font-size: 60px; bottom: 60px; pointer-events: none; transition: 0.5s; }
+        .cat-left { left: 10px; transform: scaleX(-1); }
+        .cat-right { right: 10px; }
 
-        .grid { display: none; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; position: relative; }
-        canvas, .img-box { width: 100%; border-radius: 15px; background: #050a14; min-height: 320px; object-fit: contain; border: 1px solid #334155; }
+        /* Labels */
+        .label-pills { display: inline-flex; align-items: center; background: #1e293b; padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: bold; gap: 10px; }
+        .dot-hd { width: 25px; height: 25px; background: var(--accent); color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; }
 
-        /* HD WIPER CAT ANIMATION */
-        #animLayer { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; display: none; z-index: 500; }
-        .cat-gif { position: absolute; font-size: 80px; filter: drop-shadow(0 0 15px rgba(0,0,0,0.5)); animation: hd-wiper 1s infinite linear; }
+        .footer { margin-top: 50px; font-size: 30px; letter-spacing: 15px; opacity: 0.2; text-transform: uppercase; }
 
-        @keyframes hd-wiper {
-            0% { transform: translate(10%, 20%) rotate(-10deg); }
-            50% { transform: translate(70%, 50%) rotate(10deg); }
-            100% { transform: translate(10%, 20%) rotate(-10deg); }
-        }
-
-        .dl-btn { background: var(--accent); color: #000; border: none; padding: 15px 40px; border-radius: 12px; font-weight: bold; cursor: pointer; display: none; margin: 25px auto; font-size: 16px; }
-        .footer { margin-top: 80px; font-size: 32px; letter-spacing: 18px; opacity: 0.2; padding-bottom: 60px; text-transform: uppercase; font-weight: 100; }
+        /* Animation class */
+        .cleaning { animation: scrub 1s infinite; }
+        @keyframes scrub { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(15px, -15px); } }
     </style>
 </head>
 <body>
@@ -42,36 +51,59 @@
         <div class="slogan">its free and always will be...</div>
     </div>
 
-    <div class="main-card">
-        <label for="fileIn" class="upload-box" id="dropZone">
-            <p style="font-size: 20px;">Click to Upload Image</p>
-            <input type="file" id="fileIn" hidden accept="image/*">
-        </label>
-
-        <div class="grid" id="resultGrid">
-            <div>
-                <img id="viewOrig" class="img-box">
-                <p style="font-size: 10px; opacity: 0.5;">ORIGINAL</p>
+    <div class="main-container">
+        <div class="upload-section">
+            <div style="text-align: left;">
+                <h2 style="margin:0;">AI Background Remover</h2>
+                <p style="opacity:0.6; font-size:14px;">Upload an image to see the magic!</p>
+                <label class="upload-btn">
+                    <span>✓ Upload</span>
+                    <input type="file" id="imageInput" hidden accept="image/*">
+                </label>
             </div>
-            <div style="position:relative;">
-                <canvas id="outCanvas"></canvas>
-                <div id="animLayer">
-                    <div class="cat-gif">🐱🧹</div>
+            <div style="font-size: 80px;">🐱</div>
+        </div>
+
+        <div class="preview-grid">
+            <div class="monitor-box">
+                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ORIGINAL</p>
+                <div class="screen">
+                    <img id="origDisplay">
+                    <div id="placeholder1" style="opacity: 0.3; font-size: 12px;">No Image Loaded</div>
                 </div>
-                <p style="font-size: 10px; color: var(--accent);">HD PROCESSED</p>
+                <div class="monitor-stand"></div>
+                <div class="cat-helper cat-left" id="cat1">🐱🧽</div>
+                
+                <div class="label-pills">
+                    <div class="dot-hd">HD</div> (High Definition)
+                </div>
+            </div>
+
+            <div class="monitor-box">
+                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ULTRA 4K PROCESSED</p>
+                <div class="screen">
+                    <canvas id="resCanvas"></canvas>
+                    <div id="placeholder2" style="opacity: 0.3; font-size: 12px;">Waiting for Upload...</div>
+                </div>
+                <div class="monitor-stand"></div>
+                <div class="cat-helper cat-right" id="cat2">🐈🧹</div>
+                
+                <div class="label-pills" style="background: rgba(255,255,255,0.05);">
+                    ULTRA 4K Processed!
+                </div>
             </div>
         </div>
         
-        <button id="dl" class="dl-btn" onclick="download()">Download Result</button>
+        <button id="dlBtn" class="upload-btn" style="display:none; margin: 20px auto; background: var(--accent); color: black;" onclick="download()">Download Result</button>
     </div>
 
     <div class="footer">SadSha</div>
 
     <script>
-        const fileIn = document.getElementById('fileIn');
-        const canvas = document.getElementById('outCanvas');
+        const input = document.getElementById('imageInput');
+        const canvas = document.getElementById('resCanvas');
         const ctx = canvas.getContext('2d');
-        let imgObj = null;
+        let activeImg = null;
 
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
@@ -87,25 +119,32 @@
             ctx.drawImage(res.image, 0, 0);
             
             setTimeout(() => {
-                document.getElementById('animLayer').style.display = 'none';
-                document.getElementById('dl').style.display = 'block';
-            }, 3000); 
+                document.getElementById('cat1').classList.remove('cleaning');
+                document.getElementById('cat2').classList.remove('cleaning');
+                document.getElementById('dlBtn').style.display = 'block';
+            }, 3000);
         });
 
-        fileIn.onchange = (e) => {
+        input.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
             const url = URL.createObjectURL(file);
             
-            // UI Updates
-            document.getElementById('viewOrig').src = url;
-            document.getElementById('dropZone').style.display = 'none';
-            document.getElementById('resultGrid').style.display = 'grid';
-            document.getElementById('animLayer').style.display = 'block';
+            // Setup Visuals
+            document.getElementById('placeholder1').style.display = 'none';
+            document.getElementById('placeholder2').style.display = 'none';
+            const img = document.getElementById('origDisplay');
+            img.src = url;
+            img.style.display = 'block';
+            canvas.style.display = 'block';
             
-            imgObj = new Image();
-            imgObj.src = url;
-            imgObj.onload = () => ai.send({image: imgObj});
+            // Start Cats
+            document.getElementById('cat1').classList.add('cleaning');
+            document.getElementById('cat2').classList.add('cleaning');
+            
+            activeImg = new Image();
+            activeImg.src = url;
+            activeImg.onload = () => ai.send({image: activeImg});
         };
 
         function download() {
