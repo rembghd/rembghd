@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Pro - Zero Halo HD</title>
+    <title>RemBghd Pro - Final Sharp HD</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #050a14; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; text-align: center; }
-        .logo { font-size: 38px; font-weight: 900; background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
-        .card { max-width: 650px; margin: auto; background: #0f172a; padding: 30px; border-radius: 25px; border: 1px solid #1e293b; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
-        .upload-area { border: 2px dashed #334155; padding: 50px; border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.01); transition: 0.3s; }
-        .upload-area:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
-        canvas { max-width: 100%; border-radius: 12px; margin-top: 20px; display: none; background: #0d1117; image-rendering: -webkit-optimize-contrast; }
-        #status { margin: 15px 0; font-weight: 700; color: var(--accent); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
-        .btn { display: none; background: white; color: black; padding: 18px; border-radius: 12px; font-weight: 900; border: none; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.2s; }
-        .btn:hover { background: var(--accent); transform: translateY(-2px); }
-        .footer { margin-top: 40px; font-size: 12px; opacity: 0.5; font-weight: 700; letter-spacing: 2px; }
+        .logo { font-size: 35px; font-weight: 900; background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 20px 0; }
+        .card { max-width: 600px; margin: auto; background: #0f172a; padding: 25px; border-radius: 20px; border: 1px solid #1e293b; }
+        .upload-area { border: 2px dashed #334155; padding: 40px; border-radius: 15px; cursor: pointer; background: rgba(255,255,255,0.01); }
+        canvas { max-width: 100%; border-radius: 10px; margin-top: 20px; display: none; background: #0d1117; }
+        #status { margin: 15px 0; font-weight: 700; color: var(--accent); font-size: 13px; }
+        .btn { display: none; background: white; color: black; padding: 15px; border-radius: 10px; font-weight: 900; border: none; cursor: pointer; width: 100%; margin-top: 15px; }
+        .footer { margin-top: 30px; font-size: 11px; opacity: 0.5; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -25,14 +23,14 @@
 
     <div class="card">
         <div class="upload-area" onclick="document.getElementById('fileIn').click()">
-            <p style="font-weight: 700; margin: 0; font-size: 18px;">Upload Image</p>
-            <p style="font-size: 12px; color: #64748b; margin-top: 10px;">Note: 1st time wait few seconds for HD AI download.</p>
+            <p style="font-weight: 700; margin: 0;">Upload HD Image</p>
+            <p style="font-size: 11px; color: #64748b; margin-top: 5px;">If image doesn't load, please use normal browser window (not incognito).</p>
             <input type="file" id="fileIn" accept="image/*" hidden>
         </div>
         
         <div id="status">System Ready</div>
         <canvas id="canvas"></canvas>
-        <button id="dlBtn" class="btn">DOWNLOAD CRYSTAL CLEAR PNG</button>
+        <button id="dlBtn" class="btn">DOWNLOAD PERFECT PNG</button>
     </div>
 
     <div class="footer">Powered by SadSha</div>
@@ -51,18 +49,61 @@
             canvas.width = res.image.width;
             canvas.height = res.image.height;
             
-            // Step 1: Create a temporary canvas for mask processing
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-            const tCtx = tempCanvas.getContext('2d');
+            // Draw original image first
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(res.image, 0, 0, canvas.width, canvas.height);
             
-            // Step 2: Draw the raw AI mask
-            tCtx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
+            // Get pixel data to manually erase background based on AI mask
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imgData.data;
+
+            // Draw mask on a hidden canvas to read its values
+            const maskCanvas = document.createElement('canvas');
+            maskCanvas.width = canvas.width;
+            maskCanvas.height = canvas.height;
+            const mCtx = maskCanvas.getContext('2d');
+            mCtx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
+            const maskData = mCtx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+            for (let i = 0; i < pixels.length; i += 4) {
+                const maskVal = maskData[i]; // Reading red channel of mask
+                // If mask is not "strong" (less than 230), kill the pixel completely
+                // This removes the blurry halo edges
+                if (maskVal < 230) {
+                    pixels[i + 3] = 0; // Set Alpha to 0
+                }
+            }
             
-            // Step 3: Edge Erosion (Shrinking the mask by 2-3 pixels)
-            tCtx.globalCompositeOperation = 'destination-out';
-            tCtx.filter = 'blur(2px)'; // Slight blur to find edges
-            tCtx.drawImage(tempCanvas, 0, 0);
-            tCtx.globalCompositeOperation = 'source-over';
-            tCtx.filter = 'none';
+            ctx.putImageData(imgData, 0, 0);
+            status.innerText = "✓ Ultimate HD Processing Done";
+            dlBtn.style.display = 'block';
+        });
+
+        fileIn.onchange = (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            status.innerText = "Deep Cleaning Pixels...";
+            const rd = new FileReader();
+            rd.onload = (v) => {
+                const img = new Image();
+                img.onload = () => {
+                    canvas.style.display = 'block';
+                    ai.send({image: img});
+                };
+                img.src = v.target.result;
+            };
+            rd.readAsDataURL(file);
+        };
+
+        dlBtn.onclick = () => {
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.download = `rembghd_perfect_${Date.now()}.png`;
+                a.href = url;
+                a.click();
+            }, 'image/png', 1.0);
+        };
+    </script>
+</body>
+</html>
