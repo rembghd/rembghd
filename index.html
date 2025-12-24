@@ -12,9 +12,9 @@
         .card { max-width: 700px; margin: auto; background: #0f172a; padding: 40px; border-radius: 32px; border: 1px solid #1e293b; box-shadow: 0 25px 50px rgba(0,0,0,0.6); }
         .drop-area { border: 2px dashed #334155; padding: 60px 20px; border-radius: 24px; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); }
         .drop-area:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
-        canvas { max-width: 100%; border-radius: 16px; margin-top: 30px; display: none; box-shadow: 0 0 40px rgba(0,0,0,0.4); }
+        canvas { max-width: 100%; border-radius: 16px; margin-top: 30px; display: none; box-shadow: 0 0 40px rgba(0,0,0,0.4); background: #161b22; }
         #status { margin: 20px 0; font-weight: bold; color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; }
-        .dl-btn { display: none; background: #fff; color: #000; padding: 20px; border-radius: 14px; font-weight: 800; border: none; cursor: pointer; width: 100%; font-size: 18px; margin-top: 25px; transition: 0.2s; }
+        .dl-btn { display: none; background: #fff; color: #000; padding: 20px; border-radius: 14px; font-weight: 800; border: none; cursor: pointer; width: 100%; font-size: 18px; margin-top: 25px; transition: 0.2s; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
         .dl-btn:hover { background: var(--accent); transform: translateY(-3px); }
     </style>
 </head>
@@ -24,7 +24,7 @@
 
     <div class="card">
         <div class="drop-area" onclick="document.getElementById('fileInput').click()">
-            <p id="hint">Drop HD Image Here or Click to Upload</p>
+            <p id="hint">Upload Image for Ultra HD Background Removal</p>
             <input type="file" id="fileInput" accept="image/*" hidden>
         </div>
         <div id="status"></div>
@@ -35,12 +35,12 @@
     <script>
         const fileInput = document.getElementById('fileInput');
         const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+        const ctx = canvas.getContext('2d', { willReadFrequently: true, alpha: true });
         const status = document.getElementById('status');
         const dlBtn = document.getElementById('dlBtn');
 
         const ai = new SelfieSegmentation({ locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}` });
-        ai.setOptions({ modelSelection: 1 }); // Enhanced HD Model
+        ai.setOptions({ modelSelection: 1 }); // Quality model enabled
 
         ai.onResults((res) => {
             // Quality Settings
@@ -49,8 +49,8 @@
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Mask Sharpening
-            ctx.filter = 'contrast(1.2) brightness(1.1)';
+            // Apply Edge Mask with Contrast for Sharpness
+            ctx.filter = 'contrast(1.1) brightness(1.05)';
             ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
             
             ctx.globalCompositeOperation = 'source-in';
@@ -58,41 +58,22 @@
             ctx.drawImage(res.image, 0, 0, canvas.width, canvas.height);
             ctx.globalCompositeOperation = 'source-over';
             
-            status.innerText = "✓ HD Masterpiece Ready";
+            status.innerText = "✓ HD Result Processed Successfully";
             dlBtn.style.display = 'block';
         });
 
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            status.innerText = "Analyzing Pixels...";
+            status.innerText = "Scanning Pixels for HD...";
             const rd = new FileReader();
             rd.onload = (v) => {
                 const img = new Image();
                 img.onload = () => {
-                    // Lock Canvas to Original Image Size for HD
+                    // Lock canvas to exact image dimensions
                     canvas.width = img.width;
                     canvas.height = img.height;
                     canvas.style.display = 'block';
-                    ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(img, 0, 0); // Quick Preview
                     
-                    setTimeout(() => {
-                        status.innerText = "AI Precision Cutting...";
-                        ai.send({image: img});
-                    }, 1000);
-                };
-                img.src = v.target.result;
-            };
-            rd.readAsDataURL(file);
-        };
-
-        dlBtn.onclick = () => {
-            const a = document.createElement('a');
-            a.download = 'rembghd_ultra_hd.png';
-            // Force 100% Quality for Large File Size
-            a.href = canvas.toDataURL('image/png', 1.0);
-            a.click();
-        };
-    </script>
-</body>
-</html>
+                    setTimeout(() =>
