@@ -11,25 +11,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; line-height: 1.6; overflow-x: hidden; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; line-height: 1.6; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* Header Section */
-        header { padding: 60px 0 30px 0; background: var(--dark-bg); position: relative; z-index: 100; }
+        header { padding: 50px 0 20px 0; background: var(--dark-bg); position: relative; z-index: 100; }
         .logo-container { display: flex; align-items: center; justify-content: center; gap: 15px; }
         .logo-icon { width: 55px; height: 55px; fill: var(--gold); }
         .logo-text { font-size: 58px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
-        .slogan { color: #aaa; font-size: 20px; margin-top: 12px; font-style: italic; }
+        .slogan { color: #aaa; font-size: 20px; margin-top: 10px; font-style: italic; }
 
-        .main-container { max-width: 1100px; margin: 0 auto; padding: 0 15px; }
+        .main-container { max-width: 1100px; margin: 0 auto; padding: 0 15px; flex: 1; }
 
-        /* Tool Card - Adjusted for no-cut experience */
+        /* Tool Card Fix for Footer Visibility */
         .tool-card { 
             width: 100%; 
-            height: 900px; /* PC height fix to show full tool */
+            height: 750px; 
             background: #111827; 
             border-radius: 40px; 
             overflow: hidden; 
-            margin-bottom: 60px; 
+            margin-bottom: 40px; 
             box-shadow: 0 30px 80px rgba(0,0,0,0.9); 
             border: 1px solid #1f2937; 
             position: relative;
@@ -39,31 +38,30 @@
             width: 100%; 
             height: 1500px; 
             border: none; 
-            margin-top: -95px; /* PC margin fix for labels */
+            /* Mazeed oopar kiya taake faltu text bilkul gayab ho jaye */
+            margin-top: -180px; 
             display: block;
             background: #111827;
         }
 
-        /* SEO Content Section */
-        .content-section { text-align: left; background: #111827; padding: 40px; border-radius: 30px; margin-bottom: 60px; border: 1px solid #1f2937; }
-        .content-section h2 { color: var(--gold); margin-top: 25px; }
+        .content-section { text-align: left; background: #111827; padding: 35px; border-radius: 30px; margin-bottom: 60px; border: 1px solid #1f2937; }
+        .content-section h2 { color: var(--gold); margin-top: 25px; font-size: 24px; }
         .content-section p { color: #ccc; font-size: 16px; }
 
         /* Mobile Optimization */
         @media (max-width: 600px) {
-            header { padding: 40px 0 20px 0; }
+            header { padding: 40px 0 15px 0; }
             .logo-text { font-size: 42px; }
-            .logo-icon { width: 40px; height: 40px; }
-            .tool-card { height: 1100px; }
-            iframe { margin-top: -255px; height: 2500px; }
+            .tool-card { height: 950px; }
+            iframe { margin-top: -285px; height: 2500px; }
         }
 
-        /* Footer Section */
-        footer { padding: 80px 20px; background: #05070a; border-top: 1px solid #151921; }
-        .footer-links { margin-bottom: 25px; }
-        .footer-links a { color: #888; text-decoration: none; margin: 0 15px; font-size: 14px; transition: 0.3s; }
+        /* Footer Visibility Fix */
+        footer { padding: 60px 20px; background: #05070a; border-top: 1px solid #151921; width: 100%; }
+        .footer-links { margin-bottom: 20px; }
+        .footer-links a { color: #888; text-decoration: none; margin: 0 15px; font-size: 14px; }
         .footer-links a:hover { color: var(--gold); }
-        .powered-by { color: #666; font-size: 14px; margin-top: 20px; text-transform: uppercase; letter-spacing: 1.5px; }
+        .powered-by { color: #555; font-size: 14px; margin-top: 15px; text-transform: uppercase; letter-spacing: 1.5px; }
         .sadsha { color: var(--gold); font-weight: 800; }
     </style>
 </head>
@@ -84,15 +82,12 @@
 
         <div class="content-section">
             <h2>High Definition AI Background Removal</h2>
-            <p>Welcome to <strong>RembgHD</strong>, your premier destination for professional-grade image editing. Powered by <strong>SadSha</strong>, our advanced AI technology allows you to remove backgrounds from any image in High Definition instantly and for free.</p>
-
+            <p>Welcome to <strong>RembgHD</strong>, your premier destination for professional-grade image editing. Powered by <strong>SadSha</strong>, our advanced AI technology allows you to remove backgrounds from any image in High Definition instantly.</p>
             <h2>Why Choose RembgHD?</h2>
-            <p>Unlike standard background removers that pixelate your results, RembgHD maintains the original HD quality of your photos. Our tool is perfect for eCommerce sellers, graphic designers, and social media creators who need clean, transparent PNGs without any subscription costs.</p>
-
-            <h2>Fast and Secure Processing</h2>
-            <p>Your privacy is our priority. Images processed through RembgHD are never stored on our servers. The AI handles everything in real-time, giving you peace of mind while you create stunning content.</p>
+            <p>Unlike standard background removers, RembgHD maintains the original quality of your photos. Our tool is perfect for creators who need clean, transparent PNGs without any subscription costs.</p>
         </div>
     </div>
 
     <footer>
-        <p
+        <p style="color:var(--gold); font-weight:800; font-size: 22px; margin-bottom:10px;">RembgHD Premium AI</p>
+        <div class="footer-links">
