@@ -3,131 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Pro - Ultimate Fix</title>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
+    <title>RemBghd Pro - SadSha Edition</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #050a14; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; padding: 20px; }
-        .main-card { max-width: 800px; margin: auto; background: #0f172a; padding: 30px; border-radius: 30px; border: 1px solid #1e293b; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .upload-area { border: 2px dashed #334155; padding: 50px; border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.02); transition: 0.3s; }
-        .upload-area:hover { border-color: var(--accent); background: rgba(0,242,254,0.05); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px; display: none; }
-        img, canvas { max-width: 100%; border-radius: 15px; background: #070d19; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        #status { margin: 20px 0; font-weight: bold; color: var(--accent); font-size: 14px; letter-spacing: 1px; }
-        .controls { display: none; margin-top: 25px; background: #070d19; padding: 20px; border-radius: 15px; border: 1px solid #1e293b; }
-        .btn { background: var(--accent); color: #000; padding: 15px; border-radius: 12px; border: none; font-weight: 900; width: 100%; cursor: pointer; font-size: 16px; margin-top: 15px; transition: 0.2s; }
-        .btn:active { transform: scale(0.98); }
-        input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; overflow-x: hidden; }
+        .main-card { max-width: 800px; margin: 40px auto; background: #0f172a; padding: 30px; border-radius: 30px; border: 1px solid #1e293b; position: relative; }
+        .upload-zone { border: 2px dashed #334155; padding: 60px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .upload-zone:hover { border-color: var(--accent); background: rgba(0,242,254,0.05); }
+        
+        /* The Tommy/Cat Popup */
+        #catPopup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1e293b; padding: 30px; border-radius: 25px; border: 2px solid var(--accent); z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,0.8); width: 300px; }
+        .cat-btn { background: var(--accent); color: black; border: none; padding: 10px; margin: 5px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        
+        /* Animation Overlay */
+        #animOverlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); border-radius: 30px; z-index: 10; flex-direction: column; align-items: center; justify-content: center; }
+        .cat-emoji { font-size: 60px; animation: sweep 1.5s infinite ease-in-out; }
+        
+        @keyframes sweep { 0% { transform: translateX(-50px) rotate(-10deg); } 50% { transform: translateX(50px) rotate(10deg); } 100% { transform: translateX(-50px) rotate(-10deg); } }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; display: none; }
+        canvas, img { max-width: 100%; border-radius: 15px; }
+        
+        .footer-tag { margin-top: 50px; font-size: 24px; font-weight: 200; letter-spacing: 8px; color: rgba(255,255,255,0.3); padding-bottom: 30px; }
     </style>
 </head>
 <body>
 
-    <h1 style="font-weight: 900; margin-bottom: 20px;">ULTRA <span style="color: var(--accent)">AI EDITOR</span></h1>
+    <h1 style="font-weight: 900; margin-top: 30px;">ULTRA <span style="color: var(--accent)">AI EDITOR</span></h1>
 
     <div class="main-card">
-        <div class="upload-area" id="dropBox">
-            <h3 style="margin:0;">Select High-Res Image</h3>
-            <p style="font-size: 11px; opacity: 0.6; margin-top: 10px;">Edge Correction & Face Restoration Active</p>
+        <div id="animOverlay">
+            <div class="cat-emoji" id="catEmoji">🐱🧹</div>
+            <p id="animText" style="margin-top:15px; font-weight:bold;"></p>
+        </div>
+
+        <div class="upload-zone" id="dropZone">
+            <h3>Select High-Res Image</h3>
+            <p style="font-size: 11px; opacity: 0.5;">Upload now to see magic</p>
             <input type="file" id="fileIn" hidden accept="image/*">
         </div>
 
-        <div id="status">System Ready</div>
-
-        <div class="grid" id="resultGrid">
-            <div><p style="font-size:10px; color:#64748b; margin-bottom:10px;">ORIGINAL PHOTO</p><img id="originalImg"></div>
-            <div><p style="font-size:10px; color:#64748b; margin-bottom:10px;">HD AI RESULT</p><canvas id="finalCanvas"></canvas></div>
+        <div class="grid" id="pGrid">
+            <div><img id="vOriginal"></div>
+            <div><canvas id="vCanvas"></canvas></div>
         </div>
 
-        <div class="controls" id="controlBox">
-            <label style="font-size:11px; display:block; text-align:left; margin-bottom:10px; color:#94a3b8;">FINE-TUNE SHARPNESS</label>
-            <input type="range" id="sharpener" min="1" max="1.5" step="0.05" value="1.1">
-            <button class="btn" onclick="saveResult()">DOWNLOAD HD PNG</button>
+        <div id="catPopup">
+            <h2 style="margin-top:0;">Hi! I'm your AI Cat 🐱</h2>
+            <p style="font-size:12px;">What quality do you want?</p>
+            <button class="cat-btn" onclick="startProcess('same')">Same Resolution (Kapra 🧽)</button>
+            <button class="cat-btn" onclick="startProcess('hd')">HD Quality (Wiper 🧹)</button>
+            <button class="cat-btn" onclick="startProcess('4k')">4K Ultimate (Cat Gang 🐈‍⬛🐈)</button>
         </div>
+
+        <button id="dlBtn" class="cat-btn" style="display:none; margin-top:20px; width:200px; margin-left:auto; margin-right:auto;" onclick="downloadImg()">Download HD</button>
     </div>
 
+    <div class="footer-tag">SadSha</div>
+
     <script>
-        const fileInput = document.getElementById('fileIn');
-        const dropBox = document.getElementById('dropBox');
-        const canvas = document.getElementById('finalCanvas');
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        const statusText = document.getElementById('status');
-        
-        let currentImg = null;
-        let currentMask = null;
+        const fileIn = document.getElementById('fileIn');
+        const dropZone = document.getElementById('dropZone');
+        const canvas = document.getElementById('vCanvas');
+        const ctx = canvas.getContext('2d');
+        let rawImg = null;
 
-        // Initialize AI with Error Catching
-        const selfieAI = new SelfieSegmentation({
-            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`
+        const ai = new SelfieSegmentation({
+            locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
         });
+        ai.setOptions({ modelSelection: 1 });
 
-        selfieAI.setOptions({ modelSelection: 1 });
-
-        selfieAI.onResults((results) => {
-            if (!results.image) {
-                statusText.innerText = "Error: Please try another image.";
-                return;
-            }
-            canvas.width = results.image.width;
-            canvas.height = results.image.height;
-            currentImg = results.image;
-            currentMask = results.segmentationMask;
-            
-            renderFrame();
-            
-            statusText.innerText = "✓ Processing Successful";
-            document.getElementById('resultGrid').style.display = 'grid';
-            document.getElementById('controlBox').style.display = 'block';
-        });
-
-        function renderFrame() {
-            if (!currentImg || !currentMask) return;
-            const s = document.getElementById('sharpener').value;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // EDGE FIX: Shrinking edges to remove arm shadows
+        ai.onResults((res) => {
+            canvas.width = res.image.width;
+            canvas.height = res.image.height;
+            // High-end Edge logic
             const mCanvas = document.createElement('canvas');
             mCanvas.width = canvas.width; mCanvas.height = canvas.height;
             const mCtx = mCanvas.getContext('2d');
-            mCtx.filter = 'blur(1.2px) contrast(2.5) brightness(0.9)'; 
-            mCtx.drawImage(currentMask, 0, 0, canvas.width, canvas.height);
+            mCtx.filter = 'blur(1.2px) contrast(2.8) brightness(0.9)'; 
+            mCtx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
 
-            const temp = document.createElement('canvas');
-            temp.width = canvas.width; temp.height = canvas.height;
-            const tCtx = temp.getContext('2d');
-            
-            tCtx.drawImage(mCanvas, 0, 0);
-            tCtx.globalCompositeOperation = 'source-in';
-            tCtx.filter = `contrast(${s}) saturate(1.1) brightness(1.02)`;
-            tCtx.drawImage(currentImg, 0, 0);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.drawImage(mCanvas, 0, 0);
+            ctx.globalCompositeOperation = 'source-in';
+            ctx.filter = 'contrast(1.1) saturate(1.1)';
+            ctx.drawImage(res.image, 0, 0);
+            ctx.restore();
 
-            ctx.drawImage(temp, 0, 0);
-        }
-
-        // Direct Trigger for Upload
-        dropBox.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            statusText.innerText = "AI is scanning pixels...";
-            const url = URL.createObjectURL(file);
-            document.getElementById('originalImg').src = url;
-
-            const img = new Image();
-            img.src = url;
-            img.onload = () => selfieAI.send({ image: img });
+            // Hide animation after 2 seconds for effect
+            setTimeout(() => {
+                document.getElementById('animOverlay').style.display = 'none';
+                document.getElementById('pGrid').style.display = 'grid';
+                document.getElementById('dlBtn').style.display = 'block';
+            }, 2000);
         });
 
-        document.getElementById('sharpener').oninput = renderFrame;
+        dropZone.onclick = () => fileIn.click();
 
-        function saveResult() {
-            const a = document.createElement('a');
-            a.download = `rembghd_ultra_${Date.now()}.png`;
-            a.href = canvas.toDataURL('image/png', 1.0);
-            a.click();
+        fileIn.onchange = (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            const url = URL.createObjectURL(file);
+            document.getElementById('vOriginal').src = url;
+            rawImg = new Image();
+            rawImg.src = url;
+            document.getElementById('catPopup').style.display = 'block';
+        };
+
+        function startProcess(type) {
+            document.getElementById('catPopup').style.display = 'none';
+            const overlay = document.getElementById('animOverlay');
+            const emoji = document.getElementById('catEmoji');
+            const text = document.getElementById('animText');
+            overlay.style.display = 'flex';
+
+            if(type === 'same') {
+                emoji.innerText = "🐱🧽";
+                text.innerText = "Kitten is cleaning with a cloth...";
+            } else if(type === 'hd') {
+                emoji.innerText = "🐱🧹";
+                text.innerText = "Cat is using a professional wiper...";
+            } else {
+                emoji.innerText = "🐈‍⬛🐈🐱";
+                text.innerText = "The Cat Gang is deep cleaning 4K pixels...";
+            }
+
+            rawImg.onload = () => ai.send({image: rawImg});
+        }
+
+        function downloadImg() {
+            const link = document.createElement('a');
+            link.download = `SadSha_Ultra_${Date.now()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
         }
     </script>
 </body>
