@@ -3,43 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - Free HD AI Background Remover | Powered by SadSha</title>
-    
-    <meta name="description" content="RembgHD is the best free AI tool to remove image backgrounds in Ultra HD. Fast, secure, and powered by SadSha. No sign-up required.">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23FFD700%22><path d=%22M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29L16.71,9.63C17.1,10 17.1,10.65 16.71,11.04L5.04,22.71C4.65,23.1 4,23.1 3.63,22.71L1.29,20.37C0.9,19.98 0.9,19.33 1.29,18.94L12.96,7.27C13.35,6.88 14,6.88 14.37,7.29Z%22/></svg>">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>RembgHD - Free HD AI Background Remover</title>
     <style>
+        :root { --gold: #FFD700; --dark-bg: #0b0f19; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; }
+        
+        /* Header Fix: Isay ab koi cheez hide nahi karegi */
+        header { 
+            padding: 40px 0; 
+            background: var(--dark-bg);
+            position: relative;
+            z-index: 10;
+        }
+        .logo-container { display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .logo-icon { width: 50px; height: 50px; fill: var(--gold); }
+        .logo-text { font-size: 56px; font-weight: 800; color: var(--gold); margin: 0; }
+        .slogan { color: #aaa; font-size: 19px; margin-top: 10px; font-style: italic; }
+
+        .main-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* Tool Card Fix: Iframe ko iske andar rakha hai */
+        .tool-card { 
+            width: 100%; 
+            height: 750px; 
+            background: #111827; 
+            border-radius: 35px; 
+            overflow: hidden; 
+            margin-bottom: 50px; 
+            box-shadow: 0 25px 70px rgba(0,0,0,0.9); 
+            border: 1px solid #1f2937; 
+            position: relative; /* Container fix */
+        }
+        
         iframe { 
             width: 100%; 
-            height: 1600px; 
+            height: 1500px; 
             border: none; 
-            /* PC: Is value ko -125 se badha kar -185 kar diya hai taake wo text hide ho jaye */
-            margin-top: -185px; 
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: #111827;
+            /* PC: Sirf utna oopar kiya jitna text hide karne ke liye zaroori hai */
+            margin-top: -160px; 
+            position: relative; /* Absolute se Relative kiya taake logo ke oopar na charhay */
         }
 
-        /* MOBILE: Isay nahi chhedna, ye pehle hi perfect hai */
         @media (max-width: 600px) {
-            header { padding: 35px 0 25px 0; }
-            .logo-text { font-size: 42px; }
-            .logo-icon { width: 38px; height: 38px; }
-            .slogan { font-size: 15px; }
-            .tool-card { min-height: 950px; border-radius: 25px; }
-            iframe { 
-                margin-top: -270px; 
-                height: 2200px; 
-                position: relative; 
-            }
+            .logo-text { font-size: 40px; }
+            .tool-card { height: 900px; }
+            iframe { margin-top: -265px; height: 2000px; }
         }
-        footer { padding: 80px 20px; background: #05070a; border-top: 1px solid #151921; }
-        .footer-links a { color: #888; text-decoration: none; margin: 0 15px; font-size: 14px; transition: 0.3s; }
-        .footer-links a:hover { color: var(--gold); }
-        .powered-by { color: #666; font-size: 14px; margin-top: 20px; text-transform: uppercase; }
-        .sadsha { color: var(--gold); font-weight: 800; }
     </style>
 </head>
 <body>
@@ -55,24 +64,6 @@
         <div class="tool-card">
             <iframe src="https://briaai-bria-rmbg-1-4.hf.space?__theme=dark"></iframe>
         </div>
-
-        <div class="content-section">
-            <h2>High Definition AI Background Removal</h2>
-            <p>Welcome to <strong>RembgHD</strong>, your top source for HD image editing. Powered by <strong>SadSha</strong>, we provide fast, AI-driven precision for all your photo needs.</p>
-            <h2>How to Use?</h2>
-            <p>1. Upload your image.<br>2. Click Submit.<br>3. Download your HD PNG result.</p>
-        </div>
     </div>
-
-    <footer>
-        <p style="color:var(--gold); font-weight:800; font-size: 24px; margin-bottom:15px;">RembgHD Premium AI</p>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms & Conditions</a>
-            <a href="contact.html">Contact Us</a>
-        </div>
-        <p class="powered-by">Powered by <span class="sadsha">SadSha</span></p>
-    </footer>
-</body>
+    </body>
 </html>
-
