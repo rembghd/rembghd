@@ -3,70 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - Professional AI Background Remover</title>
+    <title>RembgHD - Ultra HD Background Remover</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary-dark: #001529; --accent-red: #ff4757; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f0f2f5; text-align: center; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f4f7f6; text-align: center; }
         
-        header { background: var(--primary-dark); padding: 18px; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .logo-text { font-size: 26px; font-weight: 800; letter-spacing: 1px; }
+        /* Fixed Header */
+        header { background: var(--primary-dark); padding: 15px 0; color: white; width: 100%; position: relative; z-index: 10; }
+        .logo-text { font-size: 24px; font-weight: 800; }
 
-        .main-container { max-width: 1050px; margin: 30px auto; padding: 0 15px; position: relative; }
+        .main-container { max-width: 1000px; margin: 20px auto; padding: 0 10px; position: relative; }
         
-        /* Tool Card with better styling */
+        /* Safe Tool Card Height */
         .tool-card { 
             width: 100%; 
-            height: 780px; /* Perfect height to show all buttons */
-            background: #ffffff; 
-            border-radius: 24px; 
+            height: 680px; /* Reduced to keep footer visible */
+            background: #fff; 
+            border-radius: 20px; 
             overflow: hidden; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1); 
-            border: 1px solid #e1e4e8; 
-            position: relative;
-            /* New High-Quality Sample Image */
-            background-image: url('https://www.transparentpng.com/download/happy-person/happy-person-free-download-2.png');
-            background-repeat: no-repeat;
-            background-position: center 280px;
-            background-size: 280px;
-        }
-
-        /* Iframe over the watermark */
-        iframe { 
-            width: 100%; 
-            height: 1200px; 
-            border: none; 
-            margin-top: -185px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: 1px solid #eee; 
             position: relative; 
-            z-index: 2; 
-            background: rgba(255,255,255,0.6); /* Translucent to show sample underneath */
         }
+        
+        /* Perfect Iframe alignment */
+        iframe { width: 100%; height: 1100px; border: none; margin-top: -185px; position: relative; z-index: 2; }
 
-        /* Perfectly Placed Blinking Pointer */
+        /* Blinking Pointer - Perfectly Adjusted */
         .download-pointer {
             position: absolute;
-            top: -35px; 
+            top: -25px; 
             right: 140px; 
             z-index: 999;
             color: var(--accent-red);
             font-weight: 800;
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             flex-direction: column;
             align-items: center;
             animation: blink 1.2s infinite;
-            pointer-events: none;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .arrow-icon { font-size: 32px; margin-top: -5px; }
+        .arrow-icon { font-size: 30px; margin-top: -5px; }
 
         @keyframes blink {
             0% { opacity: 1; transform: translateY(0); }
-            50% { opacity: 0.3; transform: translateY(-10px); }
+            50% { opacity: 0.3; transform: translateY(-8px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        footer { margin-top: 50px; padding: 30px; color: #6c757d; font-size: 13px; border-top: 1px solid #ddd; background: #fff; }
+        /* Essential Footer for Pages */
+        footer { margin-top: 30px; padding: 25px; background: #fff; border-top: 1px solid #eee; }
+        .footer-links { margin-bottom: 10px; }
+        .footer-links a { color: #007bff; text-decoration: none; margin: 0 10px; font-size: 14px; }
+        .footer-links a:hover { text-decoration: underline; }
+        .copyright { color: #999; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -87,8 +78,13 @@
     </div>
 
     <footer>
-        <p><strong>Professional Tip:</strong> Upload your image, wait for processing, and then use the pointed arrow to download your background-free result.</p>
-        <p>&copy; 2025 RembgHD.com | Fast & Secure AI Processing</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+            <a href="#">About</a>
+        </div>
+        <p class="copyright">&copy; 2025 RembgHD.com | AI Image Tools</p>
     </footer>
 
 </body>
