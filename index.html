@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Pro - Ultimate HD</title>
+    <title>RemBghd Pro - Ultimate Sharpness</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1/selfie_segmentation.js"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #050a14; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; text-align: center; }
-        .logo { font-size: 35px; font-weight: 900; background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 20px 0; }
-        .card { max-width: 600px; margin: auto; background: #0f172a; padding: 30px; border-radius: 25px; border: 1px solid #1e293b; box-shadow: 0 25px 50px rgba(0,0,0,0.6); }
-        .upload-area { border: 2px dashed #334155; padding: 45px; border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.02); transition: 0.3s; }
+        .logo { font-size: 38px; font-weight: 900; background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
+        .card { max-width: 650px; margin: auto; background: #0f172a; padding: 30px; border-radius: 25px; border: 1px solid #1e293b; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
+        .upload-area { border: 2px dashed #334155; padding: 50px; border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.01); transition: 0.3s; }
         .upload-area:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
-        canvas { max-width: 100%; border-radius: 15px; margin-top: 25px; display: none; background: #0d1117; }
-        #status { margin: 20px 0; font-weight: 700; color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .btn { display: none; background: #fff; color: #000; padding: 18px; border-radius: 12px; font-weight: 900; border: none; cursor: pointer; width: 100%; margin-top: 20px; font-size: 16px; transition: 0.2s; }
+        canvas { max-width: 100%; border-radius: 12px; margin-top: 25px; display: none; background: #0d1117; image-rendering: -webkit-optimize-contrast; }
+        #status { margin: 15px 0; font-weight: 700; color: var(--accent); font-size: 13px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn { display: none; background: white; color: black; padding: 18px; border-radius: 12px; font-weight: 900; border: none; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.2s; }
         .btn:hover { background: var(--accent); transform: translateY(-2px); }
-        .footer { margin-top: 40px; font-size: 12px; opacity: 0.6; font-weight: 800; letter-spacing: 2px; }
+        .footer { margin-top: 40px; font-size: 12px; opacity: 0.5; font-weight: 700; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -25,14 +25,14 @@
 
     <div class="card">
         <div class="upload-area" onclick="document.getElementById('fileIn').click()">
-            <p style="font-weight: 700; font-size: 18px; margin: 0;">Upload HD Image</p>
-            <p style="font-size: 12px; color: #64748b; margin-top: 10px;">Perfect for Professional Cut-outs</p>
+            <p style="font-weight: 700; margin: 0; font-size: 18px;">Upload Image</p>
+            <p style="font-size: 11px; color: #64748b; margin-top: 10px;">Deep-AI: 1st time wait few seconds for model download.</p>
             <input type="file" id="fileIn" accept="image/*" hidden>
         </div>
         
         <div id="status">System Ready</div>
         <canvas id="canvas"></canvas>
-        <button id="dlBtn" class="btn">DOWNLOAD HD MASTER PNG</button>
+        <button id="dlBtn" class="btn">DOWNLOAD CRYSTAL CLEAR PNG</button>
     </div>
 
     <div class="footer">Powered by SadSha</div>
@@ -40,58 +40,53 @@
     <script>
         const fileIn = document.getElementById('fileIn');
         const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const ctx = canvas.getContext('2d', { willReadFrequently: true, alpha: true });
         const status = document.getElementById('status');
         const dlBtn = document.getElementById('dlBtn');
 
-        const ai = new SelfieSegmentation({ 
-            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}` 
-        });
-
+        const ai = new SelfieSegmentation({ locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}` });
         ai.setOptions({ modelSelection: 1 });
+
         ai.onResults((res) => {
             canvas.width = res.image.width;
             canvas.height = res.image.height;
             
-            // 1. Draw original image
+            // Step 1: Process the Mask with Edge Erosion
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            const tCtx = tempCanvas.getContext('2d');
+            
+            // Draw raw mask
+            tCtx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
+            
+            // Advance Math: Shrink mask by 2 pixels to remove green halo
+            tCtx.globalCompositeOperation = 'destination-out';
+            tCtx.filter = 'blur(2px)'; 
+            tCtx.drawImage(tempCanvas, 0, 0);
+            tCtx.globalCompositeOperation = 'source-over';
+            tCtx.filter = 'none';
+
+            // Step 2: Render Final Image
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(tempCanvas, 0, 0);
+            
+            ctx.globalCompositeOperation = 'source-in';
             ctx.drawImage(res.image, 0, 0, canvas.width, canvas.height);
             
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const pixels = imgData.data;
-
-            // 2. Process Mask for Soft Edges
-            const maskCanvas = document.createElement('canvas');
-            maskCanvas.width = canvas.width;
-            maskCanvas.height = canvas.height;
-            const mCtx = maskCanvas.getContext('2d');
-            mCtx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
-            const maskData = mCtx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-            for (let i = 0; i < pixels.length; i += 4) {
-                let maskVal = maskData[i];
-                // Advanced Smoothing: Thresholding with Feathering
-                if (maskVal < 150) {
-                    pixels[i + 3] = 0; // Fully transparent
-                } else if (maskVal < 230) {
-                    pixels[i + 3] = (maskVal - 150) * 3; // Smooth transition (Feather)
-                }
-            }
-            
-            ctx.putImageData(imgData, 0, 0);
-            status.innerText = "✓ Ultimate Cut Ready";
+            status.innerText = "✓ HD Masterpiece Ready";
             dlBtn.style.display = 'block';
         });
 
         fileIn.onchange = (e) => {
             const file = e.target.files[0];
-            if (!file) return;
-            status.innerText = "Processing High-Res Pixels...";
+            if(!file) return;
+            status.innerText = "Deep Scanning (Erosion Mode)...";
             const img = new Image();
             img.src = URL.createObjectURL(file);
             img.onload = () => {
                 canvas.style.display = 'block';
-                ai.send({ image: img });
+                ai.send({image: img});
             };
         };
 
@@ -99,7 +94,7 @@
             canvas.toBlob((blob) => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.download = `rembghd_final_${Date.now()}.png`;
+                a.download = `rembghd_pro_ultra_${Date.now()}.png`;
                 a.href = url;
                 a.click();
             }, 'image/png', 1.0);
