@@ -2,51 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RembgHD - Free HD Background Remover</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RembgHD - Ultra HD Background Remover</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-blue: #007bff; --bg-light: #f8f9fa; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg-light); text-align: center; }
+        :root { --primary-blue: #007bff; --accent-red: #ff4757; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; text-align: center; }
         
-        header { padding: 30px 0 15px 0; }
-        .logo-text { font-size: 34px; font-weight: 800; color: var(--primary-blue); margin: 0; }
-        .tagline { color: #666; font-size: 14px; margin-top: 5px; }
+        /* Clean Header */
+        header { padding: 40px 0 20px 0; background: #f8f9fa; }
+        .logo-text { font-size: 36px; font-weight: 800; color: var(--primary-blue); margin: 0; }
+        .tagline { color: #666; font-size: 15px; margin-top: 5px; }
 
-        .main-container { max-width: 1100px; margin: 0 auto; padding: 0 15px; position: relative; }
+        .main-container { max-width: 1000px; margin: 10px auto; padding: 0 10px; position: relative; }
         
         .tool-card { 
             width: 100%; 
-            height: 1100px; /* Height increased to accommodate the 300px shift */
+            height: 720px; 
             background: #fff; 
-            border-radius: 24px; 
+            border-radius: 20px; 
             overflow: hidden; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.06); 
-            border: 1px solid #e0e0e0; 
-            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            border: 1px solid #eee; 
+            position: relative; 
         }
+        
+        iframe { width: 100%; height: 1150px; border: none; margin-top: -185px; position: relative; z-index: 2; }
 
-        /* JUST 300px (POSITIVE MARGIN) */
-        iframe { 
-            width: 100%; 
-            height: 800px; 
-            border: none; 
-            margin-top: 300px; /* Tool ab 300px niche se shuru hoga */
-            display: block;
-        }
-
-        @media (max-width: 600px) {
-            .tool-card { height: 1200px; } 
-            iframe { 
-                margin-top: 250px; /* Mobile par thora kam gap */
-                height: 900px; 
-            }
-            .logo-text { font-size: 28px; }
-        }
-
-        footer { padding: 40px 20px; background: #fff; border-top: 1px solid #eee; margin-top: 20px; }
-        .footer-wrap { max-width: 800px; margin: 0 auto; }
-        .footer-text { font-size: 14px; color: #555; line-height: 1.6; }
+        /* Essential Professional Footer */
+        footer { margin-top: 60px; padding: 50px 20px; background: #fff; border-top: 1px solid #eee; color: #444; }
+        .footer-wrap { max-width: 850px; margin: 0 auto; }
+        .footer-heading { font-size: 20px; font-weight: 700; color: #222; margin-bottom: 15px; }
+        .footer-text { font-size: 15px; line-height: 1.7; color: #666; margin-bottom: 30px; }
+        
+        .footer-links { margin-bottom: 25px; border-top: 1px solid #eee; padding-top: 25px; }
+        .footer-links a { color: var(--primary-blue); text-decoration: none; margin: 0 15px; font-size: 14px; font-weight: 600; }
+        .footer-links a:hover { text-decoration: underline; }
+        .copyright { color: #aaa; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -64,10 +56,9 @@
 
     <footer>
         <div class="footer-wrap">
-            <p class="footer-text"><b>RembgHD</b> - Professional AI tools for your creative workflow.</p>
-            <p style="color:#999; font-size:11px;">&copy; 2025 RembgHD.com</p>
-        </div>
-    </footer>
-
-</body>
-</html>
+            <div class="footer-heading">Professional AI Background Removal</div>
+            <p class="footer-text">
+                <b>RembgHD</b> uses state-of-the-art AI to remove backgrounds from any image instantly. Perfect for product photography, marketing materials, and personal creative projects. Get high-definition, transparent PNG results in just one click with our secure and fast processing tool.
+            </p>
+            
+            <div class="footer-
