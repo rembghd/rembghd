@@ -1,134 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd - Free AI</title>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
-    <style>
-        :root { --accent: #00f2fe; --bg: #0b1120; }
-        body { font-family: sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; }
-        .header { margin-top: 30px; }
-        .slogan { font-size: 13px; opacity: 0.6; margin-bottom: 20px; }
-        .main-card { max-width: 850px; margin: auto; background: #161e2f; padding: 25px; border-radius: 20px; border: 1px solid #2d3748; min-height: 400px; position: relative; }
-        
-        #dropZone { border: 2px dashed #334155; padding: 80px 20px; border-radius: 15px; cursor: pointer; }
-        #catPopup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #162431; padding: 25px; border-radius: 20px; border: 2px solid var(--accent); z-index: 9999; width: 300px; box-shadow: 0 0 50px #000; }
-        .cat-btn { background: var(--accent); color: #000; border: none; padding: 12px; margin: 5px 0; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; }
+/* Better Scrubbing Animation */
+@keyframes scrub-real {
+    0% { transform: translate(0,0) rotate(-15deg); }
+    25% { transform: translate(100px, 50px) rotate(15deg); }
+    50% { transform: translate(200px, 0px) rotate(-15deg); }
+    75% { transform: translate(100px, -50px) rotate(15deg); }
+    100% { transform: translate(0,0) rotate(-15deg); }
+}
 
-        .grid { display: none; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        canvas, .img-box { width: 100%; border-radius: 10px; background: #050a14; min-height: 250px; object-fit: contain; border: 1px solid #334155; }
+/* 4K Gang Animation */
+@keyframes gang-chaos {
+    0% { top: 0%; left: 0%; transform: scale(1); }
+    50% { top: 50%; left: 50%; transform: scale(1.2); }
+    100% { top: 10%; left: 80%; transform: scale(1); }
+}
 
-        /* Cat Animation Logic */
-        #animLayer { position: absolute; width: 50%; height: 100%; right: 0; top: 0; pointer-events: none; display: none; z-index: 100; }
-        .cat-gif { position: absolute; font-size: 50px; }
-        @keyframes clean { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(40px, 40px); } }
-        @keyframes gang { 0% { top: 10%; left: 10%; } 50% { top: 50%; left: 50%; } 100% { top: 10%; left: 10%; } }
-
-        .footer { margin-top: 50px; font-size: 24px; letter-spacing: 10px; opacity: 0.3; padding-bottom: 40px; }
-    </style>
-</head>
-<body>
-
-    <div class="header">
-        <h1>rembghd</h1>
-        <div class="slogan">its free and always will be...</div>
-    </div>
-
-    <div class="main-card">
-        <div id="dropZone" onclick="document.getElementById('fileIn').click()">
-            <p>Click to Upload Image</p>
-            <input type="file" id="fileIn" hidden accept="image/*">
-        </div>
-
-        <div class="grid" id="resultGrid">
-            <img id="viewOrig" class="img-box">
-            <div style="position:relative;">
-                <canvas id="outCanvas"></canvas>
-                <div id="animLayer">
-                    <div id="c1" class="cat-gif">🐱🧽</div>
-                    <div id="c2" class="cat-gif" style="display:none; animation: gang 2s infinite;">🐈🧹</div>
-                    <div id="c3" class="cat-gif" style="display:none; animation: gang 3s infinite reverse;">🐈‍⬛🧽</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="catPopup">
-            <h3 style="margin:0;">Hi! I'm your AI Cat 🐱</h3>
-            <p style="font-size:11px;">Select Quality:</p>
-            <button class="cat-btn" onclick="go('same')">Same Resolution (Kapra 🧽)</button>
-            <button class="cat-btn" onclick="go('hd')">HD Quality (Wiper 🧹)</button>
-            <button class="cat-btn" onclick="go('4k')">4K Ultimate (Cat Gang 🐈🐈‍⬛)</button>
-        </div>
-        
-        <button id="dl" class="cat-btn" style="display:none; width:180px; margin:20px auto;" onclick="download()">Download</button>
-    </div>
-
-    <div class="footer">SadSha</div>
-
-    <script>
-        const fileIn = document.getElementById('fileIn');
-        const canvas = document.getElementById('outCanvas');
-        const ctx = canvas.getContext('2d');
-        let imgObj = null;
-
-        const ai = new SelfieSegmentation({
-            locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
-        });
-        ai.setOptions({ modelSelection: 1 });
-
-        ai.onResults((res) => {
-            canvas.width = res.image.width;
-            canvas.height = res.image.height;
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
-            ctx.globalCompositeOperation = 'source-in';
-            ctx.drawImage(res.image, 0, 0);
-            
-            setTimeout(() => {
-                document.getElementById('animLayer').style.display = 'none';
-                document.getElementById('dl').style.display = 'block';
-            }, 2500);
-        });
-
-        fileIn.onchange = (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            const url = URL.createObjectURL(file);
-            document.getElementById('viewOrig').src = url;
-            imgObj = new Image();
-            imgObj.src = url;
-            
-            document.getElementById('dropZone').style.display = 'none';
-            document.getElementById('resultGrid').style.display = 'grid';
-            document.getElementById('catPopup').style.display = 'block';
-        };
-
-        function go(mode) {
-            document.getElementById('catPopup').style.display = 'none';
-            document.getElementById('animLayer').style.display = 'block';
-            const c1 = document.getElementById('c1');
-            
-            if(mode === 'same') {
-                c1.style.animation = "clean 1s infinite";
-            } else if(mode === 'hd') {
-                c1.innerText = "🐱🧹";
-                c1.style.animation = "clean 0.6s infinite";
-            } else {
-                c1.style.animation = "gang 2.5s infinite";
-                document.getElementById('c2').style.display = 'block';
-                document.getElementById('c3').style.display = 'block';
-            }
-            imgObj.onload = () => ai.send({image: imgObj});
-            ai.send({image: imgObj});
-        }
-
-        function download() {
-            const a = document.createElement('a');
-            a.download = 'rembghd_SadSha.png';
-            a.href = canvas.toDataURL();
-            a.click();
-        }
-    </script>
-</body>
-</html>
+.cat-gif {
+    position: absolute;
+    font-size: 70px; /* Size thora bara kar diya */
+    filter: drop-shadow(0 0 15px rgba(0,242,254,0.4));
+    z-index: 200;
+}
