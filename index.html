@@ -9,8 +9,8 @@
         :root { --primary-color: #007bff; --bg-gray: #f8f9fa; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg-gray); text-align: center; }
         
-        header { background: #fff; padding: 15px; border-bottom: 1px solid #eee; }
-        .logo { color: var(--primary-color); font-size: 26px; font-weight: 800; margin: 0; }
+        header { background: #001529; padding: 15px; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .logo-text { font-size: 24px; font-weight: 800; }
 
         .ad-container { margin: 10px auto; max-width: 728px; height: 90px; display: flex; justify-content: center; align-items: center; background: #fff; overflow: hidden; border-bottom: 1px solid #eee; }
 
@@ -29,10 +29,10 @@
         }
         iframe { width: 100%; height: 1100px; border: none; margin-top: -185px; }
 
-        /* Blinking Arrow Pointer */
+        /* Blinking Pointer Logic */
         .download-pointer {
             position: absolute;
-            top: 25px; /* Seedha asli icon ke pas */
+            top: 25px; 
             right: 115px; 
             z-index: 999;
             color: #ff0000;
@@ -42,7 +42,7 @@
             flex-direction: column;
             align-items: center;
             animation: blink 1s infinite;
-            pointer-events: none; /* User is par click na kare */
+            pointer-events: none;
         }
         .arrow-icon { font-size: 30px; margin-bottom: -5px; }
 
@@ -52,15 +52,14 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        .instructions { margin-top: 15px; background: #e9ecef; padding: 10px; border-radius: 10px; font-size: 14px; color: #333; }
-        
-        footer { background: #fff; padding: 25px; margin-top: 40px; border-top: 1px solid #eee; color: #777; font-size: 12px; }
+        .footer-info { margin-top: 20px; font-size: 13px; color: #666; padding: 20px; }
+        footer { background: #fff; padding: 20px; border-top: 1px solid #eee; color: #777; font-size: 12px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">RembgHD</div>
+        <div class="logo-text">RembgHD</div>
     </header>
 
     <div class="ad-container">
@@ -78,14 +77,14 @@
         <div class="tool-card">
             <iframe src="https://briaai-bria-rmbg-1-4.hf.space" scrolling="no"></iframe>
         </div>
+    </div>
 
-        <div class="instructions">
-            <strong>How to Save:</strong> Process your image, then click the <b>Arrow Icon</b> pointed above to download.
-        </div>
+    <div class="footer-info">
+        <p><strong>Note:</strong> After processing your image, use the red arrow pointed icon inside the box to download your transparent PNG.</p>
     </div>
 
     <footer>
-        <p>&copy; 2025 RembgHD.com | Fast & Secure Background Removal</p>
+        <p>&copy; 2025 RembgHD.com | Fast AI Background Remover</p>
     </footer>
 
 </body>
