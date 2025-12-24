@@ -14,25 +14,24 @@
 
         .hero { display: flex; align-items: center; justify-content: center; gap: 80px; max-width: 1200px; margin: 0 auto; min-height: 80vh; padding: 20px; box-sizing: border-box; }
         
-        .image-container { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
-        .window { width: 500px; height: 350px; background: var(--bg); display: flex; align-items: center; justify-content: center; position: relative; border-radius: 20px; }
+        /* LEFT: Single Window for Loop */
+        .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
+        .window { width: 500px; height: 350px; background: var(--bg); display: flex; align-items: center; justify-content: center; position: relative; border-radius: 24px; overflow: hidden; }
         
-        /* Transparent Checkerboard for result phase */
         .checker { background-image: linear-gradient(45deg, #f9f9f9 25%, transparent 25%), linear-gradient(-45deg, #f9f9f9 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f9f9f9 75%), linear-gradient(-45deg, transparent 75%, #f9f9f9 75%); background-size: 20px 20px; }
         
-        img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; }
+        img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; transition: opacity 0.2s ease-in-out; }
         
+        /* RIGHT: Upload Side */
         .upload-side { flex: 1; text-align: left; }
         .upload-side h1 { font-size: 62px; line-height: 1.1; margin: 0 0 25px 0; font-weight: 800; color: #333; }
         
-        .upload-card { background: #fff; display: flex; flex-direction: column; align-items: flex-start; width: 400px; }
-        .upload-btn { background: var(--blue); color: white; padding: 20px 50px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; text-align: center; width: 100%; box-sizing: border-box; transition: 0.2s; }
-        .upload-btn:hover { background: #0056b3; }
+        .upload-card { background: #fff; display: flex; flex-direction: column; align-items: center; width: 400px; padding: 40px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
+        .upload-btn { background: var(--blue); color: white; padding: 20px 50px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; text-align: center; width: 100%; box-sizing: border-box; }
         
-        .drop-text { margin-top: 15px; font-size: 15px; color: #999; width: 100%; text-align: center; }
-        .status-msg { margin-top: 20px; font-size: 12px; font-weight: bold; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
-
-        #dlBtn { margin-top: 15px; background: #000; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; display: none; width: 100%; }
+        .drop-text { margin-top: 15px; font-size: 14px; color: #999; }
+        .status-msg { margin-top: 15px; font-size: 11px; font-weight: bold; color: var(--blue); text-transform: uppercase; }
+        #dlBtn { margin-top: 20px; background: #000; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; display: none; width: 100%; }
     </style>
 </head>
 <body>
@@ -40,10 +39,10 @@
     <div class="nav"><a href="#" class="logo">rembghd</a></div>
 
     <div class="hero">
-        <div class="image-container">
+        <div class="image-side">
             <div class="window" id="displayBox">
                 <img id="viewImg" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80" crossorigin="anonymous">
-                <canvas id="resCanvas" style="display:none;"></canvas>
+                <canvas id="resCanvas" style="opacity: 0;"></canvas>
             </div>
             <div id="status" class="status-msg">Demo Mode</div>
         </div>
@@ -55,8 +54,8 @@
                     Upload Image
                     <input type="file" id="inp" hidden accept="image/*">
                 </label>
-                <div class="drop-text">or drop a file</div>
-                <button id="dlBtn" onclick="download()">Download HD PNG</button>
+                <div class="drop-text">or drop a file, paste image or URL</div>
+                <button id="dlBtn" onclick="download()">Download Result</button>
             </div>
         </div>
     </div>
@@ -71,9 +70,24 @@
         const dlBtn = document.getElementById('dlBtn');
 
         let userUploaded = false;
-        let showRemoved = false;
+        let isRemovedVisible = false;
 
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
         });
-        ai.setOptions({ model
+        ai.setOptions({ modelSelection: 1 });
+
+        ai.onResults((res) => {
+            cvs.width = res.image.width;
+            cvs.height = res.image.height;
+            ctx.save();
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+            ctx.drawImage(res.image, 0, 0, cvs.width, cvs.height);
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
+            ctx.restore();
+            
+            if(userUploaded) {
+                // Show final result immediately for user
+                viewImg.style.opacity = '0';
+                cvs.style.
