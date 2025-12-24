@@ -21,7 +21,7 @@
         }
         
         header { 
-            padding: 25px 0 70px 0; /* Premium gap above tool */
+            padding: 25px 0 80px 0; /* More gap between name and tool */
             background: var(--dark-bg); 
             position: relative; 
             z-index: 99;
@@ -45,65 +45,51 @@
             padding: 0 15px; 
         }
         
+        /* Tool card height increased to show full frame and shade */
         .tool-card { 
             width: 100%; 
-            height: 800px; /* Space increased to push footer down */
+            height: 820px; 
             background: var(--dark-bg); 
             border-radius: 24px; 
             overflow: hidden; 
-            margin-bottom: 60px; /* Extra breathing space for footer */
+            margin-bottom: 80px; /* Pushing footer way down */
+            box-shadow: 0px 10px 40px rgba(0,0,0,0.5); /* Adding extra shade */
         }
         
         iframe { 
             width: 100%; 
-            height: 1250px; 
+            height: 1300px; 
             border: none; 
-            /* PC pe top margin mazeed kam kiya taake "image" tag dikhe */
-            margin-top: -100px; 
+            /* PC Margin mazeed kam kiya taake shade dikhe */
+            margin-top: -90px; 
         }
 
         /* MOBILE OPTIMIZATION */
         @media (max-width: 600px) {
-            header { padding: 30px 0 65px 0; }
+            header { padding: 30px 0 75px 0; }
             .logo-text { font-size: 44px; }
             
             .tool-card { 
-                height: 860px; /* Footer ko mazeed niche kiya mobile par */
+                height: 880px; /* Extra height for mobile shade */
                 margin-top: 10px;
             }
             iframe { 
-                /* Mobile par tool ka top bilkul clear hai ab */
-                margin-top: -290px; 
-                height: 2000px; 
+                /* Mobile margin adjusted for "image" label + shade visibility */
+                margin-top: -275px; 
+                height: 2100px; 
             }
         }
 
         footer { 
-            padding: 70px 20px; /* Deep footer for premium look */
+            padding: 80px 20px; /* Deep premium footer */
             background: #05070a; 
             border-top: 1px solid #151921;
         }
-        .footer-heading { color: var(--gold); font-weight: 700; margin-bottom: 10px; font-size: 20px; }
+        .footer-heading { color: var(--gold); font-weight: 700; margin-bottom: 10px; font-size: 22px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo-text">RembgHD</h1>
-        <p class="tagline">Free High Definition AI Background Remover</p>
-    </header>
-
-    <div class="main-container">
-        <div class="tool-card">
-            <iframe src="https://briaai-bria-rmbg-1-4.hf.space"></iframe>
-        </div>
-    </div>
-
-    <footer>
-        <div class="footer-heading">RembgHD Premium AI</div>
-        <p style="color:#777; font-size:14px; margin-bottom: 20px;">The world's fastest AI background removal tool.</p>
-        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Quality Guaranteed</p>
-    </footer>
-
-</body>
-</html>
+        <p class="tagline">
