@@ -8,7 +8,7 @@
     <style>
         :root { 
             --gold: #FFD700; 
-            --dark-bg: #0b0f19; /* Tool ke background se match */
+            --dark-bg: #0b0f19; /* Matching the tool's dark background */
         }
         
         body { 
@@ -20,9 +20,9 @@
             color: #fff;
         }
         
-        /* HEADER: Black background with Golden Logo */
+        /* HEADER: Dark background with Golden Logo */
         header { 
-            padding: 40px 0 20px 0; 
+            padding: 50px 0 30px 0; /* More padding to bring iframe down */
             background: var(--dark-bg); 
             position: relative; 
             z-index: 99;
@@ -33,13 +33,12 @@
             color: var(--gold); 
             margin: 0; 
             letter-spacing: -1px;
-            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
         }
         .tagline { 
-            color: #ccc; 
-            font-size: 15px; 
-            margin-top: 8px; 
-            font-weight: 400;
+            color: #aaa; 
+            font-size: 16px; 
+            margin-top: 10px; 
         }
 
         .main-container { 
@@ -52,7 +51,7 @@
         
         .tool-card { 
             width: 100%; 
-            height: 720px; 
+            height: 720px; /* Desktop height */
             background: var(--dark-bg); 
             border-radius: 20px; 
             overflow: hidden; 
@@ -63,35 +62,35 @@
             width: 100%; 
             height: 1200px; 
             border: none; 
-            margin-top: -180px; /* PC alignment */
+            margin-top: -180px; 
         }
 
-        /* MOBILE OPTIMIZATION */
+        /* MOBILE FIX: MORE SPACE + HIDE TOP TEXT */
         @media (max-width: 600px) {
-            header { padding: 35px 0 15px 0; }
-            .logo-text { font-size: 34px; }
+            header { padding: 45px 0 25px 0; }
+            .logo-text { font-size: 36px; }
             
             .tool-card { 
                 height: auto; 
                 min-height: 800px; 
                 overflow: visible; 
+                margin-top: 20px; /* Bringing iframe down on mobile */
             }
             iframe { 
-                /* Oopar wala faltu text hide karne ke liye precision crop */
-                margin-top: -415px; 
+                margin-top: -410px; /* Precision crop to hide HF header text */
                 height: 1850px; 
             }
         }
 
         footer { 
-            margin-top: 50px; 
-            padding: 40px 20px; 
+            margin-top: 60px; 
+            padding: 50px 20px; 
             background: #080b12; 
             border-top: 1px solid #1a1e26;
             color: #666;
         }
-        .footer-heading { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 10px; }
-        .copyright { font-size: 12px; margin-top: 15px; }
+        .footer-heading { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+        .copyright { font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -110,8 +109,8 @@
     <footer>
         <div class="footer-wrap">
             <div class="footer-heading">Professional AI Tools</div>
-            <p>High-quality background removal powered by advanced AI.</p>
-            <p class="copyright">&copy; 2025 RembgHD.com</p>
+            <p>Advanced AI-powered background removal for high-quality results.</p>
+            <p class="copyright">&copy; 2025 RembgHD.com | Quality AI Solutions</p>
         </div>
     </footer>
 
