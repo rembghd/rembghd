@@ -20,71 +20,71 @@
             color: #fff;
         }
         
-        /* HEADER: Reduced top padding so name goes up */
+        /* HEADER: Zero top padding to remove gap above name */
         header { 
-            padding: 40px 0 60px 0; /* Top space kam kar di, niche wali rehne di */
+            padding: 20px 0 40px 0; /* Top se gap khatam, bottom se tool push kiya */
             background: var(--dark-bg); 
             position: relative; 
             z-index: 99;
         }
         .logo-text { 
-            font-size: 52px; 
+            font-size: 48px; 
             font-weight: 800; 
             color: var(--gold); 
             margin: 0; 
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
         .tagline { 
             color: #888; 
-            font-size: 18px; 
-            margin-top: 10px; 
+            font-size: 16px; 
+            margin-top: 5px; 
         }
 
         .main-container { 
             max-width: 1000px; 
             margin: 0 auto; 
-            padding: 0 15px; 
+            padding: 0 10px; 
         }
         
+        /* Fixed height and hidden overflow to kill footer gap */
         .tool-card { 
             width: 100%; 
-            height: 750px; 
+            height: 680px; /* Tool ke size ke mutabiq tight fit */
             background: var(--dark-bg); 
             border-radius: 24px; 
             overflow: hidden; 
+            margin-bottom: 0; /* Footer gap remove karne ke liye */
         }
         
-        /* Desktop alignment */
         iframe { 
             width: 100%; 
-            height: 1250px; 
+            height: 1100px; 
             border: none; 
-            margin-top: -160px; /* PC par cutting fix */
+            margin-top: -150px; 
         }
 
-        /* MOBILE FIX: TOP SPACE REMOVED + CROP FIXED */
+        /* MOBILE FIX: NO TOP GAP + NO FOOTER GAP */
         @media (max-width: 600px) {
-            header { padding: 30px 0 50px 0; } /* Name ko screen ke oopar laya */
-            .logo-text { font-size: 44px; }
+            header { padding: 15px 0 35px 0; } /* Name screen ke top par fit */
+            .logo-text { font-size: 38px; }
             
             .tool-card { 
-                height: auto; 
-                min-height: 850px; 
-                overflow: visible; 
+                height: 750px; /* Mobile size tight fit */
+                margin-top: 10px;
             }
             iframe { 
-                /* Is value ko set kiya taake "Drop Image" poora nazar aaye */
-                margin-top: -340px; 
-                height: 2000px; 
+                margin-top: -335px; /* Precision crop: No top cut */
+                height: 1800px; 
             }
         }
 
         footer { 
-            margin-top: 80px; 
-            padding: 50px 20px; 
+            padding: 30px 20px; 
             background: #05070a; 
             border-top: 1px solid #151921;
+            margin-top: 0; /* Gap zero */
         }
+        .footer-heading { color: var(--gold); font-weight: 700; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -101,8 +101,8 @@
     </div>
 
     <footer>
-        <p style="color:var(--gold); font-weight:700;">RembgHD Premium AI</p>
-        <p style="color:#444; font-size:12px;">&copy; 2025 RembgHD.com</p>
+        <div class="footer-heading">RembgHD Premium AI</div>
+        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com</p>
     </footer>
 
 </body>
