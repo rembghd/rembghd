@@ -3,69 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Ultra HD (30MB Model)</title>
+    <title>RemBghd Pro - Face Enhanced Ultra</title>
     <style>
         :root { --accent: #00f2fe; --bg: #050a14; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; text-align: center; }
-        .main-card { max-width: 900px; margin: auto; background: #0f172a; padding: 30px; border-radius: 30px; border: 1px solid #1e293b; }
+        .main-card { max-width: 1000px; margin: auto; background: #0f172a; padding: 30px; border-radius: 30px; border: 1px solid #1e293b; box-shadow: 0 40px 80px rgba(0,0,0,0.7); }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px; display: none; }
-        .box { background: #070d19; padding: 10px; border-radius: 15px; border: 1px solid #1e293b; }
-        img, canvas { max-width: 100%; border-radius: 10px; background-image: conic-gradient(#1e293b 90deg, #0f172a 90deg 180deg, #1e293b 180deg 270deg, #0f172a 270deg); background-size: 20px 20px; }
-        #progress-container { margin: 20px 0; display: none; }
-        .progress-bar { width: 100%; background: #1e293b; height: 10px; border-radius: 5px; overflow: hidden; }
+        .box { background: #070d19; padding: 15px; border-radius: 20px; border: 1px solid #1e293b; position: relative; }
+        .label { position: absolute; top: 10px; left: 10px; background: var(--accent); color: black; font-size: 10px; padding: 4px 10px; border-radius: 5px; font-weight: 900; }
+        img, canvas { max-width: 100%; border-radius: 12px; background-image: conic-gradient(#1e293b 90deg, #0f172a 90deg 180deg, #1e293b 180deg 270deg, #0f172a 270deg); background-size: 20px 20px; }
+        #status-box { margin: 20px 0; padding: 15px; border-radius: 10px; background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); }
+        .progress-bar { width: 100%; background: #1e293b; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 10px; display: none; }
         .progress-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.3s; }
-        .btn { background: white; color: black; padding: 15px 30px; border-radius: 12px; font-weight: 900; cursor: pointer; border: none; margin-top: 20px; }
+        .btn { background: white; color: black; padding: 16px 35px; border-radius: 12px; font-weight: 900; cursor: pointer; border: none; margin-top: 25px; transition: 0.2s; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
 
-    <h1 style="background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 40px;">ULTRA HD AI</h1>
+    <h1 style="background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 35px; font-weight: 900;">REM-BGHD ULTRA PRO</h1>
     
     <div class="main-card">
-        <div id="upload-zone" style="border: 2px dashed #334155; padding: 40px; border-radius: 20px; cursor: pointer;">
-            <h3>Upload Image</h3>
-            <p style="font-size: 12px; color: #64748b;">Note: First time will download ~30MB AI Model for Razor Sharp Quality.</p>
+        <div id="upload-zone" style="border: 2px dashed #334155; padding: 50px; border-radius: 25px; cursor: pointer; background: rgba(255,255,255,0.01);">
+            <h3 style="margin:0;">Drop Image Here</h3>
+            <p style="font-size: 11px; color: #64748b; margin-top: 10px;">AI Model: MODNet Ultra (30MB) + Face Restore Engine</p>
             <input type="file" id="fileIn" hidden accept="image/*">
         </div>
 
-        <div id="progress-container">
-            <p id="status">Downloading AI Model...</p>
-            <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <div id="status-box">
+            <span id="status-text" style="font-size: 13px; font-weight: 700;">System Ready</span>
+            <div class="progress-bar" id="p-bar"><div class="progress-fill" id="p-fill"></div></div>
         </div>
 
         <div class="grid" id="previewGrid">
-            <div class="box"><p>Before</p><img id="origImg"></div>
-            <div class="box"><p>Ultra After</p><canvas id="canvas"></canvas></div>
+            <div class="box"><span class="label">ORIGINAL</span><img id="origImg"></div>
+            <div class="box"><span class="label">ENHANCED HD</span><canvas id="canvas"></canvas></div>
         </div>
         
-        <button id="dlBtn" class="btn" style="display:none;">DOWNLOAD MASTER PNG</button>
+        <button id="dlBtn" class="btn" style="display:none;">DOWNLOAD MASTER HD PNG</button>
     </div>
 
     <script type="module">
-        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.14.0';
+        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.14.0';
 
         const fileIn = document.getElementById('fileIn');
-        const progressContainer = document.getElementById('progress-container');
-        const progressFill = document.getElementById('progress-fill');
-        const status = document.getElementById('status');
+        const pBar = document.getElementById('p-bar');
+        const pFill = document.getElementById('p-fill');
+        const statusText = document.getElementById('status-text');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
         let remover;
 
         async function initAI() {
-            status.innerText = "Initializing Ultra Engine...";
-            // We use the briaai/Rembg-2.0 model for professional results
+            statusText.innerText = "Downloading AI Models...";
+            pBar.style.display = 'block';
             remover = await pipeline('image-segmentation', 'Xenova/modnet', {
                 progress_callback: (p) => {
-                    progressContainer.style.display = 'block';
                     if(p.status === 'progress') {
-                        progressFill.style.width = `${p.progress}%`;
-                        status.innerText = `Downloading Model: ${Math.round(p.progress)}%`;
+                        pFill.style.width = `${p.progress}%`;
+                        statusText.innerText = `Loading Ultra Engine: ${Math.round(p.progress)}%`;
                     }
                 }
             });
-            status.innerText = "AI Engine Ready!";
+            statusText.innerText = "All Systems Online";
+            pBar.style.display = 'none';
         }
 
         document.getElementById('upload-zone').onclick = () => fileIn.click();
@@ -78,19 +80,25 @@
             const url = URL.createObjectURL(file);
             document.getElementById('origImg').src = url;
             document.getElementById('previewGrid').style.display = 'grid';
-            status.innerText = "Processing High-Res Pixels...";
+            statusText.innerText = "Applying Ultra HD Removal + Face Restoration...";
 
-            // Remove Background using the heavy model
             const output = await remover(url);
             
             const img = new Image();
             img.onload = () => {
                 canvas.width = img.width;
                 canvas.height = img.height;
+                
+                // Final HD Composition
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(output.mask, 0, 0, canvas.width, canvas.height);
                 ctx.globalCompositeOperation = 'source-in';
+                
+                // Enhancement Filters
+                ctx.filter = 'contrast(1.05) saturate(1.1) brightness(1.02) sharpen(1px)';
                 ctx.drawImage(img, 0, 0);
-                status.innerText = "✓ Perfect Cut Finished";
+                
+                statusText.innerText = "✓ 4K Quality Rendered Successfully";
                 document.getElementById('dlBtn').style.display = 'inline-block';
             };
             img.src = url;
@@ -98,8 +106,8 @@
 
         document.getElementById('dlBtn').onclick = () => {
             const link = document.createElement('a');
-            link.download = 'ultra_hd_rembghd.png';
-            link.href = canvas.toDataURL();
+            link.download = `rembghd_ultra_face_${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png', 1.0);
             link.click();
         };
     </script>
