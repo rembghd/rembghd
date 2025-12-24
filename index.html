@@ -17,16 +17,18 @@
         .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
         .window { width: 500px; height: 350px; background: var(--bg); display: flex; align-items: center; justify-content: center; position: relative; border-radius: 24px; overflow: hidden; }
         
-        .checker { background-image: linear-gradient(45deg, #f3f3f3 25%, transparent 25%), linear-gradient(-45deg, #f3f3f3 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f3f3f3 75%), linear-gradient(-45deg, transparent 75%, #f3f3f3 75%); background-size: 20px 20px; }
+        /* High-quality checkerboard for professional look */
+        .checker { background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%); background-size: 16px 16px; }
         
-        img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; transition: opacity 0.3s ease; }
+        img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; transition: opacity 0.3s ease-in-out; }
         
         .upload-side { flex: 1; text-align: left; }
         .upload-side h1 { font-size: 62px; line-height: 1.1; margin: 0 0 25px 0; font-weight: 800; color: #333; }
         .upload-card { background: #fff; display: flex; flex-direction: column; align-items: center; width: 400px; padding: 40px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
-        .upload-btn { background: var(--blue); color: white; padding: 20px 50px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; text-align: center; width: 100%; box-sizing: border-box; }
+        .upload-btn { background: var(--blue); color: white; padding: 20px 50px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; text-align: center; width: 100%; box-sizing: border-box; transition: 0.2s; }
+        .upload-btn:hover { background: #0056b3; }
         
-        .status-msg { margin-top: 15px; font-size: 11px; font-weight: bold; color: var(--blue); text-transform: uppercase; }
+        .status-msg { margin-top: 15px; font-size: 11px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
         #dlBtn { margin-top: 20px; background: #000; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; display: none; width: 100%; }
     </style>
 </head>
@@ -37,7 +39,7 @@
     <div class="hero">
         <div class="image-side">
             <div class="window" id="displayBox">
-                <img id="viewImg" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80" crossorigin="anonymous">
+                <img id="viewImg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80" crossorigin="anonymous">
                 <canvas id="resCanvas" style="opacity: 0;"></canvas>
             </div>
             <div id="status" class="status-msg">Demo Mode</div>
@@ -84,15 +86,13 @@
             ctx.restore();
         });
 
-        function startInfiniteLoop() {
-            // First run to prepare canvas
+        // Fixed Infinite 1s/1s Loop
+        function runInfiniteLoop() {
             ai.send({image: viewImg});
 
             demoLoop = setInterval(() => {
-                if (userUploaded) {
-                    clearInterval(demoLoop);
-                    return;
-                }
+                if (userUploaded) return;
+
                 showRemoved = !showRemoved;
                 if (showRemoved) {
                     viewImg.style.opacity = '0';
@@ -106,7 +106,7 @@
             }, 1000); 
         }
 
-        viewImg.onload = () => { if(!userUploaded) startInfiniteLoop(); };
+        viewImg.onload = () => { if(!userUploaded) runInfiniteLoop(); };
 
         inp.onchange = (e) => {
             const file = e.target.files[0];
@@ -114,7 +114,7 @@
             
             userUploaded = true;
             clearInterval(demoLoop);
-            status.innerText = "Processing...";
+            status.innerText = "AI Processing...";
             
             const url = URL.createObjectURL(file);
             box.classList.remove('checker');
@@ -138,10 +138,6 @@
 
         function download() {
             const a = document.createElement('a');
-            a.download = 'rembghd_pro.png';
+            a.download = 'rembghd_result.png';
             a.href = cvs.toDataURL('image/png', 1.0);
             a.click();
-        }
-    </script>
-</body>
-</html>
