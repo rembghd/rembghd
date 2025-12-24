@@ -10,26 +10,31 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #FFD700; --dark-bg: #0b0f19; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; line-height: 1.6; }
-        header { padding: 50px 0 40px 0; }
-        .logo-container { display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .logo-icon { width: 50px; height: 50px; fill: var(--gold); }
-        .logo-text { font-size: 56px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
-        .slogan { color: #aaa; font-size: 19px; margin-top: 10px; font-style: italic; }
-        .main-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
-        .tool-card { width: 100%; height: 850px; background: #111827; border-radius: 35px; overflow: hidden; margin-bottom: 50px; box-shadow: 0 25px 70px rgba(0,0,0,0.9); border: 1px solid #1f2937; position: relative; }
-        iframe { width: 100%; height: 1600px; border: none; margin-top: -125px; position: absolute; top: 0; left: 0; background: #111827; }
-        .content-section { text-align: left; background: #111827; padding: 40px; border-radius: 25px; margin-bottom: 60px; border: 1px solid #1f2937; }
-        .content-section h2 { color: var(--gold); margin-top: 25px; }
-        .content-section p { color: #ccc; font-size: 16px; }
-
-        @media (max-width: 600px) {
-            .logo-text { font-size: 40px; }
-            .tool-card { min-height: 950px; }
-            iframe { margin-top: -270px; height: 2200px; position: relative; }
+        iframe { 
+            width: 100%; 
+            height: 1600px; 
+            border: none; 
+            /* PC: Is value ko -125 se badha kar -185 kar diya hai taake wo text hide ho jaye */
+            margin-top: -185px; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #111827;
         }
 
+        /* MOBILE: Isay nahi chhedna, ye pehle hi perfect hai */
+        @media (max-width: 600px) {
+            header { padding: 35px 0 25px 0; }
+            .logo-text { font-size: 42px; }
+            .logo-icon { width: 38px; height: 38px; }
+            .slogan { font-size: 15px; }
+            .tool-card { min-height: 950px; border-radius: 25px; }
+            iframe { 
+                margin-top: -270px; 
+                height: 2200px; 
+                position: relative; 
+            }
+        }
         footer { padding: 80px 20px; background: #05070a; border-top: 1px solid #151921; }
         .footer-links a { color: #888; text-decoration: none; margin: 0 15px; font-size: 14px; transition: 0.3s; }
         .footer-links a:hover { color: var(--gold); }
@@ -70,3 +75,4 @@
     </footer>
 </body>
 </html>
+
