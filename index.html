@@ -2,107 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>rembghd - Fast BodyPix</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.2.0"></script>
-    <style>
-        :root { --blue: #007bff; }
-        body { font-family: 'Segoe UI', sans-serif; text-align: center; padding: 50px; background: #f8f9fa; }
-        .window { 
-            width: 500px; height: 350px; background: #fff; margin: 20px auto; 
-            border-radius: 25px; overflow: hidden; position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;
+    <title>rembghd - Ultra HD AI</title>
+    <script type="module">
+        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.16.0';
+
+        const status = document.getElementById('status');
+        const cvs = document.getElementById('resCanvas');
+        const ctx = cvs.getContext('2d');
+        let remover;
+
+        async function init() {
+            status.innerText = "Loading HD Model (approx. 30MB)...";
+            // RMBG-1.4 is the state-of-the-art for background removal
+            remover = await pipeline('image-segmentation', 'Xenova/rmbg-1.4');
+            status.innerText = "HD Model Ready!";
+            document.getElementById('upLabel').style.display = 'inline-block';
         }
-        .checker { position: absolute; inset: 0; background-image: linear-gradient(45deg, #eee 25%, transparent 25%), linear-gradient(-45deg, #eee 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #eee 75%), linear-gradient(-45deg, transparent 75%, #eee 75%); background-size: 20px 20px; }
-        canvas { max-width: 100%; max-height: 100%; position: relative; z-index: 5; }
-        .btn { background: var(--blue); color: #fff; padding: 15px 40px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; display: none; }
-        #status { margin: 20px; font-weight: 600; color: #555; }
+        init();
+
+        window.processImage = async (input) => {
+            const file = input.files[0];
+            if (!file) return;
+
+            status.innerText = "Analyzing Hair & Edges (HD Pass)...";
+            const url = URL.createObjectURL(file);
+            
+            const result = await remover(url);
+            const mask = result.mask;
+
+            const img = new Image();
+            img.src = url;
+            img.onload = () => {
+                cvs.width = img.width;
+                cvs.height = img.height;
+
+                // Step 1: Draw the HD Mask
+                const maskImg = new Image();
+                maskImg.src = mask.toCanvas().toDataURL();
+                maskImg.onload = () => {
+                    ctx.drawImage(maskImg, 0, 0, cvs.width, cvs.height);
+                    
+                    // Step 2: Composite the original image
+                    ctx.globalCompositeOperation = 'source-in';
+                    ctx.drawImage(img, 0, 0);
+                    
+                    status.innerText = "Done! Professional Quality.";
+                    document.getElementById('dlBtn').style.display = 'inline-block';
+                };
+            };
+        };
+    </script>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f0f2f5; padding: 40px; }
+        .window { width: 500px; height: 400px; background: #fff; margin: 20px auto; border-radius: 20px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .checker { position: absolute; inset: 0; background-image: conic-gradient(#ddd 0.25turn, #fff 0.25turn 0.5turn, #ddd 0.5turn 0.75turn, #fff 0.75turn); background-size: 20px 20px; }
+        canvas { position: relative; z-index: 5; max-width: 100%; max-height: 100%; }
+        .btn { background: #007bff; color: #fff; padding: 15px 40px; border-radius: 50px; cursor: pointer; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
-
-    <h1>rembghd <span style="color:var(--blue)">Fast AI</span></h1>
-    
+    <h1>rembghd <span style="color:#007bff">Ultra HD</span></h1>
     <div class="window">
         <div class="checker"></div>
         <canvas id="resCanvas"></canvas>
     </div>
-
-    <div id="status">Initializing Light Model...</div>
-    
-    <label class="btn" id="upBtn">
-        Upload Image
-        <input type="file" id="inp" hidden accept="image/*">
-    </label>
+    <div id="status">Starting Engine...</div>
+    <br>
+    <label class="btn" id="upLabel">Upload Image <input type="file" onchange="processImage(this)" hidden></label>
+    <button id="dlBtn" class="btn" style="background:#000; display:none;" onclick="download()">Download</button>
 
     <script>
-        const status = document.getElementById('status');
-        const upBtn = document.getElementById('upBtn');
-        const cvs = document.getElementById('resCanvas');
-        const ctx = cvs.getContext('2d');
-        let net;
-
-        async function init() {
-            try {
-                // MobileNetV1 is much faster and smaller than ResNet
-                net = await bodyPix.load({
-                    architecture: 'MobileNetV1',
-                    outputStride: 16,
-                    multiplier: 0.75,
-                    quantBytes: 2
-                });
-                status.innerText = "Fast AI Ready!";
-                upBtn.style.display = 'inline-block';
-            } catch (err) {
-                status.innerText = "Error loading AI. Please refresh.";
-                console.error(err);
-            }
+        function download() {
+            const link = document.createElement('a');
+            link.download = 'rembghd_ultra.png';
+            link.href = document.getElementById('resCanvas').toDataURL();
+            link.click();
         }
-        init();
-
-        document.getElementById('inp').onchange = async (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-
-            status.innerText = "Removing Background...";
-            const img = new Image();
-            img.src = URL.createObjectURL(file);
-            
-            img.onload = async () => {
-                cvs.width = img.width;
-                cvs.height = img.height;
-
-                const segmentation = await net.segmentPerson(img, {
-                    internalResolution: 'medium',
-                    segmentationThreshold: 0.7
-                });
-
-                ctx.clearRect(0, 0, cvs.width, cvs.height);
-
-                // Create clean mask
-                const tempCanvas = document.createElement('canvas');
-                tempCanvas.width = cvs.width;
-                tempCanvas.height = cvs.height;
-                const tCtx = tempCanvas.getContext('2d');
-                const mask = tCtx.createImageData(cvs.width, cvs.height);
-
-                for (let i = 0; i < segmentation.data.length; i++) {
-                    const isPerson = segmentation.data[i];
-                    mask.data[i*4] = 0; mask.data[i*4+1] = 0; mask.data[i*4+2] = 0;
-                    mask.data[i*4+3] = isPerson ? 255 : 0;
-                }
-                tCtx.putImageData(mask, 0, 0);
-
-                // Drawing with smooth edges
-                ctx.save();
-                ctx.drawImage(tempCanvas, 0, 0);
-                ctx.globalCompositeOperation = 'source-in';
-                ctx.drawImage(img, 0, 0);
-                ctx.restore();
-
-                status.innerText = "Done!";
-            };
-        };
     </script>
 </body>
 </html>
