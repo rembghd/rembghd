@@ -1,17 +1,92 @@
-function handleButtonClick() {
-    // 1. Ad ko 'background' tab mein kholna (Earning)
-    var smartLink = "https://data527.click/f403280eec7c46d61ee6/02975ab252/?placementName=default";
-    var adWindow = window.open(smartLink, '_blank');
-    
-    // 2. User ko foran tool par focus karwana (No confusion)
-    if (adWindow) {
-        adWindow.blur(); // Ad window ko piche bhej dena
-        window.focus();  // Wapas apni site par focus lana
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RembgHD - Ultra HD Background Remover</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-color: #007bff; --bg-gray: #f8f9fa; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg-gray); text-align: center; }
+        
+        header { background: #fff; padding: 15px; border-bottom: 1px solid #eee; }
+        .logo { color: var(--primary-color); font-size: 26px; font-weight: 800; margin: 0; }
 
-    // 3. User ko tool ke download area par le jana
-    document.getElementById('ai-tool').scrollIntoView({ behavior: 'smooth' });
+        .ad-container { margin: 10px auto; max-width: 728px; height: 90px; display: flex; justify-content: center; align-items: center; background: #fff; overflow: hidden; border-bottom: 1px solid #eee; }
 
-    // 4. Aik chota professional message
-    alert("HD Download Unlocked! Please click the 'Arrow Icon' on top of your image inside the box to save.");
-}
+        .main-container { max-width: 1000px; margin: 20px auto; padding: 0 10px; position: relative; }
+        
+        /* Tool Card */
+        .tool-card { 
+            width: 100%; 
+            height: 650px; 
+            background: #fff; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: 1px solid #eee; 
+            position: relative; 
+        }
+        iframe { width: 100%; height: 1100px; border: none; margin-top: -185px; }
+
+        /* Blinking Arrow Pointer */
+        .download-pointer {
+            position: absolute;
+            top: 25px; /* Seedha asli icon ke pas */
+            right: 115px; 
+            z-index: 999;
+            color: #ff0000;
+            font-weight: 800;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: blink 1s infinite;
+            pointer-events: none; /* User is par click na kare */
+        }
+        .arrow-icon { font-size: 30px; margin-bottom: -5px; }
+
+        @keyframes blink {
+            0% { opacity: 1; transform: translateY(0); }
+            50% { opacity: 0.3; transform: translateY(-5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .instructions { margin-top: 15px; background: #e9ecef; padding: 10px; border-radius: 10px; font-size: 14px; color: #333; }
+        
+        footer { background: #fff; padding: 25px; margin-top: 40px; border-top: 1px solid #eee; color: #777; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">RembgHD</div>
+    </header>
+
+    <div class="ad-container">
+        <ins style="width: 728px;height:90px" data-width="728" data-height="90" class="jf254a08a6a" data-domain="//data527.click" data-affquery="/78bd9ded140f692814bb/f254a08a6a/?placementName=default">
+            <script src="//data527.click/js/responsive.js" async></script>
+        </ins>
+    </div>
+
+    <div class="main-container">
+        <div class="download-pointer">
+            <span>CLICK TO SAVE HD</span>
+            <div class="arrow-icon">⬇</div>
+        </div>
+
+        <div class="tool-card">
+            <iframe src="https://briaai-bria-rmbg-1-4.hf.space" scrolling="no"></iframe>
+        </div>
+
+        <div class="instructions">
+            <strong>How to Save:</strong> Process your image, then click the <b>Arrow Icon</b> pointed above to download.
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 RembgHD.com | Fast & Secure Background Removal</p>
+    </footer>
+
+</body>
+</html>
