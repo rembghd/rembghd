@@ -3,39 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - Free High Definition AI Background Remover</title>
+    <title>RembgHD - Ultra HD Background Remover</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary-blue: #007bff; --accent-red: #ff4757; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; text-align: center; color: #333; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; text-align: center; overflow-x: hidden; }
         
-        /* Minimalist Header */
-        header { padding: 45px 0 25px 0; background: #f8f9fa; }
-        .logo-text { font-size: 38px; font-weight: 800; color: var(--primary-blue); margin: 0; letter-spacing: -1px; }
-        .tagline { color: #666; font-size: 16px; margin-top: 8px; font-weight: 400; }
+        header { padding: 30px 0 15px 0; }
+        .logo-text { font-size: 32px; font-weight: 800; color: var(--primary-blue); margin: 0; }
+        .tagline { color: #666; font-size: 14px; margin-top: 5px; }
 
-        .main-container { max-width: 1000px; margin: 10px auto; padding: 0 15px; position: relative; }
+        .main-container { max-width: 1000px; margin: 0 auto; padding: 0 10px; position: relative; }
         
-        /* The Tool Box */
+        /* TOOL CARD - ADJUSTABLE HEIGHT */
         .tool-card { 
             width: 100%; 
-            height: 720px; 
+            height: 750px; /* Desktop height */
             background: #fff; 
-            border-radius: 24px; 
+            border-radius: 20px; 
             overflow: hidden; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.06); 
-            border: 1px solid #eef0f2; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            border: 1px solid #eee; 
             position: relative; 
         }
-        
-        /* Iframe alignment for perfect button visibility */
+
+        /* IFRAME ALIGNMENT */
         iframe { width: 100%; height: 1150px; border: none; margin-top: -185px; position: relative; z-index: 2; }
 
-        /* THE PERFECTLY CENTERED RED ARROW */
+        /* RESPONSIVE RED ARROW */
         .download-pointer {
             position: absolute;
-            top: 24px; /* Perfectly lowered to touch the icon area */
-            right: 146px; /* Shifted precisely to center over the download icon */
+            top: 25px;
+            right: 145px;
             z-index: 999;
             color: var(--accent-red);
             font-weight: 800;
@@ -44,27 +43,30 @@
             flex-direction: column;
             align-items: center;
             animation: blink 1.2s infinite;
-            pointer-events: none;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-        .arrow-icon { font-size: 34px; margin-top: -4px; line-height: 1; }
+        .arrow-icon { font-size: 30px; margin-top: -5px; }
+
+        /* MOBILE FIXES */
+        @media (max-width: 600px) {
+            header { padding: 20px 0 10px 0; }
+            .logo-text { font-size: 28px; }
+            .tool-card { height: 900px; } /* Increased height for mobile buttons */
+            iframe { margin-top: -160px; height: 1300px; }
+            .download-pointer { right: 20px; top: 10px; } /* Adjust arrow for mobile screen */
+        }
 
         @keyframes blink {
             0% { opacity: 1; transform: translateY(0); }
-            50% { opacity: 0.2; transform: translateY(6px); }
+            50% { opacity: 0.3; transform: translateY(5px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Professional Footer with Full Content */
-        footer { margin-top: 70px; padding: 60px 20px; background: #ffffff; border-top: 1px solid #eaecef; }
-        .footer-wrap { max-width: 800px; margin: 0 auto; }
-        .footer-heading { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 18px; }
-        .footer-text { font-size: 15px; line-height: 1.8; color: #5a6268; margin-bottom: 35px; }
-        
-        .footer-links { margin-bottom: 30px; border-top: 1px solid #f1f3f5; padding-top: 30px; }
-        .footer-links a { color: var(--primary-blue); text-decoration: none; margin: 0 18px; font-size: 14px; font-weight: 600; transition: color 0.2s; }
-        .footer-links a:hover { color: #0056b3; text-decoration: underline; }
-        .copyright { color: #adb5bd; font-size: 12px; margin-top: 25px; }
+        /* Footer Styling */
+        footer { margin-top: 50px; padding: 40px 20px; background: #fff; border-top: 1px solid #eee; }
+        .footer-wrap { max-width: 800px; margin: 0 auto; line-height: 1.6; color: #555; }
+        .footer-links { margin-top: 20px; }
+        .footer-links a { color: var(--primary-blue); text-decoration: none; margin: 0 10px; font-size: 14px; font-weight: 600; }
+        .copyright { margin-top: 20px; color: #999; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -76,7 +78,7 @@
 
     <div class="main-container">
         <div class="download-pointer">
-            <span>CLICK TO SAVE HD</span>
+            <span>SAVE HD</span>
             <div class="arrow-icon">⬇</div>
         </div>
 
@@ -87,19 +89,14 @@
 
     <footer>
         <div class="footer-wrap">
-            <div class="footer-heading">High-Quality Background Removal in One Click</div>
-            <p class="footer-text">
-                <b>RembgHD</b> provides a seamless experience for users looking to isolate subjects from their backgrounds using advanced AI. Whether you are dealing with complex hair details or sharp product edges, our tool ensures a clean, professional-grade result every time. Simply upload, process, and download your HD transparent PNG instantly.
-            </p>
-            
+            <p><b>RembgHD</b> provides professional AI background removal. Upload, process, and download your high-quality transparent PNG instantly.</p>
             <div class="footer-links">
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Service</a>
                 <a href="#">Contact Us</a>
                 <a href="#">About Us</a>
             </div>
-            
-            <p class="copyright">&copy; 2025 RembgHD.com | Effortless AI Image Processing</p>
+            <p class="copyright">&copy; 2025 RembgHD.com | All Rights Reserved.</p>
         </div>
     </footer>
 
