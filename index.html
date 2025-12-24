@@ -1,29 +1,116 @@
-function drawFinal() {
-    if(!rawImg || !rawMask) return;
-    const s = document.getElementById('sharpSlider').value;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RemBghd Ultra Pro - Zero Edge Fix</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
+    <style>
+        :root { --accent: #00f2fe; --bg: #050a14; }
+        body { font-family: sans-serif; background: var(--bg); color: white; text-align: center; padding: 15px; }
+        .main-card { max-width: 850px; margin: auto; background: #0f172a; padding: 25px; border-radius: 25px; border: 1px solid #1e293b; }
+        .upload-zone { border: 2px dashed #334155; padding: 40px; border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.01); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; display: none; }
+        canvas, img { max-width: 100%; border-radius: 12px; background: #070d19; display: block; margin: auto; }
+        .controls { display: none; margin-top: 20px; background: #070d19; padding: 20px; border-radius: 15px; border: 1px solid #1e293b; }
+        .btn { background: var(--accent); color: #000; padding: 15px; border-radius: 10px; border: none; font-weight: 900; width: 100%; cursor: pointer; margin-top: 15px; }
+        input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+        #status { margin: 15px; color: var(--accent); font-weight: bold; }
+    </style>
+</head>
+<body>
 
-    // Step 1: Create a Shrinked (Eroded) Mask to kill black edges
-    const mCanvas = document.createElement('canvas');
-    mCanvas.width = canvas.width; mCanvas.height = canvas.height;
-    const mCtx = mCanvas.getContext('2d');
-    
-    // Mask ko halka sa blur karke "Contrast" barhane se edges andar shrink ho jate hain
-    mCtx.filter = 'blur(1.5px) contrast(2) brightness(0.9)'; 
-    mCtx.drawImage(rawMask, 0, 0, canvas.width, canvas.height);
+    <h1 style="font-weight: 900;">ULTRA <span style="color: var(--accent)">AI EDITOR</span></h1>
 
-    // Step 2: Main Subject Rendering
-    const temp = document.createElement('canvas');
-    temp.width = canvas.width; temp.height = canvas.height;
-    const tCtx = temp.getContext('2d');
-    
-    tCtx.drawImage(mCanvas, 0, 0);
-    tCtx.globalCompositeOperation = 'source-in';
-    
-    // Face & Body Sharpness
-    tCtx.filter = `contrast(${s}) saturate(1.1) brightness(1.02)`;
-    tCtx.drawImage(rawImg, 0, 0);
+    <div class="main-card">
+        <div class="upload-zone" id="dropZone">
+            <h3 style="margin:0;">Select High-Res Image</h3>
+            <p style="font-size: 11px; opacity: 0.5;">Edge Correction & Face Restore Active</p>
+            <input type="file" id="fileIn" hidden accept="image/*">
+        </div>
 
-    // Step 3: Final Composition
-    ctx.drawImage(temp, 0, 0);
-}
+        <div id="status">System Ready</div>
+
+        <div class="grid" id="pGrid">
+            <div><p style="font-size:10px; color:#64748b;">ORIGINAL</p><img id="vOriginal"></div>
+            <div><p style="font-size:10px; color:#64748b;">ULTRA HD</p><canvas id="vCanvas"></canvas></div>
+        </div>
+
+        <div class="controls" id="ctrlPanel">
+            <label style="font-size:11px; display:block; text-align:left; margin-bottom:8px;">ADJUST SHARPNESS</label>
+            <input type="range" id="sharpSlider" min="1" max="1.4" step="0.05" value="1.1">
+            <button class="btn" onclick="downloadImg()">DOWNLOAD MASTER HD</button>
+        </div>
+    </div>
+
+    <script>
+        const fileIn = document.getElementById('fileIn');
+        const dropZone = document.getElementById('dropZone');
+        const canvas = document.getElementById('vCanvas');
+        const ctx = canvas.getContext('2d', {willReadFrequently: true});
+        const status = document.getElementById('status');
+        let rawImg = null, rawMask = null;
+
+        const ai = new SelfieSegmentation({
+            locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
+        });
+
+        ai.setOptions({ modelSelection: 1 });
+
+        ai.onResults((res) => {
+            canvas.width = res.image.width;
+            canvas.height = res.image.height;
+            rawImg = res.image;
+            rawMask = res.segmentationMask;
+            drawFinal();
+            status.innerText = "✓ HD Processing Done";
+            document.getElementById('pGrid').style.display = 'grid';
+            document.getElementById('ctrlPanel').style.display = 'block';
+        });
+
+        function drawFinal() {
+            if(!rawImg || !rawMask) return;
+            const s = document.getElementById('sharpSlider').value;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Step 1: Create a Shrinked (Eroded) Mask to kill black edges
+            const mCanvas = document.createElement('canvas');
+            mCanvas.width = canvas.width; mCanvas.height = canvas.height;
+            const mCtx = mCanvas.getContext('2d');
+            
+            // Contrast(2.5) mask ko andar shrink kar deta hai, black line khatam ho jati hai
+            mCtx.filter = 'blur(1.2px) contrast(2.5) brightness(0.9)'; 
+            mCtx.drawImage(rawMask, 0, 0, canvas.width, canvas.height);
+
+            // Step 2: Main Composition
+            const temp = document.createElement('canvas');
+            temp.width = canvas.width; temp.height = canvas.height;
+            const tCtx = temp.getContext('2d');
+            
+            tCtx.drawImage(mCanvas, 0, 0);
+            tCtx.globalCompositeOperation = 'source-in';
+            tCtx.filter = `contrast(${s}) saturate(1.1) brightness(1.02)`;
+            tCtx.drawImage(rawImg, 0, 0);
+
+            ctx.drawImage(temp, 0, 0);
+        }
+
+        dropZone.onclick = () => fileIn.click();
+
+        fileIn.onchange = (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            status.innerText = "Analyzing Pixels...";
+            const url = URL.createObjectURL(file);
+            document.getElementById('vOriginal').src = url;
+            const img = new Image();
+            img.src = url;
+            img.onload = () => ai.send({image: img});
+        };
+
+        document.getElementById('sharpSlider').oninput = drawFinal;
+
+        function downloadImg() {
+            const link = document.createElement('a');
+            link.download = `rembghd_final_${Date.now()}.png`;
+            link.href = canvas.toDataURL();
