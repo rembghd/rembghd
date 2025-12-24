@@ -4,84 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RembgHD - Free HD AI Background Remover</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
-        
-        header { padding: 25px 0; }
-        .logo-text { font-size: 44px; font-weight: 800; color: var(--gold); margin: 0; }
-        .slogan { color: #aaa; font-size: 14px; font-style: italic; }
+        body { margin: 0; padding: 0; font-family: sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
+        header { padding: 20px 0; }
+        .logo-text { font-size: 40px; font-weight: 800; color: var(--gold); margin: 0; }
+        .main-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        .tool-card { width: 100%; height: 600px; background: #111827; border-radius: 12px; overflow: hidden; border: 1px solid #1f2937; margin-bottom: 20px; }
+        iframe { width: 100%; height: 1300px; border: none; margin-top: -145px; }
 
-        .main-container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 15px; box-sizing: border-box; }
-
-        /* Tool Card setup */
-        .tool-card { 
-            width: 100%; 
-            height: 640px; 
-            background: #111827; 
-            border-radius: 15px; 
-            overflow: hidden; 
-            margin-bottom: 20px;
-            border: 1px solid #1f2937; 
-            position: relative;
-        }
-        
-        iframe { 
-            width: 100%; 
-            height: 1350px; 
-            border: none; 
-            margin-top: -145px; 
-            display: block;
-        }
-
-        /* Naya Section: Sirf Output ke niche Gallery */
-        .showcase-wrapper {
-            display: flex;
-            justify-content: flex-end; /* Is se gallery right side (output) ke niche chali jayegi */
-            margin-top: -10px;
-            margin-bottom: 40px;
-        }
-
-        .comparison-container {
-            width: 48%; /* Takreeban Output frame ki width ke barabar */
-            text-align: left;
-        }
-
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .comp-card {
-            background: #111827;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #1f2937;
-        }
-
-        .comp-card img {
-            width: 100%;
-            display: block;
-            height: 120px;
-            object-fit: cover;
-        }
-
-        .label-tag {
-            font-size: 10px;
-            color: var(--gold);
-            padding: 5px;
-            text-align: center;
-            font-weight: 600;
-            background: #1a2233;
-        }
+        /* Gallery alignment - Sirf Output ke niche */
+        .gallery-wrapper { display: flex; justify-content: flex-end; margin-top: 10px; }
+        .output-gallery { width: 48%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .gallery-item { background: #111827; border-radius: 8px; overflow: hidden; border: 1px solid #1f2937; }
+        .gallery-item img { width: 100%; height: 150px; object-fit: cover; display: block; }
+        .tag { font-size: 10px; color: var(--gold); padding: 5px; background: #1a2233; text-align: center; }
 
         @media (max-width: 768px) {
-            .comparison-container { width: 100%; }
-            .showcase-wrapper { justify-content: center; }
-            .tool-card { height: 820px; }
+            .output-gallery { width: 100%; }
+            .tool-card { height: 800px; }
             iframe { margin-top: -260px; height: 2200px; }
         }
     </style>
@@ -89,7 +30,7 @@
 <body>
     <header>
         <h1 class="logo-text">RembgHD</h1>
-        <p class="slogan">Free High-Definition Background Removal</p>
+        <p style="color: #666;">Free High-Definition Background Removal</p>
     </header>
 
     <div class="main-container">
@@ -97,22 +38,15 @@
             <iframe src="https://briaai-rmbg-1-4.hf.space/?__theme=dark"></iframe>
         </div>
 
-        <div class="showcase-wrapper">
-            <div class="comparison-container">
-                <p style="font-size: 13px; font-weight: 600; color: #666; margin-bottom: 5px;">AI EXAMPLES</p>
-                <div class="comparison-grid">
-                    <div class="comp-card">
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400" alt="Model 1">
-                        <div class="label-tag">HD Result</div>
-                    </div>
-                    <div class="comp-card">
-                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400" alt="Model 2">
-                        <div class="label-tag">Clean Edges</div>
-                    </div>
-                    <div class="comp-card">
-                        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400" alt="Model 3">
-                        <div class="label-tag">Alpha Matte</div>
-                    </div>
+        <div class="gallery-wrapper">
+            <div class="output-gallery">
+                <div class="gallery-item">
+                    <img src="https://i.ibb.co/VpkYmR4/image-c565c7.jpg" alt="Example 1">
+                    <div class="tag">AI REMOVAL</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400" alt="Example 2">
+                    <div class="tag">HD RESULT</div>
                 </div>
             </div>
         </div>
