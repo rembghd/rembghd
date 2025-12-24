@@ -2,63 +2,157 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>rembghd - Final Cloud Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rembghd - AI Background Remover</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; text-align: center; padding: 40px; background: #fff; }
-        .preview { width: 350px; height: 350px; margin: 20px auto; border-radius: 20px; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .checker { position: absolute; inset: 0; background-image: conic-gradient(#eee 0.25turn, #fff 0.25turn 0.5turn, #eee 0.5turn 0.75turn, #fff 0.75turn); background-size: 20px 20px; z-index: 1; }
-        img { max-width: 100%; max-height: 100%; position: relative; z-index: 2; }
-        .btn { background: #007bff; color: white; padding: 15px 40px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; }
-        #status { margin-top: 15px; color: #555; font-weight: 600; }
+        :root { --accent: #00f2fe; --bg: #0b1120; --card: #161e2f; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; padding: 20px; }
+        
+        .header { margin-bottom: 30px; }
+        .header h1 { font-size: 40px; margin: 0; letter-spacing: 2px; }
+        .slogan { font-size: 14px; opacity: 0.6; }
+
+        .main-container { max-width: 1000px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
+
+        /* Top Upload Section */
+        .upload-section { background: var(--card); padding: 40px; border-radius: 25px; border: 1px solid #2d3748; display: flex; align-items: center; justify-content: center; gap: 40px; }
+        .upload-btn { background: #334155; padding: 10px 25px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 10px; border: none; color: white; transition: 0.3s; }
+        .upload-btn:hover { background: var(--accent); color: black; }
+
+        /* Monitor / Preview Grid */
+        .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .monitor-box { background: var(--card); padding: 30px; border-radius: 25px; position: relative; border: 1px solid #2d3748; min-height: 350px; }
+        
+        .screen { background: #050a14; border: 8px solid #2d3748; border-radius: 10px; height: 200px; width: 85%; margin: 0 auto 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .screen img, .screen canvas { width: 100%; height: 100%; object-fit: contain; display: none; }
+        .monitor-stand { width: 40px; height: 20px; background: #2d3748; margin: -21px auto 0; border-radius: 0 0 5px 5px; }
+        
+        /* The Static Cats (Load State) */
+        .cat-helper { position: absolute; font-size: 60px; bottom: 60px; pointer-events: none; transition: 0.5s; }
+        .cat-left { left: 10px; transform: scaleX(-1); }
+        .cat-right { right: 10px; }
+
+        /* Labels */
+        .label-pills { display: inline-flex; align-items: center; background: #1e293b; padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: bold; gap: 10px; }
+        .dot-hd { width: 25px; height: 25px; background: var(--accent); color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; }
+
+        .footer { margin-top: 50px; font-size: 30px; letter-spacing: 15px; opacity: 0.2; text-transform: uppercase; }
+
+        /* Animation class */
+        .cleaning { animation: scrub 1s infinite; }
+        @keyframes scrub { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(15px, -15px); } }
     </style>
 </head>
 <body>
 
-    <h1>rembghd <span style="color:#007bff">Cloud Pro</span></h1>
-    <div class="preview">
-        <div class="checker"></div>
-        <img id="resImg" src="" style="display:none;">
+    <div class="header">
+        <h1>rembghd</h1>
+        <div class="slogan">its free and always will be...</div>
     </div>
 
-    <div id="status">Ready for Cloud Processing</div>
-    <br>
-    <input type="file" id="inp" accept="image/*" style="display:none;">
-    <button class="btn" onclick="document.getElementById('inp').click()">Upload & Remove</button>
+    <div class="main-container">
+        <div class="upload-section">
+            <div style="text-align: left;">
+                <h2 style="margin:0;">AI Background Remover</h2>
+                <p style="opacity:0.6; font-size:14px;">Upload an image to see the magic!</p>
+                <label class="upload-btn">
+                    <span>✓ Upload</span>
+                    <input type="file" id="imageInput" hidden accept="image/*">
+                </label>
+            </div>
+            <div style="font-size: 80px;">🐱</div>
+        </div>
+
+        <div class="preview-grid">
+            <div class="monitor-box">
+                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ORIGINAL</p>
+                <div class="screen">
+                    <img id="origDisplay">
+                    <div id="placeholder1" style="opacity: 0.3; font-size: 12px;">No Image Loaded</div>
+                </div>
+                <div class="monitor-stand"></div>
+                <div class="cat-helper cat-left" id="cat1">🐱🧽</div>
+                
+                <div class="label-pills">
+                    <div class="dot-hd">HD</div> (High Definition)
+                </div>
+            </div>
+
+            <div class="monitor-box">
+                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ULTRA 4K PROCESSED</p>
+                <div class="screen">
+                    <canvas id="resCanvas"></canvas>
+                    <div id="placeholder2" style="opacity: 0.3; font-size: 12px;">Waiting for Upload...</div>
+                </div>
+                <div class="monitor-stand"></div>
+                <div class="cat-helper cat-right" id="cat2">🐈🧹</div>
+                
+                <div class="label-pills" style="background: rgba(255,255,255,0.05);">
+                    ULTRA 4K Processed!
+                </div>
+            </div>
+        </div>
+        
+        <button id="dlBtn" class="upload-btn" style="display:none; margin: 20px auto; background: var(--accent); color: black;" onclick="download()">Download Result</button>
+    </div>
+
+    <div class="footer">SadSha</div>
 
     <script>
-        const inp = document.getElementById('inp');
-        const resImg = document.getElementById('resImg');
-        const status = document.getElementById('status');
+        const input = document.getElementById('imageInput');
+        const canvas = document.getElementById('resCanvas');
+        const ctx = canvas.getContext('2d');
+        let activeImg = null;
 
-        inp.onchange = async () => {
-            const file = inp.files[0];
-            if (!file) return;
+        const ai = new SelfieSegmentation({
+            locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
+        });
+        ai.setOptions({ modelSelection: 1 });
 
-            status.innerText = "Sending to Cloud AI...";
+        ai.onResults((res) => {
+            canvas.width = res.image.width;
+            canvas.height = res.image.height;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'source-in';
+            ctx.drawImage(res.image, 0, 0);
             
-            const formData = new FormData();
-            formData.append('image_file', file);
-            formData.append('size', 'auto');
+            setTimeout(() => {
+                document.getElementById('cat1').classList.remove('cleaning');
+                document.getElementById('cat2').classList.remove('cleaning');
+                document.getElementById('dlBtn').style.display = 'block';
+            }, 3000);
+        });
 
-            try {
-                const response = await fetch('https://api.remove.bg/v1.0/removebg', {
-                    method: 'POST',
-                    headers: { 'X-Api-Key': 'YOUR_API_KEY_HERE' }, // Apni API key yahan dalein
-                    body: formData
-                });
-
-                if (response.ok) {
-                    const blob = await response.blob();
-                    resImg.src = URL.createObjectURL(blob);
-                    resImg.style.display = 'block';
-                    status.innerText = "Cloud Processing Success!";
-                } else {
-                    status.innerText = "API Error. Check your Key.";
-                }
-            } catch (err) {
-                status.innerText = "Network Error. Cloud blocked.";
-            }
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            const url = URL.createObjectURL(file);
+            
+            // Setup Visuals
+            document.getElementById('placeholder1').style.display = 'none';
+            document.getElementById('placeholder2').style.display = 'none';
+            const img = document.getElementById('origDisplay');
+            img.src = url;
+            img.style.display = 'block';
+            canvas.style.display = 'block';
+            
+            // Start Cats
+            document.getElementById('cat1').classList.add('cleaning');
+            document.getElementById('cat2').classList.add('cleaning');
+            
+            activeImg = new Image();
+            activeImg.src = url;
+            activeImg.onload = () => ai.send({image: activeImg});
         };
+
+        function download() {
+            const a = document.createElement('a');
+            a.download = 'rembghd_SadSha.png';
+            a.href = canvas.toDataURL();
+            a.click();
+        }
     </script>
 </body>
 </html>
