@@ -22,7 +22,7 @@
         }
         
         header { 
-            padding: 30px 0 60px 0; /* Premium top space */
+            padding: 30px 0 65px 0; /* Premium spacing below title */
             background: var(--dark-bg); 
         }
         .logo-text { 
@@ -35,7 +35,7 @@
         .tagline { 
             color: #888; 
             font-size: 18px; 
-            margin: 10px 0 0 0; 
+            margin-top: 10px; 
         }
 
         .main-container { 
@@ -44,39 +44,39 @@
             padding: 0 15px; 
         }
         
-        /* Tool container with shadow and proper height */
+        /* Card with shadow and enough height to push footer down */
         .tool-card { 
             width: 100%; 
-            height: 750px; 
+            height: 780px; 
             background: #111827; 
-            border-radius: 24px; 
+            border-radius: 28px; 
             overflow: hidden; 
-            margin-bottom: 100px; /* Space for footer */
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            margin-bottom: 120px; /* Big gap before footer */
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
             border: 1px solid #1f2937;
         }
         
         iframe { 
             width: 100%; 
-            height: 1200px; 
+            height: 1250px; 
             border: none; 
-            /* PC alignment fix to show top shade */
-            margin-top: -95px; 
+            /* PC pe top border aur "image" label dikhane ke liye setting */
+            margin-top: -85px; 
         }
 
-        /* MOBILE OPTIMIZATION */
+        /* MOBILE FIX: NO CUTTING + PERFECT SHADE */
         @media (max-width: 600px) {
-            header { padding: 40px 0 50px 0; }
+            header { padding: 40px 0 55px 0; }
             .logo-text { font-size: 44px; }
             
             .tool-card { 
-                height: 850px; 
-                margin-top: 20px;
+                height: 870px; 
+                margin-top: 15px;
             }
             iframe { 
-                /* Fixed margin to show the "image" label clearly */
-                margin-top: -285px; 
-                height: 1950px; 
+                /* Mobile margin adjusted to show full top border & image tag */
+                margin-top: -270px; 
+                height: 2000px; 
             }
         }
 
@@ -85,7 +85,7 @@
             background: #05070a; 
             border-top: 1px solid #151921;
         }
-        .footer-heading { color: var(--gold); font-weight: 700; font-size: 22px; margin-bottom: 10px; }
+        .footer-heading { color: var(--gold); font-weight: 700; font-size: 22px; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -103,8 +103,8 @@
 
     <footer>
         <div class="footer-heading">RembgHD Premium AI</div>
-        <p style="color:#666; font-size:15px; margin-bottom: 30px;">Professional AI-powered background removal for HD results.</p>
-        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Fast & Free</p>
+        <p style="color:#666; font-size:15px; margin-bottom: 30px;">World-class HD Background Removal powered by Bria AI.</p>
+        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Fast, Secure & Free</p>
     </footer>
 
 </body>
