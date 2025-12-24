@@ -3,64 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd - Pro HD Background Remover</title>
+    <title>RemBghd - Sharp HD AI</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation"></script>
     <style>
-        :root { --accent: #00f2fe; --dark: #080c14; }
+        :root { --accent: #00f2fe; --dark: #05070a; }
         body { font-family: 'Inter', sans-serif; background: var(--dark); color: white; margin: 0; padding: 20px; text-align: center; }
-        .logo { font-size: 42px; font-weight: 900; background: linear-gradient(to right, #4facfe, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 30px; }
-        .container { max-width: 650px; margin: 40px auto; background: #111827; padding: 40px; border-radius: 32px; border: 1px solid #1f2937; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .upload-area { border: 2px dashed #374151; padding: 50px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        .upload-area:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
-        #canvas { max-width: 100%; border-radius: 16px; margin-top: 25px; display: none; }
-        .status { margin: 20px 0; font-weight: bold; color: var(--accent); text-transform: uppercase; font-size: 13px; }
-        .btn { display: none; background: #fff; color: #000; padding: 18px; border-radius: 14px; font-weight: 800; border: none; cursor: pointer; width: 100%; font-size: 16px; margin-top: 20px; }
+        .logo { font-size: 45px; font-weight: 900; background: linear-gradient(to right, #00d2ff, #92fe9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 40px; }
+        .card { max-width: 600px; margin: 40px auto; background: #0d1117; padding: 40px; border-radius: 24px; border: 1px solid #30363d; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+        .upload-zone { border: 2px dashed #30363d; padding: 60px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .upload-zone:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.03); }
+        canvas { max-width: 100%; border-radius: 12px; margin-top: 25px; display: none; background-image: linear-gradient(45deg, #141414 25%, transparent 25%), linear-gradient(-45deg, #141414 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #141414 75%), linear-gradient(-45deg, transparent 75%, #141414 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px; }
+        .status { margin: 20px 0; font-weight: bold; color: var(--accent); letter-spacing: 1px; font-size: 12px; }
+        .btn { display: none; background: white; color: black; padding: 18px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; width: 100%; font-size: 16px; margin-top: 20px; transition: 0.2s; }
+        .btn:hover { background: var(--accent); transform: scale(1.02); }
     </style>
 </head>
 <body>
 
     <div class="logo">RemBghd</div>
-    <p style="opacity: 0.5;">Advanced AI Precision Engine</p>
+    <p style="opacity: 0.5;">Precision Edge Detection Enabled</p>
 
-    <div class="container">
-        <div class="upload-area" onclick="document.getElementById('fileIn').click()">
-            <p id="msg">Select Image for Precision Removal</p>
-            <input type="file" id="fileIn" accept="image/*" hidden>
+    <div class="card">
+        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+            <p id="label">Click to Upload for Sharp Removal</p>
+            <input type="file" id="fileInput" accept="image/*" hidden>
         </div>
         <div id="status" class="status"></div>
         <canvas id="canvas"></canvas>
-        <button id="dlBtn" class="btn">Download HD Result</button>
+        <button id="dlBtn" class="btn">Download Sharp PNG</button>
     </div>
 
     <script>
-        const fileIn = document.getElementById('fileIn');
+        const fileInput = document.getElementById('fileInput');
         const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', {willReadFrequently: true});
         const status = document.getElementById('status');
         const dlBtn = document.getElementById('dlBtn');
 
-        const ai = new SelfieSegmentation({ locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}` });
-        ai.setOptions({ modelSelection: 1 }); // Use HD Model
+        const segmentation = new SelfieSegmentation({ locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}` });
+        segmentation.setOptions({ modelSelection: 1 });
 
-        ai.onResults((res) => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        segmentation.onResults((res) => {
+            // Setup temporary canvas for sharp masking
+            const tmpCanvas = document.createElement('canvas');
+            tmpCanvas.width = canvas.width;
+            tmpCanvas.height = canvas.height;
+            const tCtx = tmpCanvas.getContext('2d');
+
+            // Draw Mask
+            tCtx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
             
-            // Precision Refinement: Mask Smoothing & Erosion
-            ctx.filter = 'blur(2px) contrast(150%)'; // Helps clean the 'ghost' edges
-            ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
+            // APPLY ALPHA THRESHOLD (The Secret Sauce for Sharp Edges)
+            const imageData = tCtx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+            for (let i = 3; i < pixels.length; i += 4) {
+                if (pixels[i] < 150) pixels[i] = 0; // Remove semi-transparent 'ghost' pixels
+                else pixels[i] = 255; // Make subject 100% solid
+            }
+            tCtx.putImageData(imageData, 0, 0);
+
+            // Final Render
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(tmpCanvas, 0, 0);
             ctx.globalCompositeOperation = 'source-in';
-            ctx.filter = 'none';
             ctx.drawImage(res.image, 0, 0, canvas.width, canvas.height);
             ctx.globalCompositeOperation = 'source-over';
             
-            status.innerText = "✓ HD Precision Clean Complete";
+            status.innerText = "✓ Sharp Result Ready";
             dlBtn.style.display = 'block';
         });
 
-        fileIn.onchange = (e) => {
+        fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            status.innerText = "Preparing Preview...";
+            status.innerText = "Scanning Original...";
             const rd = new FileReader();
             rd.onload = (v) => {
                 const img = new Image();
@@ -68,11 +84,11 @@
                     canvas.width = img.width;
                     canvas.height = img.height;
                     canvas.style.display = 'block';
-                    ctx.drawImage(img, 0, 0); // Preview Original
+                    ctx.drawImage(img, 0, 0);
                     setTimeout(() => {
-                        status.innerText = "Deep Scanning Pixels...";
-                        ai.send({image: img});
-                    }, 1200);
+                        status.innerText = "Executing Precision Cut...";
+                        segmentation.send({image: img});
+                    }, 1000);
                 };
                 img.src = v.target.result;
             };
@@ -81,7 +97,7 @@
 
         dlBtn.onclick = () => {
             const a = document.createElement('a');
-            a.download = 'rembghd_hd.png';
+            a.download = 'rembghd_sharp.png';
             a.href = canvas.toDataURL('image/png', 1.0);
             a.click();
         };
