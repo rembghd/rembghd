@@ -3,35 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd - HD AI Background Remover</title>
+    <title>RemBghd - Pro HD Background Remover</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation"></script>
     <style>
         :root { --accent: #00f2fe; --dark: #080c14; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--dark); color: white; margin: 0; padding: 20px; text-align: center; }
-        .logo { font-size: 45px; font-weight: 900; background: linear-gradient(to right, #4facfe, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 40px 0 10px; }
-        .container { max-width: 600px; margin: auto; background: #111827; padding: 40px; border-radius: 30px; border: 1px solid #1f2937; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .upload-btn { background: rgba(0, 242, 254, 0.1); border: 2px dashed #374151; padding: 50px 20px; border-radius: 20px; cursor: pointer; display: block; transition: 0.3s; color: #9ca3af; }
-        .upload-btn:hover { border-color: var(--accent); color: white; background: rgba(0, 242, 254, 0.05); }
-        #canvas { max-width: 100%; border-radius: 15px; margin-top: 25px; display: none; border: 2px solid #1f2937; }
-        .status { margin: 20px 0; font-weight: bold; color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .dl-btn { display: none; background: #fff; color: #000; padding: 18px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; width: 100%; font-size: 16px; margin-top: 20px; }
+        body { font-family: 'Inter', sans-serif; background: var(--dark); color: white; margin: 0; padding: 20px; text-align: center; }
+        .logo { font-size: 42px; font-weight: 900; background: linear-gradient(to right, #4facfe, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 30px; }
+        .container { max-width: 650px; margin: 40px auto; background: #111827; padding: 40px; border-radius: 32px; border: 1px solid #1f2937; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .upload-area { border: 2px dashed #374151; padding: 50px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .upload-area:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
+        #canvas { max-width: 100%; border-radius: 16px; margin-top: 25px; display: none; }
+        .status { margin: 20px 0; font-weight: bold; color: var(--accent); text-transform: uppercase; font-size: 13px; }
+        .btn { display: none; background: #fff; color: #000; padding: 18px; border-radius: 14px; font-weight: 800; border: none; cursor: pointer; width: 100%; font-size: 16px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="logo">RemBghd</div>
-    <p style="opacity: 0.6; margin-bottom: 40px;">Professional HD Background Removal</p>
+    <p style="opacity: 0.5;">Advanced AI Precision Engine</p>
 
     <div class="container">
-        <label for="fileIn" class="upload-btn" id="dropLabel">Click to Upload HD Image</label>
-        <input type="file" id="fileIn" accept="image/*" hidden>
-        
+        <div class="upload-area" onclick="document.getElementById('fileIn').click()">
+            <p id="msg">Select Image for Precision Removal</p>
+            <input type="file" id="fileIn" accept="image/*" hidden>
+        </div>
         <div id="status" class="status"></div>
         <canvas id="canvas"></canvas>
-        <button id="dlBtn" class="dl-btn">Download HD Transparent PNG</button>
+        <button id="dlBtn" class="btn">Download HD Result</button>
     </div>
-
-    <div style="margin-top: 50px; opacity: 0.3; font-size: 12px;">Powered by SadSha AI Engine</div>
 
     <script>
         const fileIn = document.getElementById('fileIn');
@@ -41,50 +40,48 @@
         const dlBtn = document.getElementById('dlBtn');
 
         const ai = new SelfieSegmentation({ locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}` });
-        ai.setOptions({ modelSelection: 1 }); // HD Model Enabled
+        ai.setOptions({ modelSelection: 1 }); // Use HD Model
 
         ai.onResults((res) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Edges Smoothing Logic
-            ctx.filter = 'blur(1.5px)'; // Smoothens the rough edges
+            // Precision Refinement: Mask Smoothing & Erosion
+            ctx.filter = 'blur(2px) contrast(150%)'; // Helps clean the 'ghost' edges
             ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
             ctx.globalCompositeOperation = 'source-in';
             ctx.filter = 'none';
             ctx.drawImage(res.image, 0, 0, canvas.width, canvas.height);
             ctx.globalCompositeOperation = 'source-over';
             
-            status.innerText = "✓ Processing Complete";
+            status.innerText = "✓ HD Precision Clean Complete";
             dlBtn.style.display = 'block';
         });
 
         fileIn.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            
-            status.innerText = "Previewing Original Image...";
-            const reader = new FileReader();
-            reader.onload = (v) => {
+            status.innerText = "Preparing Preview...";
+            const rd = new FileReader();
+            rd.onload = (v) => {
                 const img = new Image();
                 img.onload = () => {
                     canvas.width = img.width;
                     canvas.height = img.height;
                     canvas.style.display = 'block';
-                    ctx.drawImage(img, 0, 0); // Show Preview First
-                    
+                    ctx.drawImage(img, 0, 0); // Preview Original
                     setTimeout(() => {
-                        status.innerText = "AI is Cleaning Pixels...";
+                        status.innerText = "Deep Scanning Pixels...";
                         ai.send({image: img});
-                    }, 1500); // 1.5 second preview delay
+                    }, 1200);
                 };
                 img.src = v.target.result;
             };
-            reader.readAsDataURL(file);
+            rd.readAsDataURL(file);
         };
 
         dlBtn.onclick = () => {
             const a = document.createElement('a');
-            a.download = 'rembghd_pro.png';
+            a.download = 'rembghd_hd.png';
             a.href = canvas.toDataURL('image/png', 1.0);
             a.click();
         };
