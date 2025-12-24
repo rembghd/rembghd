@@ -10,14 +10,14 @@
         :root { --gold: #FFD700; --dark-bg: #0b0f19; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
         
-        header { padding: 40px 0 20px 0; background: var(--dark-bg); }
+        header { padding: 45px 0 20px 0; background: var(--dark-bg); }
         .logo-container { display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .logo-icon { width: 50px; height: 50px; fill: var(--gold); }
-        .logo-text { font-size: 52px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
-        .slogan { color: #aaa; font-size: 18px; margin-top: 8px; font-style: italic; }
+        .logo-icon { width: 55px; height: 55px; fill: var(--gold); }
+        .logo-text { font-size: 56px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
+        .slogan { color: #aaa; font-size: 19px; margin-top: 8px; font-style: italic; }
 
-        /* PC PAR WIDE LOOK KE LIYE */
-        .main-container { width: 100%; max-width: 1300px; margin: 0 auto; padding: 0 20px; flex: 1; box-sizing: border-box; }
+        /* WIDE PC VIEW */
+        .main-container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 20px; flex: 1; box-sizing: border-box; }
 
         .tool-card { 
             width: 100%; 
@@ -25,36 +25,35 @@
             background: #111827; 
             border-radius: 35px; 
             overflow: hidden; 
-            margin: 20px 0 50px 0; 
-            box-shadow: 0 30px 80px rgba(0,0,0,0.9); 
+            margin: 25px 0 50px 0; 
+            box-shadow: 0 30px 90px rgba(0,0,0,0.9); 
             border: 1px solid #1f2937; 
             position: relative;
         }
         
         iframe { 
             width: 100%; 
-            height: 1550px; 
+            height: 1600px; 
             border: none; 
-            /* PC Margin optimized to hide top text while keeping labels visible */
-            margin-top: -160px; 
+            /* PRECISION MARGIN: Hides top text, shows labels */
+            margin-top: -170px; 
             display: block;
             background: #111827;
         }
 
-        .content-section { text-align: left; background: #111827; padding: 35px; border-radius: 25px; margin-bottom: 60px; border: 1px solid #1f2937; max-width: 900px; margin-left: auto; margin-right: auto; }
-        .content-section h2 { color: var(--gold); margin-top: 20px; }
+        .content-section { text-align: left; background: #111827; padding: 40px; border-radius: 30px; margin-bottom: 70px; border: 1px solid #1f2937; max-width: 1000px; margin-left: auto; margin-right: auto; }
+        .content-section h2 { color: var(--gold); }
 
-        /* MOBILE OPTIMIZATION */
+        /* MOBILE FIX */
         @media (max-width: 768px) {
-            header { padding: 30px 0 15px 0; }
-            .logo-text { font-size: 38px; }
-            .tool-card { height: 1000px; border-radius: 20px; }
-            iframe { margin-top: -270px; height: 2500px; }
-            .main-container { padding: 0 10px; }
+            header { padding: 35px 0 15px 0; }
+            .logo-text { font-size: 40px; }
+            .tool-card { height: 1050px; border-radius: 20px; }
+            iframe { margin-top: -275px; height: 2600px; }
         }
 
-        footer { padding: 50px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
-        .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 15px; font-size: 14px; font-weight: 600; }
+        footer { padding: 60px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
+        .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 15px; font-size: 15px; font-weight: 600; }
         .sadsha { color: var(--gold); font-weight: 800; }
     </style>
 </head>
@@ -72,8 +71,8 @@
             <iframe src="https://briaai-bria-rmbg-1-4.hf.space?__theme=dark"></iframe>
         </div>
         <div class="content-section">
-            <h2>Professional HD Background Removal</h2>
-            <p>Experience studio-quality background removal instantly. Powered by <strong>SadSha</strong> AI technology.</p>
+            <h2>Unlimited HD AI Background Removal</h2>
+            <p>RembgHD is your professional toolkit for instant image editing. Powered by <strong>SadSha</strong>, we deliver High Definition results with zero costs.</p>
         </div>
     </div>
 
@@ -83,7 +82,7 @@
             <a href="terms.html">Terms & Conditions</a>
             <a href="contact.html">Contact Us</a>
         </div>
-        <p style="margin-top:20px; font-size: 13px; color: #555;">Powered by <span class="sadsha">SadSha</span></p>
+        <p style="margin-top:25px; font-size: 14px; color: #666;">Powered by <span class="sadsha">SadSha</span></p>
     </footer>
 </body>
 </html>
