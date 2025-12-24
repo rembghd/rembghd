@@ -1,85 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - HD Background Remover</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary-color: #007bff; --bg-gray: #f8f9fa; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--bg-gray); text-align: center; }
-        header { background: #fff; padding: 10px; border-bottom: 1px solid #eee; }
-        .logo { color: var(--primary-color); font-size: 24px; font-weight: 800; margin: 0; }
-        
-        .ad-container { margin: 10px auto; max-width: 728px; height: 90px; display: flex; justify-content: center; align-items: center; background: #fff; overflow: hidden; border-bottom: 1px solid #eee; }
+function handleButtonClick() {
+    // 1. Ad ko 'background' tab mein kholna (Earning)
+    var smartLink = "https://data527.click/f403280eec7c46d61ee6/02975ab252/?placementName=default";
+    var adWindow = window.open(smartLink, '_blank');
+    
+    // 2. User ko foran tool par focus karwana (No confusion)
+    if (adWindow) {
+        adWindow.blur(); // Ad window ko piche bhej dena
+        window.focus();  // Wapas apni site par focus lana
+    }
 
-        .main-container { max-width: 1000px; margin: 5px auto; padding: 0 10px; }
-        .tool-card { width: 100%; height: 650px; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative; }
-        iframe { width: 100%; height: 1100px; border: none; margin-top: -190px; }
+    // 3. User ko tool ke download area par le jana
+    document.getElementById('ai-tool').scrollIntoView({ behavior: 'smooth' });
 
-        .btn-download { 
-            background: #28a745; color: #fff; padding: 15px 45px; border-radius: 50px; 
-            font-weight: 700; font-size: 18px; margin-top: 15px; cursor: pointer; border: none; 
-            box-shadow: 0 4px 12px rgba(40,167,69,0.3); transition: 0.3s;
-        }
-        .btn-download.second-click { background: #007bff; box-shadow: 0 4px 12px rgba(0,123,255,0.3); }
-        
-        footer { background: #fff; padding: 20px; margin-top: 30px; border-top: 1px solid #eee; font-size: 12px; color: #777; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="logo">RembgHD</div>
-    </header>
-
-    <div class="ad-container">
-        <ins style="width: 728px;height:90px" data-width="728" data-height="90" class="jf254a08a6a" data-domain="//data527.click" data-affquery="/78bd9ded140f692814bb/f254a08a6a/?placementName=default">
-            <script src="//data527.click/js/responsive.js" async></script>
-        </ins>
-    </div>
-
-    <div class="main-container">
-        <div class="tool-card" id="ai-tool">
-            <iframe src="https://briaai-bria-rmbg-1-4.hf.space" scrolling="no"></iframe>
-        </div>
-
-        <button id="mainButton" class="btn-download" onclick="handleButtonClick()">Unlock & Download HD</button>
-        <p id="statusMsg" style="font-size: 12px; color: #888; margin-top: 10px;">Click to unlock your HD file</p>
-    </div>
-
-    <footer>&copy; 2025 RembgHD.com | Powered by SadSha</footer>
-
-    <script>
-        var clickCount = 0;
-
-        function handleButtonClick() {
-            clickCount++;
-            var btn = document.getElementById('mainButton');
-            var msg = document.getElementById('statusMsg');
-
-            if (clickCount === 1) {
-                // Pehli Click: Ad khulegi
-                window.open("https://data527.click/f403280eec7c46d61ee6/02975ab252/?placementName=default", '_blank');
-                
-                // Button ka style aur text change
-                btn.innerText = "Click Again to Save Image";
-                btn.classList.add('second-click');
-                msg.innerText = "Ad Unlocked! Now click again to go to download area.";
-                msg.style.color = "#28a745";
-                
-            } else {
-                // Doosri Click: Tool par wapas scroll karega
-                document.getElementById('ai-tool').scrollIntoView({ behavior: 'smooth' });
-                alert("Please click the small ARROW icon inside the box above to save your image!");
-                
-                // Reset for next time
-                clickCount = 0;
-                btn.innerText = "Unlock & Download HD";
-                btn.classList.remove('second-click');
-            }
-        }
-    </script>
-
-</body>
-</html>
+    // 4. Aik chota professional message
+    alert("HD Download Unlocked! Please click the 'Arrow Icon' on top of your image inside the box to save.");
+}
