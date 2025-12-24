@@ -6,64 +6,47 @@
     <title>rembghd - AI Background Remover</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
-        :root { --bg: #ffffff; --blue: #007bff; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; overflow-x: hidden; }
-        
-        .nav { width: 100%; padding: 30px 60px; box-sizing: border-box; }
-        .logo { font-size: 26px; font-weight: 900; color: #000; text-decoration: none; letter-spacing: -1px; }
+        :root { --blue: #007bff; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fff; }
+        .nav { padding: 30px 60px; }
+        .logo { font-size: 26px; font-weight: 900; color: #000; text-decoration: none; }
 
-        .hero { display: flex; align-items: center; justify-content: center; gap: 80px; max-width: 1200px; margin: 0 auto; min-height: 85vh; padding: 20px; }
+        .hero { display: flex; align-items: center; justify-content: center; gap: 60px; max-width: 1200px; margin: 0 auto; min-height: 80vh; padding: 20px; }
         
-        /* IMAGE PREVIEW AREA */
-        .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; position: relative; }
+        /* IMAGE BOX */
+        .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
         .window { 
-            width: 520px; height: 380px; background: #fff; position: relative; 
-            border-radius: 32px; overflow: hidden; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            width: 500px; height: 350px; background: #fff; position: relative; 
+            border-radius: 24px; overflow: hidden; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
         }
         
-        /* Permanent Checkerboard */
+        /* Checkerboard background */
         .checker { 
-            position: absolute; width: 100%; height: 100%; z-index: 1;
-            background-image: linear-gradient(45deg, #f5f5f5 25%, transparent 25%), linear-gradient(-45deg, #f5f5f5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f5f5f5 75%), linear-gradient(-45deg, transparent 75%, #f5f5f5 75%);
-            background-size: 20px 20px;
+            position: absolute; width: 100%; height: 100%; 
+            background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 20px 20px; z-index: 1;
         }
         
-        /* Stable Demo Image */
-        .demo-img { 
-            max-width: 90%; max-height: 90%; object-fit: contain; position: absolute; z-index: 3; 
-            /* Unsplash reliable link */
-            content: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80');
+        /* Professional Demo Image */
+        .demo-img { max-width: 90%; max-height: 90%; object-fit: contain; position: absolute; z-index: 3; }
+
+        /* CSS MASK LOOP: Ye kabhi nahi rukega kyunki ye code ka hissa hai */
+        @keyframes stableLoop {
+            0%, 45% { background-color: #ffffff; -webkit-mask-image: none; }
+            55%, 100% { background-color: transparent; -webkit-mask-image: radial-gradient(circle, black 100%, transparent 100%); }
         }
 
-        /* LOOP: Background white se transparent swap hoga */
-        @keyframes demoLoop {
-            0%, 45% { background-color: #ffffff; } /* Image with White Background */
-            55%, 100% { background-color: transparent; } /* Image with Checkerboard */
-        }
+        .looping .demo-img { animation: stableLoop 2s infinite alternate ease-in-out; }
+
+        /* UPLOAD CARD */
+        .upload-side { flex: 1; }
+        h1 { font-size: 60px; font-weight: 800; line-height: 1.1; margin-bottom: 25px; color: #333; }
+        .upload-card { background: #fff; padding: 40px; border-radius: 30px; border: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; }
+        .upload-btn { background: var(--blue); color: #fff; padding: 20px 60px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; width: 100%; text-align: center; }
         
-        .looping .demo-img { 
-            animation: demoLoop 2.5s infinite alternate ease-in-out; 
-            background-color: #fff;
-            padding: 10px; border-radius: 15px;
-        }
-
-        /* UPLOAD SECTION */
-        .upload-side { flex: 1; text-align: left; }
-        h1 { font-size: 64px; line-height: 1.05; font-weight: 800; color: #1a1a1a; margin-bottom: 30px; }
-        .upload-card { 
-            background: #fff; padding: 50px 40px; border-radius: 35px; border: 1px solid #f0f0f0; 
-            display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.03);
-        }
-        .upload-btn { 
-            background: var(--blue); color: #fff; padding: 22px 60px; border-radius: 50px; 
-            font-size: 26px; font-weight: 700; cursor: pointer; width: 100%; text-align: center; border: none;
-            transition: transform 0.2s;
-        }
-        .upload-btn:active { transform: scale(0.98); }
-
-        .status-msg { margin-top: 20px; font-size: 12px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 2px; }
-        #resCanvas { max-width: 100%; max-height: 100%; position: absolute; z-index: 10; display: none; }
+        .status-msg { margin-top: 15px; font-size: 11px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
+        canvas { max-width: 100%; max-height: 100%; position: absolute; z-index: 10; display: none; }
     </style>
 </head>
 <body>
@@ -74,7 +57,7 @@
         <div class="image-side">
             <div class="window looping" id="mainBox">
                 <div class="checker"></div>
-                <img id="demoImg" class="demo-img" src="" alt="demo">
+                <img id="demoImg" class="demo-img" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80">
                 <canvas id="resCanvas"></canvas>
             </div>
             <div class="status-msg" id="status">Demo Mode</div>
@@ -87,7 +70,7 @@
                     Upload Image
                     <input type="file" id="inp" hidden accept="image/*">
                 </label>
-                <div style="margin-top:20px; color:#a0a0a0; font-size:15px; font-weight:500;">or drop a file, paste image or URL</div>
+                <div style="margin-top:15px; color:#999; font-size:14px;">100% Automatic and Free</div>
             </div>
         </div>
     </div>
@@ -97,3 +80,38 @@
         const cvs = document.getElementById('resCanvas');
         const ctx = cvs.getContext('2d');
         const box = document.getElementById('mainBox');
+        const demoImg = document.getElementById('demoImg');
+        const status = document.getElementById('status');
+
+        const ai = new SelfieSegmentation({
+            locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
+        });
+        ai.setOptions({ modelSelection: 1 });
+
+        ai.onResults((res) => {
+            cvs.width = res.image.width;
+            cvs.height = res.image.height;
+            ctx.save();
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+            ctx.drawImage(res.image, 0, 0, cvs.width, cvs.height);
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
+            ctx.restore();
+            cvs.style.display = 'block';
+            status.innerText = "Task Complete";
+        });
+
+        inp.onchange = (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            box.classList.remove('looping');
+            demoImg.style.display = 'none';
+            status.innerText = "Processing...";
+            const url = URL.createObjectURL(file);
+            const img = new Image();
+            img.src = url;
+            img.onload = () => ai.send({image: img});
+        };
+    </script>
+</body>
+</html>
