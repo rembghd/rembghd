@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RembgHD - Free HD Background Remover</title>
     <style>
-        /* Global Styles */
         body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: #f4f7f6; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* Header */
         header { background: #fff; padding: 15px 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         h1 { margin: 0; color: #007bff; font-size: 26px; font-weight: 800; }
         p.slogan { margin: 3px 0 0; color: #6c757d; font-size: 13px; font-weight: 500; }
 
-        /* The Tool Container */
         .main-content { 
             flex: 1; 
             display: flex; 
@@ -23,11 +20,11 @@
             padding: 20px;
         }
 
-        /* Iframe Cropping Magic */
+        /* Fixed Iframe Alignment */
         .iframe-wrapper { 
             width: 100%; 
             max-width: 850px; 
-            height: 520px; /* Fixed height for clean look */
+            height: 600px; /* Height thori barha di taake Submit button nazar aaye */
             background: #fff; 
             border-radius: 25px; 
             overflow: hidden; 
@@ -38,12 +35,12 @@
         
         iframe { 
             width: 100%; 
-            height: 900px; /* Longer iframe to hide text */
+            height: 1000px; 
             border: none; 
-            margin-top: -335px; /* Adjust this to hide/show specific parts */
+            /* Negative margin ko kam kiya taake zyada na katay */
+            margin-top: -280px; 
         }
 
-        /* Bottom Action Section */
         .action-bar { margin-top: 25px; text-align: center; }
         .download-btn { 
             background: #28a745; 
@@ -61,7 +58,6 @@
         }
         .download-btn:hover { background: #218838; transform: scale(1.05); }
 
-        /* Professional Footer */
         footer { padding: 15px; text-align: center; color: #999; font-size: 12px; }
         footer strong { color: #333; }
     </style>
@@ -80,7 +76,6 @@
 
         <div class="action-bar">
             <button class="download-btn" onclick="triggerAdsterra()">Download Ultra HD Result</button>
-            <p style="font-size: 11px; color: #aaa; margin-top: 8px;">File size might be large (Up to 10MB) for original quality</p>
         </div>
     </div>
 
@@ -90,12 +85,8 @@
 
     <script>
         function triggerAdsterra() {
-            // Jab apko Adsterra ka Direct Link mile, yahan paste kar dein
-            console.log("Ad Clicked & Download Started");
             alert("Preparing HD File... Please stay on this page.");
-            
-            // Simulation: Yahan apka Ad link open hoga
-            // window.open('https://your-adsterra-link.com', '_blank');
+            console.log("Download Clicked");
         }
     </script>
 
