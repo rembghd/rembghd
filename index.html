@@ -15,36 +15,34 @@
 
         .main-container { max-width: 1000px; margin: 0 auto; padding: 0 15px; position: relative; }
         
-        /* FIXED TOOL CARD - Yeh size ab nahi badle ga */
+        /* BOX FIXED - SCROLLING ENABLED */
         .tool-card { 
             width: 100%; 
-            height: 720px; 
+            height: 650px; /* Fixed height for stability */
             background: #fff; 
             border-radius: 24px; 
-            overflow: hidden; 
+            overflow-y: auto; /* Internal scroll if image gets too big */
+            -webkit-overflow-scrolling: touch;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
             border: 1px solid #eee; 
             position: relative;
-            z-index: 1;
         }
 
-        /* FIXED IFRAME - Scroll lock kiya gaya hai */
+        /* IFRAME ALIGNMENT */
         iframe { 
             width: 100%; 
-            height: 1100px; 
+            height: 1200px; /* Full height of the tool content */
             border: none; 
-            margin-top: -185px; 
-            position: relative; 
-            z-index: 5;
-            pointer-events: auto;
+            margin-top: -180px; /* Removes top extra space */
+            display: block;
         }
 
-        /* RED ARROW - Position adjusted for desktop */
+        /* RED ARROW */
         .download-pointer {
             position: absolute;
             top: 25px;
             right: 145px;
-            z-index: 10;
+            z-index: 100;
             color: var(--accent-red);
             font-weight: 800;
             font-size: 11px;
@@ -56,21 +54,21 @@
         }
         .arrow-icon { font-size: 30px; margin-top: -5px; }
 
-        /* MOBILE FIXES - Buttons visibility guaranteed */
-        @media (max-width: 600px) {
-            .tool-card { height: 820px; } /* Mobile par frame bara rakha hai taake submit button nazar aaye */
-            iframe { margin-top: -160px; height: 1250px; }
-            .download-pointer { right: 25px; top: 15px; }
-            .logo-text { font-size: 28px; }
-        }
-
         @keyframes blink {
             0% { opacity: 1; transform: translateY(0); }
             50% { opacity: 0.3; transform: translateY(5px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Professional Footer */
+        /* MOBILE FIXES */
+        @media (max-width: 600px) {
+            .tool-card { height: 600px; } 
+            iframe { margin-top: -160px; }
+            .download-pointer { right: 25px; top: 15px; }
+            .logo-text { font-size: 28px; }
+        }
+
+        /* Footer content as requested */
         footer { margin-top: 50px; padding: 40px 20px; background: #fff; border-top: 1px solid #eee; }
         .footer-wrap { max-width: 800px; margin: 0 auto; }
         .footer-text { font-size: 15px; color: #555; line-height: 1.6; margin-bottom: 20px; }
@@ -93,7 +91,7 @@
         </div>
 
         <div class="tool-card">
-            <iframe src="https://briaai-bria-rmbg-1-4.hf.space" scrolling="no"></iframe>
+            <iframe src="https://briaai-bria-rmbg-1-4.hf.space"></iframe>
         </div>
     </div>
 
