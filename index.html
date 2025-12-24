@@ -2,9 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>rembghd - Ultra HD AI</title>
+    <title>rembghd - Ultra HD Fix</title>
+    <style>
+        :root { --blue: #007bff; }
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background: #f8f9fa; padding: 40px; }
+        .window { width: 550px; height: 400px; background: #fff; margin: 20px auto; border-radius: 25px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 15px 45px rgba(0,0,0,0.1); }
+        .checker { position: absolute; inset: 0; background-image: conic-gradient(#eee 0.25turn, #fff 0.25turn 0.5turn, #eee 0.5turn 0.75turn, #fff 0.75turn); background-size: 20px 20px; }
+        canvas { position: relative; z-index: 5; max-width: 95%; max-height: 95%; border-radius: 10px; }
+        .btn { background: var(--blue); color: #fff; padding: 18px 50px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; display: none; }
+        #status { margin-top: 20px; font-weight: 600; color: #444; background: #e9ecef; padding: 10px; border-radius: 10px; display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <h1>rembghd <span style="color:var(--blue)">Ultra HD</span></h1>
+    <div class="window">
+        <div class="checker"></div>
+        <canvas id="resCanvas"></canvas>
+    </div>
+
+    <div id="status">Connecting to AI Server...</div>
+    <br><br>
+    
+    <label class="btn" id="upLabel">Upload Image <input type="file" id="inp" hidden></label>
+    <button id="dlBtn" class="btn" style="background:#000; margin-left:10px;" onclick="download()">Download HD</button>
+
     <script type="module">
-        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.16.0';
+        // Using a more stable import
+        import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.16.0';
+
+        // Fix for 404 errors: Point to the correct remote host
+        env.allowLocalModels = false;
+        env.remoteHost = 'https://huggingface.co';
+        env.remotePathTemplate = '{model}/resolve/{revision}/';
 
         const status = document.getElementById('status');
         const cvs = document.getElementById('resCanvas');
@@ -12,69 +42,55 @@
         let remover;
 
         async function init() {
-            status.innerText = "Loading HD Model (approx. 30MB)...";
-            // RMBG-1.4 is the state-of-the-art for background removal
-            remover = await pipeline('image-segmentation', 'Xenova/rmbg-1.4');
-            status.innerText = "HD Model Ready!";
-            document.getElementById('upLabel').style.display = 'inline-block';
+            try {
+                status.innerText = "Downloading HD Model Engine... (30MB)";
+                remover = await pipeline('image-segmentation', 'Xenova/rmbg-1.4');
+                status.innerText = "Ultra HD Engine Ready!";
+                document.getElementById('upLabel').style.display = 'inline-block';
+            } catch (err) {
+                console.error(err);
+                status.innerHTML = "Connection Error. <br> Please check your internet or try a VPN.";
+                status.style.color = "red";
+            }
         }
         init();
 
-        window.processImage = async (input) => {
-            const file = input.files[0];
+        document.getElementById('inp').onchange = async (e) => {
+            const file = e.target.files[0];
             if (!file) return;
 
-            status.innerText = "Analyzing Hair & Edges (HD Pass)...";
+            status.innerText = "Processing HD Edges...";
             const url = URL.createObjectURL(file);
             
-            const result = await remover(url);
-            const mask = result.mask;
+            try {
+                const result = await remover(url);
+                const maskImage = await result.mask.toCanvas();
 
-            const img = new Image();
-            img.src = url;
-            img.onload = () => {
-                cvs.width = img.width;
-                cvs.height = img.height;
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    cvs.width = img.width;
+                    cvs.height = img.height;
 
-                // Step 1: Draw the HD Mask
-                const maskImg = new Image();
-                maskImg.src = mask.toCanvas().toDataURL();
-                maskImg.onload = () => {
-                    ctx.drawImage(maskImg, 0, 0, cvs.width, cvs.height);
-                    
-                    // Step 2: Composite the original image
+                    // Draw refined result
+                    ctx.clearRect(0, 0, cvs.width, cvs.height);
+                    ctx.drawImage(maskImage, 0, 0, cvs.width, cvs.height);
                     ctx.globalCompositeOperation = 'source-in';
                     ctx.drawImage(img, 0, 0);
                     
-                    status.innerText = "Done! Professional Quality.";
+                    status.innerText = "Deep Clean Successful!";
                     document.getElementById('dlBtn').style.display = 'inline-block';
                 };
-            };
+            } catch (err) {
+                status.innerText = "Processing Failed. Try a smaller image.";
+            }
         };
     </script>
-    <style>
-        body { font-family: sans-serif; text-align: center; background: #f0f2f5; padding: 40px; }
-        .window { width: 500px; height: 400px; background: #fff; margin: 20px auto; border-radius: 20px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .checker { position: absolute; inset: 0; background-image: conic-gradient(#ddd 0.25turn, #fff 0.25turn 0.5turn, #ddd 0.5turn 0.75turn, #fff 0.75turn); background-size: 20px 20px; }
-        canvas { position: relative; z-index: 5; max-width: 100%; max-height: 100%; }
-        .btn { background: #007bff; color: #fff; padding: 15px 40px; border-radius: 50px; cursor: pointer; font-weight: bold; display: none; }
-    </style>
-</head>
-<body>
-    <h1>rembghd <span style="color:#007bff">Ultra HD</span></h1>
-    <div class="window">
-        <div class="checker"></div>
-        <canvas id="resCanvas"></canvas>
-    </div>
-    <div id="status">Starting Engine...</div>
-    <br>
-    <label class="btn" id="upLabel">Upload Image <input type="file" onchange="processImage(this)" hidden></label>
-    <button id="dlBtn" class="btn" style="background:#000; display:none;" onclick="download()">Download</button>
 
     <script>
         function download() {
             const link = document.createElement('a');
-            link.download = 'rembghd_ultra.png';
+            link.download = 'rembghd_ultra_hd.png';
             link.href = document.getElementById('resCanvas').toDataURL();
             link.click();
         }
