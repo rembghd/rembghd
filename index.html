@@ -7,65 +7,74 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; }
-        body { 
-            margin: 0; padding: 0; 
-            font-family: 'Inter', sans-serif; 
-            background: var(--dark-bg); 
-            color: #fff; 
-            display: flex; flex-direction: column; 
-            min-height: 100vh; 
-            overflow-x: hidden; 
-        }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; display: flex; flex-direction: column; min-height: 100vh; }
         
-        header { padding: 40px 0 20px 0; text-align: center; }
-        .logo-text { font-size: 48px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
-        .slogan { color: #888; font-size: 14px; margin-top: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        header { padding: 30px 0 10px 0; }
+        .logo-text { font-size: 44px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
+        .slogan { color: #666; font-size: 14px; font-weight: 600; text-transform: uppercase; margin-top: 5px; }
 
-        .main-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; flex: 1; box-sizing: border-box; }
+        .main-container { width: 100%; max-width: 1250px; margin: 0 auto; padding: 0 15px; flex: 1; box-sizing: border-box; }
 
-        /* Tool Card - Precision Fixed */
+        /* Tool Card - Precision Alignment */
         .tool-card { 
             width: 100%; 
-            height: 650px; 
+            height: 640px; 
             background: #111827; 
-            border-radius: 16px; 
+            border-radius: 12px; 
             overflow: hidden; 
-            margin-bottom: 30px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            margin: 15px 0; 
             border: 1px solid #1f2937; 
             position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
         iframe { 
             width: 100%; 
             height: 1400px; 
             border: none; 
-            /* Aligning "image" and "output" labels perfectly */
-            margin-top: -145px; 
+            margin-top: -145px; /* Fixed labels position */
             display: block;
         }
 
-        .info-box { 
-            text-align: left; 
-            background: rgba(17, 24, 39, 0.6); 
-            padding: 25px; 
-            border-radius: 12px; 
-            border: 1px dashed #1f2937;
-            max-width: 800px; 
-            margin: 0 auto 50px auto; 
+        /* Gallery: Positioned only under the Output section */
+        .gallery-wrapper {
+            display: flex;
+            justify-content: flex-end; /* Aligns to right side (Output side) */
+            margin-bottom: 40px;
         }
-        .info-box h2 { color: var(--gold); font-size: 18px; margin-top: 0; }
-        .info-box p { font-size: 14px; color: #aaa; line-height: 1.6; margin-bottom: 0; }
+
+        .output-gallery {
+            width: 48%; /* Matches width of the right-side output frame */
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .gallery-item {
+            background: #111827;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #1f2937;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            display: block;
+            opacity: 0.8;
+        }
+
+        .tag { font-size: 9px; color: var(--gold); padding: 5px; background: #1a2233; font-weight: 700; }
 
         @media (max-width: 768px) {
-            .logo-text { font-size: 36px; }
-            .tool-card { height: 850px; }
-            iframe { margin-top: -265px; height: 2400px; }
+            .logo-text { font-size: 32px; }
+            .output-gallery { width: 100%; }
+            .tool-card { height: 820px; }
+            iframe { margin-top: -262px; height: 2300px; }
         }
 
-        footer { padding: 30px; background: #070a13; border-top: 1px solid #151921; text-align: center; }
-        .footer-text { font-size: 12px; color: #444; font-weight: 600; }
-        .gold-span { color: var(--gold); }
+        footer { padding: 25px; background: #070a13; border-top: 1px solid #151921; font-size: 11px; color: #333; }
     </style>
 </head>
 <body>
@@ -79,14 +88,26 @@
             <iframe src="https://briaai-rmbg-1-4.hf.space/?__theme=dark"></iframe>
         </div>
 
-        <div class="info-box">
-            <h2>Instant Professional Results</h2>
-            <p>RembgHD utilizes advanced AI to isolate subjects from their backgrounds with surgical precision. Perfect for e-commerce, portraits, and creative design work.</p>
+        <div class="gallery-wrapper">
+            <div class="output-gallery">
+                <div class="gallery-item">
+                    <img src="https://i.ibb.co/VpkYmR4/image-c565c7.jpg" alt="Output Example 1">
+                    <div class="tag">HD RESULT</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.ibb.co/VpkYmR4/image-c565c7.jpg" alt="Output Example 2">
+                    <div class="tag">ALPHA MATTE</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://i.ibb.co/VpkYmR4/image-c565c7.jpg" alt="Output Example 3">
+                    <div class="tag">CLEAN EDGES</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <footer>
-        <p class="footer-text">© 2025 RembgHD - All Rights Reserved | Powered by <span class="gold-span">SadSha</span></p>
+        © 2025 RembgHD - Powered by SadSha
     </footer>
 </body>
 </html>
