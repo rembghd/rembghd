@@ -3,107 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd - AI Background Remover</title>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
+    <title>rembghd - Dual AI Preview</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #0b1120; --card: #161e2f; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         
-        .header { margin-bottom: 30px; }
-        .header h1 { font-size: 40px; margin: 0; letter-spacing: 2px; }
-        .slogan { font-size: 14px; opacity: 0.6; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 35px; margin: 0; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
 
-        .main-container { max-width: 1000px; margin: auto; display: flex; flex-direction: column; gap: 20px; }
+        .top-nav { margin-bottom: 30px; display: flex; gap: 15px; }
+        .btn { background: var(--accent); color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; border: none; text-transform: uppercase; }
+        .btn-dl { background: none; border: 2px solid var(--accent); color: var(--accent); }
 
-        /* Top Upload Section */
-        .upload-section { background: var(--card); padding: 40px; border-radius: 25px; border: 1px solid #2d3748; display: flex; align-items: center; justify-content: center; gap: 40px; }
-        .upload-btn { background: #334155; padding: 10px 25px; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 10px; border: none; color: white; transition: 0.3s; }
-        .upload-btn:hover { background: var(--accent); color: black; }
-
-        /* Monitor / Preview Grid */
-        .preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .monitor-box { background: var(--card); padding: 30px; border-radius: 25px; position: relative; border: 1px solid #2d3748; min-height: 350px; }
+        /* Split Layout: Left (Preview) | Right (Task Complete) */
+        .main-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1200px; width: 100%; }
         
-        .screen { background: #050a14; border: 8px solid #2d3748; border-radius: 10px; height: 200px; width: 85%; margin: 0 auto 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .screen img, .screen canvas { width: 100%; height: 100%; object-fit: contain; display: none; }
-        .monitor-stand { width: 40px; height: 20px; background: #2d3748; margin: -21px auto 0; border-radius: 0 0 5px 5px; }
+        .monitor-box { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid #2d3748; text-align: center; }
+        .screen { background: #050a14; border: 6px solid #2d3748; border-radius: 12px; height: 350px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         
-        /* The Static Cats (Load State) */
-        .cat-helper { position: absolute; font-size: 60px; bottom: 60px; pointer-events: none; transition: 0.5s; }
-        .cat-left { left: 10px; transform: scaleX(-1); }
-        .cat-right { right: 10px; }
+        /* Checkerboard for Transparency */
+        .transparent-bg { background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%); background-size: 20px 20px; }
+        
+        canvas, .orig-img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Labels */
-        .label-pills { display: inline-flex; align-items: center; background: #1e293b; padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: bold; gap: 10px; }
-        .dot-hd { width: 25px; height: 25px; background: var(--accent); color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; }
-
-        .footer { margin-top: 50px; font-size: 30px; letter-spacing: 15px; opacity: 0.2; text-transform: uppercase; }
-
-        /* Animation class */
-        .cleaning { animation: scrub 1s infinite; }
-        @keyframes scrub { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(15px, -15px); } }
+        .sidebar { margin-top: 20px; display: flex; gap: 10px; background: var(--card); padding: 10px; border-radius: 50px; }
+        .color-opt { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid #2d3748; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>rembghd</h1>
-        <div class="slogan">its free and always will be...</div>
+    <div class="header"><h1>rembghd</h1></div>
+
+    <div class="top-nav">
+        <label class="btn">Upload Image <input type="file" id="imageInput" hidden accept="image/*"></label>
+        <button class="btn btn-dl" onclick="download()">Download Result</button>
     </div>
 
     <div class="main-container">
-        <div class="upload-section">
-            <div style="text-align: left;">
-                <h2 style="margin:0;">AI Background Remover</h2>
-                <p style="opacity:0.6; font-size:14px;">Upload an image to see the magic!</p>
-                <label class="upload-btn">
-                    <span>✓ Upload</span>
-                    <input type="file" id="imageInput" hidden accept="image/*">
-                </label>
-            </div>
-            <div style="font-size: 80px;">🐱</div>
-        </div>
-
-        <div class="preview-grid">
-            <div class="monitor-box">
-                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ORIGINAL</p>
-                <div class="screen">
-                    <img id="origDisplay">
-                    <div id="placeholder1" style="opacity: 0.3; font-size: 12px;">No Image Loaded</div>
-                </div>
-                <div class="monitor-stand"></div>
-                <div class="cat-helper cat-left" id="cat1">🐱🧽</div>
-                
-                <div class="label-pills">
-                    <div class="dot-hd">HD</div> (High Definition)
-                </div>
-            </div>
-
-            <div class="monitor-box">
-                <p style="font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ULTRA 4K PROCESSED</p>
-                <div class="screen">
-                    <canvas id="resCanvas"></canvas>
-                    <div id="placeholder2" style="opacity: 0.3; font-size: 12px;">Waiting for Upload...</div>
-                </div>
-                <div class="monitor-stand"></div>
-                <div class="cat-helper cat-right" id="cat2">🐈🧹</div>
-                
-                <div class="label-pills" style="background: rgba(255,255,255,0.05);">
-                    ULTRA 4K Processed!
-                </div>
+        <div class="monitor-box">
+            <p style="font-size: 11px; margin-bottom: 10px; letter-spacing: 2px;">LEFT: PREVIEW IMAGE</p>
+            <div class="screen">
+                <img id="origDisplay" class="orig-img" style="display:none;">
+                <div id="msg1" style="opacity:0.2;">Original View</div>
             </div>
         </div>
-        
-        <button id="dlBtn" class="upload-btn" style="display:none; margin: 20px auto; background: var(--accent); color: black;" onclick="download()">Download Result</button>
+
+        <div class="monitor-box">
+            <p style="font-size: 11px; margin-bottom: 10px; letter-spacing: 2px;">RIGHT: TASK COMPLETE</p>
+            <div class="screen transparent-bg" id="resScreen">
+                <canvas id="resCanvas" style="display:none;"></canvas>
+                <div id="msg2" style="opacity:0.2;">Processed View</div>
+            </div>
+        </div>
     </div>
 
-    <div class="footer">SadSha</div>
+    <div class="sidebar">
+        <div class="color-opt" style="background:transparent; border: 1px dashed #fff;" onclick="setBG('transparent')"></div>
+        <div class="color-opt" style="background:#ff0055;" onclick="setBG('#ff0055')"></div>
+        <div class="color-opt" style="background:#00ff88;" onclick="setBG('#00ff88')"></div>
+        <div class="color-opt" style="background:#000;" onclick="setBG('#000')"></div>
+    </div>
 
     <script>
         const input = document.getElementById('imageInput');
         const canvas = document.getElementById('resCanvas');
         const ctx = canvas.getContext('2d');
-        let activeImg = null;
+        const resScreen = document.getElementById('resScreen');
+        let currentBG = 'transparent';
+        let latestRes = null;
 
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
@@ -111,45 +79,58 @@
         ai.setOptions({ modelSelection: 1 });
 
         ai.onResults((res) => {
-            canvas.width = res.image.width;
-            canvas.height = res.image.height;
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
-            ctx.globalCompositeOperation = 'source-in';
-            ctx.drawImage(res.image, 0, 0);
-            
-            setTimeout(() => {
-                document.getElementById('cat1').classList.remove('cleaning');
-                document.getElementById('cat2').classList.remove('cleaning');
-                document.getElementById('dlBtn').style.display = 'block';
-            }, 3000);
+            latestRes = res;
+            render();
         });
+
+        function render() {
+            if(!latestRes) return;
+            canvas.width = latestRes.image.width;
+            canvas.height = latestRes.image.height;
+            
+            ctx.save();
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            
+            // Background logic
+            if(currentBG !== 'transparent') {
+                ctx.fillStyle = currentBG;
+                ctx.fillRect(0,0,canvas.width,canvas.height);
+            }
+
+            // Cutout logic
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.drawImage(latestRes.segmentationMask, 0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.drawImage(latestRes.image, 0, 0);
+            ctx.restore();
+        }
 
         input.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
             const url = URL.createObjectURL(file);
             
-            // Setup Visuals
-            document.getElementById('placeholder1').style.display = 'none';
-            document.getElementById('placeholder2').style.display = 'none';
-            const img = document.getElementById('origDisplay');
-            img.src = url;
-            img.style.display = 'block';
+            document.getElementById('msg1').style.display = 'none';
+            document.getElementById('msg2').style.display = 'none';
+            
+            const orig = document.getElementById('origDisplay');
+            orig.src = url;
+            orig.style.display = 'block';
             canvas.style.display = 'block';
-            
-            // Start Cats
-            document.getElementById('cat1').classList.add('cleaning');
-            document.getElementById('cat2').classList.add('cleaning');
-            
-            activeImg = new Image();
-            activeImg.src = url;
-            activeImg.onload = () => ai.send({image: activeImg});
+
+            const img = new Image();
+            img.src = url;
+            img.onload = () => ai.send({image: img});
         };
+
+        function setBG(color) {
+            currentBG = color;
+            render();
+        }
 
         function download() {
             const a = document.createElement('a');
-            a.download = 'rembghd_SadSha.png';
+            a.download = 'rembghd_final.png';
             a.href = canvas.toDataURL();
             a.click();
         }
