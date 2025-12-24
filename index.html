@@ -9,39 +9,50 @@
         :root { --primary-blue: #007bff; --accent-red: #ff4757; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; text-align: center; }
         
-        header { padding: 30px 0 10px 0; }
+        header { padding: 25px 0 10px 0; }
         .logo-text { font-size: 32px; font-weight: 800; color: var(--primary-blue); margin: 0; }
         .tagline { color: #666; font-size: 14px; margin-top: 5px; }
 
-        .main-container { max-width: 1000px; margin: 0 auto; padding: 0 10px; position: relative; }
+        .main-container { max-width: 1100px; margin: 0 auto; padding: 0 15px; position: relative; }
         
-        /* CARD HEIGHT INCREASED FOR FULL TOOL VISIBILITY */
+        /* THE BOX - LOCKING DIMENSIONS */
         .tool-card { 
             width: 100%; 
-            height: 900px; /* Locked height to prevent footer jumping */
+            height: 850px; /* PC Height */
             background: #fff; 
             border-radius: 24px; 
             overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            border: 1px solid #eee; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06); 
+            border: 1px solid #e0e0e0; 
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
-        /* IFRAME ADJUSTED TO HIDE TOP TEXT BUT SHOW BOTTOM BUTTONS */
+        /* IFRAME - PC POSITIONING */
         iframe { 
             width: 100%; 
-            height: 1550px; /* Extra long to ensure nothing gets cut at the bottom */
+            height: 1400px; 
             border: none; 
-            margin-top: -340px; /* Hides the dark text section completely */
+            margin-top: -340px; /* Hide top text on PC */
             display: block;
         }
 
-        /* ARROW POSITION */
+        /* MOBILE FIXES - SPECIFIC FOR PHONES */
+        @media (max-width: 600px) {
+            .tool-card { height: 950px; } /* More height for mobile result view */
+            iframe { 
+                margin-top: -325px; /* Adjust top crop for mobile */
+                height: 1600px; /* Extra height to show output image */
+            }
+            .logo-text { font-size: 28px; }
+            .download-pointer { right: 20px !important; top: 10px !important; }
+        }
+
+        /* DOWNLOAD ARROW */
         .download-pointer {
             position: absolute;
-            top: 20px;
-            right: 145px;
+            top: 25px;
+            right: 155px;
             z-index: 100;
             color: var(--accent-red);
             font-weight: 800;
@@ -52,15 +63,7 @@
             animation: blink 1.2s infinite;
             pointer-events: none;
         }
-        .arrow-icon { font-size: 30px; margin-top: -5px; }
-
-        /* MOBILE FIXES */
-        @media (max-width: 600px) {
-            .tool-card { height: 850px; } /* Perfect height for mobile scrolling */
-            iframe { margin-top: -330px; height: 1600px; }
-            .logo-text { font-size: 28px; }
-            .download-pointer { right: 25px !important; top: 10px !important; }
-        }
+        .arrow-icon { font-size: 32px; margin-top: -5px; }
 
         @keyframes blink {
             0% { opacity: 1; transform: translateY(0); }
@@ -68,12 +71,12 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Clean Footer */
+        /* Footer Alignment */
         footer { padding: 40px 20px; background: #fff; border-top: 1px solid #eee; }
         .footer-wrap { max-width: 800px; margin: 0 auto; }
-        .footer-text { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 15px; }
-        .footer-links a { color: var(--primary-blue); text-decoration: none; margin: 0 10px; font-size: 13px; font-weight: 600; }
-        .copyright { color: #999; font-size: 11px; margin-top: 15px; }
+        .footer-text { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 25px; }
+        .footer-links a { color: var(--primary-blue); text-decoration: none; margin: 0 12px; font-size: 14px; font-weight: 600; }
+        .copyright { color: #aaa; font-size: 12px; margin-top: 25px; }
     </style>
 </head>
 <body>
@@ -96,7 +99,7 @@
 
     <footer>
         <div class="footer-wrap">
-            <p class="footer-text"><b>RembgHD</b> is a professional AI tool for high-quality background removal. Get transparent PNGs instantly for free.</p>
+            <p class="footer-text"><b>RembgHD</b> provides instant, high-definition background removal powered by AI. Perfect for professional photography, e-commerce, and creative projects.</p>
             <div class="footer-links">
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Service</a>
