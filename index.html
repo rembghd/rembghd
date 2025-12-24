@@ -18,7 +18,7 @@
         /* THE MAIN BOX - PC SETTINGS */
         .tool-card { 
             width: 100%; 
-            height: 950px; /* PC par height barha di taake button na katay */
+            height: 800px; /* Locked box height */
             background: #fff; 
             border-radius: 24px; 
             overflow: hidden; 
@@ -27,21 +27,22 @@
             margin-bottom: 30px;
         }
 
-        /* IFRAME - PC POSITIONING */
+        /* IFRAME - PC POSITIONING (PRECISION CROP) */
         iframe { 
             width: 100%; 
-            height: 1600px; /* Extra height for safe scrolling inside */
+            height: 1550px; 
             border: none; 
-            margin-top: -340px; /* Hide top text */
+            /* Yahan se control hoga ke iframe kahan se start ho */
+            margin-top: -375px; 
             display: block;
         }
 
         /* MOBILE SPECIFIC OVERRIDES */
         @media (max-width: 600px) {
-            .tool-card { height: 1050px; } /* Mobile par result box lamba hota hai */
+            .tool-card { height: 950px; } 
             iframe { 
-                margin-top: -325px; 
-                height: 1700px; 
+                margin-top: -360px; /* Mobile alignment */
+                height: 1650px; 
             }
             .logo-text { font-size: 28px; }
         }
