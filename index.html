@@ -9,17 +9,16 @@
         :root { --primary-blue: #007bff; --accent-red: #ff4757; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; text-align: center; }
         
-        /* Clean Header without Black Bar */
-        header { padding: 30px 0 10px 0; background: #f8f9fa; }
-        .logo-text { font-size: 32px; font-weight: 800; color: var(--primary-blue); margin: 0; }
-        .tagline { color: #666; font-size: 14px; margin-top: 5px; }
+        /* Clean Header */
+        header { padding: 40px 0 20px 0; background: #f8f9fa; }
+        .logo-text { font-size: 36px; font-weight: 800; color: var(--primary-blue); margin: 0; }
+        .tagline { color: #666; font-size: 15px; margin-top: 5px; }
 
         .main-container { max-width: 1000px; margin: 10px auto; padding: 0 10px; position: relative; }
         
-        /* Tool Card Styling */
         .tool-card { 
             width: 100%; 
-            height: 700px; 
+            height: 720px; 
             background: #fff; 
             border-radius: 20px; 
             overflow: hidden; 
@@ -28,13 +27,12 @@
             position: relative; 
         }
         
-        /* Iframe alignment to show Submit button */
         iframe { width: 100%; height: 1150px; border: none; margin-top: -185px; position: relative; z-index: 2; }
 
-        /* Lowered Red Arrow */
+        /* PERFECTLY LOWERED RED ARROW */
         .download-pointer {
             position: absolute;
-            top: 5px; /* Upar se neeche kiya hai */
+            top: 25px; /* Mazeed neeche kiya gaya hai */
             right: 140px; 
             z-index: 999;
             color: var(--accent-red);
@@ -54,13 +52,16 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Rich Footer Content */
-        footer { margin-top: 50px; padding: 40px 20px; background: #fff; border-top: 1px solid #eee; color: #555; }
-        .footer-content { max-width: 800px; margin: 0 auto; line-height: 1.6; }
-        .footer-links { margin-top: 20px; }
+        /* Full Professional Footer */
+        footer { margin-top: 60px; padding: 50px 20px; background: #fff; border-top: 1px solid #eee; color: #444; text-align: center; }
+        .footer-wrap { max-width: 850px; margin: 0 auto; }
+        .footer-heading { font-size: 20px; font-weight: 700; color: #222; margin-bottom: 15px; }
+        .footer-text { font-size: 15px; line-height: 1.7; color: #666; margin-bottom: 30px; }
+        
+        .footer-links { margin-bottom: 25px; border-top: 1px solid #eee; padding-top: 25px; }
         .footer-links a { color: var(--primary-blue); text-decoration: none; margin: 0 15px; font-size: 14px; font-weight: 600; }
         .footer-links a:hover { text-decoration: underline; }
-        .copyright { margin-top: 25px; color: #999; font-size: 12px; }
+        .copyright { color: #aaa; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -82,8 +83,11 @@
     </div>
 
     <footer>
-        <div class="footer-content">
-            <p><b>RembgHD</b> is a leading AI-powered tool designed to provide professional-grade background removal in seconds. Our technology ensures that every pixel is processed with ultra-high definition accuracy, making it perfect for photographers, designers, and e-commerce businesses.</p>
+        <div class="footer-wrap">
+            <div class="footer-heading">Professional Background Removal Made Simple</div>
+            <p class="footer-text">
+                <b>RembgHD</b> is your ultimate solution for instant, high-quality background removal. Powered by advanced artificial intelligence, our tool automatically detects the subject and removes the background with surgical precision. Whether you are creating professional product photos, social media content, or personal projects, RembgHD delivers HD results in seconds without the need for complex software.
+            </p>
             
             <div class="footer-links">
                 <a href="#">Privacy Policy</a>
@@ -92,7 +96,7 @@
                 <a href="#">About Us</a>
             </div>
             
-            <p class="copyright">&copy; 2025 RembgHD.com | All Rights Reserved.</p>
+            <p class="copyright">&copy; 2025 RembgHD.com | The Smartest Way to Remove Backgrounds.</p>
         </div>
     </footer>
 
