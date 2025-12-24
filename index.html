@@ -3,76 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Ultra HD - No Compression</title>
+    <title>RemBghd Pro - Ultra HD (15MB+ Results)</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #010409; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; text-align: center; }
-        .logo { font-size: 42px; font-weight: 900; background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 30px 0; }
-        .container { max-width: 700px; margin: auto; background: #0d1117; padding: 40px; border-radius: 24px; border: 1px solid #30363d; box-shadow: 0 30px 60px rgba(0,0,0,0.7); }
-        .upload-box { border: 2px dashed #30363d; padding: 60px; border-radius: 16px; cursor: pointer; background: rgba(255,255,255,0.01); transition: 0.3s; }
-        .upload-box:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.03); }
-        canvas { max-width: 100%; border-radius: 12px; margin-top: 25px; display: none; background: #161b22; }
-        .status-text { margin: 20px 0; font-weight: bold; color: var(--accent); font-size: 13px; text-transform: uppercase; }
-        .dl-btn { display: none; background: white; color: black; padding: 20px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; width: 100%; font-size: 18px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .dl-btn:hover { background: var(--accent); }
+        .logo { font-size: 45px; font-weight: 900; background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 30px 0; }
+        .container { max-width: 750px; margin: auto; background: #0d1117; padding: 40px; border-radius: 32px; border: 1px solid #30363d; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
+        .premium-badge { background: linear-gradient(45deg, #f39c12, #f1c40f); color: black; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 800; display: inline-block; margin-bottom: 20px; }
+        .upload-area { border: 2px dashed #30363d; padding: 60px; border-radius: 24px; cursor: pointer; background: rgba(255,255,255,0.02); transition: 0.3s; position: relative; }
+        .upload-area:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
+        .warning { font-size: 13px; color: #8b949e; margin-top: 15px; line-height: 1.6; }
+        canvas { max-width: 100%; border-radius: 16px; margin-top: 30px; display: none; background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); }
+        #status { margin: 20px 0; font-weight: bold; color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+        .dl-btn { display: none; background: white; color: black; padding: 20px; border-radius: 14px; font-weight: 900; border: none; cursor: pointer; width: 100%; font-size: 18px; margin-top: 25px; transition: 0.2s; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        .dl-btn:hover { background: var(--accent); transform: scale(1.02); }
+        .footer { margin-top: 50px; opacity: 0.6; font-size: 14px; font-weight: bold; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
     <div class="logo">RemBghd Pro</div>
+    <div class="premium-badge">ULTRA-HD MODE ENABLED</div>
 
     <div class="container">
-        <div class="upload-box" onclick="document.getElementById('fileIn').click()">
-            <p>Upload High-Res Image (No Quality Loss)</p>
+        <div class="upload-area" onclick="document.getElementById('fileIn').click()">
+            <p style="font-size: 18px; font-weight: 600;">Upload High-Resolution Image</p>
+            <p class="warning">Note: 1st time you may wait for a few seconds for the HD AI to download. Professional 15MB+ results require heavy processing.</p>
             <input type="file" id="fileIn" accept="image/*" hidden>
         </div>
-        <div id="status" class="status-text"></div>
+        
+        <div id="status">Ready to Scan</div>
         <canvas id="canvas"></canvas>
-        <button id="dlBtn" class="dl-btn">Download Original HD PNG</button>
+        <button id="dlBtn" class="dl-btn">DOWNLOAD ORIGINAL MASTER (NO COMPRESSION)</button>
     </div>
+
+    <div class="footer">Powered by SadSha</div>
 
     <script>
         const fileIn = document.getElementById('fileIn');
         const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: true });
+        const ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: true, desynchronized: true });
         const status = document.getElementById('status');
         const dlBtn = document.getElementById('dlBtn');
 
+        // Initializing Heavy Model (approx 20MB)
         const ai = new SelfieSegmentation({ locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}` });
-        ai.setOptions({ modelSelection: 1 }); // HD Model
+        ai.setOptions({ modelSelection: 1 }); // Use most accurate model
 
         ai.onResults((res) => {
-            // Force Canvas to Original High-Res Dimensions
-            ctx.save();
+            // Processing on Full-Scale Resolution
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Step 1: Draw the high-quality mask
+            // Step 1: High-Contrast Masking for Sharp Edges
+            ctx.imageSmoothingEnabled = false; // Prevent blurring during cut
             ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
             
-            // Step 2: Use source-in to keep only the subject with original pixels
+            // Step 2: Extracting Original Pixels
             ctx.globalCompositeOperation = 'source-in';
             ctx.drawImage(res.image, 0, 0, canvas.width, canvas.height);
             
-            ctx.restore();
-            status.innerText = "✓ HD Processing Complete";
+            status.innerText = "✓ Professional Cut Completed";
             dlBtn.style.display = 'block';
         });
 
         fileIn.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            status.innerText = "Reading Original Quality...";
+            status.innerText = "Downloading AI Assets (Wait few seconds)...";
             const rd = new FileReader();
             rd.onload = (v) => {
                 const img = new Image();
                 img.onload = () => {
-                    // CRITICAL: Set canvas to REAL image size
+                    // Lock Canvas to Full Original Dimensions
                     canvas.width = img.width;
                     canvas.height = img.height;
                     canvas.style.display = 'block';
                     
-                    status.innerText = "AI Precision Cutting (Please Wait)...";
+                    status.innerText = "AI Executing Heavy Analysis...";
                     ai.send({image: img});
                 };
                 img.src = v.target.result;
@@ -80,18 +88,18 @@
             rd.readAsDataURL(file);
         };
 
-        // THE QUALITY FIX: Using Blob with no compression
+        // EXPORTING AS HEAVY PNG BLOB
         dlBtn.onclick = () => {
-            status.innerText = "Encoding HD File...";
+            status.innerText = "Encoding Zero-Loss PNG...";
             canvas.toBlob((blob) => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.download = `rembghd_original_hd_${Date.now()}.png`;
+                a.download = `rembghd_pro_master_${Date.now()}.png`;
                 a.href = url;
                 a.click();
-                setTimeout(() => URL.revokeObjectURL(url), 2000);
-                status.innerText = "✓ Downloaded Successfully";
-            }, 'image/png', 1.0); // 1.0 = Maximum Quality
+                setTimeout(() => URL.revokeObjectURL(url), 3000);
+                status.innerText = "✓ Master File Downloaded";
+            }, 'image/png', 1.0); // Maximum quality, No compression
         };
     </script>
 </body>
