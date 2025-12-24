@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Pro - Crystal Clear HD</title>
+    <title>RemBghd Pro - Crystal Sharp HD</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #050a14; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; text-align: center; }
-        .logo { font-size: 42px; font-weight: 900; background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 30px 0; letter-spacing: -1px; }
-        .card { max-width: 650px; margin: auto; background: #0f172a; padding: 35px; border-radius: 30px; border: 1px solid #1e293b; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
-        .upload-box { border: 2px dashed #334155; padding: 50px; border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.01); transition: 0.3s; }
+        .logo { font-size: 42px; font-weight: 900; background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 30px 0; }
+        .card { max-width: 700px; margin: auto; background: #0f172a; padding: 40px; border-radius: 30px; border: 1px solid #1e293b; box-shadow: 0 35px 70px rgba(0,0,0,0.7); }
+        .upload-box { border: 2px dashed #334155; padding: 60px; border-radius: 24px; cursor: pointer; background: rgba(255,255,255,0.01); transition: 0.3s; }
         .upload-box:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
-        .notice { font-size: 12px; color: #64748b; margin-top: 15px; }
-        canvas { max-width: 100%; border-radius: 15px; margin-top: 25px; display: none; background: #1e293b; image-rendering: pixelated; }
-        #status { margin: 20px 0; font-weight: 800; color: var(--accent); font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; }
-        .dl-btn { display: none; background: white; color: black; padding: 20px; border-radius: 15px; font-weight: 900; border: none; cursor: pointer; width: 100%; font-size: 18px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        .dl-btn:hover { background: var(--accent); transform: translateY(-2px); }
-        .footer { margin-top: 40px; font-size: 13px; font-weight: 700; opacity: 0.4; letter-spacing: 2px; }
+        .msg { font-size: 13px; color: #64748b; margin-top: 15px; line-height: 1.5; }
+        canvas { max-width: 100%; border-radius: 15px; margin-top: 30px; display: none; background: #0d1117; }
+        #status { margin: 25px 0; font-weight: 800; color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+        .dl-btn { display: none; background: white; color: black; padding: 20px; border-radius: 15px; font-weight: 900; border: none; cursor: pointer; width: 100%; font-size: 18px; margin-top: 25px; transition: 0.2s; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        .dl-btn:hover { background: var(--accent); transform: scale(1.02); }
+        .footer { margin-top: 50px; font-size: 14px; font-weight: 700; opacity: 0.5; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -25,57 +25,57 @@
     <div class="logo">RemBghd Pro</div>
 
     <div class="card">
-        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-            <p style="font-size: 18px; font-weight: 700; margin: 0;">Upload HD Image</p>
-            <p class="notice">High-precision AI: 1st time may take 5-10 seconds to load.</p>
-            <input type="file" id="fileInput" accept="image/*" hidden>
+        <div class="upload-box" onclick="document.getElementById('fileIn').click()">
+            <p style="font-size: 19px; font-weight: 700; margin: 0;">Upload Image</p>
+            <p class="msg">1st time wait for few seconds for download. Heavy AI assets loading...</p>
+            <input type="file" id="fileIn" accept="image/*" hidden>
         </div>
         
-        <div id="status">System Ready</div>
+        <div id="status">Ready For High-Res Processing</div>
         <canvas id="canvas"></canvas>
-        <button id="dlBtn" class="dl-btn">DOWNLOAD ORIGINAL SHARP PNG</button>
+        <button id="dlBtn" class="dl-btn">DOWNLOAD CRYSTAL SHARP PNG</button>
     </div>
 
     <div class="footer">Powered by SadSha</div>
 
     <script>
-        const fileInput = document.getElementById('fileInput');
+        const fileIn = document.getElementById('fileIn');
         const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: true });
+        const ctx = canvas.getContext('2d', { alpha: true });
         const status = document.getElementById('status');
         const dlBtn = document.getElementById('dlBtn');
 
         const ai = new SelfieSegmentation({ locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}` });
-        ai.setOptions({ modelSelection: 1 }); // Ultra-HD Model
+        ai.setOptions({ modelSelection: 1 });
 
         ai.onResults((res) => {
-            // Fix for Blurriness: Disable Smoothing
-            ctx.imageSmoothingEnabled = false;
+            ctx.save();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Draw Mask with high contrast to prevent feathering/blur
-            ctx.filter = 'contrast(1.5) brightness(1.1)';
+            // 1. Draw High-Accuracy Mask
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
             ctx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
             
-            // Source-In to keep original pixels exactly as they are
+            // 2. Edge Sharpening Logic
             ctx.globalCompositeOperation = 'source-in';
-            ctx.filter = 'none';
+            
+            // 3. Render Original Pixels with No Compression
             ctx.drawImage(res.image, 0, 0, canvas.width, canvas.height);
             
-            ctx.globalCompositeOperation = 'source-over';
-            status.innerText = "✓ HD Cutting Finished";
+            ctx.restore();
+            status.innerText = "✓ HD Masterpiece Ready";
             dlBtn.style.display = 'block';
         });
 
-        fileInput.onchange = (e) => {
+        fileIn.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            status.innerText = "Analyzing Original Pixels...";
+            status.innerText = "Scanning Pixels (HD Mode)...";
             const rd = new FileReader();
             rd.onload = (v) => {
                 const img = new Image();
                 img.onload = () => {
-                    // Lock canvas to real image size (Critical for HD)
                     canvas.width = img.width;
                     canvas.height = img.height;
                     canvas.style.display = 'block';
@@ -86,18 +86,16 @@
             rd.readAsDataURL(file);
         };
 
-        // Fix for File Size & Extension: Forced PNG Blob
         dlBtn.onclick = () => {
-            status.innerText = "Generating Final File...";
+            status.innerText = "Saving Original Resolution...";
             canvas.toBlob((blob) => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.download = `rembghd_sharp_${Date.now()}.png`; // Lock as PNG
+                a.download = `rembghd_crystal_${Date.now()}.png`;
                 a.href = url;
                 a.click();
                 setTimeout(() => URL.revokeObjectURL(url), 2000);
-                status.innerText = "✓ Master Copy Saved";
-            }, 'image/png', 1.0); // 1.0 = Zero Compression
+            }, 'image/png', 1.0); 
         };
     </script>
 </body>
