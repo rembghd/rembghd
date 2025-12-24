@@ -1,29 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>RemBghd AI</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RemBghd - AI BG Remover</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation"></script>
     <style>
-        body { text-align: center; font-family: sans-serif; padding: 50px; }
-        .logo { font-size: 40px; font-weight: bold; }
-        .btn { background: blue; color: white; padding: 20px; border-radius: 10px; cursor: pointer; }
+        :root { --main: #00d2ff; --bg-dark: #0b0f19; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: white; margin: 0; padding: 20px; text-align: center; }
+        .hero { padding: 60px 20px; }
+        .logo { font-size: 50px; font-weight: 900; background: linear-gradient(45deg, #00d2ff, #92fe9d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card { max-width: 550px; margin: auto; background: #161b22; padding: 40px; border-radius: 30px; border: 1px solid #30363d; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .upload-area { border: 2px dashed #30363d; padding: 50px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .upload-area:hover { border-color: var(--main); background: rgba(0, 210, 255, 0.05); }
+        #canvas { max-width: 100%; border-radius: 15px; margin-top: 25px; display: none; border: 4px solid #30363d; }
+        .status-msg { margin: 20px 0; font-weight: bold; color: var(--main); min-height: 24px; }
+        .btn-dl { display: none; background: linear-gradient(to right, #00d2ff, #3a7bd5); color: white; padding: 18px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; width: 100%; font-size: 18px; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="logo">RemBghd</div>
-    <p>It's free and always will be</p>
-    <input type="file" id="upload">
-    <button class="btn" onclick="checkAd()">Download</button>
+
+    <div class="hero">
+        <div class="logo">RemBghd</div>
+        <p style="opacity: 0.6;">High-End AI Background Removal for Professionals</p>
+    </div>
+
+    <div class="card">
+        <div class="upload-area" onclick="document.getElementById('upload').click()">
+            <p id="label-text">Select Image to Begin</p>
+            <input type="file" id="upload" accept="image/*" hidden>
+        </div>
+        
+        <div id="status" class="status-msg"></div>
+        <canvas id="canvas"></canvas>
+        <button id="downloadBtn" class="btn-dl">Download PNG</button>
+    </div>
 
     <script>
-        let count = localStorage.getItem('adCount') || 0;
-        function checkAd() {
-            count++;
-            localStorage.setItem('adCount', count);
-            if(count % 2 === 0) {
-                alert("Ad Loading... (AdMob/Adsterra)");
-            }
-            alert("Image Processing...");
-        }
+        const upload = document.getElementById('upload');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const status = document.getElementById('status');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        const selfieSegmentation = new SelfieSegmentation({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`
+        });
+
+        selfieSegmentation.setOptions({ modelSelection: 1 });
+        selfieSegmentation.onResults((results) => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(results.segmentationMask, 0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'source-in';
+            ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'source-over';
+            status.innerText = "✓ Background Removed Successfully!";
+            downloadBtn.style.display = 'block';
+        });
+
+        upload.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = new Image();
+                img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    canvas.style.display = 'block';
+                    // Preview Original first
+                    ctx.drawImage(img, 0, 0);
+                    status.innerText = "Step 1: Previewing... AI Starting in 2s";
+                    
+                    setTimeout(() => {
+                        status.innerText = "Step 2: AI is Removing Background...";
+                        selfieSegmentation.send({image: img});
+                    }, 2000);
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        downloadBtn.onclick = () => {
+            const link = document.createElement('a');
+            link.download = 'rembghd_pro.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        };
     </script>
 </body>
 </html>
