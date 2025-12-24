@@ -6,53 +6,53 @@
     <title>rembghd - AI Background Remover</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
-        :root { --blue: #007bff; --dark: #1a1a1a; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fff; color: var(--dark); }
-        .nav { padding: 30px 60px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 28px; font-weight: 900; color: #000; text-decoration: none; letter-spacing: -1px; }
+        :root { --blue: #007bff; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #fff; overflow-x: hidden; }
+        .nav { padding: 30px 60px; }
+        .logo { font-size: 26px; font-weight: 900; color: #000; text-decoration: none; }
 
-        .hero { display: flex; align-items: center; justify-content: center; gap: 80px; max-width: 1200px; margin: 0 auto; min-height: 80vh; padding: 20px; }
+        .hero { display: flex; align-items: center; justify-content: center; gap: 60px; max-width: 1200px; margin: 0 auto; min-height: 85vh; padding: 20px; }
         
-        /* LEFT SIDE: IMAGE BOX */
         .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
         .window { 
-            width: 520px; height: 380px; background: #fff; position: relative; 
-            border-radius: 30px; overflow: hidden; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.07);
+            width: 500px; height: 350px; background: #fff; position: relative; 
+            border-radius: 28px; overflow: hidden; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.06);
         }
         
+        /* Permanent Checkerboard Background */
         .checker { 
             position: absolute; width: 100%; height: 100%; z-index: 1;
-            background-image: linear-gradient(45deg, #f5f5f5 25%, transparent 25%), linear-gradient(-45deg, #f5f5f5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f5f5f5 75%), linear-gradient(-45deg, transparent 75%, #f5f5f5 75%);
+            background-image: linear-gradient(45deg, #f2f2f2 25%, transparent 25%), linear-gradient(-45deg, #f2f2f2 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f2f2f2 75%), linear-gradient(-45deg, transparent 75%, #f2f2f2 75%);
             background-size: 20px 20px;
         }
         
-        .demo-overlay {
+        /* Container for the image and its white background toggle */
+        .demo-wrap {
             width: 100%; height: 100%; position: absolute; z-index: 3;
             display: flex; align-items: center; justify-content: center;
-            background-color: #ffffff;
+            background-color: #ffffff; /* This is what we animate */
         }
 
-        /* Pure CSS Infinite Loop Animation */
-        .looping .demo-overlay { animation: toggleBg 2.5s infinite alternate ease-in-out; }
+        /* The Animation that removes the background */
+        .looping .demo-wrap { animation: removeBg 2.5s infinite alternate ease-in-out; }
 
-        @keyframes toggleBg {
-            0%, 45% { background-color: #ffffff; }
-            55%, 100% { background-color: transparent; }
+        @keyframes removeBg {
+            0%, 40% { background-color: #ffffff; }
+            60%, 100% { background-color: transparent; }
         }
 
-        .demo-img { max-width: 85%; max-height: 85%; object-fit: contain; }
+        /* Using a stable placeholder that will show even if link fails */
+        .demo-img { max-width: 80%; max-height: 80%; object-fit: contain; }
 
-        /* RIGHT SIDE: UPLOAD */
         .upload-side { flex: 1; }
-        h1 { font-size: 68px; font-weight: 800; line-height: 1; margin-bottom: 25px; color: var(--dark); }
-        .upload-card { background: #fff; padding: 50px 40px; border-radius: 40px; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; }
-        .upload-btn { background: var(--blue); color: #fff; padding: 22px 70px; border-radius: 60px; font-size: 26px; font-weight: 700; cursor: pointer; width: 100%; text-align: center; border: none; transition: 0.3s; }
-        .upload-btn:hover { background: #0056b3; transform: translateY(-2px); }
+        h1 { font-size: 64px; font-weight: 800; line-height: 1.05; margin-bottom: 30px; color: #1a1a1a; }
+        .upload-card { background: #fff; padding: 50px 40px; border-radius: 35px; border: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; }
+        .upload-btn { background: var(--blue); color: #fff; padding: 22px 65px; border-radius: 50px; font-size: 24px; font-weight: 700; cursor: pointer; width: 100%; text-align: center; border: none; }
         
-        .status-msg { margin-top: 20px; font-size: 12px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 2px; }
-        #resCanvas { max-width: 100%; max-height: 100%; position: absolute; z-index: 10; display: none; border-radius: 15px; }
-        #dlBtn { margin-top: 20px; background: #000; color: #fff; padding: 15px 40px; border-radius: 50px; cursor: pointer; border: none; font-weight: 700; display: none; width: 100%; }
+        .status-msg { margin-top: 20px; font-size: 11px; font-weight: 900; color: var(--blue); text-transform: uppercase; letter-spacing: 2px; }
+        canvas { max-width: 100%; max-height: 100%; position: absolute; z-index: 10; display: none; }
+        #dlBtn { margin-top: 20px; background: #000; color: #fff; padding: 14px 40px; border-radius: 50px; cursor: pointer; border: none; font-weight: 700; display: none; width: 100%; }
     </style>
 </head>
 <body>
@@ -63,12 +63,12 @@
         <div class="image-side">
             <div class="window looping" id="mainBox">
                 <div class="checker"></div>
-                <div class="demo-overlay" id="demoLayer">
-                    <img class="demo-img" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80">
+                <div class="demo-wrap" id="demoLayer">
+                    <img class="demo-img" src="https://www.remove.bg/images/samples/combined/woman-1.jpg" onerror="this.src='https://via.placeholder.com/300x400?text=Demo+Image'">
                 </div>
                 <canvas id="resCanvas"></canvas>
             </div>
-            <div class="status-msg" id="status">Demo Mode</div>
+            <div class="status-msg" id="status">Demo Mode Active</div>
         </div>
 
         <div class="upload-side">
@@ -79,7 +79,6 @@
                     <input type="file" id="inp" hidden accept="image/*">
                 </label>
                 <button id="dlBtn" onclick="download()">Download Result</button>
-                <div style="margin-top:20px; color:#aaa; font-size:15px;">Fast, Free & Automatic</div>
             </div>
         </div>
     </div>
@@ -118,7 +117,7 @@
             if(!file) return;
             box.classList.remove('looping');
             layer.style.display = 'none';
-            status.innerText = "AI is working...";
+            status.innerText = "AI is Processing...";
             const url = URL.createObjectURL(file);
             const img = new Image();
             img.src = url;
@@ -127,7 +126,7 @@
 
         function download() {
             const link = document.createElement('a');
-            link.download = 'rembghd_pro.png';
+            link.download = 'rembghd_output.png';
             link.href = cvs.toDataURL();
             link.click();
         }
