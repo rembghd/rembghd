@@ -1,100 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd AI - Professional Background Remover</title>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation"></script>
+    <title>RemBghd AI</title>
     <style>
-        :root { --primary: #00d2ff; --bg: #0f172a; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; text-align: center; margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: rgba(255,255,255,0.05); padding: 30px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
-        .upload-box { border: 2px dashed #334155; padding: 40px; border-radius: 16px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
-        .upload-box:hover { border-color: var(--primary); background: rgba(0, 210, 255, 0.05); }
-        input[type="file"] { display: none; }
-        #status { font-weight: bold; color: var(--primary); margin: 15px 0; }
-        canvas { max-width: 100%; border-radius: 12px; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        .btn { display: none; background: var(--primary); color: #000; padding: 14px 28px; border-radius: 10px; text-decoration: none; font-weight: bold; border: none; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3); }
+        body { text-align: center; font-family: sans-serif; padding: 50px; }
+        .logo { font-size: 40px; font-weight: bold; }
+        .btn { background: blue; color: white; padding: 20px; border-radius: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
+    <div class="logo">RemBghd</div>
+    <p>It's free and always will be</p>
+    <input type="file" id="upload">
+    <button class="btn" onclick="checkAd()">Download</button>
 
-<div class="container">
-    <h1>RemBghd AI ✨</h1>
-    <p>Fast, Secure & Unlimited</p>
-
-    <label for="upload" class="upload-box" id="drop-area">
-        <p>Click or Drag to Upload Image</p>
-        <input type="file" id="upload" accept="image/*">
-    </label>
-
-    <div id="status">Ready to process</div>
-    
-    <canvas id="output"></canvas>
-    <br>
-    <button id="dlBtn" class="btn">Download Transparent PNG</button>
-</div>
-
-<script>
-    const upload = document.getElementById('upload');
-    const status = document.getElementById('status');
-    const canvas = document.getElementById('output');
-    const ctx = canvas.getContext('2d');
-    const dlBtn = document.getElementById('dlBtn');
-
-    // Initialize Mediapipe
-    const selfieSegmentation = new SelfieSegmentation({locateFile: (file) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
-    }});
-
-    selfieSegmentation.setOptions({ modelSelection: 1 }); // 1 for better quality
-
-    selfieSegmentation.onResults((results) => {
-        canvas.width = results.image.width;
-        canvas.height = results.image.height;
-        
-        ctx.save();
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw the segmentation mask
-        ctx.globalAlpha = 1.0;
-        // Adding a slight blur to mask for smoother edges
-        ctx.filter = 'blur(1px)'; 
-        ctx.drawImage(results.segmentationMask, 0, 0, canvas.width, canvas.height);
-        
-        // Use composite operation to extract the person
-        ctx.globalCompositeOperation = 'source-in';
-        ctx.filter = 'none'; // Draw actual image without blur
-        ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
-        ctx.restore();
-
-        canvas.style.display = 'inline-block';
-        dlBtn.style.display = 'inline-block';
-        status.innerText = "✅ Background Removed Successfully!";
-    });
-
-    upload.onchange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        status.innerText = "⚡ Processing... Please wait.";
-        const img = new Image();
-        img.src = URL.createObjectURL(file);
-        
-        img.onload = async () => {
-            await selfieSegmentation.send({image: img});
-        };
-    };
-
-    // Download Function
-    dlBtn.onclick = () => {
-        const link = document.createElement('a');
-        link.download = 'rembghd_output.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    };
-</script>
-
+    <script>
+        let count = localStorage.getItem('adCount') || 0;
+        function checkAd() {
+            count++;
+            localStorage.setItem('adCount', count);
+            if(count % 2 === 0) {
+                alert("Ad Loading... (AdMob/Adsterra)");
+            }
+            alert("Image Processing...");
+        }
+    </script>
 </body>
 </html>
