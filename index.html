@@ -1,114 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RembgHD - Ultra HD Background Remover</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary-blue: #007bff; --accent-red: #ff4757; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; text-align: center; }
-        
-        header { padding: 25px 0 10px 0; }
-        .logo-text { font-size: 32px; font-weight: 800; color: var(--primary-blue); margin: 0; }
-        .tagline { color: #666; font-size: 14px; margin-top: 5px; }
+<style>
+    /* --- SHARED STYLES --- */
+    .tool-card { 
+        width: 100%; 
+        background: #fff; 
+        border-radius: 24px; 
+        overflow: hidden; 
+        box-shadow: 0 10px 40px rgba(0,0,0,0.06); 
+        border: 1px solid #e0e0e0; 
+        position: relative;
+        margin-bottom: 30px;
+    }
+    iframe { 
+        width: 100%; 
+        border: none; 
+        display: block;
+    }
 
-        .main-container { max-width: 1100px; margin: 0 auto; padding: 0 15px; position: relative; }
-        
-        /* THE BOX - LOCKING DIMENSIONS */
-        .tool-card { 
-            width: 100%; 
-            height: 850px; /* PC Height */
-            background: #fff; 
-            border-radius: 24px; 
-            overflow: hidden; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.06); 
-            border: 1px solid #e0e0e0; 
-            position: relative;
-            margin-bottom: 30px;
-        }
-
-        /* IFRAME - PC POSITIONING */
+    /* --- PC / DESKTOP SETTINGS --- */
+    @media (min-width: 1024px) {
+        .tool-card { height: 750px; } /* PC par box ki height */
         iframe { 
-            width: 100%; 
+            margin-top: -340px; /* PC par top text hide karne ke liye */
             height: 1400px; 
-            border: none; 
-            margin-top: -340px; /* Hide top text on PC */
-            display: block;
         }
+    }
 
-        /* MOBILE FIXES - SPECIFIC FOR PHONES */
-        @media (max-width: 600px) {
-            .tool-card { height: 950px; } /* More height for mobile result view */
-            iframe { 
-                margin-top: -325px; /* Adjust top crop for mobile */
-                height: 1600px; /* Extra height to show output image */
-            }
-            .logo-text { font-size: 28px; }
-            .download-pointer { right: 20px !important; top: 10px !important; }
+    /* --- TABLET SETTINGS --- */
+    @media (min-width: 601px) and (max-width: 1023px) {
+        .tool-card { height: 850px; }
+        iframe { margin-top: -340px; height: 1500px; }
+    }
+
+    /* --- MOBILE SETTINGS --- */
+    @media (max-width: 600px) {
+        .tool-card { height: 920px; } /* Mobile par zyada height taake niche result nazar aaye */
+        iframe { 
+            margin-top: -325px; /* Mobile ke liye specific top crop */
+            height: 1550px; 
         }
-
-        /* DOWNLOAD ARROW */
-        .download-pointer {
-            position: absolute;
-            top: 25px;
-            right: 155px;
-            z-index: 100;
-            color: var(--accent-red);
-            font-weight: 800;
-            font-size: 11px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: blink 1.2s infinite;
-            pointer-events: none;
-        }
-        .arrow-icon { font-size: 32px; margin-top: -5px; }
-
-        @keyframes blink {
-            0% { opacity: 1; transform: translateY(0); }
-            50% { opacity: 0.3; transform: translateY(5px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Footer Alignment */
-        footer { padding: 40px 20px; background: #fff; border-top: 1px solid #eee; }
-        .footer-wrap { max-width: 800px; margin: 0 auto; }
-        .footer-text { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 25px; }
-        .footer-links a { color: var(--primary-blue); text-decoration: none; margin: 0 12px; font-size: 14px; font-weight: 600; }
-        .copyright { color: #aaa; font-size: 12px; margin-top: 25px; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1 class="logo-text">RembgHD</h1>
-        <p class="tagline">Free High Definition AI Background Remover</p>
-    </header>
-
-    <div class="main-container">
-        <div class="download-pointer">
-            <span>SAVE HD</span>
-            <div class="arrow-icon">⬇</div>
-        </div>
-
-        <div class="tool-card">
-            <iframe src="https://briaai-bria-rmbg-1-4.hf.space" scrolling="no"></iframe>
-        </div>
-    </div>
-
-    <footer>
-        <div class="footer-wrap">
-            <p class="footer-text"><b>RembgHD</b> provides instant, high-definition background removal powered by AI. Perfect for professional photography, e-commerce, and creative projects.</p>
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Contact Us</a>
-                <a href="#">About Us</a>
-            </div>
-            <p class="copyright">&copy; 2025 RembgHD.com | AI Quality Tools</p>
-        </div>
-    </footer>
-
-</body>
-</html>
+        .logo-text { font-size: 28px; }
+        .download-pointer { right: 20px !important; top: 10px !important; }
+    }
+</style>
