@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Pro - Final Master</title>
+    <title>RemBghd Pro - Signature HD</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1/selfie_segmentation.js"></script>
     <style>
         :root { --accent: #00f2fe; --bg: #050a14; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; text-align: center; }
         .logo { font-size: 38px; font-weight: 900; background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
-        .card { max-width: 600px; margin: auto; background: #0f172a; padding: 30px; border-radius: 25px; border: 1px solid #1e293b; }
+        .card { max-width: 650px; margin: auto; background: #0f172a; padding: 30px; border-radius: 25px; border: 1px solid #1e293b; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
         .upload-area { border: 2px dashed #334155; padding: 50px; border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.01); transition: 0.3s; }
-        canvas { max-width: 100%; border-radius: 12px; margin-top: 20px; display: none; background: #0d1117; }
-        #status { margin: 15px 0; font-weight: 700; color: var(--accent); font-size: 13px; text-transform: uppercase; }
-        .btn { display: none; background: white; color: black; padding: 18px; border-radius: 12px; font-weight: 900; border: none; cursor: pointer; width: 100%; margin-top: 20px; }
+        .upload-area:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
+        canvas { max-width: 100%; border-radius: 12px; margin-top: 25px; display: none; background: #0d1117; image-rendering: auto; }
+        #status { margin: 15px 0; font-weight: 700; color: var(--accent); font-size: 13px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn { display: none; background: white; color: black; padding: 18px; border-radius: 12px; font-weight: 900; border: none; cursor: pointer; width: 100%; margin-top: 20px; transition: 0.2s; }
+        .btn:hover { background: var(--accent); transform: translateY(-2px); }
         .footer { margin-top: 40px; font-size: 12px; opacity: 0.5; font-weight: 700; letter-spacing: 2px; }
     </style>
 </head>
@@ -23,14 +25,14 @@
 
     <div class="card">
         <div class="upload-area" onclick="document.getElementById('fileIn').click()">
-            <p style="font-weight: 700; margin: 0; font-size: 18px;">Upload HD Image</p>
-            <p style="font-size: 11px; color: #64748b; margin-top: 10px;">1st time wait few seconds for download.</p>
+            <p style="font-weight: 700; margin: 0; font-size: 18px;">Upload Image</p>
+            <p style="font-size: 11px; color: #64748b; margin-top: 10px;">Pro Tip: Use High-Quality portrait for best results.</p>
             <input type="file" id="fileIn" accept="image/*" hidden>
         </div>
         
         <div id="status">System Ready</div>
         <canvas id="canvas"></canvas>
-        <button id="dlBtn" class="btn">DOWNLOAD CLEAN MASTER PNG</button>
+        <button id="dlBtn" class="btn">DOWNLOAD PRO MASTER PNG</button>
     </div>
 
     <div class="footer">Powered by SadSha</div>
@@ -49,37 +51,34 @@
             canvas.width = res.image.width;
             canvas.height = res.image.height;
             
-            // Step 1: Draw the full image first
+            // Step 1: Create a soft-edged mask
+            const maskCanvas = document.createElement('canvas');
+            maskCanvas.width = canvas.width;
+            maskCanvas.height = canvas.height;
+            const mCtx = maskCanvas.getContext('2d');
+            
+            // Draw raw mask and apply a slight blur to prevent "jagged" edges
+            mCtx.filter = 'blur(1px)'; 
+            mCtx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
+            
+            // Step 2: Final Composite Rendering
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(maskCanvas, 0, 0, canvas.width, canvas.height);
+            
+            ctx.globalCompositeOperation = 'source-in';
+            // Anti-aliasing hint for the browser
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
             ctx.drawImage(res.image, 0, 0, canvas.width, canvas.height);
             
-            // Step 2: Clean the mask (Binary Threshold)
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-            const tCtx = tempCanvas.getContext('2d');
-            tCtx.drawImage(res.segmentationMask, 0, 0, canvas.width, canvas.height);
-            
-            const maskData = tCtx.getImageData(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < maskData.data.length; i += 4) {
-                // If mask is weak (less than 200), kill it. This removes the green glow.
-                if (maskData.data[i] < 200) maskData.data[i + 3] = 0;
-            }
-            tCtx.putImageData(maskData, 0, 0);
-
-            // Step 3: Apply the cleaned mask to the original image
-            ctx.globalCompositeOperation = 'destination-in';
-            ctx.drawImage(tempCanvas, 0, 0);
-            ctx.globalCompositeOperation = 'source-over';
-
-            status.innerText = "✓ HD Master Ready";
+            status.innerText = "✓ Pro Quality Cut Ready";
             dlBtn.style.display = 'block';
         });
 
         fileIn.onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            status.innerText = "Processing Pixels...";
+            status.innerText = "Refining Edges (Anti-Aliasing)...";
             const img = new Image();
             img.src = URL.createObjectURL(file);
             img.onload = () => {
@@ -92,11 +91,9 @@
             canvas.toBlob((blob) => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.download = `rembghd_master_${Date.now()}.png`;
+                a.download = `rembghd_pro_final_${Date.now()}.png`;
                 a.href = url;
                 a.click();
             }, 'image/png', 1.0);
         };
     </script>
-</body>
-</html>
