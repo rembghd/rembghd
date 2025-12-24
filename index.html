@@ -1,126 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemBghd Ultra Pro - Final Fix</title>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
-    <style>
-        :root { --accent: #00f2fe; --bg: #050a14; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 15px; text-align: center; }
-        .main-card { max-width: 850px; margin: 20px auto; background: #0f172a; padding: 25px; border-radius: 25px; border: 1px solid #1e293b; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
-        .upload-area { border: 2px dashed #334155; padding: 45px; border-radius: 20px; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.02); }
-        .upload-area:hover { border-color: var(--accent); background: rgba(0, 242, 254, 0.05); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; display: none; }
-        img, canvas { max-width: 100%; border-radius: 12px; background: #070d19; display: block; margin: auto; }
-        #status { margin: 20px 0; font-weight: 700; color: var(--accent); font-size: 14px; text-transform: uppercase; }
-        .controls { display: none; background: #070d19; padding: 20px; border-radius: 15px; margin-top: 20px; border: 1px solid #1e293b; }
-        .btn { background: #fff; color: #000; padding: 15px; border-radius: 10px; border: none; font-weight: 900; width: 100%; cursor: pointer; margin-top: 15px; }
-        input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-    </style>
-</head>
-<body>
+function drawFinal() {
+    if (!activeImg || !activeMask) return;
+    const s = document.getElementById('sharpener').value;
 
-    <h1 style="font-weight: 900; letter-spacing: -1px;">ULTRA <span style="color: var(--accent)">AI EDITOR</span></h1>
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Step 1: Background Layer (if any)
+    if(bgColor !== 'transparent') {
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
-    <div class="main-card">
-        <div class="upload-area" id="dropZone">
-            <h3 style="margin:0;">Click to Select Photo</h3>
-            <p style="font-size: 11px; opacity: 0.5; margin-top: 10px;">Supported: JPG, PNG | Pro HD Quality</p>
-            <input type="file" id="fileIn" hidden accept="image/*">
-        </div>
+    // Step 2: Refined Mask (To fix black edges on arms)
+    const mCanvas = document.createElement('canvas');
+    mCanvas.width = canvas.width; mCanvas.height = canvas.height;
+    const mCtx = mCanvas.getContext('2d');
+    
+    // Halka sa blur aur contrast edges ko "clean" karta hai
+    mCtx.filter = 'blur(0.5px) contrast(1.1)'; 
+    mCtx.drawImage(activeMask, 0, 0, canvas.width, canvas.height);
 
-        <div id="status">Engine Ready</div>
+    // Step 3: Drawing the Subject
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = canvas.width; tempCanvas.height = canvas.height;
+    const tCtx = tempCanvas.getContext('2d');
+    
+    tCtx.drawImage(mCanvas, 0, 0);
+    tCtx.globalCompositeOperation = 'source-in';
+    
+    // Face Restoration & Color Correction
+    tCtx.filter = `contrast(${s}) saturate(1.1) brightness(1.02)`;
+    tCtx.drawImage(activeImg, 0, 0);
 
-        <div class="grid" id="resultGrid">
-            <div><p style="font-size:10px; color:#64748b;">ORIGINAL</p><img id="inputView"></div>
-            <div><p style="font-size:10px; color:#64748b;">HD RESULT</p><canvas id="outputCanvas"></canvas></div>
-        </div>
-
-        <div class="controls" id="controlPanel">
-            <label style="font-size:11px; display:block; text-align:left; margin-bottom:10px;">ADJUST FACE SHARPNESS</label>
-            <input type="range" id="sharpener" min="1" max="1.5" step="0.05" value="1.1">
-            <button class="btn" onclick="saveImage()">DOWNLOAD MASTER HD</button>
-        </div>
-    </div>
-
-    <script>
-        const fileIn = document.getElementById('fileIn');
-        const dropZone = document.getElementById('dropZone');
-        const canvas = document.getElementById('outputCanvas');
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        const status = document.getElementById('status');
-        
-        let activeImg = null;
-        let activeMask = null;
-
-        // Initialize AI
-        const selfie = new SelfieSegmentation({
-            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`
-        });
-
-        selfie.setOptions({ modelSelection: 1 });
-
-        selfie.onResults((res) => {
-            canvas.width = res.image.width;
-            canvas.height = res.image.height;
-            activeImg = res.image;
-            activeMask = res.segmentationMask;
-            
-            drawFinal();
-            
-            status.innerText = "✓ Processing Complete";
-            document.getElementById('resultGrid').style.display = 'grid';
-            document.getElementById('controlPanel').style.display = 'block';
-        });
-
-        function drawFinal() {
-            if (!activeImg || !activeMask) return;
-            const s = document.getElementById('sharpener').value;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Mask Processing for Smooth Edges
-            const mCanvas = document.createElement('canvas');
-            mCanvas.width = canvas.width; mCanvas.height = canvas.height;
-            const mCtx = mCanvas.getContext('2d');
-            mCtx.filter = 'blur(1px) contrast(1.2)';
-            mCtx.drawImage(activeMask, 0, 0, canvas.width, canvas.height);
-
-            // High-End Compositing
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.drawImage(mCanvas, 0, 0);
-            ctx.globalCompositeOperation = 'source-in';
-            ctx.filter = `contrast(${s}) saturate(1.1) brightness(1.02)`;
-            ctx.drawImage(activeImg, 0, 0);
-        }
-
-        // Trigger uploader on click
-        dropZone.onclick = () => fileIn.click();
-
-        fileIn.onchange = (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            status.innerText = "Analyzing Pixels...";
-            const url = URL.createObjectURL(file);
-            document.getElementById('inputView').src = url;
-
-            const img = new Image();
-            img.src = url;
-            img.onload = () => selfie.send({ image: img });
-        };
-
-        // Live Slider update
-        document.getElementById('sharpener').oninput = drawFinal;
-
-        function saveImage() {
-            const link = document.createElement('a');
-            link.download = `rembghd_ultra_${Date.now()}.png`;
-            link.href = canvas.toDataURL('image/png', 1.0);
-            link.click();
-        }
-    </script>
-</body>
-</html>
+    ctx.drawImage(tempCanvas, 0, 0);
+}
