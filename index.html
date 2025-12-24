@@ -3,39 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rembghd | AI Pro Fixed</title>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"></script>
+    <title>rembghd | AI Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
     <style>
         :root { --neon: #00f2fe; --bg: #050810; --panel: #0d121f; }
-        body { font-family: sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .header h1 { font-size: 40px; color: var(--neon); text-shadow: 0 0 15px var(--neon); margin: 20px 0; }
-        .nav { margin-bottom: 25px; display: flex; gap: 15px; }
-        .btn { background: var(--neon); color: black; padding: 12px 35px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; }
-        
-        .main-container { display: flex; gap: 20px; max-width: 1100px; width: 100%; height: 550px; }
-        .editor-area { flex: 3; background: var(--panel); background-image: radial-gradient(#1e293b 1px, transparent 1px); background-size: 20px 20px; border: 2px solid #1e293b; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        canvas { max-width: 95%; max-height: 95%; border-radius: 10px; }
-        
-        .sidebar { flex: 1; background: var(--panel); border-radius: 20px; border: 2px solid #1e293b; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .bg-card { height: 65px; border-radius: 10px; border: 3px solid #1e293b; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; font-size: 10px; }
-        .bg-card.active { border-color: var(--neon); box-shadow: 0 0 15px var(--neon); }
+        body { font-family: sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; text-align: center; }
+        .btn { background: var(--neon); color: black; padding: 15px 40px; border-radius: 5px; font-weight: bold; cursor: pointer; border: none; margin: 20px; display: inline-block; }
+        .main-container { display: flex; gap: 20px; max-width: 1000px; margin: auto; height: 500px; }
+        .editor-area { flex: 3; background: var(--panel); border: 2px solid #1e293b; border-radius: 20px; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        canvas { max-width: 95%; max-height: 95%; }
+        #status { position: absolute; font-size: 12px; color: var(--neon); bottom: 10px; }
     </style>
 </head>
 <body>
-    <div class="header"><h1>rembghd</h1></div>
-    <div class="nav">
-        <label class="btn">SELECT IMAGE <input type="file" id="up" hidden accept="image/*"></label>
-        <button class="btn" onclick="save()" style="background:none; border:2px solid var(--neon); color:var(--neon);">DOWNLOAD PNG</button>
-    </div>
+
+    <h1>rembghd</h1>
+    
+    <label class="btn">
+        SELECT IMAGE
+        <input type="file" id="up" hidden accept="image/*">
+    </label>
 
     <div class="main-container">
-        <div class="editor-area"><canvas id="canvas"></canvas></div>
-        <div class="sidebar">
-            <div style="font-size:12px; color:var(--neon); margin-bottom:5px; font-weight:bold;">BACKGROUNDS</div>
-            <div class="bg-card active" style="background:transparent; border: 2px dashed #444;" onclick="setBG('transparent', this)">NONE</div>
-            <div class="bg-card" style="background:#ff0055;" onclick="setBG('#ff0055', this)"></div>
-            <div class="bg-card" style="background:#00ff88;" onclick="setBG('#00ff88', this)"></div>
-            <div class="bg-card" style="background:#000;" onclick="setBG('#000', this)"></div>
+        <div class="editor-area">
+            <canvas id="canvas"></canvas>
+            <div id="status">INITIALIZING AI...</div>
         </div>
     </div>
 
@@ -43,24 +35,46 @@
         const up = document.getElementById('up');
         const cvs = document.getElementById('canvas');
         const ctx = cvs.getContext('2d');
-        let currentBG = 'transparent';
-        let latestRes = null;
+        const status = document.getElementById('status');
 
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
         });
+
         ai.setOptions({ modelSelection: 1 });
-        
-        ai.onResults((res) => {
-            latestRes = res;
-            render();
+
+        // Jab AI load ho jaye
+        ai.initialize().then(() => {
+            status.innerText = "AI READY: UPLOAD IMAGE NOW";
+        }).catch(err => {
+            status.innerText = "AI FAILED TO LOAD: CHECK INTERNET OR HTTPS";
+            console.error(err);
         });
 
-        function render() {
-            if(!latestRes) return;
-            const w = latestRes.image.width;
-            const h = latestRes.image.height;
-            cvs.width = w; cvs.height = h;
+        ai.onResults((res) => {
+            status.innerText = "PROCESSING COMPLETE";
+            cvs.width = res.image.width;
+            cvs.height = res.image.height;
+            ctx.clearRect(0,0,cvs.width,cvs.height);
+            ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
+            ctx.globalCompositeOperation = 'source-in';
+            ctx.drawImage(res.image, 0, 0);
+        });
 
-            ctx.save();
-            ctx.clearRect(0, 0,
+        up.onchange = (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            status.innerText = "AI SCANNING...";
+            
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = () => {
+                ai.send({image: img}).catch(err => {
+                    status.innerText = "ERROR: AI PROCESS FAILED";
+                    console.error(err);
+                });
+            };
+        };
+    </script>
+</body>
+</html>
