@@ -10,47 +10,47 @@
         :root { --gold: #FFD700; --dark-bg: #0b0f19; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
         
-        header { padding: 40px 0 15px 0; }
-        .logo-container { display: flex; align-items: center; justify-content: center; gap: 12px; }
-        .logo-icon { width: 50px; height: 50px; fill: var(--gold); }
-        .logo-text { font-size: 50px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
-        .slogan { color: #aaa; font-size: 17px; margin-top: 5px; font-style: italic; }
+        header { padding: 35px 0 15px 0; }
+        .logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .logo-icon { width: 45px; height: 45px; fill: var(--gold); }
+        .logo-text { font-size: 48px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
+        .slogan { color: #aaa; font-size: 16px; margin-top: 4px; font-style: italic; }
 
-        .main-container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 20px; flex: 1; box-sizing: border-box; }
+        .main-container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 15px; flex: 1; box-sizing: border-box; }
 
         .tool-card { 
             width: 100%; 
-            height: 680px; /* Reduced height for a much cleaner bottom fit */
+            height: 660px; /* Precise height to cut off extra space at bottom */
             background: #111827; 
-            border-radius: 25px; 
+            border-radius: 20px; 
             overflow: hidden; 
-            margin: 15px 0 35px 0; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8); 
+            margin: 10px 0 30px 0; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
             border: 1px solid #1f2937; 
             position: relative;
         }
         
         iframe { 
             width: 100%; 
-            height: 1500px; 
+            height: 1450px; 
             border: none; 
-            /* PRECISION TUNE: Perfect balance for labels and hidden text */
-            margin-top: -150px; 
+            /* THE GOLDEN MEAN: Shows labels perfectly, hides commercial text */
+            margin-top: -147px; 
             display: block;
             background: #111827;
         }
 
-        .content-section { text-align: left; background: #111827; padding: 35px; border-radius: 20px; margin-bottom: 50px; border: 1px solid #1f2937; max-width: 950px; margin-left: auto; margin-right: auto; }
-        .content-section h2 { color: var(--gold); font-size: 22px; margin-top: 0; }
+        .content-section { text-align: left; background: #111827; padding: 30px; border-radius: 15px; margin-bottom: 40px; border: 1px solid #1f2937; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .content-section h2 { color: var(--gold); font-size: 20px; margin-top: 0; }
 
         @media (max-width: 768px) {
-            .logo-text { font-size: 36px; }
-            .tool-card { height: 900px; }
-            iframe { margin-top: -268px; height: 2500px; }
+            .logo-text { font-size: 34px; }
+            .tool-card { height: 850px; }
+            iframe { margin-top: -265px; height: 2400px; }
         }
 
-        footer { padding: 40px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
-        .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 15px; font-size: 13px; font-weight: 600; opacity: 0.7; }
+        footer { padding: 35px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
+        .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 12px; font-size: 12px; font-weight: 600; opacity: 0.6; }
         .footer-links a:hover { opacity: 1; color: var(--gold) !important; }
         .sadsha { color: var(--gold); font-weight: 800; }
     </style>
@@ -70,7 +70,7 @@
         </div>
         <div class="content-section">
             <h2>AI Background Removal</h2>
-            <p>RembgHD provides instant, high-definition background removal at no cost. Powered by <strong>SadSha</strong> AI for professional results.</p>
+            <p>RembgHD provides instant, high-definition background removal at no cost. Powered by <strong>SadSha</strong> AI.</p>
         </div>
     </div>
 
@@ -80,7 +80,7 @@
             <a href="terms.html">Terms</a>
             <a href="contact.html">Contact</a>
         </div>
-        <p style="margin-top:15px; font-size: 12px; color: #444;">© 2025 RembgHD - Powered by <span class="sadsha">SadSha</span></p>
+        <p style="margin-top:10px; font-size: 11px; color: #444;">© 2025 RembgHD - Powered by <span class="sadsha">SadSha</span></p>
     </footer>
 </body>
 </html>
