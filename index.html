@@ -14,22 +14,18 @@
 
         .hero { display: flex; align-items: center; justify-content: center; gap: 80px; max-width: 1200px; margin: 0 auto; min-height: 80vh; padding: 20px; box-sizing: border-box; }
         
-        /* LEFT: Single Window for Loop */
         .image-side { flex: 1.2; display: flex; flex-direction: column; align-items: center; }
         .window { width: 500px; height: 350px; background: var(--bg); display: flex; align-items: center; justify-content: center; position: relative; border-radius: 24px; overflow: hidden; }
         
         .checker { background-image: linear-gradient(45deg, #f9f9f9 25%, transparent 25%), linear-gradient(-45deg, #f9f9f9 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f9f9f9 75%), linear-gradient(-45deg, transparent 75%, #f9f9f9 75%); background-size: 20px 20px; }
         
-        img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; transition: opacity 0.2s ease-in-out; }
+        img, canvas { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; transition: opacity 0.2s ease; }
         
-        /* RIGHT: Upload Side */
         .upload-side { flex: 1; text-align: left; }
         .upload-side h1 { font-size: 62px; line-height: 1.1; margin: 0 0 25px 0; font-weight: 800; color: #333; }
-        
         .upload-card { background: #fff; display: flex; flex-direction: column; align-items: center; width: 400px; padding: 40px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
         .upload-btn { background: var(--blue); color: white; padding: 20px 50px; border-radius: 50px; font-size: 24px; font-weight: bold; cursor: pointer; border: none; text-align: center; width: 100%; box-sizing: border-box; }
         
-        .drop-text { margin-top: 15px; font-size: 14px; color: #999; }
         .status-msg { margin-top: 15px; font-size: 11px; font-weight: bold; color: var(--blue); text-transform: uppercase; }
         #dlBtn { margin-top: 20px; background: #000; color: #fff; padding: 12px 30px; border-radius: 50px; cursor: pointer; border: none; font-weight: bold; display: none; width: 100%; }
     </style>
@@ -54,7 +50,6 @@
                     Upload Image
                     <input type="file" id="inp" hidden accept="image/*">
                 </label>
-                <div class="drop-text">or drop a file, paste image or URL</div>
                 <button id="dlBtn" onclick="download()">Download Result</button>
             </div>
         </div>
@@ -70,7 +65,8 @@
         const dlBtn = document.getElementById('dlBtn');
 
         let userUploaded = false;
-        let isRemovedVisible = false;
+        let showRemoved = false;
+        let demoLoop;
 
         const ai = new SelfieSegmentation({
             locateFile: (f) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
@@ -86,8 +82,66 @@
             ctx.globalCompositeOperation = 'destination-in';
             ctx.drawImage(res.segmentationMask, 0, 0, cvs.width, cvs.height);
             ctx.restore();
+        });
+
+        function startInfiniteLoop() {
+            // Pre-process demo image
+            ai.send({image: viewImg});
+
+            demoLoop = setInterval(() => {
+                if (userUploaded) {
+                    clearInterval(demoLoop);
+                    return;
+                }
+                showRemoved = !showRemoved;
+                if (showRemoved) {
+                    viewImg.style.opacity = '0';
+                    cvs.style.opacity = '1';
+                    box.classList.add('checker');
+                } else {
+                    viewImg.style.opacity = '1';
+                    cvs.style.opacity = '0';
+                    box.classList.remove('checker');
+                }
+            }, 1000); // 1s Original, 1s Removed
+        }
+
+        viewImg.onload = () => { if(!userUploaded) startInfiniteLoop(); };
+
+        inp.onchange = (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
             
-            if(userUploaded) {
-                // Show final result immediately for user
-                viewImg.style.opacity = '0';
-                cvs.style.
+            userUploaded = true;
+            clearInterval(demoLoop); // Stop demo loop immediately
+            status.innerText = "Processing...";
+            
+            const url = URL.createObjectURL(file);
+            box.classList.remove('checker');
+            cvs.style.opacity = '0';
+            viewImg.src = url;
+            viewImg.style.opacity = '1';
+
+            const img = new Image();
+            img.src = url;
+            img.onload = () => {
+                setTimeout(() => {
+                    ai.send({image: img});
+                    viewImg.style.opacity = '0';
+                    cvs.style.opacity = '1';
+                    box.classList.add('checker');
+                    status.innerText = "Task Complete";
+                    dlBtn.style.display = 'block';
+                }, 800);
+            };
+        };
+
+        function download() {
+            const a = document.createElement('a');
+            a.download = 'rembghd_pro.png';
+            a.href = cvs.toDataURL('image/png', 1.0);
+            a.click();
+        }
+    </script>
+</body>
+</html>
