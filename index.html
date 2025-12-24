@@ -8,7 +8,7 @@
     <style>
         :root { 
             --gold: #FFD700; 
-            --dark-bg: #0b0f19; /* Full dark matching tool */
+            --dark-bg: #0b0f19; 
         }
         
         body { 
@@ -21,20 +21,19 @@
             overflow-x: hidden;
         }
         
-        /* HEADER: Massive space to push iframe down */
         header { 
-            padding: 110px 0 70px 0; 
+            padding: 120px 0 80px 0; /* Bohat zyada space logo ke niche */
             background: var(--dark-bg); 
             position: relative; 
             z-index: 99;
         }
         .logo-text { 
-            font-size: 50px; 
+            font-size: 52px; 
             font-weight: 800; 
             color: var(--gold); 
             margin: 0; 
             letter-spacing: -1.5px;
-            text-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
         }
         .tagline { 
             color: #888; 
@@ -59,7 +58,6 @@
             position: relative;
         }
         
-        /* PC Adjustment to prevent cutting */
         iframe { 
             width: 100%; 
             height: 1250px; 
@@ -67,10 +65,10 @@
             margin-top: -180px; 
         }
 
-        /* MOBILE FIX: NO CUTTING + SPACING */
+        /* MOBILE FIX: NO MORE CUTTING */
         @media (max-width: 600px) {
-            header { padding: 90px 0 60px 0; }
-            .logo-text { font-size: 42px; }
+            header { padding: 100px 0 70px 0; }
+            .logo-text { font-size: 44px; }
             
             .tool-card { 
                 height: auto; 
@@ -79,14 +77,14 @@
                 margin-top: 50px; 
             }
             iframe { 
-                /* Is value ko kam kiya hai taake tool oopar se na cut-ay */
-                margin-top: -385px; 
-                height: 1950px; 
+                /* Is value ko mazeed kam kiya taake icon poora nazar aaye */
+                margin-top: -360px; 
+                height: 2000px; 
             }
         }
 
         footer { 
-            margin-top: 100px; 
+            margin-top: 120px; 
             padding: 60px 20px; 
             background: #05070a; 
             border-top: 1px solid #151921;
@@ -111,8 +109,8 @@
     <footer>
         <div class="footer-wrap">
             <div class="footer-heading">RembgHD Premium AI</div>
-            <p>Ultimate HD quality background removal at your fingertips.</p>
-            <p class="copyright">&copy; 2025 RembgHD.com | Quality First</p>
+            <p>Advanced HD background removal technology.</p>
+            <p class="copyright">&copy; 2025 RembgHD.com</p>
         </div>
     </footer>
 
