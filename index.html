@@ -6,61 +6,92 @@
     <title>RembgHD - Ultra HD Background Remover</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-blue: #007bff; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f8f9fa; text-align: center; }
-        
-        /* HEADER FIX: Solid background and high z-index */
-        header { 
-            padding: 30px 0 20px 0; 
-            background: #f8f9fa; 
-            position: relative; 
-            z-index: 99; /* Is se logo iframe ke oopar rahega */
+        :root { 
+            --gold: #FFD700; 
+            --dark-bg: #0b0f19; /* Tool ke background se match */
         }
-        .logo-text { font-size: 36px; font-weight: 800; color: var(--primary-blue); margin: 0; }
-        .tagline { color: #666; font-size: 15px; margin-top: 5px; }
+        
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Inter', sans-serif; 
+            background: var(--dark-bg); 
+            text-align: center; 
+            color: #fff;
+        }
+        
+        /* HEADER: Black background with Golden Logo */
+        header { 
+            padding: 40px 0 20px 0; 
+            background: var(--dark-bg); 
+            position: relative; 
+            z-index: 99;
+        }
+        .logo-text { 
+            font-size: 42px; 
+            font-weight: 800; 
+            color: var(--gold); 
+            margin: 0; 
+            letter-spacing: -1px;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+        .tagline { 
+            color: #ccc; 
+            font-size: 15px; 
+            margin-top: 8px; 
+            font-weight: 400;
+        }
 
         .main-container { 
             max-width: 1000px; 
             margin: 0 auto; 
             padding: 0 10px; 
             position: relative; 
-            z-index: 1; /* Iframe niche rahega */
+            z-index: 1;
         }
         
         .tool-card { 
             width: 100%; 
             height: 720px; 
-            background: #fff; 
+            background: var(--dark-bg); 
             border-radius: 20px; 
             overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            border: 1px solid #eee; 
             position: relative;
         }
         
-        iframe { width: 100%; height: 1150px; border: none; margin-top: -185px; }
+        iframe { 
+            width: 100%; 
+            height: 1200px; 
+            border: none; 
+            margin-top: -180px; /* PC alignment */
+        }
 
-        /* MOBILE FIX: HIDE TEXT BUT KEEP LOGO VISIBLE */
+        /* MOBILE OPTIMIZATION */
         @media (max-width: 600px) {
-            header { padding: 25px 0 15px 0; background: #f8f9fa; }
-            .logo-text { font-size: 28px; }
-            .tagline { font-size: 13px; }
-
+            header { padding: 35px 0 15px 0; }
+            .logo-text { font-size: 34px; }
+            
             .tool-card { 
                 height: auto; 
-                min-height: 750px; 
+                min-height: 800px; 
                 overflow: visible; 
-                margin-top: 10px; /* Space from header */
             }
             iframe { 
-                margin-top: -390px; /* To hide HF text */
-                height: 1800px; 
+                /* Oopar wala faltu text hide karne ke liye precision crop */
+                margin-top: -415px; 
+                height: 1850px; 
             }
         }
 
-        footer { margin-top: 50px; padding: 50px 20px; background: #fff; border-top: 1px solid #eee; position: relative; z-index: 99; }
-        .footer-wrap { max-width: 850px; margin: 0 auto; }
-        .copyright { color: #aaa; font-size: 12px; margin-top: 20px; }
+        footer { 
+            margin-top: 50px; 
+            padding: 40px 20px; 
+            background: #080b12; 
+            border-top: 1px solid #1a1e26;
+            color: #666;
+        }
+        .footer-heading { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+        .copyright { font-size: 12px; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -78,7 +109,8 @@
 
     <footer>
         <div class="footer-wrap">
-            <p><b>RembgHD</b> - Professional Background Removal</p>
+            <div class="footer-heading">Professional AI Tools</div>
+            <p>High-quality background removal powered by advanced AI.</p>
             <p class="copyright">&copy; 2025 RembgHD.com</p>
         </div>
     </footer>
