@@ -8,7 +8,7 @@
     <style>
         :root { 
             --gold: #FFD700; 
-            --dark-bg: #0b0f19; 
+            --dark-bg: #0b0f19; /* Deep dark background */
         }
         
         body { 
@@ -22,7 +22,7 @@
         }
         
         header { 
-            padding: 20px 0 25px 0; 
+            padding: 25px 0; 
             background: var(--dark-bg); 
         }
         .logo-text { 
@@ -30,7 +30,7 @@
             font-weight: 800; 
             color: var(--gold); 
             margin: 0; 
-            text-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+            text-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
         }
         .tagline { 
             color: #888; 
@@ -44,10 +44,11 @@
             padding: 0 10px; 
         }
         
+        /* Tool card container matching the dark theme */
         .tool-card { 
             width: 100%; 
             height: 850px; 
-            background: #111827; 
+            background: #111827; /* Darker card shade */
             border-radius: 30px; 
             overflow: hidden; 
             margin-bottom: 60px;
@@ -60,17 +61,17 @@
             width: 100%; 
             height: 1600px; 
             border: none; 
-            /* PC: Is value ko mazeed kam kiya taake tool nechy aye aur label wazeh ho */
+            /* PC: Position to hide top text and show tool only */
             margin-top: -125px; 
             position: absolute;
             top: 0;
             left: 0;
-            background: #111827;
+            background: #111827; /* Match card background */
         }
 
-        /* MOBILE: Keeping your 100% perfect mobile setting */
+        /* MOBILE: Perfect settings for small screens */
         @media (max-width: 600px) {
-            header { padding: 15px 0 20px 0; }
+            header { padding: 20px 0; }
             .logo-text { font-size: 40px; }
             .tool-card { min-height: 950px; margin-top: 10px; }
             iframe { 
@@ -96,13 +97,13 @@
 
     <div class="main-container">
         <div class="tool-card">
-            <iframe src="https://briaai-bria-rmbg-1-4.hf.space"></iframe>
+            <iframe src="https://briaai-bria-rmbg-1-4.hf.space?__theme=dark"></iframe>
         </div>
     </div>
 
     <footer>
         <p style="color:var(--gold); font-weight:700; margin-bottom:10px;">RembgHD Premium AI</p>
-        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Clean AI Interface</p>
+        <p style="color:#444; font-size:12px; margin:0;">&copy; 2025 RembgHD.com | Full Dark Experience</p>
     </footer>
 
 </body>
