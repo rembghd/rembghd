@@ -4,25 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RembgHD - Free HD AI Background Remover</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Inter', sans-serif; 
+            background: var(--dark-bg); 
+            color: #fff; 
+            display: flex; flex-direction: column; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+        }
         
-        header { padding: 30px 0 10px 0; }
-        .logo-text { font-size: 46px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
-        .slogan { color: #aaa; font-size: 15px; margin-top: 2px; font-style: italic; opacity: 0.8; }
+        header { padding: 40px 0 20px 0; text-align: center; }
+        .logo-text { font-size: 48px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
+        .slogan { color: #888; font-size: 14px; margin-top: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        .main-container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 10px; flex: 1; box-sizing: border-box; }
+        .main-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; flex: 1; box-sizing: border-box; }
 
+        /* Tool Card - Precision Fixed */
         .tool-card { 
             width: 100%; 
-            height: 645px; 
+            height: 650px; 
             background: #111827; 
-            border-radius: 15px; 
+            border-radius: 16px; 
             overflow: hidden; 
-            margin: 10px 0 25px 0; 
-            box-shadow: 0 15px 45px rgba(0,0,0,0.9); 
+            margin-bottom: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
             border: 1px solid #1f2937; 
             position: relative;
         }
@@ -31,52 +40,53 @@
             width: 100%; 
             height: 1400px; 
             border: none; 
-            margin-top: -145px; /* Precision alignment for labels */
+            /* Aligning "image" and "output" labels perfectly */
+            margin-top: -145px; 
             display: block;
-            background: #111827;
         }
 
-        .content-section { text-align: left; background: #111827; padding: 25px; border-radius: 12px; margin-bottom: 40px; border: 1px solid #1f2937; max-width: 850px; margin-left: auto; margin-right: auto; }
-        .content-section h2 { color: var(--gold); font-size: 18px; margin-top: 0; }
+        .info-box { 
+            text-align: left; 
+            background: rgba(17, 24, 39, 0.6); 
+            padding: 25px; 
+            border-radius: 12px; 
+            border: 1px dashed #1f2937;
+            max-width: 800px; 
+            margin: 0 auto 50px auto; 
+        }
+        .info-box h2 { color: var(--gold); font-size: 18px; margin-top: 0; }
+        .info-box p { font-size: 14px; color: #aaa; line-height: 1.6; margin-bottom: 0; }
 
         @media (max-width: 768px) {
-            .logo-text { font-size: 32px; }
-            .tool-card { height: 820px; }
-            iframe { margin-top: -262px; height: 2300px; }
+            .logo-text { font-size: 36px; }
+            .tool-card { height: 850px; }
+            iframe { margin-top: -265px; height: 2400px; }
         }
 
-        footer { padding: 30px 15px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
-        .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 10px; font-size: 11px; font-weight: 600; opacity: 0.5; }
-        .sadsha { color: var(--gold); font-weight: 800; }
+        footer { padding: 30px; background: #070a13; border-top: 1px solid #151921; text-align: center; }
+        .footer-text { font-size: 12px; color: #444; font-weight: 600; }
+        .gold-span { color: var(--gold); }
     </style>
 </head>
 <body>
     <header>
         <h1 class="logo-text">RembgHD</h1>
-        <p class="slogan">Premium AI Background Removal - Free Forever</p>
+        <p class="slogan">Premium AI Background Removal</p>
     </header>
 
     <div class="main-container">
         <div class="tool-card">
-            <iframe 
-                src="https://briaai-rmbg-1-4.hf.space/?__theme=dark" 
-                allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-                sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads">
-            </iframe>
+            <iframe src="https://briaai-rmbg-1-4.hf.space/?__theme=dark"></iframe>
         </div>
-        <div class="content-section">
-            <h2>Fast HD Background Removal</h2>
-            <p>Experience the power of AI. RembgHD removes backgrounds instantly with zero loss in quality.</p>
+
+        <div class="info-box">
+            <h2>Instant Professional Results</h2>
+            <p>RembgHD utilizes advanced AI to isolate subjects from their backgrounds with surgical precision. Perfect for e-commerce, portraits, and creative design work.</p>
         </div>
     </div>
 
     <footer>
-        <div class="footer-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Contact</a>
-        </div>
-        <p style="margin-top:8px; font-size: 10px; color: #333;">© 2025 RembgHD - Powered by <span class="sadsha">SadSha</span></p>
+        <p class="footer-text">© 2025 RembgHD - All Rights Reserved | Powered by <span class="gold-span">SadSha</span></p>
     </footer>
 </body>
 </html>
