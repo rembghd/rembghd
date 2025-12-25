@@ -39,4 +39,27 @@
             background: #111827;
         }
 
-        .content-section { text-align: left; background: #1
+        /* MOBILE VIEW MERGED - AS REQUESTED */
+        @media (max-width: 768px) {
+            header { padding: 15px 0 25px 0; }
+            .logo-text { font-size: 40px; }
+            .tool-card { 
+                height: 950px; /* Space for portrait images */
+                border-radius: 12px;
+                margin-top: 10px;
+            }
+            iframe { 
+                margin-top: -265px; /* Alignment for mobile labels */
+                height: 2600px; /* Scroll room for long images */
+            }
+        }
+
+        footer { padding: 35px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
+        .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 12px; font-size: 12px; font-weight: 600; opacity: 0.6; }
+        .sadsha { color: var(--gold); font-weight: 800; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 24 24"><path d="M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5
