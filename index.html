@@ -20,12 +20,11 @@
 
         .tool-card { 
             width: 100%; 
-            height: auto;
-	    min-height: 850px; /* Ensures space for all buttons */
+            height: 1660px; /* Precise height to cut off extra space at bottom */
             background: #111827; 
-            border-radius: 28px; 
+            border-radius: 20px; 
             overflow: hidden; 
-            margin-bottom: 50px;
+            margin: 10px 0 30px 0; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
             border: 1px solid #1f2937; 
             position: relative;
@@ -33,7 +32,7 @@
         
         iframe { 
             width: 100%; 
-            height: auto; 
+            height: 1450px; 
             border: none; 
             /* THE GOLDEN MEAN: Shows labels perfectly, hides commercial text */
             margin-top: -147px; 
@@ -48,15 +47,6 @@
             .logo-text { font-size: 34px; }
             .tool-card { height: 850px; }
             iframe { margin-top: -265px; height: 2400px; }
-        }
- /* MOBILE OPTIMIZATION */
-        @media (max-width: 600px) {
-            header { padding: 15px 0 25px 0; }
-            .logo-text { font-size: 40px; }
-            
-            .tool-card { 
-                min-height: 950px; /* Mobile par nichle buttons ke liye mazeed jagah */
-                margin-
         }
 
         footer { padding: 35px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
