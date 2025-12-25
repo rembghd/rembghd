@@ -11,7 +11,7 @@
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
         
         header { padding: 35px 0 15px 0; }
-        .logo-container { display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; }
         .logo-icon { width: 45px; height: 45px; fill: var(--gold); }
         .logo-text { font-size: 48px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
         .slogan { color: #aaa; font-size: 16px; margin-top: 4px; font-style: italic; }
@@ -20,7 +20,7 @@
 
         .tool-card { 
             width: 100%; 
-            height: 660px; /* PC Height */
+            height: 660px; /* Precise height to cut off extra space at bottom */
             background: #111827; 
             border-radius: 20px; 
             overflow: hidden; 
@@ -34,20 +34,24 @@
             width: 100%; 
             height: 1450px; 
             border: none; 
-            margin-top: -147px; /* Aligning labels */
+            /* THE GOLDEN MEAN: Shows labels perfectly, hides commercial text */
+            margin-top: -147px; 
             display: block;
             background: #111827;
         }
 
-        /* Mobile Fix: Prevent image cutting and 404 look */
+        .content-section { text-align: left; background: #111827; padding: 30px; border-radius: 15px; margin-bottom: 40px; border: 1px solid #1f2937; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .content-section h2 { color: var(--gold); font-size: 20px; margin-top: 0; }
+
         @media (max-width: 768px) {
             .logo-text { font-size: 34px; }
-            .tool-card { height: 950px; } /* Auto height increased for portrait images */
-            iframe { margin-top: -265px; height: 2600px; }
+            .tool-card { height: 850px; }
+            iframe { margin-top: -265px; height: 2400px; }
         }
 
         footer { padding: 35px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
         .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 12px; font-size: 12px; font-weight: 600; opacity: 0.6; }
+        .footer-links a:hover { opacity: 1; color: var(--gold) !important; }
         .sadsha { color: var(--gold); font-weight: 800; }
     </style>
 </head>
@@ -57,12 +61,16 @@
             <svg class="logo-icon" viewBox="0 0 24 24"><path d="M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29L16.71,9.63C17.1,10 17.1,10.65 16.71,11.04L5.04,22.71C4.65,23.1 4,23.1 3.63,22.71L1.29,20.37C0.9,19.98 0.9,19.33 1.29,18.94L12.96,7.27C13.35,6.88 14,6.88 14.37,7.29Z"/></svg>
             <h1 class="logo-text">RembgHD</h1>
         </div>
-        <p class="slogan">Premium AI Background Removal - Free Forever</p>
+        <p class="slogan">It's Free And Always Will Be...</p>
     </header>
 
     <div class="main-container">
         <div class="tool-card">
-            <iframe src="https://briaai-rmbg-1-4.hf.space/?__theme=dark" scrolling="no"></iframe>
+            <iframe src="https://briaai-bria-rmbg-1-4.hf.space?__theme=dark"></iframe>
+        </div>
+        <div class="content-section">
+            <h2>AI Background Removal</h2>
+            <p>RembgHD provides instant, high-definition background removal at no cost. Powered by <strong>SadSha</strong> AI.</p>
         </div>
     </div>
 
@@ -70,7 +78,7 @@
         <div class="footer-links">
             <a href="privacy.html">Privacy Policy</a>
             <a href="terms.html">Terms</a>
-            <a href="contact.html">Contact Us</a>
+            <a href="contact.html">Contact</a>
         </div>
         <p style="margin-top:10px; font-size: 11px; color: #444;">© 2025 RembgHD - Powered by <span class="sadsha">SadSha</span></p>
     </footer>
