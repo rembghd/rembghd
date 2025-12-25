@@ -20,22 +20,27 @@
         
         .main-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
         
-        /* Tool Card */
+        /* Tool Card - Updated PC Margin to hide extra text */
         .tool-card { width: 100%; height: 850px; background: #111827; border-radius: 35px; overflow: hidden; margin-bottom: 50px; box-shadow: 0 25px 70px rgba(0,0,0,0.9); border: 1px solid #1f2937; position: relative; }
-        iframe { width: 100%; height: 1600px; border: none; margin-top: -125px; position: absolute; top: 0; left: 0; background: #111827; }
+        iframe { width: 100%; height: 1600px; border: none; margin-top: -180px; position: absolute; top: 0; left: 0; background: #111827; }
 
-        /* --- ADVANCED MOBILE PORTRAIT OPTIMIZATION --- */
+        /* Article Content */
+        .content-section { text-align: left; background: #111827; padding: 40px; border-radius: 25px; margin-bottom: 60px; border: 1px solid #1f2937; }
+        .content-section h2 { color: var(--gold); margin-top: 25px; }
+        .content-section p { color: #ccc; font-size: 16px; }
+
+        /* --- MOBILE VIEW (UNTOUCHED TO KEEP SETTINGS) --- */
         @media (max-width: 600px) {
             .logo-text { font-size: 40px; }
             .tool-card { 
-                height: 1200px; /* Container height increased for long pics */
+                height: 1200px; 
                 border-radius: 20px;
                 margin-bottom: 30px;
-                overflow-y: auto; /* Added internal scroll safety */
+                overflow-y: auto; 
             }
             iframe { 
                 margin-top: -270px; 
-                height: 4500px; /* MASSIVE height to ensure download button NEVER cuts */
+                height: 4500px; 
                 position: relative; 
                 display: block;
             }
@@ -66,7 +71,7 @@
         <div class="content-section">
             <h2>High Definition AI Background Removal</h2>
             <p>Welcome to <strong>RembgHD</strong>, your number one source for all things image editing. Powered by <strong>SadSha</strong>.</p>
-            </div>
+        </div>
     </div>
 
     <footer>
