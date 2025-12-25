@@ -29,10 +29,19 @@
         .content-section h2 { color: var(--gold); margin-top: 25px; }
         .content-section p { color: #ccc; font-size: 16px; }
 
+        /* --- UPDATED MOBILE SECTION FOR PORTRAIT IMAGES --- */
         @media (max-width: 600px) {
             .logo-text { font-size: 40px; }
-            .tool-card { min-height: 950px; }
-            iframe { margin-top: -270px; height: 2200px; position: relative; }
+            .tool-card { 
+                height: 950px; /* Frame lamba ho gaya lambi images k liye */
+                border-radius: 20px;
+                margin-bottom: 30px;
+            }
+            iframe { 
+                margin-top: -270px; /* Precise labels alignment */
+                height: 2800px; /* Space for scrolling long pics and download buttons */
+                position: relative; 
+            }
         }
 
         footer { padding: 80px 20px; background: #05070a; border-top: 1px solid #151921; }
