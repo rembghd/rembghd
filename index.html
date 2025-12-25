@@ -24,23 +24,20 @@
         .tool-card { width: 100%; height: 850px; background: #111827; border-radius: 35px; overflow: hidden; margin-bottom: 50px; box-shadow: 0 25px 70px rgba(0,0,0,0.9); border: 1px solid #1f2937; position: relative; }
         iframe { width: 100%; height: 1600px; border: none; margin-top: -125px; position: absolute; top: 0; left: 0; background: #111827; }
 
-        /* Article Content */
-        .content-section { text-align: left; background: #111827; padding: 40px; border-radius: 25px; margin-bottom: 60px; border: 1px solid #1f2937; }
-        .content-section h2 { color: var(--gold); margin-top: 25px; }
-        .content-section p { color: #ccc; font-size: 16px; }
-
-        /* --- UPDATED MOBILE SECTION FOR PORTRAIT IMAGES --- */
+        /* --- ADVANCED MOBILE PORTRAIT OPTIMIZATION --- */
         @media (max-width: 600px) {
             .logo-text { font-size: 40px; }
             .tool-card { 
-                height: 1000px; /* Thoda aur space mobile frame k liye */
+                height: 1200px; /* Container height increased for long pics */
                 border-radius: 20px;
                 margin-bottom: 30px;
+                overflow-y: auto; /* Added internal scroll safety */
             }
             iframe { 
                 margin-top: -270px; 
-                height: 3200px; /* Lamba frame portrait images k download button k liye */
+                height: 4500px; /* MASSIVE height to ensure download button NEVER cuts */
                 position: relative; 
+                display: block;
             }
         }
 
@@ -68,20 +65,8 @@
 
         <div class="content-section">
             <h2>High Definition AI Background Removal</h2>
-            <p>Welcome to <strong>RembgHD</strong>, your number one source for all things image editing. We're dedicated to giving you the very best of background removal services, with a focus on speed, HD quality, and AI precision. Powered by <strong>SadSha</strong>, our tool uses advanced machine learning models to identify and remove backgrounds from any photo instantly.</p>
-
-            <h2>Why Use RembgHD?</h2>
-            <p>Unlike other tools that lower your image quality, RembgHD ensures that your original resolution stays intact. Whether you are a professional photographer or a social media influencer, our AI-powered interface provides a clean, transparent background in just one click.</p>
-
-            <h2>How to Remove Background?</h2>
-            <p>1. Upload your image in the "Image" box above.<br>
-            2. Click the <strong>Submit</strong> button.<br>
-            3. Wait for a few seconds while our AI processes the edges.<br>
-            4. Download your transparent PNG from the "Output" box.</p>
-
-            <h2>Is it Really Free?</h2>
-            <p>Yes! RembgHD is and always will be free for everyone. Our mission is to provide high-quality editing tools to creators without any subscription fees or hidden costs.</p>
-        </div>
+            <p>Welcome to <strong>RembgHD</strong>, your number one source for all things image editing. Powered by <strong>SadSha</strong>.</p>
+            </div>
     </div>
 
     <footer>
