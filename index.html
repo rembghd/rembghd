@@ -18,10 +18,9 @@
 
         .main-container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 15px; flex: 1; box-sizing: border-box; }
 
-        /* PC Tool Card - Fixed & Stable */
         .tool-card { 
             width: 100%; 
-            height: 660px; 
+            height: 660px; /* PC Height */
             background: #111827; 
             border-radius: 20px; 
             overflow: hidden; 
@@ -35,25 +34,20 @@
             width: 100%; 
             height: 1450px; 
             border: none; 
-            margin-top: -147px; /* Aligning Image/Output labels perfectly */
+            margin-top: -147px; /* Aligning labels */
             display: block;
             background: #111827;
         }
 
-        .content-section { text-align: left; background: #111827; padding: 30px; border-radius: 15px; margin-bottom: 40px; border: 1px solid #1f2937; max-width: 900px; margin-left: auto; margin-right: auto; }
-        .content-section h2 { color: var(--gold); font-size: 20px; margin-top: 0; }
-
-        /* Mobile Fix: Prevent image cutting */
+        /* Mobile Fix: Prevent image cutting and 404 look */
         @media (max-width: 768px) {
             .logo-text { font-size: 34px; }
-            .tool-card { height: 950px; } /* Auto height increased for portrait photos */
+            .tool-card { height: 950px; } /* Auto height increased for portrait images */
             iframe { margin-top: -265px; height: 2600px; }
-            .content-section { width: 95%; padding: 20px; }
         }
 
         footer { padding: 35px 20px; background: #05070a; border-top: 1px solid #151921; margin-top: auto; }
         .footer-links a { color: #ffffff !important; text-decoration: none; margin: 0 12px; font-size: 12px; font-weight: 600; opacity: 0.6; }
-        .footer-links a:hover { opacity: 1; color: var(--gold) !important; }
         .sadsha { color: var(--gold); font-weight: 800; }
     </style>
 </head>
@@ -68,11 +62,7 @@
 
     <div class="main-container">
         <div class="tool-card">
-            <iframe src="https://briaai-rmbg-1-4.hf.space/?__theme=dark"></iframe>
-        </div>
-        <div class="content-section">
-            <h2>Instant HD Results</h2>
-            <p>RembgHD uses advanced AI to isolate subjects from their backgrounds with professional precision. Perfect for e-commerce, portraits, and creative design. Powered by <strong>SadSha</strong> AI.</p>
+            <iframe src="https://briaai-rmbg-1-4.hf.space/?__theme=dark" scrolling="no"></iframe>
         </div>
     </div>
 
