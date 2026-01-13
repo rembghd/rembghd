@@ -3,103 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - Free HD AI Background Remover | Powered by SadSha</title>
-    
-    <meta name="description" content="RembgHD is the best free AI tool to remove image backgrounds in Ultra HD. Fast, secure, and powered by SadSha. No sign-up required.">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23FFD700%22><path d=%22M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29L16.71,9.63C17.1,10 17.1,10.65 16.71,11.04L5.04,22.71C4.65,23.1 4,23.1 3.63,22.71L1.29,20.37C0.9,19.98 0.9,19.33 1.29,18.94L12.96,7.27C13.35,6.88 14,6.88 14.37,7.29Z%22/></svg>">
-    
+    <title>RembgHD - Best Free AI Image Tools | Powered by SadSha</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; line-height: 1.6; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; }
         
-        header { padding: 50px 0 40px 0; }
-        .logo-container { display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .logo-icon { width: 50px; height: 50px; fill: var(--gold); }
-        .logo-text { font-size: 56px; font-weight: 800; color: var(--gold); margin: 0; letter-spacing: -1.5px; }
-        .slogan { color: #aaa; font-size: 19px; margin-top: 10px; font-style: italic; }
-        
-        .main-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-        
-        /* Main Tool Section */
-        .tool-card { width: 100%; height: 850px; background: var(--card-bg); border-radius: 35px; overflow: hidden; margin-bottom: 50px; box-shadow: 0 25px 70px rgba(0,0,0,0.9); border: 1px solid #1f2937; position: relative; }
-        iframe { width: 100%; height: 1600px; border: none; margin-top: -180px; position: absolute; top: 0; left: 0; background: var(--card-bg); }
+        header { padding: 60px 20px; }
+        .logo-text { font-size: 48px; font-weight: 800; color: var(--gold); margin: 0; }
+        .slogan { color: #aaa; font-size: 18px; font-style: italic; }
 
-        /* Tools Grid Section */
-        .grid-title { color: var(--gold); font-size: 28px; margin-bottom: 30px; font-weight: 800; }
-        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 60px; }
-        .tool-link { background: var(--card-bg); padding: 30px; border-radius: 25px; border: 1px solid #1f2937; text-decoration: none; color: #fff; transition: 0.3s ease; }
-        .tool-link:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1); }
-        .tool-link h3 { color: var(--gold); margin: 0 0 10px 0; }
-        .tool-link p { color: #ccc; font-size: 14px; margin: 0; }
-
-        /* Content Section */
-        .content-section { text-align: left; background: var(--card-bg); padding: 40px; border-radius: 25px; margin-bottom: 60px; border: 1px solid #1f2937; }
-        .content-section h2 { color: var(--gold); margin-top: 0; }
+        .main-container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
         
-        @media (max-width: 600px) {
-            .logo-text { font-size: 40px; }
-            .tool-card { height: 1200px; border-radius: 20px; overflow-y: auto; }
-            iframe { margin-top: -270px; height: 4500px; position: relative; }
-        }
+        /* Tool Grid */
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .tool-link { background: var(--card-bg); padding: 40px 20px; border-radius: 30px; border: 1px solid #1f2937; text-decoration: none; color: #fff; transition: 0.3s; display: block; }
+        .tool-link:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 15px 40px rgba(255, 215, 0, 0.1); }
+        
+        .icon-box { font-size: 40px; margin-bottom: 15px; display: block; }
+        .tool-link h3 { color: var(--gold); margin: 10px 0; font-size: 22px; }
+        .tool-link p { color: #ccc; font-size: 15px; margin: 0; }
 
-        footer { padding: 60px 20px; background: #05070a; border-top: 1px solid #151921; }
-        .footer-links a { color: #888; text-decoration: none; margin: 0 15px; font-size: 14px; }
-        .footer-links a:hover { color: var(--gold); }
-        .powered-by { color: #555; font-size: 16px; margin-top: 30px; font-style: italic; }
+        .powered-by { margin: 60px 0; font-style: italic; color: #666; font-size: 18px; }
         .sadsha { color: var(--gold); font-weight: 800; }
+
+        footer { padding: 40px; background: #05070a; border-top: 1px solid #151921; }
+        .footer-links a { color: #888; text-decoration: none; margin: 0 15px; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-container">
-            <svg class="logo-icon" viewBox="0 0 24 24"><path d="M7.5,5.6L5,7L6.4,4.5L5,2L7.5,3.4L10,2L8.6,4.5L10,7L7.5,5.6M19.5,15.4L22,14L20.6,16.5L22,19L19.5,17.6L17,19L18.4,16.5L17,14L19.5,15.4M22,2L20.6,4.5L22,7L19.5,5.6L17,7L18.4,4.5L17,2L19.5,3.4L22,2M13.34,12.78L15.78,10.34L13.66,8.22L11.22,10.66L13.34,12.78M14.37,7.29L16.71,9.63C17.1,10 17.1,10.65 16.71,11.04L5.04,22.71C4.65,23.1 4,23.1 3.63,22.71L1.29,20.37C0.9,19.98 0.9,19.33 1.29,18.94L12.96,7.27C13.35,6.88 14,6.88 14.37,7.29Z"/></svg>
-            <h1 class="logo-text">RembgHD</h1>
-        </div>
-        <p class="slogan">It's Free And Always Will Be...</p>
+        <h1 class="logo-text">RembgHD</h1>
+        <p class="slogan">Premium AI Tools for Everyone...</p>
     </header>
 
     <div class="main-container">
-        <div class="tool-card">
-            <iframe src="https://briaai-bria-rmbg-1-4.hf.space?__theme=dark" scrolling="yes"></iframe>
-        </div>
-
-        <h2 class="grid-title">More Image Magic Tools</h2>
-        
         <div class="tools-grid">
+            <a href="remover.html" class="tool-link">
+                <span class="icon-box">🖼️</span>
+                <h3>HD BG Remover</h3>
+                <p>Remove backgrounds in Ultra HD quality with AI.</p>
+            </a>
+
             <a href="webp-converter.html" class="tool-link">
+                <span class="icon-box">⚡</span>
                 <h3>Image to WebP</h3>
-                <p>Convert to high-quality, small size WebP images.</p>
+                <p>Convert images to fast-loading WebP format.</p>
             </a>
+
             <a href="compressor.html" class="tool-link">
+                <span class="icon-box">📉</span>
                 <h3>Compress Image</h3>
-                <p>Reduce image size without losing quality.</p>
+                <p>Reduce file size without quality loss.</p>
             </a>
+
             <a href="filters.html" class="tool-link">
-                <h3>AI Filters</h3>
-                <p>Apply stunning filters to your photos.</p>
+                <span class="icon-box">🎨</span>
+                <h3>AI Photo Filters</h3>
+                <p>Add professional effects to your photos.</p>
             </a>
+
             <a href="converter.html" class="tool-link">
-                <h3>PNG to JPG</h3>
-                <p>Fast and easy format conversion.</p>
+                <span class="icon-box">🔄</span>
+                <h3>Format Converter</h3>
+                <p>Convert between PNG, JPG, and more.</p>
             </a>
         </div>
 
-        <div class="content-section">
-            <h2>High Definition AI Background Removal</h2>
-            <p>Welcome to <strong>RembgHD</strong>, your number one source for all things image editing. Powered by <strong>SadSha</strong>. Our advanced AI ensures that your backgrounds are removed with surgical precision while maintaining the highest HD quality possible.</p>
+        <div class="powered-by">
+            Powered by <span class="sadsha">SadSha</span> ❤️
         </div>
     </div>
 
     <footer>
-        <p style="color:var(--gold); font-weight:800; font-size: 24px; margin-bottom:15px;">RembgHD Premium AI</p>
         <div class="footer-links">
             <a href="privacy.html">Privacy Policy</a>
             <a href="terms.html">Terms & Conditions</a>
             <a href="contact.html">Contact Us</a>
         </div>
-        <p class="powered-by">Powered by <span class="sadsha">SadSha</span> ❤️</p>
     </footer>
 
 </body>
