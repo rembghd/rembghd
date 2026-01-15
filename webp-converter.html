@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to WebP Converter - RembgHD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
+        
+        header { padding: 15px 20px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
+        .logo-small { font-size: 24px; font-weight: 800; color: var(--gold); text-decoration: none; }
+        .back-btn { background: transparent; color: #ccc; text-decoration: none; border: 1px solid #333; padding: 8px 15px; border-radius: 10px; font-size: 14px; transition: 0.3s; }
+        .back-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
+        .converter-box { background: var(--card-bg); padding: 40px 20px; border-radius: 30px; border: 2px dashed #1f2937; position: relative; }
+        
+        #fileInput { display: none; }
+        .upload-label { cursor: pointer; display: block; }
+        .icon { font-size: 50px; margin-bottom: 15px; display: block; }
+        
+        .btn-gold { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 20px; font-size: 16px; width: 100%; display: none; }
+        
+        #preview { max-width: 100%; margin-top: 20px; border-radius: 15px; display: none; }
+        .status { margin-top: 15px; color: var(--gold); font-weight: 600; }
+
+        footer { margin-top: 50px; padding: 20px; color: #666; font-style: italic; }
+        .sadsha { color: var(--gold); font-weight: 800; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-small">RembgHD</a>
+        <a href="index.html" class="back-btn">← Back</a>
+    </header>
+
+    <div class="container">
+        <h1>Image to WebP</h1>
+        <p style="color: #aaa; margin-bottom: 30px;">Convert JPG/PNG to Next-Gen WebP format instantly.</p>
+
+        <div class="converter-box" id="dropZone">
+            <label for="fileInput" class="upload-label">
+                <span class="icon">⚡</span>
+                <span id="fileName">Click to Upload or Drag & Drop</span>
+                <input type="file" id="fileInput" accept="image/*">
+            </label>
+            <img id="preview">
+            <div id="status" class="status"></div>
+            <button id="downloadBtn" class="btn-gold">Download WebP</button>
+        </div>
+
+        <footer>Powered by <span class="sadsha">SadSha</span> ❤️</footer>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const status = document.getElementById('status');
+        const fileNameText = document.getElementById('fileName');
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileNameText.innerText = file.name;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                    downloadBtn.style.display = 'block';
+                    status.innerText = 'Ready to convert!';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        downloadBtn.addEventListener('click', function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                canvas.toBlob(function(blob) {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'rembgHD-' + Date.now() + '.webp';
+                    link.click();
+                    status.innerText = 'Success! Image Downloaded.';
+                }, 'image/webp', 0.8); // 0.8 is the quality
+            };
+            img.src = preview.src;
+        });
+    </script>
+</body>
+</html>
