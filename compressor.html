@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compress Image - RembgHD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
+        
+        header { padding: 15px 20px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
+        .logo-small { font-size: 24px; font-weight: 800; color: var(--gold); text-decoration: none; }
+        .back-btn { background: transparent; color: #ccc; text-decoration: none; border: 1px solid #333; padding: 8px 15px; border-radius: 10px; font-size: 14px; transition: 0.3s; }
+        .back-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
+        .tool-box { background: var(--card-bg); padding: 40px 20px; border-radius: 30px; border: 2px dashed #1f2937; }
+        
+        #fileInput { display: none; }
+        .upload-label { cursor: pointer; display: block; }
+        .icon { font-size: 50px; margin-bottom: 15px; display: block; }
+        
+        .controls { margin-top: 20px; display: none; }
+        input[type="range"] { width: 100%; accent-color: var(--gold); margin: 15px 0; }
+        
+        .btn-gold { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 20px; font-size: 16px; width: 100%; display: none; }
+        
+        #preview { max-width: 100%; margin-top: 20px; border-radius: 15px; display: none; border: 1px solid #333; }
+        .info { margin-top: 15px; font-size: 14px; color: #aaa; }
+
+        footer { margin-top: 50px; padding: 20px; color: #666; font-style: italic; }
+        .sadsha { color: var(--gold); font-weight: 800; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-small">RembgHD</a>
+        <a href="index.html" class="back-btn">← Back</a>
+    </header>
+
+    <div class="container">
+        <h1>Compress Image</h1>
+        <p style="color: #aaa; margin-bottom: 30px;">Reduce size without losing quality.</p>
+
+        <div class="tool-box">
+            <label for="fileInput" class="upload-label" id="dropZone">
+                <span class="icon">📉</span>
+                <span id="fileName">Select Image to Compress</span>
+                <input type="file" id="fileInput" accept="image/jpeg, image/png">
+            </label>
+
+            <div class="controls" id="controls">
+                <p>Compression Quality: <span id="qualVal">80</span>%</p>
+                <input type="range" id="quality" min="10" max="100" value="80">
+                <div class="info" id="sizeInfo"></div>
+                <button id="compressBtn" class="btn-gold">Compress & Download</button>
+            </div>
+
+            <img id="preview">
+        </div>
+
+        <footer>Powered by <span class="sadsha">SadSha</span> ❤️</footer>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const compressBtn = document.getElementById('compressBtn');
+        const qualityInput = document.getElementById('quality');
+        const qualVal = document.getElementById('qualVal');
+        const controls = document.getElementById('controls');
+        const sizeInfo = document.getElementById('sizeInfo');
+
+        qualityInput.oninput = () => qualVal.innerText = qualityInput.value;
+
+        fileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                    controls.style.display = 'block';
+                    compressBtn.style.display = 'block';
+                    sizeInfo.innerText = "Original Size: " + (file.size / 1024).toFixed(2) + " KB";
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        compressBtn.onclick = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.src = preview.src;
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                const quality = qualityInput.value / 100;
+                
+                canvas.toBlob((blob) => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'compressed-' + Date.now() + '.jpg';
+                    link.click();
+                }, 'image/jpeg', quality);
+            };
+        };
+    </script>
+</body>
+</html>
