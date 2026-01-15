@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer - RembgHD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
+        header { padding: 15px 20px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
+        .logo-small { font-size: 24px; font-weight: 800; color: var(--gold); text-decoration: none; }
+        .back-btn { background: transparent; color: #ccc; text-decoration: none; border: 1px solid #333; padding: 8px 15px; border-radius: 10px; font-size: 14px; transition: 0.3s; }
+        .container { max-width: 600px; margin: 40px auto; padding: 20px; }
+        .tool-box { background: var(--card-bg); padding: 40px 20px; border-radius: 30px; border: 1px solid #1f2937; }
+        input[type="number"] { background: #1f2937; border: 1px solid #333; color: white; padding: 10px; border-radius: 8px; width: 80px; margin: 10px; }
+        .btn-gold { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 20px; width: 100%; }
+        #preview { max-width: 100%; border-radius: 15px; margin-top: 20px; display: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-small">RembgHD</a>
+        <a href="index.html" class="back-btn">← Back</a>
+    </header>
+    <div class="container">
+        <h1>Image Resizer</h1>
+        <div class="tool-box">
+            <input type="file" id="upload" accept="image/*" style="margin-bottom: 20px;">
+            <div id="controls" style="display:none;">
+                Width: <input type="number" id="width"> 
+                Height: <input type="number" id="height">
+                <button class="btn-gold" onclick="resizeImage()">Resize & Download</button>
+            </div>
+            <canvas id="canvas" style="display:none;"></canvas>
+            <img id="preview">
+        </div>
+    </div>
+    <script>
+        const upload = document.getElementById('upload');
+        const preview = document.getElementById('preview');
+        const canvas = document.getElementById('canvas');
+        let originalImage = new Image();
+
+        upload.onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                originalImage.src = event.target.result;
+                originalImage.onload = () => {
+                    document.getElementById('width').value = originalImage.width;
+                    document.getElementById('height').value = originalImage.height;
+                    preview.src = originalImage.src;
+                    preview.style.display = 'block';
+                    document.getElementById('controls').style.display = 'block';
+                };
+            };
+            reader.readAsDataURL(file);
+        };
+
+        function resizeImage() {
+            const ctx = canvas.getContext('2d');
+            canvas.width = document.getElementById('width').value;
+            canvas.height = document.getElementById('height').value;
+            ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+            const link = document.createElement('a');
+            link.download = 'resized-rembgHD.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>
