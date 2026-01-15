@@ -3,112 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - Free AI Image Tools | Powered by SadSha</title>
+    <title>RembgHD - Premium AI Photo Tools (Free Forever)</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); text-align: center; color: #fff; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; line-height: 1.6; }
         
-        /* Gap Kam karne ke liye padding adjust ki hai */
-        header { padding: 40px 20px 10px 20px; } 
-        .logo-text { font-size: 48px; font-weight: 800; color: var(--gold); margin: 0; }
-        .slogan { color: #aaa; font-size: 18px; font-style: italic; margin-top: 5px; }
+        header { padding: 40px 20px; text-align: center; background: linear-gradient(180deg, #111827 0%, #0b0f19 100%); }
+        .logo { font-size: 48px; font-weight: 800; color: var(--gold); margin-bottom: 10px; letter-spacing: -1px; }
+        .slogan { font-size: 18px; color: #9ca3af; font-weight: 400; margin-bottom: 20px; }
+        .badge { background: rgba(255, 215, 0, 0.1); color: var(--gold); padding: 5px 15px; border-radius: 50px; font-size: 14px; font-weight: 600; border: 1px solid rgba(255, 215, 0, 0.3); }
 
-        .main-container { max-width: 1100px; margin: 0 auto; padding: 20px 20px 40px 20px; } /* Top padding kam kar di */
-        
-        .tools-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 20px; 
-            justify-content: center;
-        }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
 
-        .tool-link { 
+        .tool-card { 
             background: var(--card-bg); 
-            padding: 30px 20px; 
-            border-radius: 25px; 
-            border: 1px solid #1f2937; 
+            border-radius: 24px; 
+            padding: 30px; 
             text-decoration: none; 
-            color: #fff; 
-            transition: 0.3s ease; 
-            display: block; 
+            color: white; 
+            transition: all 0.3s ease; 
+            border: 1px solid #1f2937;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-
-        .tool-link:hover { 
-            transform: translateY(-8px); 
-            border-color: var(--gold); 
-            box-shadow: 0 12px 30px rgba(255, 215, 0, 0.1); 
-        }
+        .tool-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .icon-box { font-size: 40px; margin-bottom: 20px; }
+        .tool-card h3 { font-size: 22px; margin: 0 0 10px 0; color: var(--gold); }
+        .tool-card p { font-size: 15px; color: #9ca3af; margin: 0; }
         
-        .icon-box { font-size: 40px; margin-bottom: 12px; display: block; }
-        .tool-link h3 { color: var(--gold); margin: 5px 0; font-size: 20px; font-weight: 600; }
-        .tool-link p { color: #ccc; font-size: 14px; margin: 0; line-height: 1.4; }
+        .action-text { margin-top: 20px; font-weight: 800; font-size: 14px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
 
-        .powered-by { margin: 50px 0; font-style: italic; color: #666; font-size: 16px; }
+        footer { margin-top: 80px; padding: 40px; text-align: center; border-top: 1px solid #1f2937; color: #666; font-style: italic; }
         .sadsha { color: var(--gold); font-weight: 800; }
-
-        footer { padding: 30px; background: #05070a; border-top: 1px solid #151921; }
-        .footer-links a { color: #888; text-decoration: none; margin: 0 15px; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1 class="logo-text">RembgHD</h1>
-        <p class="slogan">Premium AI Tools for Everyone...</p>
+        <div class="logo">RembgHD</div>
+        <div class="slogan">Premium AI Image processing tools for Everyone</div>
+        <span class="badge">It's free & always will be</span>
     </header>
 
-    <div class="main-container">
-        <div class="tools-grid">
-            <a href="remover.html" class="tool-link">
-                <span class="icon-box">🖼️</span>
-                <h3>HD BG Remover</h3>
-                <p>Remove backgrounds in Ultra HD quality with AI.</p>
+    <div class="container">
+        <div class="grid">
+            <a href="remover.html" class="tool-card">
+                <div>
+                    <div class="icon-box">🖼️</div>
+                    <h3>HD BG Remover</h3>
+                    <p>Remove backgrounds with AI precision. No quality loss, instant download.</p>
+                </div>
+                <div class="action-text">Try Now →</div>
             </a>
 
-            <a href="enhancer.html" class="tool-link">
-                <span class="icon-box">💎</span>
-                <h3>AI Image Enhancer</h3>
-                <p>Upscale and fix blurry photos instantly.</p>
+            <a href="webp-converter.html" class="tool-card">
+                <div>
+                    <div class="icon-box">⚡</div>
+                    <h3>Image to WebP</h3>
+                    <p>Convert PNG/JPG to WebP format to speed up your website.</p>
+                </div>
+                <div class="action-text">Try Now →</div>
             </a>
 
-            <a href="webp-converter.html" class="tool-link">
-                <span class="icon-box">⚡</span>
-                <h3>Image to WebP</h3>
-                <p>Convert images to fast-loading WebP format.</p>
+            <a href="compressor.html" class="tool-card">
+                <div>
+                    <div class="icon-box">📉</div>
+                    <h3>Image Compressor</h3>
+                    <p>Reduce file size by up to 90% while maintaining HD quality.</p>
+                </div>
+                <div class="action-text">Try Now →</div>
             </a>
 
-            <a href="compressor.html" class="tool-link">
-                <span class="icon-box">📉</span>
-                <h3>Compress Image</h3>
-                <p>Reduce file size without quality loss.</p>
+            <a href="resizer.html" class="tool-card">
+                <div>
+                    <div class="icon-box">📏</div>
+                    <h3>Smart Resizer</h3>
+                    <p>Change image dimensions for Instagram, YouTube, and more.</p>
+                </div>
+                <div class="action-text">Try Now →</div>
             </a>
 
-            <a href="filters.html" class="tool-link">
-                <span class="icon-box">🎨</span>
-                <h3>AI Photo Filters</h3>
-                <p>Add professional effects to your photos.</p>
+            <a href="filters.html" class="tool-card">
+                <div>
+                    <div class="icon-box">🎨</div>
+                    <h3>Artistic Filters</h3>
+                    <p>Apply stunning filters and effects to your photos instantly.</p>
+                </div>
+                <div class="action-text">Try Now →</div>
             </a>
-
-            <a href="resizer.html" class="tool-link">
-                <span class="icon-box">📏</span>
-                <h3>Photo Resizer</h3>
-                <p>Resize images to custom dimensions easily.</p>
+            
+             <a href="enhancer.html" class="tool-card">
+                <div>
+                    <div class="icon-box">✨</div>
+                    <h3>AI Enhancer</h3>
+                    <p>Sharpen and upscale blurry photos using Deep Learning AI.</p>
+                </div>
+                <div class="action-text">Try Now →</div>
             </a>
         </div>
 
-        <div class="powered-by">
-            Powered by <span class="sadsha">SadSha</span> ❤️
-        </div>
+        <footer>Powered by <span class="sadsha">SadSha</span> ❤️ | Designed for the Community</footer>
     </div>
-
-    <footer>
-        <div class="footer-links">
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms & Conditions</a>
-            <a href="contact.html">Contact Us</a>
-        </div>
-    </footer>
 
 </body>
 </html>
