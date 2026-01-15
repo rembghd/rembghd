@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Filters - RembgHD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
+        header { padding: 15px 20px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
+        .logo-small { font-size: 24px; font-weight: 800; color: var(--gold); text-decoration: none; }
+        .back-btn { background: transparent; color: #ccc; text-decoration: none; border: 1px solid #333; padding: 8px 15px; border-radius: 10px; font-size: 14px; }
+        .container { max-width: 700px; margin: 40px auto; padding: 20px; }
+        .tool-box { background: var(--card-bg); padding: 30px; border-radius: 30px; border: 1px solid #1f2937; }
+        .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-top: 20px; }
+        .filter-btn { background: #1f2937; color: white; border: 1px solid #333; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .filter-btn:hover { border-color: var(--gold); }
+        .btn-gold { background: var(--gold); color: #000; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 20px; width: 100%; }
+        #preview { max-width: 100%; border-radius: 15px; margin-top: 20px; display: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-small">RembgHD</a>
+        <a href="index.html" class="back-btn">← Back</a>
+    </header>
+    <div class="container">
+        <h1>Artistic Filters</h1>
+        <div class="tool-box">
+            <input type="file" id="upload" accept="image/*">
+            <img id="preview">
+            <div class="filter-grid" id="controls" style="display:none;">
+                <button class="filter-btn" onclick="applyFilter('none')">Original</button>
+                <button class="filter-btn" onclick="applyFilter('grayscale(100%)')">B&W</button>
+                <button class="filter-btn" onclick="applyFilter('sepia(100%)')">Retro</button>
+                <button class="filter-btn" onclick="applyFilter('blur(5px)')">Blur</button>
+                <button class="filter-btn" onclick="applyFilter('hue-rotate(90deg)')">Neon</button>
+                <button class="filter-btn" onclick="applyFilter('invert(100%)')">Invert</button>
+            </div>
+            <button id="dl" class="btn-gold" style="display:none;" onclick="downloadImage()">Download Filtered Image</button>
+        </div>
+    </div>
+    <script>
+        const upload = document.getElementById('upload');
+        const preview = document.getElementById('preview');
+        let currentFilter = 'none';
+
+        upload.onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                preview.src = event.target.result;
+                preview.style.display = 'block';
+                document.getElementById('controls').style.display = 'grid';
+                document.getElementById('dl').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        };
+
+        function applyFilter(filter) {
+            currentFilter = filter;
+            preview.style.filter = filter;
+        }
+
+        function downloadImage() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.src = preview.src;
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.filter = currentFilter;
+                ctx.drawImage(img, 0, 0);
+                const link = document.createElement('a');
+                link.download = 'filter-rembgHD.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            };
+        }
+    </script>
+</body>
+</html>
