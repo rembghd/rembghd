@@ -29,16 +29,26 @@
         .tool-info h1 { color: var(--gold); margin-bottom: 5px; }
         .tool-info p { color: #aaa; margin: 0; }
 
-        /* iframe Styling */
+        /* Iframe Trick: Text hide karne ke liye container adjust kiya gaya hai */
         .iframe-wrapper { 
-            background: var(--card-bg); 
+            background: #ffffff; /* Tool ka apna background white hai is liye ye white hi rahay ga taake gap na dikhay */
             border-radius: 20px; 
             overflow: hidden; 
             border: 1px solid #1f2937; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             margin-bottom: 30px;
+            position: relative;
+            height: 700px; /* Height thori kam ki hai taake niche ka footer hide ho jaye */
         }
-        iframe { width: 100%; border: none; }
+
+        iframe { 
+            width: 100%; 
+            height: 1000px; /* Iframe ko bada rakha hai */
+            border: none; 
+            position: absolute;
+            top: -280px; /* Iframe ko upar move kar dia taake wo text area hide ho jaye */
+            left: 0;
+        }
 
         footer { padding: 30px; color: #666; font-size: 14px; font-style: italic; }
         .sadsha { color: var(--gold); font-weight: 800; }
@@ -61,8 +71,6 @@
             <iframe
                 src="https://briaai-bria-rmbg-2-0.hf.space"
                 frameborder="0"
-                width="100%"
-                height="800"
             ></iframe>
         </div>
 
