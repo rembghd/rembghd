@@ -9,60 +9,51 @@
         :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
         
-        header { padding: 20px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
+        header { padding: 15px 20px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
         .logo-small { font-size: 24px; font-weight: 800; color: var(--gold); text-decoration: none; }
         
-        .back-btn { 
-            background: transparent; 
-            color: #ccc; 
-            text-decoration: none; 
-            border: 1px solid #333; 
-            padding: 8px 15px; 
-            border-radius: 10px; 
-            font-size: 14px; 
-            transition: 0.3s;
-        }
+        .back-btn { background: transparent; color: #ccc; text-decoration: none; border: 1px solid #333; padding: 8px 15px; border-radius: 10px; font-size: 14px; transition: 0.3s; }
         .back-btn:hover { border-color: var(--gold); color: var(--gold); }
 
-        .tool-container { padding: 15px; max-width: 1200px; margin: 0 auto; }
-        .tool-info { margin-bottom: 20px; }
-        .tool-info h1 { color: var(--gold); margin-bottom: 5px; font-size: 28px; }
-        .tool-info p { color: #aaa; margin: 0; font-size: 15px; }
+        .tool-container { padding: 10px; max-width: 1200px; margin: 0 auto; }
+        .tool-info { margin-bottom: 15px; }
+        .tool-info h1 { color: var(--gold); margin-bottom: 5px; font-size: 24px; }
+        .tool-info p { color: #aaa; margin: 0; font-size: 14px; }
 
-        /* Iframe Container */
+        /* Updated Iframe Container to prevent bottom cutting */
         .iframe-wrapper { 
             background: #0b0f19; 
             border-radius: 20px; 
             overflow: hidden; 
             border: 1px solid #1f2937; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             position: relative;
-            height: 700px; /* Default height for Laptop */
+            height: 850px; /* PC par height barha di taake niche se na kate */
         }
 
         iframe { 
             width: 100%; 
-            height: 1200px; 
+            height: 1500px; /* Iframe ki apni height zyada rakhi hai */
             border: none; 
             position: absolute;
-            top: -285px; /* Default crop for Laptop */
+            top: -285px; /* PC crop */
             left: 0;
         }
 
-        /* --- Mobile Specific Fix --- */
+        /* Responsive Fix for Mobile */
         @media (max-width: 768px) {
             .iframe-wrapper {
-                height: 780px; /* Mobile par container thora lamba rakha hai */
+                height: 1000px; /* Mobile par lamba interface hota hai isliye height zyada ki */
             }
             iframe {
-                top: -380px; /* Mobile par text area bada hota hai, isliye zyada crop kiya */
-                height: 1300px;
+                top: -460px; /* Mobile par text hide karne ke liye mazeed upar kiya */
+                height: 1800px;
             }
-            .tool-info h1 { font-size: 22px; }
+            .tool-info h1 { font-size: 20px; }
         }
 
-        footer { padding: 30px; color: #666; font-size: 14px; font-style: italic; }
+        footer { padding: 20px; color: #666; font-size: 14px; font-style: italic; }
         .sadsha { color: var(--gold); font-weight: 800; }
     </style>
 </head>
@@ -80,10 +71,7 @@
         </div>
 
         <div class="iframe-wrapper">
-            <iframe
-                src="https://briaai-bria-rmbg-2-0.hf.space?__theme=dark"
-                frameborder="0"
-            ></iframe>
+            <iframe src="https://briaai-bria-rmbg-2-0.hf.space?__theme=dark" frameborder="0"></iframe>
         </div>
 
         <footer>
