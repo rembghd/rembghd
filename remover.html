@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; overflow-x: hidden; }
         
         header { padding: 15px 20px; border-bottom: 1px solid #1f2937; display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; }
         .logo-small { font-size: 24px; font-weight: 800; color: var(--gold); text-decoration: none; }
@@ -20,7 +20,7 @@
         .tool-info h1 { color: var(--gold); margin-bottom: 5px; font-size: 24px; }
         .tool-info p { color: #aaa; margin: 0; font-size: 14px; }
 
-        /* Updated Iframe Container to prevent bottom cutting */
+        /* Container for Iframe */
         .iframe-wrapper { 
             background: #0b0f19; 
             border-radius: 20px; 
@@ -29,26 +29,26 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             margin-bottom: 20px;
             position: relative;
-            height: 850px; /* PC par height barha di taake niche se na kate */
+            height: 950px; /* PC height barha di taake niche se safe rahay */
         }
 
         iframe { 
             width: 100%; 
-            height: 1500px; /* Iframe ki apni height zyada rakhi hai */
+            height: 2000px; /* Internal height kafi zyada rakhi hai */
             border: none; 
             position: absolute;
-            top: -285px; /* PC crop */
+            top: -300px; /* PC crop adjustment */
             left: 0;
         }
 
         /* Responsive Fix for Mobile */
         @media (max-width: 768px) {
             .iframe-wrapper {
-                height: 1000px; /* Mobile par lamba interface hota hai isliye height zyada ki */
+                height: 1150px; /* Mobile par tool lamba hota hai, is liye container bada rakha */
             }
             iframe {
-                top: -460px; /* Mobile par text hide karne ke liye mazeed upar kiya */
-                height: 1800px;
+                top: -510px; /* Mobile par text hide karne ke liye mazeed upar move kiya */
+                height: 2500px;
             }
             .tool-info h1 { font-size: 20px; }
         }
