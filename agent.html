@@ -3,163 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CreatorFlow AI Agent</title>
+    <title>CreatorFlow AI - Active Agent</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: white; display: flex; flex-direction: column; min-height: 100vh; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .disabled-box { opacity: 0.15; pointer-events: none; filter: grayscale(1); }
-        main { flex: 1; }
+        body { background-color: #020617; color: #f8fafc; font-family: sans-serif; }
+        .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+        .promo-banner { background: linear-gradient(90deg, #1e3a8a, #3b82f6, #1e3a8a); }
+        .hidden-dash { display: none; }
     </style>
 </head>
-<body class="p-4 md:p-10">
-    <main class="max-w-4xl mx-auto w-full">
-        <h1 class="text-4xl font-extrabold text-blue-500 mb-8 text-center tracking-tighter">CreatorFlow AI Agent</h1>
+<body class="p-4 md:p-8">
 
-        <div class="glass p-6 rounded-2xl mb-10 border border-blue-500/20">
-            <h2 class="text-lg font-bold mb-4 text-blue-200">1. System Activation</h2>
-            <div class="flex flex-col md:flex-row gap-4">
-                <input type="text" id="licenseKey" placeholder="Paste Key (1M-ABCD...)" 
-                       class="flex-1 p-3 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-blue-500">
-                <button id="activateBtn" onclick="doActivate()" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold transition-all">Activate</button>
+    <div class="max-w-4xl mx-auto mb-6 promo-banner p-3 rounded-lg text-center shadow-2xl border border-blue-400/30">
+        <p class="text-xs md:text-sm font-bold tracking-wide">
+            🚀 PRO OFFER: Get <span class="text-yellow-400">15 Days Bonus</span> & 1-Time Page Replacement on <span class="text-yellow-400">3-Month Plans!</span>
+        </p>
+    </div>
+
+    <main class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-black text-blue-500 mb-2 text-center">CREATORFLOW AI</h1>
+        <p class="text-center text-[10px] text-slate-500 uppercase tracking-[0.4em] mb-10">Silver & Golden Plan Automation</p>
+
+        <div id="activationBox" class="glass-card p-6 rounded-2xl mb-8">
+            <h2 class="text-sm font-bold text-blue-300 uppercase mb-4 tracking-tighter italic">Key Activation Required</h2>
+            <div class="flex flex-col md:flex-row gap-3">
+                <input type="text" id="licenseKey" maxlength="24" placeholder="Enter 24-char Key (e.g. 3M-Golden-XYZ...)" 
+                       class="flex-1 bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none focus:border-blue-500 text-sm">
+                <button onclick="checkKey()" class="bg-blue-600 hover:bg-blue-700 px-10 py-3 rounded-xl font-bold transition-all">Activate</button>
             </div>
-            <p id="msg" class="mt-4 font-bold text-sm text-center"></p>
+            <p id="statusMsg" class="mt-3 text-xs font-bold text-center"></p>
         </div>
 
-        <div id="mainDashboard" class="glass p-8 rounded-2xl disabled-box transition-all duration-500">
-            <h2 class="text-2xl font-bold mb-8 text-gray-300 border-b border-white/10 pb-2 text-center">2. Agent Configuration</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="space-y-4">
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Access Token</label>
-                    <input type="password" id="fbToken" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
-                    
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Page ID</label>
-                    <input type="text" id="fbPageId" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
+        <div id="agentDashboard" class="hidden-dash space-y-6">
+            <div class="glass-card p-6 rounded-2xl border-t-4 border-blue-500">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">Agent Configuration</h2>
+                    <div id="countdownBox" class="text-right text-xs bg-blue-500/20 px-3 py-1 rounded-full text-blue-300 font-mono"></div>
                 </div>
 
-                <div class="space-y-4">
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Select AI Model</label>
-                    <select id="aiModel" class="w-full p-3 rounded-lg bg-slate-800 border-none text-white outline-none">
-                        <option value="Gemini">Google Gemini (Recommended)</option>
-                        <option value="OpenAI">OpenAI (ChatGPT)</option>
-                        <option value="Grok">xAI (Grok)</option>
-                    </select>
-
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">AI API Key</label>
-                    <input type="password" id="aiApiKey" placeholder="Enter API Key for selected model" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
+                <div id="reviewAlert" class="mb-6 p-4 bg-yellow-900/30 border border-yellow-600/50 rounded-xl text-center hidden">
+                    <p class="text-yellow-500 text-xs font-bold italic">⏳ APPLICATION UNDER REVIEW: Your page replacement request is being verified. Please check back after 24 hours.</p>
                 </div>
-            </div>
 
-            <div class="space-y-6 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Select Niche</label>
-                        <select id="contentNiche" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            <option value="Motivational Quotes">Motivational Quotes</option>
-                            <option value="Islamic Content">Islamic Content</option>
-                            <option value="Tech News">Tech News</option>
-                            <option value="Health Tips">Health Tips</option>
-                            <option value="Business Finance">Business & Finance</option>
-                            <option value="Custom Prompt">Custom (Write Below)</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Language</label>
-                        <select id="postLanguage" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            <option value="Roman Urdu">Roman Urdu</option>
-                            <option value="Roman Hindi">Roman Hindi</option>
-                            <option value="British English">British English</option>
-                            <option value="American English">American English</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Frequency</label>
-                        <select id="frequency" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            <option>Every 2 Hours</option>
-                            <option>Every 6 Hours</option>
-                            <option>Once a Day</option>
-                        </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <input type="password" id="fbToken" placeholder="Facebook Access Token" class="bg-slate-900 p-3 rounded-lg text-sm border border-slate-800 outline-none">
+                    <div class="relative">
+                        <input type="text" id="fbPageId" placeholder="Facebook Page ID" class="w-full bg-slate-900 p-3 rounded-lg text-sm border border-slate-800 outline-none">
+                        <button id="replaceBtn" onclick="requestReplacement()" class="absolute right-2 top-2 bg-red-600 text-[9px] px-2 py-1.5 rounded font-bold uppercase hidden">Claim Replacement</button>
                     </div>
                 </div>
 
-                <div>
-                    <label class="text-sm font-bold text-blue-300 uppercase tracking-widest flex items-center gap-2 mb-3">
-                        🤖 What should the Agent post?
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-900/50 p-4 rounded-xl">
+                    <select class="bg-slate-800 p-2 rounded text-xs outline-none"><option>Gemini-Pro</option></select>
+                    <select class="bg-slate-800 p-2 rounded text-xs outline-none"><option>Roman Urdu</option><option>English</option></select>
+                    <select id="frequencyDrop" class="bg-slate-800 p-2 rounded text-xs outline-none font-bold text-blue-400"></select>
+                </div>
+
+                <div class="mt-8">
+                    <label class="flex items-center gap-3 mb-6 cursor-pointer">
+                        <input type="checkbox" id="riskCheck" class="w-4 h-4 accent-red-600">
+                        <span class="text-[10px] text-slate-400 italic">I accept full responsibility for any account-related issues or bans.</span>
                     </label>
-                    <textarea id="userPrompt" rows="3" 
-                              class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white focus:ring-2 focus:ring-blue-600 outline-none"
-                              placeholder="Example: I want motivational quotes with nature backgrounds..."></textarea>
-                </div>
-
-                <div class="p-4 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50">
-                    <label class="text-xs font-bold text-blue-300 uppercase block mb-2">📸 Upload Reference Image (Optional)</label>
-                    <input type="file" id="refImage" accept="image/*" 
-                           class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
-                </div>
-                
-                <div class="flex items-center gap-3">
-                    <input type="checkbox" id="genImage" checked class="w-5 h-5 accent-blue-600">
-                    <label for="genImage" class="text-sm text-gray-300">Generate AI Images for every post</label>
+                    <button class="w-full bg-green-600 hover:bg-green-700 py-4 rounded-xl font-black tracking-widest text-lg">START AI AGENT</button>
                 </div>
             </div>
-
-            <button onclick="startPosting()" class="w-full mt-10 bg-green-500 hover:bg-green-600 text-slate-900 py-5 rounded-2xl font-black text-2xl shadow-lg transition-all transform hover:scale-[1.01]">
-                START AI AGENT
-            </button>
-            <p id="agentStatus" class="mt-4 text-center text-yellow-500 font-medium"></p>
         </div>
     </main>
 
-    <footer class="mt-10 pb-6 text-center border-t border-white/5 pt-6">
-        <p class="text-gray-500 text-sm tracking-widest italic">
-            Powered by <span class="text-yellow-500 font-bold not-italic">SadSha</span> | Designed for the Community
-        </p>
+    <footer class="mt-20 py-6 text-center border-t border-slate-900">
+        <p class="text-slate-600 text-[10px] tracking-[0.5em] uppercase italic font-bold">Powered by <span class="text-yellow-600 not-italic">SadSha</span></p>
     </footer>
 
     <script>
-        const API_URL = "https://creator-agent-backend.vercel.app/activate";
-
-        async function doActivate() {
+        function checkKey() {
             const key = document.getElementById('licenseKey').value;
-            const msg = document.getElementById('msg');
-            const dash = document.getElementById('mainDashboard');
+            const msg = document.getElementById('statusMsg');
+            const dash = document.getElementById('agentDashboard');
+            const freq = document.getElementById('frequencyDrop');
+            const countBox = document.getElementById('countdownBox');
 
-            if(!key) { msg.innerHTML = "❌ Please enter a key!"; return; }
-            msg.innerHTML = "⏳ Verifying...";
+            // --- Demo Check ---
+            if(key.length === 24) {
+                msg.innerText = "Processing Activation...";
+                msg.style.color = "cyan";
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ key: key })
-                });
-                const data = await response.json();
-                if (data.status === "success") {
-                    msg.innerHTML = "✅ Success: " + data.message;
+                setTimeout(() => {
+                    msg.innerText = "System Activated Successfully!";
                     msg.style.color = "#4ade80";
-                    dash.classList.remove('disabled-box');
-                    localStorage.setItem('activated', 'true');
-                } else {
-                    msg.innerHTML = "❌ Invalid Key";
-                    msg.style.color = "#f87171";
-                }
-            } catch (err) {
-                msg.innerHTML = "❌ Connection Failed!";
+                    document.getElementById('activationBox').style.display = 'none';
+                    dash.classList.remove('hidden-dash');
+
+                    // Set Limits based on key word
+                    if(key.toLowerCase().includes("silver")) {
+                        freq.innerHTML = '<option>1 Post Daily</option><option>3 Posts Daily</option><option>6 Posts Daily</option>';
+                    } else {
+                        freq.innerHTML = '<option>10 Posts Daily</option><option>15 Posts Daily</option><option>20 Posts Daily</option>';
+                    }
+
+                    // Set Days
+                    let days = key.startsWith("3M") ? 105 : (key.startsWith("2M") ? 60 : 30);
+                    countBox.innerText = `EXPIRES IN: ${days} DAYS`;
+
+                    // Show Replacement Button only for 3M
+                    if(key.startsWith("3M")) document.getElementById('replaceBtn').classList.remove('hidden');
+
+                }, 1200);
+            } else {
+                msg.innerText = "Error: Key must be 24 characters.";
+                msg.style.color = "#f87171";
             }
         }
 
-        function startPosting() {
-            const status = document.getElementById('agentStatus');
-            status.innerHTML = "🚀 Initializing AI Agent...";
-        }
-
-        if(localStorage.getItem('activated') === 'true') {
-            document.getElementById('mainDashboard').classList.remove('disabled-box');
-            document.getElementById('msg').innerHTML = "✅ System Active";
-            document.getElementById('msg').style.color = "#4ade80";
+        function requestReplacement() {
+            if(confirm("Submit proof of ban to support. Your request will be reviewed for 24 hours. Proceed?")) {
+                document.getElementById('fbPageId').disabled = true;
+                document.getElementById('replaceBtn').style.display = 'none';
+                document.getElementById('reviewAlert').classList.remove('hidden');
+            }
         }
     </script>
 </body>
