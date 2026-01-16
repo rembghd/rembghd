@@ -31,15 +31,15 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="space-y-4">
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Access Token</label>
-                    <input type="password" id="fbToken" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                    <input type="password" id="fbToken" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
                     
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Page ID</label>
-                    <input type="text" id="fbPageId" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                    <input type="text" id="fbPageId" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
                 </div>
 
                 <div class="space-y-4">
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Gemini AI Key</label>
-                    <input type="password" id="geminiKey" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                    <input type="password" id="geminiKey" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
                     
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Posting Frequency</label>
                     <select id="frequency" class="w-full p-3 rounded-lg bg-slate-800 border-none text-white">
@@ -50,13 +50,22 @@
                 </div>
             </div>
 
-            <div class="space-y-4 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
-                <label class="text-sm font-bold text-blue-300 uppercase tracking-widest flex items-center gap-2">
-                    🤖 What should the Agent post?
-                </label>
-                <textarea id="userPrompt" rows="3" 
-                          class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white focus:ring-2 focus:ring-blue-600 outline-none"
-                          placeholder="Example: I want motivational quotes in Urdu with beautiful nature backgrounds..."></textarea>
+            <div class="space-y-6 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
+                <div>
+                    <label class="text-sm font-bold text-blue-300 uppercase tracking-widest flex items-center gap-2 mb-3">
+                        🤖 What should the Agent post?
+                    </label>
+                    <textarea id="userPrompt" rows="3" 
+                              class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white focus:ring-2 focus:ring-blue-600 outline-none"
+                              placeholder="Example: I want motivational quotes in Urdu with beautiful nature backgrounds..."></textarea>
+                </div>
+
+                <div class="p-4 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50">
+                    <label class="text-xs font-bold text-blue-300 uppercase block mb-2">📸 Upload Reference Image (Optional)</label>
+                    <p class="text-[10px] text-gray-400 mb-3 italic">Upload a sample image so the agent knows the style you like.</p>
+                    <input type="file" id="refImage" accept="image/*" 
+                           class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+                </div>
                 
                 <div class="flex items-center gap-3">
                     <input type="checkbox" id="genImage" checked class="w-5 h-5 accent-blue-600">
@@ -64,7 +73,7 @@
                 </div>
             </div>
 
-            <button onclick="startPosting()" class="w-full mt-10 bg-green-500 hover:bg-green-600 text-slate-900 py-5 rounded-2xl font-black text-2xl shadow-lg transition-all transform hover:scale-[1.02]">
+            <button onclick="startPosting()" class="w-full mt-10 bg-green-500 hover:bg-green-600 text-slate-900 py-5 rounded-2xl font-black text-2xl shadow-lg transition-all transform hover:scale-[1.01]">
                 START AI AGENT
             </button>
             <p id="agentStatus" class="mt-4 text-center text-yellow-500 font-medium"></p>
@@ -105,7 +114,7 @@
 
         function startPosting() {
             const status = document.getElementById('agentStatus');
-            status.innerHTML = "🚀 Agent Started! Connecting to Gemini AI to generate post based on your description...";
+            status.innerHTML = "🚀 Agent initialization started...";
         }
 
         if(localStorage.getItem('activated') === 'true') {
