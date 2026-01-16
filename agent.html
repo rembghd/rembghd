@@ -6,23 +6,20 @@
     <title>CreatorFlow AI Agent</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: white; display: flex; flex-direction: column; min-height: 100vh; font-family: sans-serif; }
+        body { background-color: #0f172a; color: white; display: flex; flex-direction: column; min-height: 100vh; }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .disabled-box { opacity: 0.2; pointer-events: none; filter: grayscale(1); }
+        .disabled-box { opacity: 0.15; pointer-events: none; filter: grayscale(1); }
         main { flex: 1; }
     </style>
 </head>
 <body class="p-4 md:p-10">
     <main class="max-w-4xl mx-auto w-full">
-        <h1 class="text-4xl font-extrabold text-blue-500 mb-2 text-center tracking-tighter">CreatorFlow AI Agent</h1>
-        <p class="text-center text-xs text-blue-300 mb-8 uppercase tracking-[0.2em]">
-            Silver: 1-6 posts/day | Golden: 10-20 posts/day
-        </p>
+        <h1 class="text-4xl font-extrabold text-blue-500 mb-8 text-center tracking-tighter">CreatorFlow AI Agent</h1>
 
         <div class="glass p-6 rounded-2xl mb-10 border border-blue-500/20">
             <h2 class="text-lg font-bold mb-4 text-blue-200">1. System Activation</h2>
             <div class="flex flex-col md:flex-row gap-4">
-                <input type="text" id="licenseKey" maxlength="24" placeholder="Enter 24-char Key (e.g., 1M-Silver-...)" 
+                <input type="text" id="licenseKey" placeholder="Paste Key (1M-ABCD...)" 
                        class="flex-1 p-3 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-blue-500">
                 <button id="activateBtn" onclick="doActivate()" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold transition-all">Activate</button>
             </div>
@@ -35,10 +32,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="space-y-4">
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Access Token</label>
-                    <input type="password" id="fbToken" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                    <input type="password" id="fbToken" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
                     
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Page ID</label>
-                    <input type="text" id="fbPageId" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                    <input type="text" id="fbPageId" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
                 </div>
 
                 <div class="space-y-4">
@@ -50,7 +47,7 @@
                     </select>
 
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">AI API Key</label>
-                    <input type="password" id="aiApiKey" placeholder="Enter API Key" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                    <input type="password" id="aiApiKey" placeholder="Enter API Key for selected model" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
                 </div>
             </div>
 
@@ -59,51 +56,57 @@
                     <div>
                         <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Select Niche</label>
                         <select id="contentNiche" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            <option>Motivational Quotes</option>
-                            <option>Islamic Content</option>
-                            <option>Tech News</option>
-                            <option>Health Tips</option>
-                            <option>Business & Finance</option>
-                            <option>Custom Prompt</option>
+                            <option value="Motivational Quotes">Motivational Quotes</option>
+                            <option value="Islamic Content">Islamic Content</option>
+                            <option value="Tech News">Tech News</option>
+                            <option value="Health Tips">Health Tips</option>
+                            <option value="Business Finance">Business & Finance</option>
+                            <option value="Custom Prompt">Custom (Write Below)</option>
                         </select>
                     </div>
                     
                     <div>
                         <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Language</label>
                         <select id="postLanguage" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            <option>Roman Urdu</option>
-                            <option>Roman Hindi</option>
-                            <option>British English</option>
-                            <option>American English</option>
+                            <option value="Roman Urdu">Roman Urdu</option>
+                            <option value="Roman Hindi">Roman Hindi</option>
+                            <option value="British English">British English</option>
+                            <option value="American English">American English</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Posts Per Day</label>
+                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Frequency</label>
                         <select id="frequency" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            </select>
+                            <option>Every 2 Hours</option>
+                            <option>Every 6 Hours</option>
+                            <option>Once a Day</option>
+                        </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-sm font-bold text-blue-300 uppercase tracking-widest flex items-center gap-2 mb-3">🤖 Post Instructions</label>
-                    <textarea id="userPrompt" rows="3" class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-blue-500" placeholder="Example: Motivational quotes with nature backgrounds..."></textarea>
+                    <label class="text-sm font-bold text-blue-300 uppercase tracking-widest flex items-center gap-2 mb-3">
+                        🤖 What should the Agent post?
+                    </label>
+                    <textarea id="userPrompt" rows="3" 
+                              class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white focus:ring-2 focus:ring-blue-600 outline-none"
+                              placeholder="Example: I want motivational quotes with nature backgrounds..."></textarea>
                 </div>
 
-                <div class="p-4 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50 text-center">
-                    <label class="text-xs font-bold text-blue-300 uppercase block mb-2 cursor-pointer">📸 Upload Style Reference</label>
-                    <input type="file" id="refImage" accept="image/*" class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+                <div class="p-4 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50">
+                    <label class="text-xs font-bold text-blue-300 uppercase block mb-2">📸 Upload Reference Image (Optional)</label>
+                    <input type="file" id="refImage" accept="image/*" 
+                           class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" id="genImage" checked class="w-5 h-5 accent-blue-600">
+                    <label for="genImage" class="text-sm text-gray-300">Generate AI Images for every post</label>
                 </div>
             </div>
 
-            <div class="mt-8 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
-                <label class="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" id="disclaimerCheck" class="w-5 h-5 accent-red-500">
-                    <span class="text-sm text-gray-300 italic">I accept full responsibility for any account-related issues or bans resulting from AI automation.</span>
-                </label>
-            </div>
-
-            <button onclick="startPosting()" id="startBtn" class="w-full mt-6 bg-green-500 hover:bg-green-600 text-slate-900 py-5 rounded-2xl font-black text-2xl shadow-lg transition-all transform hover:scale-[1.01]">
+            <button onclick="startPosting()" class="w-full mt-10 bg-green-500 hover:bg-green-600 text-slate-900 py-5 rounded-2xl font-black text-2xl shadow-lg transition-all transform hover:scale-[1.01]">
                 START AI AGENT
             </button>
             <p id="agentStatus" class="mt-4 text-center text-yellow-500 font-medium"></p>
@@ -111,57 +114,52 @@
     </main>
 
     <footer class="mt-10 pb-6 text-center border-t border-white/5 pt-6">
-        <p class="text-gray-500 text-xs tracking-widest">
-            Powered by <span class="text-yellow-500 font-bold">SadSha</span> | Professional AI Solutions
+        <p class="text-gray-500 text-sm tracking-widest italic">
+            Powered by <span class="text-yellow-500 font-bold not-italic">SadSha</span> | Designed for the Community
         </p>
     </footer>
 
     <script>
-        function doActivate() {
+        const API_URL = "https://creator-agent-backend.vercel.app/activate";
+
+        async function doActivate() {
             const key = document.getElementById('licenseKey').value;
             const msg = document.getElementById('msg');
             const dash = document.getElementById('mainDashboard');
-            const freq = document.getElementById('frequency');
 
-            if(key.length < 24) { 
-                msg.innerHTML = "❌ Key must be exactly 24 characters!"; 
-                msg.style.color = "#f87171";
-                return; 
-            }
+            if(!key) { msg.innerHTML = "❌ Please enter a key!"; return; }
+            msg.innerHTML = "⏳ Verifying...";
 
-            // Simple Logic for Demo - In real, this fetches from your Vercel backend
-            msg.innerHTML = "⏳ Validating License...";
-            
-            setTimeout(() => {
-                let plan = "";
-                if(key.toLowerCase().includes("silver")) {
-                    plan = "Silver";
-                    freq.innerHTML = '<option>1 Post Daily</option><option>3 Posts Daily</option><option>6 Posts Daily</option>';
-                } else if(key.toLowerCase().includes("golden")) {
-                    plan = "Golden";
-                    freq.innerHTML = '<option>10 Posts Daily</option><option>15 Posts Daily</option><option>20 Posts Daily</option>';
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: key })
+                });
+                const data = await response.json();
+                if (data.status === "success") {
+                    msg.innerHTML = "✅ Success: " + data.message;
+                    msg.style.color = "#4ade80";
+                    dash.classList.remove('disabled-box');
+                    localStorage.setItem('activated', 'true');
                 } else {
-                    msg.innerHTML = "❌ Invalid Key Style!";
-                    return;
+                    msg.innerHTML = "❌ Invalid Key";
+                    msg.style.color = "#f87171";
                 }
-
-                msg.innerHTML = "✅ " + plan + " Plan Activated Successfully!";
-                msg.style.color = "#4ade80";
-                document.getElementById('licenseKey').disabled = true;
-                document.getElementById('activateBtn').disabled = true;
-                dash.classList.remove('disabled-box');
-            }, 1500);
+            } catch (err) {
+                msg.innerHTML = "❌ Connection Failed!";
+            }
         }
 
         function startPosting() {
-            const isChecked = document.getElementById('disclaimerCheck').checked;
             const status = document.getElementById('agentStatus');
-            
-            if(!isChecked) {
-                alert("Please accept the responsibility checkbox to proceed.");
-                return;
-            }
-            status.innerHTML = "🚀 Connection established. Agent is now running...";
+            status.innerHTML = "🚀 Initializing AI Agent...";
+        }
+
+        if(localStorage.getItem('activated') === 'true') {
+            document.getElementById('mainDashboard').classList.remove('disabled-box');
+            document.getElementById('msg').innerHTML = "✅ System Active";
+            document.getElementById('msg').style.color = "#4ade80";
         }
     </script>
 </body>
