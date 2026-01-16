@@ -6,13 +6,14 @@
     <title>CreatorFlow AI Agent</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: white; }
+        body { background-color: #0f172a; color: white; display: flex; flex-direction: column; min-height: 100vh; }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .disabled-box { opacity: 0.15; pointer-events: none; filter: grayscale(1); }
+        main { flex: 1; }
     </style>
 </head>
 <body class="p-4 md:p-10">
-    <div class="max-w-4xl mx-auto">
+    <main class="max-w-4xl mx-auto w-full">
         <h1 class="text-4xl font-extrabold text-blue-500 mb-8 text-center tracking-tighter">CreatorFlow AI Agent</h1>
 
         <div class="glass p-6 rounded-2xl mb-10 border border-blue-500/20">
@@ -95,7 +96,6 @@
 
                 <div class="p-4 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50">
                     <label class="text-xs font-bold text-blue-300 uppercase block mb-2">📸 Upload Reference Image (Optional)</label>
-                    <p class="text-[10px] text-gray-400 mb-3 italic">Agent will use this to understand your preferred image style.</p>
                     <input type="file" id="refImage" accept="image/*" 
                            class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
                 </div>
@@ -111,7 +111,13 @@
             </button>
             <p id="agentStatus" class="mt-4 text-center text-yellow-500 font-medium"></p>
         </div>
-    </div>
+    </main>
+
+    <footer class="mt-10 pb-6 text-center border-t border-white/5 pt-6">
+        <p class="text-gray-500 text-sm tracking-widest italic">
+            Powered by <span class="text-yellow-500 font-bold not-italic">SadSha</span> | Designed for the Community
+        </p>
+    </footer>
 
     <script>
         const API_URL = "https://creator-agent-backend.vercel.app/activate";
@@ -147,8 +153,7 @@
 
         function startPosting() {
             const status = document.getElementById('agentStatus');
-            const model = document.getElementById('aiModel').value;
-            status.innerHTML = "🚀 Initializing " + model + " Agent...";
+            status.innerHTML = "🚀 Initializing AI Agent...";
         }
 
         if(localStorage.getItem('activated') === 'true') {
