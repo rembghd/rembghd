@@ -1,114 +1,122 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CreatorFlow AI - Agent Dashboard</title>
+    <title>CreatorFlow AI Agent</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: white; }
+        body { background-color: #0f172a; color: white; font-family: sans-serif; }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .disabled { opacity: 0.3; pointer-events: none; }
     </style>
 </head>
-<body class="p-5">
+<body class="p-4 md:p-10">
     <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold text-blue-400 mb-6 text-center">CreatorFlow AI Agent</h1>
+        <h1 class="text-3xl font-bold text-blue-400 mb-8 text-center">CreatorFlow AI Agent</h1>
 
-        <div id="activation-box" class="glass p-6 rounded-xl mb-8">
-            <h2 class="text-xl font-semibold mb-4">Activate Your Agent</h2>
-            <div class="flex gap-4">
-                <input type="text" id="licenseKey" placeholder="Enter License Key (e.g. 1M-ABCD...)" 
-                       class="flex-1 p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:border-blue-500">
-                <button onclick="activateKey()" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded font-bold transition">Activate</button>
+        <div class="glass p-6 rounded-xl mb-10">
+            <h2 class="text-lg font-semibold mb-4 text-gray-200">Activate Your Agent</h2>
+            <div class="flex flex-col md:flex-row gap-3">
+                <input type="text" id="licenseKey" placeholder="1M-ABCD-1234-EFGH" 
+                       class="flex-1 p-3 rounded bg-gray-900 border border-gray-700 text-white focus:border-blue-500 outline-none">
+                <button id="activateBtn" onclick="activateKey()" 
+                        class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded font-bold transition">
+                    Activate
+                </button>
             </div>
-            <p id="statusMsg" class="mt-3 text-sm font-medium"></p>
+            <p id="statusMsg" class="mt-4 text-sm font-medium transition-all"></p>
         </div>
 
-        <div id="dashboard" class="glass p-6 rounded-xl opacity-50 pointer-events-none">
-            <h2 class="text-xl font-semibold mb-6">Agent Settings</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div id="dashboard" class="glass p-6 rounded-xl disabled">
+            <h2 class="text-xl font-semibold mb-8 text-gray-200">Agent Settings</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="space-y-4">
-                    <label class="block text-sm text-gray-400">Facebook Page Access Token</label>
-                    <input type="password" id="fb_token" class="w-full p-2 rounded bg-gray-800 border border-gray-700">
+                    <label class="block text-xs uppercase tracking-wider text-gray-500">Facebook Page Access Token</label>
+                    <input type="password" id="fb_token" class="w-full p-3 rounded bg-gray-900 border border-gray-800">
                     
-                    <label class="block text-sm text-gray-400">Facebook Page ID</label>
-                    <input type="text" id="page_id" class="w-full p-2 rounded bg-gray-800 border border-gray-700">
+                    <label class="block text-xs uppercase tracking-wider text-gray-500">Facebook Page ID</label>
+                    <input type="text" id="page_id" class="w-full p-3 rounded bg-gray-900 border border-gray-800">
                 </div>
-
                 <div class="space-y-4">
-                    <label class="block text-sm text-gray-400">Gemini / OpenAI API Key</label>
-                    <input type="password" id="api_key" class="w-full p-2 rounded bg-gray-800 border border-gray-700">
+                    <label class="block text-xs uppercase tracking-wider text-gray-500">Gemini / OpenAI API Key</label>
+                    <input type="password" id="api_key" class="w-full p-3 rounded bg-gray-900 border border-gray-800">
                     
-                    <label class="block text-sm text-gray-400">Content Niche</label>
-                    <select id="niche" class="w-full p-2 rounded bg-gray-800 border border-gray-700">
+                    <label class="block text-xs uppercase tracking-wider text-gray-500">Content Niche</label>
+                    <select id="niche" class="w-full p-3 rounded bg-gray-900 border border-gray-800">
                         <option value="quotes">Motivational Quotes</option>
                         <option value="tech">Tech News</option>
-                        <option value="health">Health Tips</option>
                     </select>
                 </div>
             </div>
-
-            <button onclick="startAgent()" class="w-full mt-8 bg-green-600 hover:bg-green-700 py-3 rounded-lg font-bold text-xl transition">
+            <button onclick="startAgent()" class="w-full mt-10 bg-green-600 hover:bg-green-700 py-4 rounded-lg font-bold text-xl flex items-center justify-center gap-2 transition">
                 🚀 Start Auto-Posting Agent
             </button>
-            <p id="agentStatus" class="mt-4 text-center text-yellow-400"></p>
+            <p id="agentStatus" class="mt-6 text-center text-yellow-500 font-medium"></p>
         </div>
     </div>
 
     <script>
-        // backendURL ab Vercel par point kar raha hai
+        // Sahi Backend URL jo aapne Vercel par banaya hai
         const backendURL = "https://creator-agent-backend.vercel.app/activate";
 
         async function activateKey() {
-            const key = document.getElementById('licenseKey').value;
+            const keyInput = document.getElementById('licenseKey');
             const statusMsg = document.getElementById('statusMsg');
+            const activateBtn = document.getElementById('activateBtn');
             const dashboard = document.getElementById('dashboard');
 
-            if(!key) {
-                statusMsg.innerHTML = "❌ Please enter a key!";
+            if (!keyInput.value) {
+                statusMsg.innerText = "❌ Please enter your license key!";
+                statusMsg.style.color = "#f87171";
                 return;
             }
 
-            statusMsg.innerHTML = "⏳ Verifying...";
+            statusMsg.innerText = "⏳ Connecting to backend...";
+            statusMsg.style.color = "#fbbf24";
+            activateBtn.disabled = true;
 
             try {
                 const response = await fetch(backendURL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ key: key })
+                    body: JSON.stringify({ key: keyInput.value })
                 });
 
                 const data = await response.json();
 
                 if (data.status === "success") {
-                    statusMsg.innerHTML = "✅ " + data.message + " | Expires: " + data.expires_on;
-                    statusMsg.className = "mt-3 text-sm font-medium text-green-400";
-                    
-                    // Dashboard unlock karein
-                    dashboard.classList.remove('opacity-50', 'pointer-events-none');
-                    localStorage.setItem('isActivated', 'true');
+                    statusMsg.innerHTML = `✅ ${data.message} (Expires: ${data.expires_on})`;
+                    statusMsg.style.color = "#4ade80";
+                    dashboard.classList.remove('disabled');
+                    localStorage.setItem('agent_activated', 'true');
+                    keyInput.disabled = true;
+                    activateBtn.style.display = "none";
                 } else {
-                    statusMsg.innerHTML = "❌ " + data.message;
-                    statusMsg.className = "mt-3 text-sm font-medium text-red-400";
+                    statusMsg.innerText = "❌ " + data.message;
+                    statusMsg.style.color = "#f87171";
+                    activateBtn.disabled = false;
                 }
             } catch (error) {
-                statusMsg.innerHTML = "❌ Backend Connection Error!";
-                console.error(error);
+                statusMsg.innerText = "❌ Connection Failed! Make sure your Vercel backend is awake.";
+                statusMsg.style.color = "#f87171";
+                activateBtn.disabled = false;
+                console.error("Fetch Error:", error);
             }
         }
 
         function startAgent() {
-            const agentStatus = document.getElementById('agentStatus');
-            agentStatus.innerHTML = "⚙️ Agent is connecting to Facebook and AI...";
-            
-            // Aglay step mein hum posting ka function yahan joreinge
-            setTimeout(() => {
-                agentStatus.innerHTML = "✅ Agent is Active! First post will be live in 5 minutes.";
-            }, 2000);
+            document.getElementById('agentStatus').innerText = "⚙️ Agent initialization started... Connecting to AI and Facebook API.";
         }
 
-        // Page load par check karein ke pehle se activated hai ya nahi
+        // Auto-check on load
         window.onload = () => {
-            if(localStorage.getItem('isActivated') === 'true') {
-                document.getElementById('dashboard').classList.remove('opacity-50', 'pointer-events
+            if(localStorage.getItem('agent_activated') === 'true') {
+                document.getElementById('dashboard').classList.remove('disabled');
+                document.getElementById('statusMsg').innerText = "✅ License Active";
+                document.getElementById('statusMsg').style.color = "#4ade80";
+            }
+        }
+    </script>
+</body>
+</html>
