@@ -38,20 +38,20 @@
                 </div>
 
                 <div class="space-y-4">
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Gemini AI Key</label>
-                    <input type="password" id="geminiKey" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
-                    
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Posting Frequency</label>
-                    <select id="frequency" class="w-full p-3 rounded-lg bg-slate-800 border-none text-white">
-                        <option>Every 2 Hours</option>
-                        <option>Every 6 Hours</option>
-                        <option>Once a Day</option>
+                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Select AI Model</label>
+                    <select id="aiModel" class="w-full p-3 rounded-lg bg-slate-800 border-none text-white outline-none">
+                        <option value="Gemini">Google Gemini (Recommended)</option>
+                        <option value="OpenAI">OpenAI (ChatGPT)</option>
+                        <option value="Grok">xAI (Grok)</option>
                     </select>
+
+                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">AI API Key</label>
+                    <input type="password" id="aiApiKey" placeholder="Enter API Key for selected model" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
                 </div>
             </div>
 
             <div class="space-y-6 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Select Niche</label>
                         <select id="contentNiche" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
@@ -65,14 +65,21 @@
                     </div>
                     
                     <div>
-                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Post Language</label>
+                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Language</label>
                         <select id="postLanguage" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            <option value="Roman Urdu">Roman Urdu (Urdu in English Script)</option>
-                            <option value="Roman Hindi">Roman Hindi (Hindi in English Script)</option>
-                            <option value="Urdu Script">Urdu (اردو رسم الخط)</option>
-                            <option value="Hindi Script">Hindi (हिन्दी)</option>
-                            <option value="British English">British English (UK)</option>
-                            <option value="American English">American English (USA)</option>
+                            <option value="Roman Urdu">Roman Urdu</option>
+                            <option value="Roman Hindi">Roman Hindi</option>
+                            <option value="British English">British English</option>
+                            <option value="American English">American English</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Frequency</label>
+                        <select id="frequency" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
+                            <option>Every 2 Hours</option>
+                            <option>Every 6 Hours</option>
+                            <option>Once a Day</option>
                         </select>
                     </div>
                 </div>
@@ -88,7 +95,7 @@
 
                 <div class="p-4 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50">
                     <label class="text-xs font-bold text-blue-300 uppercase block mb-2">📸 Upload Reference Image (Optional)</label>
-                    <p class="text-[10px] text-gray-400 mb-3 italic">Upload a sample image so the agent knows the style you like.</p>
+                    <p class="text-[10px] text-gray-400 mb-3 italic">Agent will use this to understand your preferred image style.</p>
                     <input type="file" id="refImage" accept="image/*" 
                            class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
                 </div>
@@ -140,7 +147,8 @@
 
         function startPosting() {
             const status = document.getElementById('agentStatus');
-            status.innerHTML = "🚀 Agent started with " + document.getElementById('postLanguage').value + " selection!";
+            const model = document.getElementById('aiModel').value;
+            status.innerHTML = "🚀 Initializing " + model + " Agent...";
         }
 
         if(localStorage.getItem('activated') === 'true') {
