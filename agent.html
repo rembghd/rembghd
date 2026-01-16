@@ -4,43 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CreatorFlow AI - Dashboard</title>
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; color: white; padding: 20px; }
         .container { max-width: 800px; margin: auto; background: #1e293b; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h2 { color: #38bdf8; text-align: center; }
-        .section { margin-bottom: 25px; padding: 15px; border: 1px solid #334155; border-radius: 8px; }
-        label { display: block; margin-bottom: 10px; font-weight: bold; }
-        input[type="text"], input[type="password"], select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: none; background: #0f172a; color: white; }
-        .disabled { opacity: 0.3; pointer-events: none; }
-        .license-status { text-align: right; color: #fbbf24; font-weight: bold; margin-bottom: 10px; }
-        .btn-active { background: #0ea5e9; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px; }
-        .btn-active:hover { background: #0284c7; }
+        h2 { color: #38bdf8; text-align: center; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+        .section { margin-bottom: 25px; padding: 15px; border: 1px solid #334155; border-radius: 8px; background: #1e293b; }
+        label { display: block; margin-bottom: 10px; font-weight: bold; color: #94a3b8; }
+        input[type="text"], input[type="password"], select { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        .disabled { opacity: 0.2; pointer-events: none; display: none; }
+        .license-status { text-align: right; color: #fbbf24; font-weight: bold; margin-bottom: 10px; font-size: 0.9em; }
+        .btn-active { background: #0ea5e9; color: white; padding: 14px 25px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; transition: 0.3s; }
+        .btn-active:hover { background: #0284c7; transform: translateY(-2px); }
+        .success-btn { background: #22c55e; margin-top: 20px; }
+        .success-btn:hover { background: #16a34a; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="license-status" id="daysLeft">License: Not Activated</div>
+    <div class="license-status" id="daysLeft">Status: License Required</div>
     <h2>CreatorFlow AI Agent</h2>
 
     <div class="section">
-        <label>Activation Key (14-Character Code)</label>
-        <input type="text" id="licenseKey" placeholder="XXXX-XXXX-XXXX-XX">
-        <button class="btn-active" onclick="activateKey()">Activate Agent</button>
+        <label>Step 1: Activate Agent (14-Word Key)</label>
+        <input type="text" id="licenseKey" placeholder="e.g., 1M-ABCD-1234-EFGH">
+        <button class="btn-active" onclick="activateKey()">Activate My License</button>
     </div>
 
     <div class="section">
-        <label>Select AI Engine</label>
+        <label>Step 2: Choose AI Engine</label>
         <select id="aiSelect" onchange="toggleAPIs()">
-            <option value="none">-- Select Engine --</option>
-            <option value="gemini">Google Gemini (Free/Pro)</option>
-            <option value="grok">xAI Grok</option>
+            <option value="none">-- Click to Select Engine --</option>
+            <option value="gemini">Google Gemini (Recommended)</option>
             <option value="openai">OpenAI (ChatGPT)</option>
+            <option value="grok">xAI Grok</option>
         </select>
 
         <div id="geminiGroup" class="disabled">
             <label>Gemini API Key</label>
-            <input type="password" id="geminiKey" placeholder="Enter Gemini Key">
+            <input type="password" id="geminiKey" placeholder="Paste Gemini Key Here">
+        </div>
+
+        <div id="openaiGroup" class="disabled">
+            <label>OpenAI API Key</label>
+            <input type="password" id="openaiKey" placeholder="sk-xxxx...">
         </div>
 
         <div id="grokGroup" class="disabled">
@@ -50,33 +60,49 @@
     </div>
 
     <div class="section">
-        <label>Facebook Page ID</label>
-        <input type="text" id="pageId" placeholder="1234567890">
-        <label>Page Access Token (60 Days)</label>
-        <input type="password" id="fbToken" placeholder="Paste Token Here">
+        <label>Step 3: Target Page & Niche</label>
+        <input type="text" id="pageId" placeholder="Facebook Page ID">
+        <input type="password" id="fbToken" placeholder="Facebook Access Token">
+        
+        <label>Select Content Niche</label>
+        <select id="nicheSelect">
+            <option value="tech">Future Technology</option>
+            <option value="islamic">Islamic History/Quotes</option>
+            <option value="health">Health & Fitness</option>
+            <option value="motivation">Motivation & Success</option>
+        </select>
     </div>
 
-    <button class="btn-active" style="background: #22c55e;">Save & Start Auto-Posting</button>
+    <button class="btn-active success-btn" onclick="startAgent()">Save & Start 30-Day Auto-Pilot</button>
 </div>
 
 <script>
     function toggleAPIs() {
         const selection = document.getElementById('aiSelect').value;
-        const gemini = document.getElementById('geminiGroup');
-        const grok = document.getElementById('grokGroup');
+        const engines = ['geminiGroup', 'openaiGroup', 'grokGroup'];
+        
+        engines.forEach(id => {
+            document.getElementById(id).classList.add('disabled');
+        });
 
-        // Reset all
-        gemini.classList.add('disabled');
-        grok.classList.add('disabled');
-
-        // Enable only selected
-        if (selection === 'gemini') gemini.classList.remove('disabled');
-        if (selection === 'grok') grok.classList.remove('disabled');
+        if (selection !== 'none') {
+            document.getElementById(selection + 'Group').classList.remove('disabled');
+        }
     }
 
     function activateKey() {
-        // Logic for checking 14-char key will go here
-        alert("Connecting to Database to verify key...");
+        const key = document.getElementById('licenseKey').value;
+        if(key.length < 14) {
+            alert("Please enter a valid 14-word license key.");
+            return;
+        }
+        alert("Verifying License: " + key);
+        // Backend connection logic will be added here
+    }
+
+    function startAgent() {
+        alert("Starting Agent... Connecting to Facebook and AI Engine.");
+        // Data collection for backend
     }
 </script>
 
