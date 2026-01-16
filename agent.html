@@ -8,57 +8,57 @@
     <style>
         body { background-color: #0f172a; color: white; display: flex; flex-direction: column; min-height: 100vh; font-family: sans-serif; }
         .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .disabled-box { opacity: 0.2; pointer-events: none; filter: grayscale(1); }
+        /* Partner, yahan se disabled-box wali opacity aur filter hata diye hain */
         main { flex: 1; }
     </style>
 </head>
 <body class="p-4 md:p-10">
     <main class="max-w-4xl mx-auto w-full">
-        <h1 class="text-4xl font-extrabold text-blue-500 mb-2 text-center tracking-tighter">CreatorFlow AI Agent</h1>
+        <h1 class="text-4xl font-extrabold text-blue-500 mb-2 text-center tracking-tighter italic">CreatorFlow AI Agent</h1>
         <p class="text-center text-xs text-blue-300 mb-8 uppercase tracking-[0.2em]">
             Silver: 1-6 posts/day | Golden: 10-20 posts/day
         </p>
 
-        <div class="glass p-6 rounded-2xl mb-10 border border-blue-500/20">
-            <h2 class="text-lg font-bold mb-4 text-blue-200">1. System Activation</h2>
+        <div class="glass p-6 rounded-2xl mb-10 border border-blue-500/20 shadow-xl">
+            <h2 class="text-lg font-bold mb-4 text-blue-200 uppercase tracking-tight">1. System Activation</h2>
             <div class="flex flex-col md:flex-row gap-4">
                 <input type="text" id="licenseKey" maxlength="24" placeholder="Enter 24-char Key (e.g., 1M-Silver-...)" 
                        class="flex-1 p-3 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-blue-500">
-                <button id="activateBtn" onclick="doActivate()" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold transition-all">Activate</button>
+                <button id="activateBtn" onclick="doActivate()" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/20">Activate</button>
             </div>
             <p id="msg" class="mt-4 font-bold text-sm text-center"></p>
         </div>
 
-        <div id="mainDashboard" class="glass p-8 rounded-2xl disabled-box transition-all duration-500">
-            <h2 class="text-2xl font-bold mb-8 text-gray-300 border-b border-white/10 pb-2 text-center">2. Agent Configuration</h2>
+        <div id="mainDashboard" class="glass p-8 rounded-2xl transition-all duration-500 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-8 text-gray-300 border-b border-white/10 pb-2 text-center italic">2. Agent Configuration</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="space-y-4">
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Access Token</label>
-                    <input type="password" id="fbToken" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                    <input type="password" id="fbToken" class="w-full p-4 rounded-xl bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500 text-sm">
                     
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Page ID</label>
-                    <input type="text" id="fbPageId" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                    <input type="text" id="fbPageId" class="w-full p-4 rounded-xl bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500 text-sm">
                 </div>
 
                 <div class="space-y-4">
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Select AI Model</label>
-                    <select id="aiModel" class="w-full p-3 rounded-lg bg-slate-800 border-none text-white outline-none">
+                    <select id="aiModel" class="w-full p-4 rounded-xl bg-slate-800 border-none text-white outline-none text-sm cursor-pointer">
                         <option value="Gemini">Google Gemini (Recommended)</option>
                         <option value="OpenAI">OpenAI (ChatGPT)</option>
                         <option value="Grok">xAI (Grok)</option>
                     </select>
 
                     <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">AI API Key</label>
-                    <input type="password" id="aiApiKey" placeholder="Enter API Key" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500">
+                    <input type="password" id="aiApiKey" placeholder="Enter API Key" class="w-full p-4 rounded-xl bg-slate-800 border-none outline-none focus:ring-1 focus:ring-blue-500 text-sm">
                 </div>
             </div>
 
-            <div class="space-y-6 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
+            <div class="space-y-6 bg-blue-500/5 p-6 rounded-2xl border border-blue-500/10">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Select Niche</label>
-                        <select id="contentNiche" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
+                        <select id="contentNiche" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none text-sm">
                             <option>Motivational Quotes</option>
                             <option>Islamic Content</option>
                             <option>Tech News</option>
@@ -70,7 +70,7 @@
                     
                     <div>
                         <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Language</label>
-                        <select id="postLanguage" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
+                        <select id="postLanguage" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none text-sm">
                             <option>Roman Urdu</option>
                             <option>Roman Hindi</option>
                             <option>British English</option>
@@ -80,39 +80,40 @@
 
                     <div>
                         <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Posts Per Day</label>
-                        <select id="frequency" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            </select>
+                        <select id="frequency" class="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none text-sm font-bold text-blue-400">
+                            <option>-- Select Plan First --</option>
+                        </select>
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-sm font-bold text-blue-300 uppercase tracking-widest flex items-center gap-2 mb-3">🤖 Post Instructions</label>
-                    <textarea id="userPrompt" rows="3" class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-blue-500" placeholder="Example: Motivational quotes with nature backgrounds..."></textarea>
+                    <label class="text-sm font-bold text-blue-300 uppercase tracking-widest flex items-center gap-2 mb-3 font-mono">🤖 Post Instructions</label>
+                    <textarea id="userPrompt" rows="3" class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-blue-500 text-sm" placeholder="Example: Motivational quotes with nature backgrounds..."></textarea>
                 </div>
 
-                <div class="p-4 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50 text-center">
-                    <label class="text-xs font-bold text-blue-300 uppercase block mb-2 cursor-pointer">📸 Upload Style Reference</label>
-                    <input type="file" id="refImage" accept="image/*" class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+                <div class="p-6 border-2 border-dashed border-blue-500/20 rounded-2xl bg-slate-900/50 text-center hover:border-blue-500/40 transition-all cursor-pointer">
+                    <label class="text-xs font-bold text-blue-300 uppercase block mb-2 cursor-pointer">📸 Upload Style Reference (Optional)</label>
+                    <input type="file" id="refImage" accept="image/*" class="text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-900 file:text-blue-300 hover:file:bg-blue-800">
                 </div>
             </div>
 
-            <div class="mt-8 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+            <div class="mt-8 p-4 bg-red-500/5 border border-red-500/10 rounded-xl">
                 <label class="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" id="disclaimerCheck" class="w-5 h-5 accent-red-500">
-                    <span class="text-sm text-gray-300 italic">I accept full responsibility for any account-related issues or bans resulting from AI automation.</span>
+                    <input type="checkbox" id="disclaimerCheck" class="w-5 h-5 accent-red-600">
+                    <span class="text-[11px] text-gray-400 italic">I accept full responsibility for any account-related issues or bans resulting from AI automation.</span>
                 </label>
             </div>
 
-            <button onclick="startPosting()" id="startBtn" class="w-full mt-6 bg-green-500 hover:bg-green-600 text-slate-900 py-5 rounded-2xl font-black text-2xl shadow-lg transition-all transform hover:scale-[1.01]">
+            <button onclick="startPosting()" id="startBtn" class="w-full mt-8 bg-green-500 hover:bg-green-600 text-slate-950 py-5 rounded-2xl font-black text-2xl shadow-xl transition-all uppercase tracking-tighter">
                 START AI AGENT
             </button>
-            <p id="agentStatus" class="mt-4 text-center text-yellow-500 font-medium"></p>
+            <p id="agentStatus" class="mt-4 text-center text-yellow-500 font-bold uppercase text-xs tracking-[0.2em]"></p>
         </div>
     </main>
 
-    <footer class="mt-10 pb-6 text-center border-t border-white/5 pt-6">
-        <p class="text-gray-500 text-xs tracking-widest">
-            Powered by <span class="text-yellow-500 font-bold">SadSha</span> | Professional AI Solutions
+    <footer class="mt-10 pb-8 text-center border-t border-white/5 pt-8">
+        <p class="text-gray-600 text-[10px] tracking-[0.5em] uppercase font-bold">
+            Powered by <span class="text-yellow-600 font-black">SadSha</span>
         </p>
     </footer>
 
@@ -120,17 +121,16 @@
         function doActivate() {
             const key = document.getElementById('licenseKey').value;
             const msg = document.getElementById('msg');
-            const dash = document.getElementById('mainDashboard');
             const freq = document.getElementById('frequency');
 
             if(key.length < 24) { 
-                msg.innerHTML = "❌ Key must be exactly 24 characters!"; 
+                msg.innerHTML = "❌ Error: Key must be 24 characters!"; 
                 msg.style.color = "#f87171";
                 return; 
             }
 
-            // Simple Logic for Demo - In real, this fetches from your Vercel backend
             msg.innerHTML = "⏳ Validating License...";
+            msg.style.color = "cyan";
             
             setTimeout(() => {
                 let plan = "";
@@ -141,16 +141,16 @@
                     plan = "Golden";
                     freq.innerHTML = '<option>10 Posts Daily</option><option>15 Posts Daily</option><option>20 Posts Daily</option>';
                 } else {
-                    msg.innerHTML = "❌ Invalid Key Style!";
+                    msg.innerHTML = "❌ Invalid Key Format!";
+                    msg.style.color = "#f87171";
                     return;
                 }
 
                 msg.innerHTML = "✅ " + plan + " Plan Activated Successfully!";
                 msg.style.color = "#4ade80";
                 document.getElementById('licenseKey').disabled = true;
-                document.getElementById('activateBtn').disabled = true;
-                dash.classList.remove('disabled-box');
-            }, 1500);
+                document.getElementById('activateBtn').classList.add('opacity-50', 'pointer-events-none');
+            }, 1200);
         }
 
         function startPosting() {
@@ -158,10 +158,10 @@
             const status = document.getElementById('agentStatus');
             
             if(!isChecked) {
-                alert("Please accept the responsibility checkbox to proceed.");
+                alert("Please check the disclaimer box first.");
                 return;
             }
-            status.innerHTML = "🚀 Connection established. Agent is now running...";
+            status.innerHTML = "🚀 Initializing... Agent is now running!";
         }
     </script>
 </body>
