@@ -51,16 +51,30 @@
             </div>
 
             <div class="space-y-6 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
-                <div>
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Select Content Niche</label>
-                    <select id="contentNiche" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                        <option value="Motivational Quotes">Motivational Quotes</option>
-                        <option value="Islamic Content">Islamic Content</option>
-                        <option value="Tech News">Tech News</option>
-                        <option value="Health Tips">Health Tips</option>
-                        <option value="Business Finance">Business & Finance</option>
-                        <option value="Custom Prompt">Custom (Write Below)</option>
-                    </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Select Niche</label>
+                        <select id="contentNiche" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
+                            <option value="Motivational Quotes">Motivational Quotes</option>
+                            <option value="Islamic Content">Islamic Content</option>
+                            <option value="Tech News">Tech News</option>
+                            <option value="Health Tips">Health Tips</option>
+                            <option value="Business Finance">Business & Finance</option>
+                            <option value="Custom Prompt">Custom (Write Below)</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Post Language</label>
+                        <select id="postLanguage" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
+                            <option value="Roman Urdu">Roman Urdu (Urdu in English Script)</option>
+                            <option value="Roman Hindi">Roman Hindi (Hindi in English Script)</option>
+                            <option value="Urdu Script">Urdu (اردو رسم الخط)</option>
+                            <option value="Hindi Script">Hindi (हिन्दी)</option>
+                            <option value="British English">British English (UK)</option>
+                            <option value="American English">American English (USA)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div>
@@ -69,7 +83,7 @@
                     </label>
                     <textarea id="userPrompt" rows="3" 
                               class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white focus:ring-2 focus:ring-blue-600 outline-none"
-                              placeholder="Example: I want motivational quotes in Urdu with beautiful nature backgrounds..."></textarea>
+                              placeholder="Example: I want motivational quotes with nature backgrounds..."></textarea>
                 </div>
 
                 <div class="p-4 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50">
@@ -126,7 +140,7 @@
 
         function startPosting() {
             const status = document.getElementById('agentStatus');
-            status.innerHTML = "🚀 Agent initialization started...";
+            status.innerHTML = "🚀 Agent started with " + document.getElementById('postLanguage').value + " selection!";
         }
 
         if(localStorage.getItem('activated') === 'true') {
