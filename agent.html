@@ -10,9 +10,10 @@
         .glass-card { background: #161b28; border: 1px solid #2d333f; border-radius: 20px; }
         .yellow-text { color: #FFD700; }
         .yellow-btn { background-color: #FFD700; color: #000; font-weight: 800; }
-        .promo-banner { background: linear-gradient(90deg, #1e40af, #3b82f6); }
-        .disabled-section { opacity: 0.2; pointer-events: none; filter: grayscale(1); }
-        .alert-box { border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.1); }
+        .promo-banner { background: linear-gradient(90deg, #1e40af, #3b82f6); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+        /* Ab yahan koi disabled ya faded class nahi hai */
+        input, select, textarea { transition: all 0.3s ease; color: white !important; }
+        input:focus, select:focus { border-color: #FFD700 !important; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-10">
@@ -20,120 +21,112 @@
     <main class="max-w-4xl mx-auto">
         <div class="text-center mb-10">
             <h1 class="text-5xl font-black yellow-text tracking-tighter italic">SadSha AI Agent</h1>
-            <p class="text-gray-400 text-xs mt-2 tracking-[0.3em] uppercase italic font-bold tracking-widest">Advanced Social Automation</p>
+            <p class="text-gray-400 text-xs mt-2 tracking-[0.3em] uppercase italic font-bold">Advanced Social Automation</p>
         </div>
 
         <div class="glass-card p-6 mb-8 border-yellow-500/20">
-            <h2 class="text-lg font-bold mb-4 text-yellow-500 italic uppercase">1. System Activation</h2>
+            <h2 class="text-lg font-bold mb-4 text-yellow-500 italic uppercase tracking-wider">1. System Activation</h2>
             <div class="flex flex-col md:flex-row gap-4">
-                <input type="text" id="licenseKey" placeholder="Enter Key (e.g. 1M-SILVER-XYZ...)" class="flex-1 p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none focus:border-yellow-500">
+                <input type="text" id="licenseKey" placeholder="Enter Key (e.g. 1M-SILVER-XYZ...)" class="flex-1 p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
                 <button onclick="activateSystem()" class="yellow-btn px-10 py-4 rounded-xl transition-transform active:scale-95 shadow-lg uppercase">Activate</button>
             </div>
             <p id="activateMsg" class="mt-4 font-bold text-center text-sm"></p>
         </div>
 
-        <div id="masterDashboard" class="disabled-section transition-all duration-700">
-            
-            <div id="offerBanner" class="promo-banner p-4 rounded-2xl mb-8 text-center shadow-xl">
-                <p class="font-black text-sm md:text-base italic uppercase tracking-tighter">
-                    🔥 3-Month Plan Active: 15 Days Extra Bonus + 1-Time Page Replacement Guarantee Included!
-                </p>
-            </div>
-
-            <div id="banAlert" class="hidden alert-box p-6 rounded-2xl mb-8">
-                <h3 class="text-red-500 font-black text-xl mb-2 italic uppercase">⚠️ Page Restriction Detected!</h3>
-                <p class="text-gray-300 text-sm mb-4">You have a 1-Time Replacement Guarantee. Submit proof to start the 24-hour review process.</p>
-                <button onclick="startReview()" id="reviewBtn" class="bg-red-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-700">Claim Replacement</button>
-                <p id="timerMsg" class="mt-3 text-yellow-500 font-bold italic"></p>
-            </div>
-
-            <div class="glass-card p-8 mb-8 shadow-2xl">
-                <h2 class="text-xl font-bold mb-8 border-b border-gray-700 pb-3 italic">2. Agent Configuration</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                    <div class="space-y-4">
-                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Facebook Access Token</label>
-                        <input type="password" id="fbToken" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none focus:border-yellow-500">
-                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Facebook Page ID</label>
-                        <input type="text" id="fbPageId" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none focus:border-yellow-500">
-                    </div>
-                    <div class="space-y-4">
-                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Select AI Model</label>
-                        <select id="aiModel" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
-                            <option>Google Gemini (Recommended)</option>
-                            <option>OpenAI (ChatGPT)</option>
-                        </select>
-                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">AI API Key</label>
-                        <input type="password" id="aiApiKey" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
-                    </div>
-                </div>
-
-                <div class="bg-black/30 p-6 rounded-2xl border border-gray-800 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div>
-                        <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Duration</label>
-                        <select id="planDuration" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
-                            <option value="1">1 Month</option>
-                            <option value="2">2 Months</option>
-                            <option value="3">3 Months (Special Offer)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Package</label>
-                        <select id="planType" onchange="syncFrequency()" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
-                            <option value="silver">Silver Plan</option>
-                            <option value="golden">Golden Plan</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Daily Posts</label>
-                        <select id="frequency" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold"></select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Content Language</label>
-                        <select class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none">
-                            <option>Roman Urdu</option>
-                            <option>British English</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Niche</label>
-                        <select class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none">
-                            <option>Motivational Quotes</option>
-                            <option>Islamic Content</option>
-                            <option>Tech News</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="mt-6">
-                    <label class="text-sm font-bold text-gray-300 uppercase block mb-2">🤖 Post Instructions</label>
-                    <textarea id="userPrompt" rows="3" class="w-full p-4 rounded-xl bg-slate-800 border border-gray-700 outline-none" placeholder="e.g. Daily motivational quotes for entrepreneurs..."></textarea>
-                </div>
-            </div>
-
-            <div class="glass-card p-6 mb-8 bg-red-950/10 border-red-900/30">
-                <label class="flex items-start gap-4 cursor-pointer">
-                    <input type="checkbox" id="legalCheck" class="w-6 h-6 mt-1 accent-yellow-500">
-                    <span class="text-lg font-extrabold uppercase italic tracking-tighter text-gray-200">
-                        I accept full responsibility for any account-related issues or bans resulting from AI automation.
-                    </span>
-                </label>
-            </div>
-
-            <button onclick="startAgent()" class="w-full bg-green-600 hover:bg-green-500 text-black py-6 rounded-2xl font-black text-3xl shadow-2xl transition-all uppercase mb-10 transform hover:scale-[1.01]">
-                START AI AGENT
-            </button>
-            <p id="agentStatus" class="text-center text-yellow-500 font-black italic mb-20"></p>
+        <div id="offerBanner" class="promo-banner p-4 rounded-2xl mb-8 text-center">
+            <p class="font-black text-sm md:text-base italic uppercase tracking-tighter text-white">
+                🚀 3-MONTH PLAN OFFER: 15 DAYS EXTRA BONUS + 1-TIME PAGE REPLACEMENT GUARANTEE INCLUDED!
+            </p>
         </div>
 
+        <div class="glass-card p-8 mb-8 shadow-2xl">
+            <h2 class="text-xl font-bold mb-8 border-b border-gray-700 pb-3 italic text-gray-300 uppercase">2. Agent Configuration</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="space-y-4">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Facebook Access Token</label>
+                    <input type="password" id="fbToken" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Facebook Page ID</label>
+                    <input type="text" id="fbPageId" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
+                </div>
+                <div class="space-y-4">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Select AI Model</label>
+                    <select id="aiModel" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
+                        <option>Google Gemini (Recommended)</option>
+                        <option>OpenAI (ChatGPT)</option>
+                    </select>
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">AI API Key</label>
+                    <input type="password" id="aiApiKey" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
+                </div>
+            </div>
+
+            <div class="bg-black/30 p-6 rounded-2xl border border-gray-800 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div>
+                    <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Duration</label>
+                    <select id="planDuration" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
+                        <option value="1">1 Month Plan</option>
+                        <option value="2">2 Months Plan</option>
+                        <option value="3">3 Months (15 Days Extra)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Package Type</label>
+                    <select id="planType" onchange="syncFrequency()" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
+                        <option value="silver">Silver Agent</option>
+                        <option value="golden">Golden Agent</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Post Frequency</label>
+                    <select id="frequency" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
+                        </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Niche / Category</label>
+                    <select id="niche" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none">
+                        <option>Motivational Quotes</option>
+                        <option>Islamic Teachings</option>
+                        <option>Health & Fitness</option>
+                        <option>Tech & AI News</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Language</label>
+                    <select id="language" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none">
+                        <option>Roman Urdu</option>
+                        <option>British English</option>
+                        <option>American English</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div>
+                <label class="text-sm font-bold text-gray-300 uppercase block mb-2">🤖 Custom Instructions</label>
+                <textarea id="userPrompt" rows="3" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none" placeholder="Explain how you want your posts..."></textarea>
+            </div>
+        </div>
+
+        <div class="glass-card p-6 mb-8 bg-red-950/10 border-red-900/30">
+            <label class="flex items-start gap-4 cursor-pointer">
+                <input type="checkbox" id="legalCheck" class="w-6 h-6 mt-1 accent-yellow-500">
+                <span class="text-sm md:text-base font-extrabold uppercase italic tracking-tighter text-gray-200">
+                    I accept full responsibility for any account-related issues or bans resulting from AI automation.
+                </span>
+            </label>
+        </div>
+
+        <button onclick="startAgent()" class="w-full bg-green-600 hover:bg-green-500 text-black py-6 rounded-2xl font-black text-3xl shadow-2xl transition-all uppercase mb-10 transform hover:scale-[1.01] active:scale-95">
+            START AI AGENT
+        </button>
+        <p id="agentStatus" class="text-center text-yellow-500 font-black italic mb-20"></p>
     </main>
 
     <footer class="pb-10 text-center border-t border-white/5 pt-10">
         <p class="text-gray-600 text-[10px] tracking-[0.5em] font-bold uppercase">
-            Powered by <span class="yellow-text">SadSha</span> | Designed for the Community
+            Powered by <span class="yellow-text font-black italic">SadSha</span>
         </p>
     </footer>
 
@@ -148,42 +141,42 @@
             }
         }
 
+        let isActivated = false;
+
         function activateSystem() {
             const key = document.getElementById('licenseKey').value.toLowerCase();
             const msg = document.getElementById('activateMsg');
-            const dash = document.getElementById('masterDashboard');
-            const banner = document.getElementById('offerBanner');
-
+            
             if(key.includes("1m") || key.includes("2m") || key.includes("3m")) {
-                msg.innerHTML = "✅ SYSTEM ACTIVATED SUCCESSFULLY!";
+                msg.innerHTML = "✅ SYSTEM ACTIVE: LICENSE VERIFIED.";
                 msg.style.color = "#4ade80";
-                dash.classList.remove('disabled-section');
-                if(!key.includes("3m")) banner.classList.add('hidden');
+                isActivated = true;
                 localStorage.setItem('sadsha_active', 'true');
             } else {
-                msg.innerHTML = "❌ INVALID LICENSE KEY!";
+                msg.innerHTML = "❌ INVALID KEY: ACCESS DENIED.";
                 msg.style.color = "#f87171";
+                isActivated = false;
             }
         }
 
-        // 24-Hour Review Logic (Secret)
-        function startReview() {
-            const btn = document.getElementById('reviewBtn');
-            const timer = document.getElementById('timerMsg');
-            btn.classList.add('hidden');
-            timer.innerHTML = "⏳ APPLICATION UNDER REVIEW. PROOF RECEIVED. SYSTEM WILL AUTO-RESET PAGE SLOT IN 24 HOURS.";
-            // Logic to unlock after 24h would go here
-        }
-
         function startAgent() {
+            if(!isActivated && localStorage.getItem('sadsha_active') !== 'true') {
+                alert("Please activate the system with a valid key first.");
+                return;
+            }
             if(!document.getElementById('legalCheck').checked) {
                 alert("Please accept the responsibility disclaimer.");
                 return;
             }
-            document.getElementById('agentStatus').innerHTML = "🚀 AGENT INITIALIZING... CONNECTION TO VERCEL BACKEND ESTABLISHED.";
+            document.getElementById('agentStatus').innerHTML = "🚀 AGENT INITIALIZING...";
         }
 
         syncFrequency();
+        if(localStorage.getItem('sadsha_active') === 'true') {
+            document.getElementById('activateMsg').innerHTML = "✅ SYSTEM ACTIVE";
+            document.getElementById('activateMsg').style.color = "#4ade80";
+            isActivated = true;
+        }
     </script>
 </body>
 </html>
