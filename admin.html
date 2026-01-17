@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SadSha Admin - Secure Control Room</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #05070a; color: #e2e8f0; font-family: 'Inter', sans-serif; }
+        .admin-card { background: #0f172a; border: 1px solid #1e293b; border-radius: 15px; }
+        .stat-box { border-left: 4px solid #FFD700; background: rgba(255, 215, 0, 0.05); }
+        .hidden { display: none; }
+        /* Shake effect for wrong password */
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <div id="loginSection" class="fixed inset-0 bg-black flex items-center justify-center z-50">
+        <div id="loginBox" class="admin-card p-10 max-w-md w-full text-center shadow-2xl border-yellow-500/10">
+            <div class="mb-6">
+                <h1 class="text-3xl font-black text-yellow-500 italic uppercase tracking-tighter">SadSha Admin</h1>
+                <p class="text-gray-500 text-[10px] uppercase tracking-[0.4em] font-bold mt-1">Encrypted Access Only</p>
+            </div>
+            
+            <div class="space-y-4">
+                <input type="password" id="adminPass" placeholder="Enter System Key" 
+                    class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none text-center text-white focus:border-yellow-500 transition-all font-mono">
+                
+                <button onclick="checkAdmin()" 
+                    class="w-full bg-yellow-500 text-black font-black py-4 rounded-xl hover:bg-yellow-400 transition-all uppercase shadow-lg active:scale-95">
+                    Verify Identity
+                </button>
+            </div>
+            <p id="errorMsg" class="text-red-500 mt-6 font-bold text-sm h-4"></p>
+        </div>
+    </div>
+
+    <main id="adminContent" class="hidden max-w-6xl mx-auto animate-in fade-in duration-700">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 border-b border-gray-800 pb-6 gap-4">
+            <div>
+                <h1 class="text-4xl font-black italic text-white uppercase tracking-tighter">Master Control <span class="text-yellow-500">Room</span></h1>
+                <p class="text-gray-500 text-xs mt-1 uppercase tracking-widest">Real-time Agent & Storage Monitoring</p>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="location.reload()" class="bg-red-900/20 text-red-500 border border-red-900 px-6 py-2 rounded-lg font-bold text-xs uppercase hover:bg-red-900/40 transition-all">Terminate Session</button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="admin-card p-6 stat-box shadow-xl">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-1">Active Agents</p>
+                <h3 class="text-4xl font-black text-white italic">24</h3>
+            </div>
+            <div class="admin-card p-6 stat-box border-blue-500 bg-blue-500/5 shadow-xl">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-1">Cloud Sync Status</p>
+                <h3 class="text-4xl font-black text-white italic">98.2%</h3>
+            </div>
+            <div class="admin-card p-6 stat-box border-green-500 bg-green-500/5 shadow-xl">
+                <p class="text-gray-500 text-xs font-bold uppercase mb-1">Storage Free</p>
+                <h3 class="text-4xl font-black text-white italic">100%</h3>
+            </div>
+        </div>
+
+        <div class="admin-card overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-gray-800 flex justify-between items-center bg-slate-800/30">
+                <h2 class="font-bold text-lg italic uppercase flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+                    Live Activity Logs
+                </h2>
+                <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Auto-Refresh: 5s</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-black/50 text-gray-400 uppercase text-[10px] tracking-widest border-b border-gray-800">
+                        <tr>
+                            <th class="p-5">License Key</th>
+                            <th class="p-5">Facebook ID</th>
+                            <th class="p-5">Status</th>
+                            <th class="p-5">Storage Logic</th>
+                            <th class="p-5 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800 font-medium">
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="p-5 font-mono text-yellow-500">3M-GOLD-AD78...</td>
+                            <td class="p-5">1029485763</td>
+                            <td class="p-5"><span class="bg-green-500/10 text-green-500 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">✅ Active Posting</span></td>
+                            <td class="p-5 text-gray-500 uppercase text-[10px] font-bold italic">Cleaned After Post</td>
+                            <td class="p-5 text-right">
+                                <button class="text-red-500 font-black hover:text-red-400 uppercase text-xs">Revoke</button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="p-5 font-mono text-blue-400">1M-SILV-RE22...</td>
+                            <td class="p-5">9948271630</td>
+                            <td class="p-5"><span class="bg-red-500/10 text-red-500 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">⚠️ Restriction</span></td>
+                            <td class="p-5 text-gray-500 uppercase text-[10px] font-bold italic">Task Suspended</td>
+                            <td class="p-5 text-right">
+                                <button class="text-yellow-500 font-black hover:text-yellow-400 uppercase text-xs italic">Start 24h Review</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // HIGH-END MILITARY GRADE PASSWORD
+        const SECRET_PASS = "S@dSh@_Agent#99!_SecureX"; 
+
+        function checkAdmin() {
+            const input = document.getElementById('adminPass').value;
+            const error = document.getElementById('errorMsg');
+            const loginBox = document.getElementById('loginBox');
+            
+            if(input === SECRET_PASS) {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('adminContent').classList.remove('hidden');
+                console.log("Admin Access Granted - Encrypted Session Started");
+            } else {
+                error.innerText = "🛑 UNAUTHORIZED ACCESS DETECTED!";
+                loginBox.classList.add('shake');
+                setTimeout(() => loginBox.classList.remove('shake'), 500);
+                document.getElementById('adminPass').value = "";
+            }
+        }
+
+        // Allow Enter key to login
+        document.getElementById('adminPass').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkAdmin();
+            }
+        });
+    </script>
+</body>
+</html>
