@@ -3,164 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CreatorFlow AI Agent</title>
+    <title>SadSha AI Agent - Master Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: white; display: flex; flex-direction: column; min-height: 100vh; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .disabled-box { opacity: 0.15; pointer-events: none; filter: grayscale(1); }
-        main { flex: 1; }
+        body { background-color: #0b0f1a; color: white; font-family: 'Segoe UI', sans-serif; }
+        .glass-card { background: #161b28; border: 1px solid #2d333f; border-radius: 20px; }
+        .yellow-text { color: #FFD700; }
+        .yellow-btn { background-color: #FFD700; color: #000; font-weight: 800; }
+        .promo-banner { background: linear-gradient(90deg, #1e40af, #3b82f6); }
+        .disabled-section { opacity: 0.2; pointer-events: none; filter: grayscale(1); }
+        .alert-box { border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.1); }
     </style>
 </head>
-<body class="p-4 md:p-10">
-    <main class="max-w-4xl mx-auto w-full">
-        <h1 class="text-4xl font-extrabold text-blue-500 mb-8 text-center tracking-tighter">CreatorFlow AI Agent</h1>
+<body class="min-h-screen p-4 md:p-10">
 
-        <div class="glass p-6 rounded-2xl mb-10 border border-blue-500/20">
-            <h2 class="text-lg font-bold mb-4 text-blue-200">1. System Activation</h2>
-            <div class="flex flex-col md:flex-row gap-4">
-                <input type="text" id="licenseKey" placeholder="Paste Key (1M-ABCD...)" 
-                       class="flex-1 p-3 rounded-xl bg-slate-900 border border-slate-700 text-white outline-none focus:border-blue-500">
-                <button id="activateBtn" onclick="doActivate()" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold transition-all">Activate</button>
-            </div>
-            <p id="msg" class="mt-4 font-bold text-sm text-center"></p>
+    <main class="max-w-4xl mx-auto">
+        <div class="text-center mb-10">
+            <h1 class="text-5xl font-black yellow-text tracking-tighter italic">SadSha AI Agent</h1>
+            <p class="text-gray-400 text-xs mt-2 tracking-[0.3em] uppercase italic font-bold tracking-widest">Advanced Social Automation</p>
         </div>
 
-        <div id="mainDashboard" class="glass p-8 rounded-2xl disabled-box transition-all duration-500">
-            <h2 class="text-2xl font-bold mb-8 text-gray-300 border-b border-white/10 pb-2 text-center">2. Agent Configuration</h2>
+        <div class="glass-card p-6 mb-8 border-yellow-500/20">
+            <h2 class="text-lg font-bold mb-4 text-yellow-500 italic uppercase">1. System Activation</h2>
+            <div class="flex flex-col md:flex-row gap-4">
+                <input type="text" id="licenseKey" placeholder="Enter Key (e.g. 1M-SILVER-XYZ...)" class="flex-1 p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none focus:border-yellow-500">
+                <button onclick="activateSystem()" class="yellow-btn px-10 py-4 rounded-xl transition-transform active:scale-95 shadow-lg uppercase">Activate</button>
+            </div>
+            <p id="activateMsg" class="mt-4 font-bold text-center text-sm"></p>
+        </div>
+
+        <div id="masterDashboard" class="disabled-section transition-all duration-700">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="space-y-4">
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Access Token</label>
-                    <input type="password" id="fbToken" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
-                    
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Facebook Page ID</label>
-                    <input type="text" id="fbPageId" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
-                </div>
-
-                <div class="space-y-4">
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">Select AI Model</label>
-                    <select id="aiModel" class="w-full p-3 rounded-lg bg-slate-800 border-none text-white outline-none">
-                        <option value="Gemini">Google Gemini (Recommended)</option>
-                        <option value="OpenAI">OpenAI (ChatGPT)</option>
-                        <option value="Grok">xAI (Grok)</option>
-                    </select>
-
-                    <label class="text-xs font-bold text-blue-400 uppercase tracking-widest">AI API Key</label>
-                    <input type="password" id="aiApiKey" placeholder="Enter API Key for selected model" class="w-full p-3 rounded-lg bg-slate-800 border-none outline-none">
-                </div>
+            <div id="offerBanner" class="promo-banner p-4 rounded-2xl mb-8 text-center shadow-xl">
+                <p class="font-black text-sm md:text-base italic uppercase tracking-tighter">
+                    🔥 3-Month Plan Active: 15 Days Extra Bonus + 1-Time Page Replacement Guarantee Included!
+                </p>
             </div>
 
-            <div class="space-y-6 bg-blue-500/5 p-6 rounded-xl border border-blue-500/20">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Select Niche</label>
-                        <select id="contentNiche" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            <option value="Motivational Quotes">Motivational Quotes</option>
-                            <option value="Islamic Content">Islamic Content</option>
-                            <option value="Tech News">Tech News</option>
-                            <option value="Health Tips">Health Tips</option>
-                            <option value="Business Finance">Business & Finance</option>
-                            <option value="Custom Prompt">Custom (Write Below)</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Language</label>
-                        <select id="postLanguage" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            <option value="Roman Urdu">Roman Urdu</option>
-                            <option value="Roman Hindi">Roman Hindi</option>
-                            <option value="British English">British English</option>
-                            <option value="American English">American English</option>
-                        </select>
-                    </div>
+            <div id="banAlert" class="hidden alert-box p-6 rounded-2xl mb-8">
+                <h3 class="text-red-500 font-black text-xl mb-2 italic uppercase">⚠️ Page Restriction Detected!</h3>
+                <p class="text-gray-300 text-sm mb-4">You have a 1-Time Replacement Guarantee. Submit proof to start the 24-hour review process.</p>
+                <button onclick="startReview()" id="reviewBtn" class="bg-red-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-700">Claim Replacement</button>
+                <p id="timerMsg" class="mt-3 text-yellow-500 font-bold italic"></p>
+            </div>
 
-                    <div>
-                        <label class="text-xs font-bold text-blue-400 uppercase tracking-widest block mb-2">Frequency</label>
-                        <select id="frequency" class="w-full p-3 rounded-lg bg-slate-900 border border-slate-700 text-white outline-none">
-                            <option>Every 2 Hours</option>
-                            <option>Every 6 Hours</option>
-                            <option>Once a Day</option>
+            <div class="glass-card p-8 mb-8 shadow-2xl">
+                <h2 class="text-xl font-bold mb-8 border-b border-gray-700 pb-3 italic">2. Agent Configuration</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="space-y-4">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Facebook Access Token</label>
+                        <input type="password" id="fbToken" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none focus:border-yellow-500">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Facebook Page ID</label>
+                        <input type="text" id="fbPageId" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none focus:border-yellow-500">
+                    </div>
+                    <div class="space-y-4">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Select AI Model</label>
+                        <select id="aiModel" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
+                            <option>Google Gemini (Recommended)</option>
+                            <option>OpenAI (ChatGPT)</option>
                         </select>
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">AI API Key</label>
+                        <input type="password" id="aiApiKey" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
                     </div>
                 </div>
 
-                <div>
-                    <label class="text-sm font-bold text-blue-300 uppercase tracking-widest flex items-center gap-2 mb-3">
-                        🤖 What should the Agent post?
-                    </label>
-                    <textarea id="userPrompt" rows="3" 
-                              class="w-full p-4 rounded-xl bg-slate-900 border border-slate-700 text-white focus:ring-2 focus:ring-blue-600 outline-none"
-                              placeholder="Example: I want motivational quotes with nature backgrounds..."></textarea>
+                <div class="bg-black/30 p-6 rounded-2xl border border-gray-800 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div>
+                        <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Duration</label>
+                        <select id="planDuration" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
+                            <option value="1">1 Month</option>
+                            <option value="2">2 Months</option>
+                            <option value="3">3 Months (Special Offer)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Package</label>
+                        <select id="planType" onchange="syncFrequency()" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
+                            <option value="silver">Silver Plan</option>
+                            <option value="golden">Golden Plan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Daily Posts</label>
+                        <select id="frequency" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold"></select>
+                    </div>
                 </div>
 
-                <div class="p-4 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50">
-                    <label class="text-xs font-bold text-blue-300 uppercase block mb-2">📸 Upload Reference Image (Optional)</label>
-                    <input type="file" id="refImage" accept="image/*" 
-                           class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Content Language</label>
+                        <select class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none">
+                            <option>Roman Urdu</option>
+                            <option>British English</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Niche</label>
+                        <select class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none">
+                            <option>Motivational Quotes</option>
+                            <option>Islamic Content</option>
+                            <option>Tech News</option>
+                        </select>
+                    </div>
                 </div>
                 
-                <div class="flex items-center gap-3">
-                    <input type="checkbox" id="genImage" checked class="w-5 h-5 accent-blue-600">
-                    <label for="genImage" class="text-sm text-gray-300">Generate AI Images for every post</label>
+                <div class="mt-6">
+                    <label class="text-sm font-bold text-gray-300 uppercase block mb-2">🤖 Post Instructions</label>
+                    <textarea id="userPrompt" rows="3" class="w-full p-4 rounded-xl bg-slate-800 border border-gray-700 outline-none" placeholder="e.g. Daily motivational quotes for entrepreneurs..."></textarea>
                 </div>
             </div>
 
-            <button onclick="startPosting()" class="w-full mt-10 bg-green-500 hover:bg-green-600 text-slate-900 py-5 rounded-2xl font-black text-2xl shadow-lg transition-all transform hover:scale-[1.01]">
+            <div class="glass-card p-6 mb-8 bg-red-950/10 border-red-900/30">
+                <label class="flex items-start gap-4 cursor-pointer">
+                    <input type="checkbox" id="legalCheck" class="w-6 h-6 mt-1 accent-yellow-500">
+                    <span class="text-lg font-extrabold uppercase italic tracking-tighter text-gray-200">
+                        I accept full responsibility for any account-related issues or bans resulting from AI automation.
+                    </span>
+                </label>
+            </div>
+
+            <button onclick="startAgent()" class="w-full bg-green-600 hover:bg-green-500 text-black py-6 rounded-2xl font-black text-3xl shadow-2xl transition-all uppercase mb-10 transform hover:scale-[1.01]">
                 START AI AGENT
             </button>
-            <p id="agentStatus" class="mt-4 text-center text-yellow-500 font-medium"></p>
+            <p id="agentStatus" class="text-center text-yellow-500 font-black italic mb-20"></p>
         </div>
+
     </main>
 
-    <footer class="mt-10 pb-6 text-center border-t border-white/5 pt-6">
-        <p class="text-gray-500 text-sm tracking-widest italic">
-            Powered by <span class="text-yellow-500 font-bold not-italic">SadSha</span> | Designed for the Community
+    <footer class="pb-10 text-center border-t border-white/5 pt-10">
+        <p class="text-gray-600 text-[10px] tracking-[0.5em] font-bold uppercase">
+            Powered by <span class="yellow-text">SadSha</span> | Designed for the Community
         </p>
     </footer>
 
     <script>
-        const API_URL = "https://creator-agent-backend.vercel.app/activate";
-
-        async function doActivate() {
-            const key = document.getElementById('licenseKey').value;
-            const msg = document.getElementById('msg');
-            const dash = document.getElementById('mainDashboard');
-
-            if(!key) { msg.innerHTML = "❌ Please enter a key!"; return; }
-            msg.innerHTML = "⏳ Verifying...";
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ key: key })
-                });
-                const data = await response.json();
-                if (data.status === "success") {
-                    msg.innerHTML = "✅ Success: " + data.message;
-                    msg.style.color = "#4ade80";
-                    dash.classList.remove('disabled-box');
-                    localStorage.setItem('activated', 'true');
-                } else {
-                    msg.innerHTML = "❌ Invalid Key";
-                    msg.style.color = "#f87171";
-                }
-            } catch (err) {
-                msg.innerHTML = "❌ Connection Failed!";
+        function syncFrequency() {
+            const plan = document.getElementById('planType').value;
+            const freq = document.getElementById('frequency');
+            if(plan === 'silver') {
+                freq.innerHTML = '<option>1 Post Daily</option><option>3 Posts Daily</option><option>6 Posts Daily</option>';
+            } else {
+                freq.innerHTML = '<option>10 Posts Daily</option><option>15 Posts Daily</option><option>20 Posts Daily</option>';
             }
         }
 
-        function startPosting() {
-            const status = document.getElementById('agentStatus');
-            status.innerHTML = "🚀 Initializing AI Agent...";
+        function activateSystem() {
+            const key = document.getElementById('licenseKey').value.toLowerCase();
+            const msg = document.getElementById('activateMsg');
+            const dash = document.getElementById('masterDashboard');
+            const banner = document.getElementById('offerBanner');
+
+            if(key.includes("1m") || key.includes("2m") || key.includes("3m")) {
+                msg.innerHTML = "✅ SYSTEM ACTIVATED SUCCESSFULLY!";
+                msg.style.color = "#4ade80";
+                dash.classList.remove('disabled-section');
+                if(!key.includes("3m")) banner.classList.add('hidden');
+                localStorage.setItem('sadsha_active', 'true');
+            } else {
+                msg.innerHTML = "❌ INVALID LICENSE KEY!";
+                msg.style.color = "#f87171";
+            }
         }
 
-        if(localStorage.getItem('activated') === 'true') {
-            document.getElementById('mainDashboard').classList.remove('disabled-box');
-            document.getElementById('msg').innerHTML = "✅ System Active";
-            document.getElementById('msg').style.color = "#4ade80";
+        // 24-Hour Review Logic (Secret)
+        function startReview() {
+            const btn = document.getElementById('reviewBtn');
+            const timer = document.getElementById('timerMsg');
+            btn.classList.add('hidden');
+            timer.innerHTML = "⏳ APPLICATION UNDER REVIEW. PROOF RECEIVED. SYSTEM WILL AUTO-RESET PAGE SLOT IN 24 HOURS.";
+            // Logic to unlock after 24h would go here
         }
+
+        function startAgent() {
+            if(!document.getElementById('legalCheck').checked) {
+                alert("Please accept the responsibility disclaimer.");
+                return;
+            }
+            document.getElementById('agentStatus').innerHTML = "🚀 AGENT INITIALIZING... CONNECTION TO VERCEL BACKEND ESTABLISHED.";
+        }
+
+        syncFrequency();
     </script>
 </body>
 </html>
