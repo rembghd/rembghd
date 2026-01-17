@@ -1,125 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SadSha AI Agent - Live</title>
+    <title>AI Content Agent - HF Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0b0f1a; color: white; font-family: 'Segoe UI', sans-serif; }
-        .glass-card { background: #161b28; border: 1px solid #2d333f; border-radius: 20px; }
-        .yellow-text { color: #FFD700; }
-        .yellow-btn { background-color: #FFD700; color: #000; font-weight: 800; }
-        .locked-section { opacity: 0.3; pointer-events: none; filter: grayscale(1); }
-        input, select, textarea { color: white !important; background-color: #0f172a !important; border: 1px solid #2d333f !important; }
+        body { background-color: #0f172a; color: white; }
+        .card { background: #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-10">
-
-    <main class="max-w-4xl mx-auto">
-        <div class="text-center mb-10">
-            <h1 class="text-5xl font-black yellow-text tracking-tighter italic">SadSha AI Agent</h1>
-            <p class="text-gray-400 text-[10px] mt-2 tracking-[0.4em] uppercase font-bold">Live Social Automation</p>
-        </div>
-
-        <div class="glass-card p-8 mb-8 shadow-2xl">
-            <h2 class="text-xl font-bold mb-8 border-b border-gray-700 pb-3 italic text-gray-300 uppercase">1. Agent Configuration</h2>
+<body class="p-5">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8 text-blue-400">🚀 AI Content Agent (Hugging Face)</h1>
+        
+        <div class="card space-y-4">
+            <div>
+                <label class="block mb-2">Hugging Face API Key</label>
+                <input type="password" id="aiApiKey" class="w-full p-2 rounded bg-slate-700 border border-slate-600" placeholder="hf_...">
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                <div class="space-y-4">
-                    <label class="text-xs font-bold text-gray-400 uppercase">Facebook Access Token</label>
-                    <input type="password" id="fbToken" class="w-full p-4 rounded-xl">
-                    <label class="text-xs font-bold text-gray-400 uppercase">Facebook Page ID</label>
-                    <input type="text" id="fbPageId" class="w-full p-4 rounded-xl">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block mb-2">FB Page ID</label>
+                    <input type="text" id="fbPageId" class="w-full p-2 rounded bg-slate-700 border border-slate-600" placeholder="8604334">
                 </div>
-                <div class="space-y-4">
-                    <label class="text-xs font-bold text-gray-400 uppercase">AI API Key</label>
-                    <input type="password" id="aiApiKey" class="w-full p-4 rounded-xl">
-                    <label class="text-xs font-bold text-gray-400 uppercase">Niche</label>
-                    <select id="niche" class="w-full p-4 rounded-xl">
-                        <option>Motivational Quotes</option>
-                        <option>Islamic Content</option>
-                        <option>Health & Fitness</option>
-                        <option>Technology News</option>
-                        <option>Business & Finance</option>
-                    </select>
+                <div>
+                    <label class="block mb-2">Niche/Topic</label>
+                    <input type="text" id="niche" class="w-full p-2 rounded bg-slate-700 border border-slate-600" value="Success">
                 </div>
             </div>
 
-            <div class="space-y-6">
-                <label class="text-sm font-bold text-gray-300 uppercase">🤖 AI Instructions (Captions/Style)</label>
-                <textarea id="userPrompt" rows="3" class="w-full p-4 rounded-xl" placeholder="Describe how you want your posts..."></textarea>
+            <div>
+                <label class="block mb-2">FB Page Access Token (29 Permissions)</label>
+                <textarea id="fbToken" class="w-full p-2 rounded bg-slate-700 border border-slate-600 h-24" placeholder="EAA..."></textarea>
             </div>
-        </div>
 
-        <div id="activationSection" class="glass-card p-6 mb-8 border-yellow-500/20">
-            <h2 class="text-lg font-bold mb-4 text-yellow-500 italic uppercase">2. System Activation</h2>
-            <div class="flex flex-col md:flex-row gap-4">
-                <input type="text" id="licenseKey" placeholder="Enter License Key" class="flex-1 p-4 rounded-xl">
-                <button onclick="activateSystem()" class="yellow-btn px-10 py-4 rounded-xl uppercase">Activate</button>
-            </div>
-            <p id="activateMsg" class="mt-4 font-bold text-center text-sm"></p>
-        </div>
+            <button onclick="startAgent()" id="startBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">
+                START AI AGENT
+            </button>
 
-        <button id="startBtn" onclick="startAgent()" class="w-full bg-green-600 hover:bg-green-500 text-black py-6 rounded-2xl font-black text-3xl shadow-2xl uppercase transition-all">
-            START AI AGENT
-        </button>
-        <p id="agentStatus" class="text-center text-yellow-500 font-black italic mt-4"></p>
-    </main>
+            <div id="status" class="mt-4 p-3 rounded hidden text-center font-semibold"></div>
+        </div>
+    </div>
 
     <script>
-        // 1. Activation Logic
-        function activateSystem() {
-            const key = document.getElementById('licenseKey').value;
-            if(key.length > 5) {
-                document.getElementById('activateMsg').innerText = "✅ SYSTEM ACTIVATED & LOCKED";
-                document.getElementById('activationSection').classList.add('locked-section');
-                localStorage.setItem('sadsha_active', 'true');
-            }
-        }
-
-        // 2. Real Connection to Backend (Raj)
         async function startAgent() {
-            if(localStorage.getItem('sadsha_active') !== 'true') {
-                alert("Please activate the system first!");
+            const btn = document.getElementById('startBtn');
+            const status = document.getElementById('status');
+            
+            // Input values lena
+            const aiApiKey = document.getElementById('aiApiKey').value;
+            const fbPageId = document.getElementById('fbPageId').value;
+            const fbToken = document.getElementById('fbToken').value;
+            const niche = document.getElementById('niche').value;
+
+            if(!aiApiKey || !fbToken || !fbPageId) {
+                alert("Please fill all fields!");
                 return;
             }
 
-            const status = document.getElementById('agentStatus');
-            const startBtn = document.getElementById('startBtn');
-            
-            status.innerText = "🚀 AGENT AWAKE: CONNECTING TO BACKEND...";
-            startBtn.disabled = true;
-            startBtn.style.opacity = "0.5";
-
-            const payload = {
-                fbToken: document.getElementById('fbToken').value,
-                fbPageId: document.getElementById('fbPageId').value,
-                aiApiKey: document.getElementById('aiApiKey').value,
-                niche: document.getElementById('niche').value,
-                userPrompt: document.getElementById('userPrompt').value
-            };
+            // Loading state
+            btn.disabled = true;
+            btn.innerText = "AGENT WORKING...";
+            status.className = "mt-4 p-3 rounded text-center font-semibold bg-blue-900 text-blue-200 block";
+            status.innerText = "🤖 AI is generating quote and image... Please wait.";
 
             try {
-                // APNA VERCEL URL YAHAN DALAIN
-               const response = await fetch('https://creator-agent-backend.vercel.app/api/process', {
+                // NAYA HUGGING FACE ENDPOINT
+                const response = await fetch('https://rembghd-ai-fb-agent.hf.space/api/process', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ aiApiKey, fbToken, fbPageId, niche })
                 });
 
                 const result = await response.json();
 
-                if(result.status === "success") {
-                    status.innerHTML = `✅ SUCCESS: ${result.message} <br> <span class="text-white text-xs">Storage: ${result.storage}</span>`;
+                if (result.status === "success") {
+                    status.className = "mt-4 p-3 rounded text-center font-semibold bg-green-900 text-green-200 block";
+                    status.innerText = result.message;
                 } else {
+                    status.className = "mt-4 p-3 rounded text-center font-semibold bg-red-900 text-red-200 block";
                     status.innerText = "❌ ERROR: " + result.message;
                 }
             } catch (error) {
-                status.innerText = "❌ CONNECTION FAILED: Check Internet or Vercel URL";
+                status.className = "mt-4 p-3 rounded text-center font-semibold bg-red-900 text-red-200 block";
+                status.innerText = "❌ Connection Failed. Check if HF Space is Running.";
             } finally {
-                startBtn.disabled = false;
-                startBtn.style.opacity = "1";
+                btn.disabled = false;
+                btn.innerText = "START AI AGENT";
             }
         }
     </script>
