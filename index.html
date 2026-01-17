@@ -3,9 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RembgHD - Premium AI Photo Tools (Free Forever)</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <title>SadSha AI Agent - Master Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; line-height: 1.6; }
+        
+        header { padding: 40px 20px; text-align: center; background: linear-gradient(180deg, #111827 0%, #0b0f19 100%); }
+        .logo { font-size: 48px; font-weight: 800; color: var(--gold); margin-bottom: 10px; letter-spacing: -1px; }
+        .slogan { font-size: 18px; color: #9ca3af; font-weight: 400; margin-bottom: 20px; }
+        .badge { background: rgba(255, 215, 0, 0.1); color: var(--gold); padding: 5px 15px; border-radius: 50px; font-size: 14px; font-weight: 600; border: 1px solid rgba(255, 215, 0, 0.3); }
+
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+
+        .tool-card { 
+            background: var(--card-bg); 
+            border-radius: 24px; 
+            padding: 30px; 
+            text-decoration: none; 
+            color: white; 
+            transition: all 0.3s ease; 
+            border: 1px solid #1f2937;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .tool-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .icon-box { font-size: 40px; margin-bottom: 20px; }
+        .tool-card h3 { font-size: 22px; margin: 0 0 10px 0; color: var(--gold); }
+        .tool-card p { font-size: 15px; color: #9ca3af; margin: 0; }
+        
+        .action-text { margin-top: 20px; font-weight: 800; font-size: 14px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+
+        footer { margin-top: 80px; padding: 40px; text-align: center; border-top: 1px solid #1f2937; color: #666; font-style: italic; }
+        .sadsha { color: var(--gold); font-weight: 800; }
         body { background-color: #0b0f1a; color: white; font-family: 'Segoe UI', sans-serif; }
         .glass-card { background: #161b28; border: 1px solid #2d333f; border-radius: 20px; }
         .yellow-text { color: #FFD700; }
@@ -16,14 +53,27 @@
         input:focus, select:focus { border-color: #FFD700 !important; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
     </style>
 </head>
+<body>
 <body class="min-h-screen p-4 md:p-10">
 
+    <header>
+        <div class="logo">RembgHD</div>
+        <div class="slogan">Premium AI Image processing tools for Everyone</div>
+        <span class="badge">It's free & always will be</span>
+    </header>
     <main class="max-w-4xl mx-auto">
         <div class="text-center mb-10">
             <h1 class="text-5xl font-black yellow-text tracking-tighter italic">SadSha AI Agent</h1>
             <p class="text-gray-400 text-xs mt-2 tracking-[0.3em] uppercase italic font-bold">Advanced Social Automation</p>
         </div>
 
+    <div class="container">
+        <div class="grid">
+            <a href="remover.html" class="tool-card">
+                <div>
+                    <div class="icon-box">🖼️</div>
+                    <h3>HD BG Remover</h3>
+                    <p>Remove backgrounds with AI precision. No quality loss, instant download.</p>
         <div class="glass-card p-6 mb-8 border-yellow-500/20">
             <h2 class="text-lg font-bold mb-4 text-yellow-500 italic uppercase tracking-wider">1. System Activation</h2>
             <div class="flex flex-col md:flex-row gap-4">
@@ -56,6 +106,8 @@
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Facebook Page ID</label>
                     <input type="text" id="fbPageId" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
                 <div class="space-y-4">
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Select AI Model</label>
                     <select id="aiModel" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none text-white">
@@ -67,8 +119,12 @@
                 </div>
             </div>
 
+            <a href="webp-converter.html" class="tool-card">
             <div class="bg-black/30 p-6 rounded-2xl border border-gray-800 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div>
+                    <div class="icon-box">⚡</div>
+                    <h3>Image to WebP</h3>
+                    <p>Convert PNG/JPG to WebP format to speed up your website.</p>
                     <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Duration</label>
                     <select id="planDuration" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold text-white">
                         <option value="1">1 Month Plan</option>
@@ -76,22 +132,42 @@
                         <option value="3">3 Months (15 Days Extra)</option>
                     </select>
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
+
+            <a href="compressor.html" class="tool-card">
                 <div>
+                    <div class="icon-box">📉</div>
+                    <h3>Image Compressor</h3>
+                    <p>Reduce file size by up to 90% while maintaining HD quality.</p>
                     <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Package Type</label>
                     <select id="planType" onchange="syncFrequency()" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold text-white">
                         <option value="silver">Silver Agent</option>
                         <option value="golden">Golden Agent</option>
                     </select>
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
+
+            <a href="resizer.html" class="tool-card">
                 <div>
+                    <div class="icon-box">📏</div>
+                    <h3>Smart Resizer</h3>
+                    <p>Change image dimensions for Instagram, YouTube, and more.</p>
                     <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Post Frequency</label>
                     <select id="frequency" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold text-white">
                         </select>
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
             </div>
 
+            <a href="filters.html" class="tool-card">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
+                    <div class="icon-box">🎨</div>
+                    <h3>Artistic Filters</h3>
+                    <p>Apply stunning filters and effects to your photos instantly.</p>
                     <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Niche / Category</label>
                     <select id="niche" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none text-white">
                         <option>Motivational Quotes</option>
@@ -100,7 +176,14 @@
                         <option>Tech & AI News</option>
                     </select>
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
+            
+             <a href="enhancer.html" class="tool-card">
                 <div>
+                    <div class="icon-box">✨</div>
+                    <h3>AI Enhancer</h3>
+                    <p>Sharpen and upscale blurry photos using Deep Learning AI.</p>
                     <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Language</label>
                     <select id="language" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none text-white">
                         <option>Roman Urdu</option>
@@ -108,6 +191,8 @@
                         <option>American English</option>
                     </select>
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
             </div>
             
             <div>
@@ -116,6 +201,8 @@
             </div>
         </div>
 
+        <footer>Powered by <span class="sadsha">SadSha</span> ❤️ | Designed for the Community</footer>
+    </div>
         <div class="glass-card p-6 mb-8 bg-red-950/10 border-red-900/30">
             <label class="flex items-start gap-4 cursor-pointer">
                 <input type="checkbox" id="legalCheck" class="w-6 h-6 mt-1 accent-yellow-500">
@@ -195,4 +282,3 @@
         }
     </script>
 </body>
-</html>
