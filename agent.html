@@ -3,35 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SadSha AI Agent - Final Flow</title>
+    <title>RembgHD - Premium AI Photo Tools (Free Forever)</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>SadSha AI Agent - Master Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; line-height: 1.6; }
+        
+        header { padding: 40px 20px; text-align: center; background: linear-gradient(180deg, #111827 0%, #0b0f19 100%); }
+        .logo { font-size: 48px; font-weight: 800; color: var(--gold); margin-bottom: 10px; letter-spacing: -1px; }
+        .slogan { font-size: 18px; color: #9ca3af; font-weight: 400; margin-bottom: 20px; }
+        .badge { background: rgba(255, 215, 0, 0.1); color: var(--gold); padding: 5px 15px; border-radius: 50px; font-size: 14px; font-weight: 600; border: 1px solid rgba(255, 215, 0, 0.3); }
+
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+
+        .tool-card { 
+            background: var(--card-bg); 
+            border-radius: 24px; 
+            padding: 30px; 
+            text-decoration: none; 
+            color: white; 
+            transition: all 0.3s ease; 
+            border: 1px solid #1f2937;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .tool-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .icon-box { font-size: 40px; margin-bottom: 20px; }
+        .tool-card h3 { font-size: 22px; margin: 0 0 10px 0; color: var(--gold); }
+        .tool-card p { font-size: 15px; color: #9ca3af; margin: 0; }
+        
+        .action-text { margin-top: 20px; font-weight: 800; font-size: 14px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+
+        footer { margin-top: 80px; padding: 40px; text-align: center; border-top: 1px solid #1f2937; color: #666; font-style: italic; }
+        .sadsha { color: var(--gold); font-weight: 800; }
         body { background-color: #0b0f1a; color: white; font-family: 'Segoe UI', sans-serif; }
         .glass-card { background: #161b28; border: 1px solid #2d333f; border-radius: 20px; }
         .yellow-text { color: #FFD700; }
         .yellow-btn { background-color: #FFD700; color: #000; font-weight: 800; }
-        .promo-banner { background: linear-gradient(90deg, #1e40af, #3b82f6); box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-        .locked-section { opacity: 0.3; pointer-events: none; filter: grayscale(1); transition: all 0.5s ease; }
-        input, select, textarea { transition: all 0.3s ease; color: white !important; }
+        .promo-banner { background: linear-gradient(90deg, #1e40af, #3b82f6); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+        .alert-box { border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.1); }
+        input, select, textarea { transition: all 0.3s ease; }
         input:focus, select:focus { border-color: #FFD700 !important; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
     </style>
 </head>
+<body>
 <body class="min-h-screen p-4 md:p-10">
 
+    <header>
+        <div class="logo">RembgHD</div>
+        <div class="slogan">Premium AI Image processing tools for Everyone</div>
+        <span class="badge">It's free & always will be</span>
+    </header>
     <main class="max-w-4xl mx-auto">
         <div class="text-center mb-10">
             <h1 class="text-5xl font-black yellow-text tracking-tighter italic">SadSha AI Agent</h1>
-            <p class="text-gray-400 text-[10px] mt-2 tracking-[0.4em] uppercase font-bold">Advanced Social Automation</p>
+            <p class="text-gray-400 text-xs mt-2 tracking-[0.3em] uppercase italic font-bold">Advanced Social Automation</p>
         </div>
 
-        <div class="promo-banner p-4 rounded-2xl mb-8 text-center border border-blue-400/30">
-            <p class="font-black text-sm md:text-base italic uppercase tracking-tighter text-white">
-                🚀 3-MONTH PLAN OFFER: 15 DAYS EXTRA BONUS + 1-TIME PAGE REPLACEMENT GUARANTEE!
+    <div class="container">
+        <div class="grid">
+            <a href="remover.html" class="tool-card">
+                <div>
+                    <div class="icon-box">🖼️</div>
+                    <h3>HD BG Remover</h3>
+                    <p>Remove backgrounds with AI precision. No quality loss, instant download.</p>
+        <div class="glass-card p-6 mb-8 border-yellow-500/20">
+            <h2 class="text-lg font-bold mb-4 text-yellow-500 italic uppercase tracking-wider">1. System Activation</h2>
+            <div class="flex flex-col md:flex-row gap-4">
+                <input type="text" id="licenseKey" placeholder="Enter Key (e.g. 1M-SILVER-XYZ...)" class="flex-1 p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
+                <button onclick="activateSystem()" class="yellow-btn px-10 py-4 rounded-xl transition-transform active:scale-95 shadow-lg uppercase">Activate</button>
+            </div>
+            <p id="activateMsg" class="mt-4 font-bold text-center text-sm"></p>
+        </div>
+
+        <div id="offerBanner" class="promo-banner p-4 rounded-2xl mb-8 text-center">
+            <p class="font-black text-sm md:text-base italic uppercase tracking-tighter">
+                🚀 3-MONTH PLAN OFFER: 15 DAYS EXTRA BONUS + 1-TIME PAGE REPLACEMENT GUARANTEE INCLUDED!
             </p>
         </div>
 
-        <div class="glass-card p-8 mb-8 shadow-2xl border-white/5">
-            <h2 class="text-xl font-bold mb-8 border-b border-gray-700 pb-3 italic text-gray-300 uppercase">1. Agent Configuration</h2>
+        <div id="banAlert" class="hidden alert-box p-6 rounded-2xl mb-8">
+            <h3 class="text-red-500 font-black text-xl mb-2 italic uppercase">⚠️ Page Restriction Detected!</h3>
+            <p class="text-gray-300 text-sm mb-4">You have a 1-Time Replacement Guarantee. Submit proof to start the 24-hour review process.</p>
+            <button onclick="startReview()" id="reviewBtn" class="bg-red-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-700 transition-all">Claim Replacement Slot</button>
+            <p id="timerMsg" class="mt-3 text-yellow-500 font-bold italic"></p>
+        </div>
+
+        <div class="glass-card p-8 mb-8 shadow-2xl">
+            <h2 class="text-xl font-bold mb-8 border-b border-gray-700 pb-3 italic text-gray-300 uppercase">2. Agent Configuration</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div class="space-y-4">
@@ -40,83 +106,126 @@
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Facebook Page ID</label>
                     <input type="text" id="fbPageId" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
                 <div class="space-y-4">
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Select AI Model</label>
-                    <select id="aiModel" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
+                    <select id="aiModel" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none text-white">
                         <option>Google Gemini (Recommended)</option>
                         <option>OpenAI (ChatGPT)</option>
                     </select>
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">AI API Key</label>
-                    <input type="password" id="aiApiKey" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
+                    <input type="password" id="aiApiKey" placeholder="Paste your API key here" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
                 </div>
             </div>
 
+            <a href="webp-converter.html" class="tool-card">
             <div class="bg-black/30 p-6 rounded-2xl border border-gray-800 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div>
+                    <div class="icon-box">⚡</div>
+                    <h3>Image to WebP</h3>
+                    <p>Convert PNG/JPG to WebP format to speed up your website.</p>
                     <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Duration</label>
-                    <select id="planDuration" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
+                    <select id="planDuration" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold text-white">
                         <option value="1">1 Month Plan</option>
                         <option value="2">2 Months Plan</option>
-                        <option value="3">3 Months (Special)</option>
+                        <option value="3">3 Months (15 Days Extra)</option>
                     </select>
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
+
+            <a href="compressor.html" class="tool-card">
                 <div>
+                    <div class="icon-box">📉</div>
+                    <h3>Image Compressor</h3>
+                    <p>Reduce file size by up to 90% while maintaining HD quality.</p>
                     <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Package Type</label>
-                    <select id="planType" onchange="syncFrequency()" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
+                    <select id="planType" onchange="syncFrequency()" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold text-white">
                         <option value="silver">Silver Agent</option>
                         <option value="golden">Golden Agent</option>
                     </select>
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
+
+            <a href="resizer.html" class="tool-card">
                 <div>
-                    <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Frequency</label>
-                    <select id="frequency" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold">
+                    <div class="icon-box">📏</div>
+                    <h3>Smart Resizer</h3>
+                    <p>Change image dimensions for Instagram, YouTube, and more.</p>
+                    <label class="text-xs font-bold text-yellow-500 uppercase block mb-2">Post Frequency</label>
+                    <select id="frequency" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none font-bold text-white">
                         </select>
                 </div>
+                <div class="action-text">Try Now →</div>
+            </a>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <a href="filters.html" class="tool-card">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
+                    <div class="icon-box">🎨</div>
+                    <h3>Artistic Filters</h3>
+                    <p>Apply stunning filters and effects to your photos instantly.</p>
+                    <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Niche / Category</label>
+                    <select id="niche" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none text-white">
+                        <option>Motivational Quotes</option>
+                        <option>Islamic Teachings</option>
+                        <option>Health & Fitness</option>
+                        <option>Tech & AI News</option>
+                    </select>
+                </div>
+                <div class="action-text">Try Now →</div>
+            </a>
+            
+             <a href="enhancer.html" class="tool-card">
+                <div>
+                    <div class="icon-box">✨</div>
+                    <h3>AI Enhancer</h3>
+                    <p>Sharpen and upscale blurry photos using Deep Learning AI.</p>
                     <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Language</label>
-                    <select id="language" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none">
+                    <select id="language" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none text-white">
                         <option>Roman Urdu</option>
                         <option>British English</option>
+                        <option>American English</option>
                     </select>
                 </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase block mb-2">Niche</label>
-                    <select id="niche" class="w-full p-3 rounded-xl bg-slate-800 border border-gray-700 outline-none">
-                        <option>Motivational Quotes</option>
-                        <option>Islamic Content</option>
-                    </select>
-                </div>
+                <div class="action-text">Try Now →</div>
+            </a>
+            </div>
+            
+            <div>
+                <label class="text-sm font-bold text-gray-300 uppercase block mb-2">🤖 Custom Instructions for AI</label>
+                <textarea id="userPrompt" rows="3" class="w-full p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none" placeholder="Explain exactly how you want your posts to look..."></textarea>
             </div>
         </div>
 
-        <div id="activationSection" class="glass-card p-6 mb-8 border-yellow-500/20">
-            <h2 class="text-lg font-bold mb-4 text-yellow-500 italic uppercase tracking-wider">2. System Activation</h2>
-            <div class="flex flex-col md:flex-row gap-4">
-                <input type="text" id="licenseKey" placeholder="Enter Key (1M-SILVER...)" class="flex-1 p-4 rounded-xl bg-slate-900 border border-gray-700 outline-none">
-                <button id="activateBtn" onclick="activateSystem()" class="yellow-btn px-10 py-4 rounded-xl transition-transform active:scale-95 shadow-lg uppercase">Activate Now</button>
-            </div>
-            <p id="activateMsg" class="mt-4 font-bold text-center text-sm"></p>
+        <footer>Powered by <span class="sadsha">SadSha</span> ❤️ | Designed for the Community</footer>
+    </div>
+        <div class="glass-card p-6 mb-8 bg-red-950/10 border-red-900/30">
+            <label class="flex items-start gap-4 cursor-pointer">
+                <input type="checkbox" id="legalCheck" class="w-6 h-6 mt-1 accent-yellow-500">
+                <span class="text-sm md:text-base font-extrabold uppercase italic tracking-tighter text-gray-200">
+                    I accept full responsibility for any account-related issues or bans resulting from AI automation.
+                </span>
+            </label>
         </div>
 
-        <div class="mb-20">
-            <button onclick="startAgent()" class="w-full bg-green-600 hover:bg-green-500 text-black py-6 rounded-2xl font-black text-3xl shadow-2xl transition-all uppercase transform hover:scale-[1.01]">
-                START AI AGENT
-            </button>
-            <p id="agentStatus" class="text-center text-yellow-500 font-black italic mt-4"></p>
-        </div>
-
+        <button onclick="startAgent()" class="w-full bg-green-600 hover:bg-green-500 text-black py-6 rounded-2xl font-black text-3xl shadow-2xl transition-all uppercase mb-10 transform hover:scale-[1.01] active:scale-95">
+            START AI AGENT
+        </button>
+        <p id="agentStatus" class="text-center text-yellow-500 font-black italic mb-20"></p>
     </main>
 
     <footer class="pb-10 text-center border-t border-white/5 pt-10">
-        <p class="text-gray-600 text-[10px] tracking-[0.5em] font-bold uppercase italic">
-            Powered by <span class="yellow-text font-black">SadSha</span>
+        <p class="text-gray-600 text-[10px] tracking-[0.5em] font-bold uppercase">
+            Powered by <span class="yellow-text font-black italic">SadSha</span> | Community Edition
         </p>
     </footer>
 
     <script>
+        // Set default frequencies on load
         function syncFrequency() {
             const plan = document.getElementById('planType').value;
             const freq = document.getElementById('frequency');
@@ -127,37 +236,49 @@
             }
         }
 
+        let isActivated = false;
+
         function activateSystem() {
             const key = document.getElementById('licenseKey').value.toLowerCase();
             const msg = document.getElementById('activateMsg');
-            const section = document.getElementById('activationSection');
             
             if(key.includes("1m") || key.includes("2m") || key.includes("3m")) {
-                msg.innerHTML = "✅ KEY ACTIVATED - SYSTEM LOCKED";
+                msg.innerHTML = "✅ SYSTEM READY: KEY VERIFIED AND ACTIVE.";
                 msg.style.color = "#4ade80";
-                // LOCK THE SECTION AFTER ACTIVATION
-                section.classList.add('locked-section');
+                isActivated = true;
                 localStorage.setItem('sadsha_active', 'true');
             } else {
-                msg.innerHTML = "❌ INVALID LICENSE KEY";
+                msg.innerHTML = "❌ INVALID KEY: PLEASE ENTER A VALID LICENSE.";
                 msg.style.color = "#f87171";
+                isActivated = false;
             }
+        }
+
+        function startReview() {
+            const btn = document.getElementById('reviewBtn');
+            const timer = document.getElementById('timerMsg');
+            btn.classList.add('hidden');
+            timer.innerHTML = "⏳ APPLICATION UNDER REVIEW. SYSTEM WILL AUTO-RESET PAGE SLOT IN 24 HOURS.";
         }
 
         function startAgent() {
-            if(localStorage.getItem('sadsha_active') !== 'true') {
-                alert("Please activate the system at the bottom first.");
+            if(!isActivated && localStorage.getItem('sadsha_active') !== 'true') {
+                alert("Please activate the system with a valid key first.");
                 return;
             }
-            document.getElementById('agentStatus').innerHTML = "🚀 AGENT ACTIVE AND POSTING...";
+            if(!document.getElementById('legalCheck').checked) {
+                alert("Please accept the responsibility disclaimer.");
+                return;
+            }
+            document.getElementById('agentStatus').innerHTML = "🚀 AGENT ACTIVE: GENERATING POSTS VIA GEMINI...";
         }
 
+        // Initialize
         syncFrequency();
         if(localStorage.getItem('sadsha_active') === 'true') {
-            document.getElementById('activationSection').classList.add('locked-section');
-            document.getElementById('activateMsg').innerHTML = "✅ SYSTEM ALREADY ACTIVE";
+            document.getElementById('activateMsg').innerHTML = "✅ SYSTEM ACTIVE (RESTORED SESSION)";
             document.getElementById('activateMsg').style.color = "#4ade80";
+            isActivated = true;
         }
     </script>
 </body>
-</html>
