@@ -3,88 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 3D Motion - RembgHD</title>
+    <title>Edge AI 3D - RembgHD</title>
+    <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; min-height: 100vh; overflow-x: hidden; }
-        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-        h1 { color: var(--gold); font-size: 32px; font-weight: 800; }
-        .upload-box { background: var(--card-bg); border: 2px dashed #374151; padding: 40px; border-radius: 20px; cursor: pointer; margin-bottom: 20px; }
-        input[type="file"] { display: none; }
-        .preview-box { position: relative; width: 100%; max-width: 500px; margin: 20px auto; border-radius: 15px; overflow: hidden; display: none; border: 3px solid var(--gold); }
-        #motionImg { width: 100%; height: auto; transform: scale(1.1); transition: transform 0.1s ease-out; }
-        .label { font-size: 14px; color: var(--gold); margin-top: 10px; font-weight: 600; }
-        .controls { margin-top: 20px; color: #9ca3af; font-size: 14px; }
-        .back-link { display: inline-block; margin-bottom: 20px; color: #6b7280; text-decoration: none; }
+        :root { --gold: #FFD700; --dark-bg: #0b0f19; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
+        .container { max-width: 800px; margin: auto; padding: 40px 20px; }
+        .upload-box { border: 2px dashed #333; padding: 40px; border-radius: 20px; cursor: pointer; background: #111827; }
+        #canvas { width: 100%; max-width: 500px; border-radius: 15px; display: none; margin: 20px auto; border: 2px solid var(--gold); }
+        .status { margin: 20px; color: var(--gold); font-weight: 600; }
+        .loader { display: none; border: 4px solid #f3f3f3; border-top: 4px solid var(--gold); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <a href="index.html" class="back-link">← Back to Dashboard</a>
-        <h1>🎬 3D Motion Live Preview</h1>
-        <p style="color: #9ca3af;">Move your mouse over the image after uploading!</p>
+<div class="container">
+    <h1 style="color: var(--gold);">Local Device AI 3D</h1>
+    <p>Processing on your device (No Server Needed)</p>
 
-        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-            <div style="font-size: 40px;">📸</div>
-            <p id="uploadText">Upload Furniture Photo</p>
-            <input type="file" id="fileInput" accept="image/*">
-        </div>
+    <div id="setup-status" class="status">Initializing AI Engine...</div>
+    <div class="loader" id="loader"></div>
 
-        <div class="preview-box" id="previewBox">
-            <img id="motionImg" src="">
-        </div>
-        
-        <div id="statusLabel" class="label" style="display:none;">3D MODE ACTIVE: Move your mouse or tilt phone</div>
-        
-        <div class="controls">
-            This tool uses <strong>Client-Side Parallax</strong>. No data is sent to servers.
-        </div>
+    <div class="upload-box" id="dropZone" style="display:none;" onclick="document.getElementById('fileInput').click()">
+        <p>AI Ready. Upload Photo</p>
+        <input type="file" id="fileInput" accept="image/*">
     </div>
 
-    <script>
-        const fileInput = document.getElementById('fileInput');
-        const previewBox = document.getElementById('previewBox');
-        const motionImg = document.getElementById('motionImg');
-        const statusLabel = document.getElementById('statusLabel');
+    <canvas id="canvas"></canvas>
+    <div id="output-text" style="margin-top:20px; color:#9ca3af;"></div>
+</div>
 
-        fileInput.onchange = () => {
-            const file = fileInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    motionImg.src = e.target.result;
-                    previewBox.style.display = 'block';
-                    statusLabel.style.display = 'block';
-                    document.getElementById('uploadText').innerText = "File: " + file.name;
-                };
-                reader.readAsDataURL(file);
-            }
-        };
+<script type="module">
+    // Transformers.js ko load karna
+    import { pipeline, RawImage } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0';
 
-        // 3D Parallax Logic (Mouse Move)
-        previewBox.addEventListener('mousemove', (e) => {
-            const { left, top, width, height } = previewBox.getBoundingClientRect();
-            const x = (e.clientX - left) / width - 0.5;
-            const y = (e.clientY - top) / height - 0.5;
+    const status = document.getElementById('setup-status');
+    const loader = document.getElementById('loader');
+    const dropZone = document.getElementById('dropZone');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
 
-            // Image ko thora sa rotate aur move karna
-            motionImg.style.transform = `scale(1.1) translate(${x * 30}px, ${y * 30}px) rotateY(${x * 10}deg) rotateX(${y * -10}deg)`;
-        });
+    let depthEstimator;
 
-        previewBox.addEventListener('mouseleave', () => {
-            motionImg.style.transform = `scale(1.1) translate(0, 0) rotateY(0) rotateX(0)`;
-        });
-
-        // Mobile Gyroscope (Tilt Effect)
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', (e) => {
-                const x = e.gamma / 45; // Left/Right tilt
-                const y = e.beta / 45;  // Front/Back tilt
-                motionImg.style.transform = `scale(1.1) translate(${x * 20}px, ${y * 20}px)`;
-            });
+    // AI Model load karna (Browser memory mein)
+    async function init() {
+        loader.style.display = 'block';
+        try {
+            status.innerText = "Loading AI Model (~15MB)...";
+            depthEstimator = await pipeline('depth-estimation', 'Xenova/depth-anything-small');
+            status.innerText = "AI Engine Active ✅";
+            loader.style.display = 'none';
+            dropZone.style.display = 'block';
+        } catch (e) {
+            status.innerText = "Error loading AI. Try refreshing.";
         }
-    </script>
+    }
+
+    init();
+
+    document.getElementById('fileInput').addEventListener('change', async (e) => {
+        const file = e.target.target.files[0];
+        if (!file) return;
+
+        status.innerText = "Analyzing 3D Depth...";
+        loader.style.display = 'block';
+
+        const url = URL.createObjectURL(file);
+        const image = await RawImage.read(url);
+
+        // Actual AI Processing (User ke Mobile/PC par)
+        const result = await depthEstimator(image);
+
+        // Depth map ko canvas par draw karna
+        const output = result.depth;
+        canvas.width = output.width;
+        canvas.height = output.height;
+        canvas.style.display = 'block';
+
+        const imageData = ctx.createImageData(output.width, output.height);
+        for (let i = 0; i < output.data.length; ++i) {
+            const val = output.data[i];
+            const offset = i * 4;
+            imageData.data[offset] = val;
+            imageData.data[offset + 1] = val;
+            imageData.data[offset + 2] = val;
+            imageData.data[offset + 3] = 255;
+        }
+        ctx.putImageData(imageData, 0, 0);
+
+        status.innerText = "3D Depth Extracted Successfully!";
+        loader.style.display = 'none';
+    });
+</script>
+
 </body>
 </html>
