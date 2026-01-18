@@ -7,104 +7,84 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; min-height: 100vh; }
-        .container { max-width: 900px; margin: 0 auto; padding: 50px 20px; }
-        h1 { color: var(--gold); font-size: 38px; font-weight: 800; margin-bottom: 10px; }
-        .upload-box { background: var(--card-bg); border: 2px dashed #374151; padding: 60px 20px; border-radius: 24px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
-        .upload-box:hover { border-color: var(--gold); background: #1f2937; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; min-height: 100vh; overflow-x: hidden; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        h1 { color: var(--gold); font-size: 32px; font-weight: 800; }
+        .upload-box { background: var(--card-bg); border: 2px dashed #374151; padding: 40px; border-radius: 20px; cursor: pointer; margin-bottom: 20px; }
         input[type="file"] { display: none; }
-        .btn { background: var(--gold); color: #000; padding: 16px 45px; border-radius: 50px; font-weight: 800; cursor: pointer; border: none; margin-top: 10px; font-size: 16px; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2); }
-        #loading { display: none; margin-top: 25px; color: var(--gold); font-weight: 600; font-size: 18px; }
-        .result-container { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        img { max-width: 100%; border-radius: 16px; border: 1px solid #1f2937; box-shadow: 0 10px 30px rgba(0,0,0,0.5); background: #000; }
-        .label { font-size: 13px; color: var(--gold); margin-bottom: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
-        .back-link { display: inline-block; margin-bottom: 30px; color: #6b7280; text-decoration: none; font-weight: 600; }
+        .preview-box { position: relative; width: 100%; max-width: 500px; margin: 20px auto; border-radius: 15px; overflow: hidden; display: none; border: 3px solid var(--gold); }
+        #motionImg { width: 100%; height: auto; transform: scale(1.1); transition: transform 0.1s ease-out; }
+        .label { font-size: 14px; color: var(--gold); margin-top: 10px; font-weight: 600; }
+        .controls { margin-top: 20px; color: #9ca3af; font-size: 14px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #6b7280; text-decoration: none; }
     </style>
 </head>
 <body>
 
     <div class="container">
         <a href="index.html" class="back-link">← Back to Dashboard</a>
-        <h1>🎬 AI 3D Motion</h1>
-        <p style="color: #9ca3af; margin-bottom: 40px;">No more connection errors. High-speed 3D depth extraction.</p>
+        <h1>🎬 3D Motion Live Preview</h1>
+        <p style="color: #9ca3af;">Move your mouse over the image after uploading!</p>
 
         <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-            <div style="font-size: 50px; margin-bottom: 15px;">🚀</div>
-            <p id="uploadText" style="font-size: 18px;">Upload your furniture photo (Any size)</p>
+            <div style="font-size: 40px;">📸</div>
+            <p id="uploadText">Upload Furniture Photo</p>
             <input type="file" id="fileInput" accept="image/*">
         </div>
 
-        <button id="processBtn" class="btn" style="display:none;">GENERATE 3D MOTION MAP</button>
-
-        <div id="loading">✨ Processing with Super-Speed AI...</div>
-
-        <div class="result-container" id="resultArea" style="display:none;">
-            <div>
-                <div class="label">Original Image</div>
-                <img id="originalImg" src="">
-            </div>
-            <div>
-                <div class="label">3D Motion (Depth)</div>
-                <img id="depthImg" src="">
-            </div>
+        <div class="preview-box" id="previewBox">
+            <img id="motionImg" src="">
+        </div>
+        
+        <div id="statusLabel" class="label" style="display:none;">3D MODE ACTIVE: Move your mouse or tilt phone</div>
+        
+        <div class="controls">
+            This tool uses <strong>Client-Side Parallax</strong>. No data is sent to servers.
         </div>
     </div>
 
     <script>
         const fileInput = document.getElementById('fileInput');
-        const processBtn = document.getElementById('processBtn');
-        const loading = document.getElementById('loading');
-        const resultArea = document.getElementById('resultArea');
-        const originalImg = document.getElementById('originalImg');
-        const depthImg = document.getElementById('depthImg');
+        const previewBox = document.getElementById('previewBox');
+        const motionImg = document.getElementById('motionImg');
+        const statusLabel = document.getElementById('statusLabel');
 
         fileInput.onchange = () => {
-            if (fileInput.files[0]) {
+            const file = fileInput.files[0];
+            if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    originalImg.src = e.target.result;
-                    processBtn.style.display = 'inline-block';
-                    resultArea.style.display = 'none';
-                    document.getElementById('uploadText').innerText = "Ready: " + fileInput.files[0].name;
+                    motionImg.src = e.target.result;
+                    previewBox.style.display = 'block';
+                    statusLabel.style.display = 'block';
+                    document.getElementById('uploadText').innerText = "File: " + file.name;
                 };
-                reader.readAsDataURL(fileInput.files[0]);
+                reader.readAsDataURL(file);
             }
         };
 
-        processBtn.onclick = async () => {
-            loading.style.display = 'block';
-            processBtn.style.display = 'none';
+        // 3D Parallax Logic (Mouse Move)
+        previewBox.addEventListener('mousemove', (e) => {
+            const { left, top, width, height } = previewBox.getBoundingClientRect();
+            const x = (e.clientX - left) / width - 0.5;
+            const y = (e.clientY - top) / height - 0.5;
 
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-            formData.append('upload_preset', 'ml_default'); // No Key Needed for this public test
+            // Image ko thora sa rotate aur move karna
+            motionImg.style.transform = `scale(1.1) translate(${x * 30}px, ${y * 30}px) rotateY(${x * 10}deg) rotateX(${y * -10}deg)`;
+        });
 
-            try {
-                // Step 1: Upload to Cloudinary
-                const uploadRes = await fetch("https://api.cloudinary.com/v1_1/demo/image/upload", {
-                    method: "POST",
-                    body: formData
-                });
-                const uploadData = await uploadRes.json();
+        previewBox.addEventListener('mouseleave', () => {
+            motionImg.style.transform = `scale(1.1) translate(0, 0) rotateY(0) rotateX(0)`;
+        });
 
-                if (uploadData.secure_url) {
-                    // Step 2: Use Cloudinary's AI to generate Depth Effect URL
-                    // Hum image URL mein 'e_make_transparent' ya 'e_grayscale' jaisay effects test kar saktay hain
-                    // Filhal hum depth map ki simulation dikhayenge jo foran load hogi
-                    const depthUrl = uploadData.secure_url.replace("/upload/", "/upload/e_grayscale/e_contrast:50/");
-                    
-                    depthImg.src = depthUrl;
-                    resultArea.style.display = 'grid';
-                } else {
-                    alert("Upload failed. Try again.");
-                }
-            } catch (e) {
-                alert("Server busy. Please try one more time.");
-            }
-            
-            loading.style.display = 'none';
-            processBtn.style.display = 'inline-block';
-        };
+        // Mobile Gyroscope (Tilt Effect)
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (e) => {
+                const x = e.gamma / 45; // Left/Right tilt
+                const y = e.beta / 45;  // Front/Back tilt
+                motionImg.style.transform = `scale(1.1) translate(${x * 20}px, ${y * 20}px)`;
+            });
+        }
     </script>
 </body>
 </html>
