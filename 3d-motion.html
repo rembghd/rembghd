@@ -3,86 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro 3D Motion - RembgHD</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <title>Cinematic 3D - RembgHD</title>
     <style>
-        body { margin: 0; background: #0b0f19; color: white; font-family: sans-serif; overflow: hidden; text-align: center; }
-        #controls { position: absolute; top: 20px; width: 100%; z-index: 10; }
-        .btn { background: #FFD700; color: black; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; }
-        #canvas-container { width: 100vw; height: 100vh; cursor: move; }
-        input[type="file"] { display: none; }
+        :root { --gold: #FFD700; }
+        body { margin: 0; background: #05070a; color: white; font-family: 'Inter', sans-serif; overflow: hidden; }
+        .ui { position: absolute; width: 100%; z-index: 100; padding: 20px; text-align: center; pointer-events: none; }
+        .btn { background: var(--gold); color: black; padding: 15px 30px; border-radius: 50px; cursor: pointer; font-weight: 800; border: none; pointer-events: auto; box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+        #container { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; perspective: 1500px; }
+        #view-card { 
+            width: 80%; max-width: 500px; aspect-ratio: 4/5; 
+            background-size: cover; background-position: center;
+            border-radius: 20px; border: 1px solid rgba(255,215,0,0.3);
+            transform-style: preserve-3d;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+            transition: transform 0.1s ease-out;
+            display: none;
+        }
+        /* Depth Shadow Effect */
+        #view-card::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.4) 100%);
+            border-radius: 20px; pointer-events: none;
+        }
     </style>
 </head>
 <body>
 
-    <div id="controls">
-        <h2 id="msg">Select Chair Photo for 3D View</h2>
-        <button class="btn" onclick="document.getElementById('fileInput').click()">UPLOAD PHOTO</button>
-        <input type="file" id="fileInput" accept="image/*">
-        <p style="font-size: 12px; color: #666;">Drag to rotate | Scroll to zoom</p>
+    <div class="ui">
+        <h1 style="color: var(--gold); letter-spacing: 2px;">CINEMATIC 3D SHOWCASE</h1>
+        <button class="btn" onclick="document.getElementById('fileInput').click()">UPLOAD PRODUCT PHOTO</button>
+        <input type="file" id="fileInput" accept="image/*" style="display:none;">
     </div>
 
-    <div id="canvas-container"></div>
+    <div id="container">
+        <div id="view-card"></div>
+    </div>
 
     <script>
-        let scene, camera, renderer, plane;
-
-        function init3D(imageSrc) {
-            document.getElementById('canvas-container').innerHTML = '';
-            document.getElementById('msg').innerText = "3D MODE ACTIVE";
-
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 5;
-
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-            const loader = new THREE.TextureLoader();
-            loader.load(imageSrc, function(texture) {
-                const geometry = new THREE.PlaneGeometry(4, 4);
-                const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-                plane = new THREE.Mesh(geometry, material);
-                scene.add(plane);
-                animate();
-            });
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            renderer.render(scene, camera);
-        }
-
-        // Mouse Rotation Logic
-        let isDragging = false;
-        let previousMouseX = 0;
-        let previousMouseY = 0;
-
-        document.addEventListener('mousedown', () => isDragging = true);
-        document.addEventListener('mouseup', () => isDragging = false);
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging && plane) {
-                const deltaX = e.pageX - previousMouseX;
-                const deltaY = e.pageY - previousMouseY;
-                plane.rotation.y += deltaX * 0.01;
-                plane.rotation.x += deltaY * 0.01;
-            }
-            previousMouseX = e.pageX;
-            previousMouseY = e.pageY;
-        });
+        const card = document.getElementById('view-card');
+        const container = document.getElementById('container');
 
         document.getElementById('fileInput').onchange = (e) => {
+            const file = e.target.files[0];
             const reader = new FileReader();
-            reader.onload = (event) => init3D(event.target.result);
-            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = (event) => {
+                card.style.backgroundImage = `url(${event.target.result})`;
+                card.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
         };
 
-        window.addEventListener('resize', () => {
-            if(camera) {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
+        // Real Interactive Perspective
+        container.addEventListener('mousemove', (e) => {
+            if(card.style.display === 'block') {
+                const x = (window.innerWidth / 2 - e.pageX) / 15;
+                const y = (window.innerHeight / 2 - e.pageY) / 15;
+                
+                // Ye logic chair ko rotate karte waqt uski depth aur shadow ko change karega
+                card.style.transform = `rotateY(${-x}deg) rotateX(${y}deg) translateZ(50px)`;
+            }
+        });
+
+        // Mobile Tilt Support
+        window.addEventListener('deviceorientation', (e) => {
+            if(card.style.display === 'block') {
+                const x = e.gamma / 2;
+                const y = e.beta / 2;
+                card.style.transform = `rotateY(${x}deg) rotateX(${y}deg) translateZ(50px)`;
             }
         });
     </script>
