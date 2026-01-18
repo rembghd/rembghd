@@ -10,18 +10,16 @@
         body { margin: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; min-height: 100vh; }
         .container { max-width: 900px; margin: 0 auto; padding: 50px 20px; }
         h1 { color: var(--gold); font-size: 38px; font-weight: 800; margin-bottom: 10px; }
-        .upload-box { background: var(--card-bg); border: 2px dashed #374151; padding: 60px 20px; border-radius: 24px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; position: relative; }
+        .upload-box { background: var(--card-bg); border: 2px dashed #374151; padding: 60px 20px; border-radius: 24px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
         .upload-box:hover { border-color: var(--gold); background: #1f2937; }
         input[type="file"] { display: none; }
         .btn { background: var(--gold); color: #000; padding: 16px 45px; border-radius: 50px; font-weight: 800; cursor: pointer; border: none; margin-top: 10px; font-size: 16px; transition: 0.3s; }
         .btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
-        #loading { display: none; margin-top: 25px; color: var(--gold); font-weight: 600; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+        #loading { display: none; margin-top: 25px; color: var(--gold); font-weight: 600; }
         .result-container { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         img { max-width: 100%; border-radius: 16px; border: 1px solid #1f2937; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .label { font-size: 13px; color: var(--gold); margin-bottom: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; }
-        .back-link { display: block; margin-bottom: 30px; color: #6b7280; text-decoration: none; font-weight: 600; transition: 0.3s; }
-        .back-link:hover { color: var(--gold); }
+        .back-link { display: block; margin-bottom: 30px; color: #6b7280; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -29,17 +27,17 @@
     <div class="container">
         <a href="index.html" class="back-link">← Back to Dashboard</a>
         <h1>🎬 AI 3D Motion</h1>
-        <p style="color: #9ca3af; margin-bottom: 40px;">Instantly extract 3D depth for cinematic furniture & tech showcase.</p>
+        <p style="color: #9ca3af; margin-bottom: 40px;">Professional Depth Extraction for Furniture Showcases.</p>
 
-        <div class="upload-box" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
             <div style="font-size: 50px; margin-bottom: 15px;">✨</div>
-            <p id="uploadText" style="font-size: 18px;">Click to upload your product photo</p>
+            <p id="uploadText" style="font-size: 18px;">Click to upload chair or table photo</p>
             <input type="file" id="fileInput" accept="image/*">
         </div>
 
         <button id="processBtn" class="btn" style="display:none;">GENERATE 3D DEPTH</button>
 
-        <div id="loading">🚀 AI is analyzing depth (up to 30s)...</div>
+        <div id="loading">🚀 AI is working... This usually takes 5-10 seconds.</div>
 
         <div class="result-container" id="resultArea" style="display:none;">
             <div>
@@ -61,7 +59,6 @@
         const originalImg = document.getElementById('originalImg');
         const depthImg = document.getElementById('depthImg');
 
-        // Secure Key Construction
         const k1 = "hf_uITZcAEQWvIFuGDGbdqVE";
         const k2 = "qRqzurpNHlzOX";
         const KEY = k1 + k2;
@@ -73,7 +70,7 @@
                     originalImg.src = e.target.result;
                     processBtn.style.display = 'inline-block';
                     resultArea.style.display = 'none';
-                    document.getElementById('uploadText').innerText = "File Ready: " + fileInput.files[0].name;
+                    document.getElementById('uploadText').innerText = "Selected: " + fileInput.files[0].name;
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             }
@@ -85,14 +82,11 @@
 
             try {
                 const response = await fetch(
-                    "https://api-inference.huggingface.co/models/depth-anything/Depth-Anything-V2-Base",
+                    "https://api-inference.huggingface.co/models/Intel/dpt-large",
                     {
-                        headers: { 
-                            "Authorization": `Bearer ${KEY}`,
-                            "Content-Type": "application/octet-stream"
-                        },
+                        headers: { Authorization: `Bearer ${KEY}` },
                         method: "POST",
-                        body: await fileInput.files[0].arrayBuffer(),
+                        body: fileInput.files[0],
                     }
                 );
 
@@ -102,17 +96,12 @@
                     resultArea.style.display = 'grid';
                     loading.style.display = 'none';
                 } else {
-                    const error = await response.json();
-                    if (error.error.includes("loading")) {
-                        alert("Model is starting up. Please wait 10 seconds and click again!");
-                    } else {
-                        alert("API Busy. Please try again in a moment.");
-                    }
+                    alert("Model is waking up. Wait 5 seconds and try again!");
                     processBtn.style.display = 'inline-block';
                     loading.style.display = 'none';
                 }
             } catch (e) {
-                alert("Connection stable but model timed out. Try smaller image or wait 10 seconds.");
+                alert("Connection error. Try a smaller file.");
                 processBtn.style.display = 'inline-block';
                 loading.style.display = 'none';
             }
