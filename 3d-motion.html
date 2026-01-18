@@ -3,100 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edge AI 3D - RembgHD</title>
-    <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Pro 3D Motion - RembgHD</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        :root { --gold: #FFD700; --dark-bg: #0b0f19; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
-        .container { max-width: 800px; margin: auto; padding: 40px 20px; }
-        .upload-box { border: 2px dashed #333; padding: 40px; border-radius: 20px; cursor: pointer; background: #111827; }
-        #canvas { width: 100%; max-width: 500px; border-radius: 15px; display: none; margin: 20px auto; border: 2px solid var(--gold); }
-        .status { margin: 20px; color: var(--gold); font-weight: 600; }
-        .loader { display: none; border: 4px solid #f3f3f3; border-top: 4px solid var(--gold); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { margin: 0; background: #0b0f19; color: white; font-family: sans-serif; overflow: hidden; text-align: center; }
+        #controls { position: absolute; top: 20px; width: 100%; z-index: 10; }
+        .btn { background: #FFD700; color: black; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; border: none; }
+        #canvas-container { width: 100vw; height: 100vh; cursor: move; }
+        input[type="file"] { display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1 style="color: var(--gold);">Local Device AI 3D</h1>
-    <p>Processing on your device (No Server Needed)</p>
-
-    <div id="setup-status" class="status">Initializing AI Engine...</div>
-    <div class="loader" id="loader"></div>
-
-    <div class="upload-box" id="dropZone" style="display:none;" onclick="document.getElementById('fileInput').click()">
-        <p>AI Ready. Upload Photo</p>
+    <div id="controls">
+        <h2 id="msg">Select Chair Photo for 3D View</h2>
+        <button class="btn" onclick="document.getElementById('fileInput').click()">UPLOAD PHOTO</button>
         <input type="file" id="fileInput" accept="image/*">
+        <p style="font-size: 12px; color: #666;">Drag to rotate | Scroll to zoom</p>
     </div>
 
-    <canvas id="canvas"></canvas>
-    <div id="output-text" style="margin-top:20px; color:#9ca3af;"></div>
-</div>
+    <div id="canvas-container"></div>
 
-<script type="module">
-    // Transformers.js ko load karna
-    import { pipeline, RawImage } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0';
+    <script>
+        let scene, camera, renderer, plane;
 
-    const status = document.getElementById('setup-status');
-    const loader = document.getElementById('loader');
-    const dropZone = document.getElementById('dropZone');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+        function init3D(imageSrc) {
+            document.getElementById('canvas-container').innerHTML = '';
+            document.getElementById('msg').innerText = "3D MODE ACTIVE";
 
-    let depthEstimator;
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
 
-    // AI Model load karna (Browser memory mein)
-    async function init() {
-        loader.style.display = 'block';
-        try {
-            status.innerText = "Loading AI Model (~15MB)...";
-            depthEstimator = await pipeline('depth-estimation', 'Xenova/depth-anything-small');
-            status.innerText = "AI Engine Active ✅";
-            loader.style.display = 'none';
-            dropZone.style.display = 'block';
-        } catch (e) {
-            status.innerText = "Error loading AI. Try refreshing.";
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            const loader = new THREE.TextureLoader();
+            loader.load(imageSrc, function(texture) {
+                const geometry = new THREE.PlaneGeometry(4, 4);
+                const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
+                plane = new THREE.Mesh(geometry, material);
+                scene.add(plane);
+                animate();
+            });
         }
-    }
 
-    init();
-
-    document.getElementById('fileInput').addEventListener('change', async (e) => {
-        const file = e.target.target.files[0];
-        if (!file) return;
-
-        status.innerText = "Analyzing 3D Depth...";
-        loader.style.display = 'block';
-
-        const url = URL.createObjectURL(file);
-        const image = await RawImage.read(url);
-
-        // Actual AI Processing (User ke Mobile/PC par)
-        const result = await depthEstimator(image);
-
-        // Depth map ko canvas par draw karna
-        const output = result.depth;
-        canvas.width = output.width;
-        canvas.height = output.height;
-        canvas.style.display = 'block';
-
-        const imageData = ctx.createImageData(output.width, output.height);
-        for (let i = 0; i < output.data.length; ++i) {
-            const val = output.data[i];
-            const offset = i * 4;
-            imageData.data[offset] = val;
-            imageData.data[offset + 1] = val;
-            imageData.data[offset + 2] = val;
-            imageData.data[offset + 3] = 255;
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
         }
-        ctx.putImageData(imageData, 0, 0);
 
-        status.innerText = "3D Depth Extracted Successfully!";
-        loader.style.display = 'none';
-    });
-</script>
+        // Mouse Rotation Logic
+        let isDragging = false;
+        let previousMouseX = 0;
+        let previousMouseY = 0;
 
+        document.addEventListener('mousedown', () => isDragging = true);
+        document.addEventListener('mouseup', () => isDragging = false);
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging && plane) {
+                const deltaX = e.pageX - previousMouseX;
+                const deltaY = e.pageY - previousMouseY;
+                plane.rotation.y += deltaX * 0.01;
+                plane.rotation.x += deltaY * 0.01;
+            }
+            previousMouseX = e.pageX;
+            previousMouseY = e.pageY;
+        });
+
+        document.getElementById('fileInput').onchange = (e) => {
+            const reader = new FileReader();
+            reader.onload = (event) => init3D(event.target.result);
+            reader.readAsDataURL(e.target.files[0]);
+        };
+
+        window.addEventListener('resize', () => {
+            if(camera) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        });
+    </script>
 </body>
 </html>
