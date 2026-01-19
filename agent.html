@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA Premium Agent | RembgHD</title>
+    <title>SADSHA Agent | RembgHD - Premium Production Engine</title>
+    <link rel="icon" type="image/png" href="https://rembghd.com/favicon.png">
+    
     <style>
-        /* RembgHD Main Site Theme Matching */
+        :root {
+            --bg-color: #0b1120;
+            --card-bg: #111827;
+            --primary-yellow: #fbbf24;
+            --text-gray: #9ca3af;
+            --border-color: #1f2937;
+        }
+
         body { 
-            background-color: #0b1120; /* Deep dark blue from your site */
+            background-color: var(--bg-color); 
             color: #ffffff; 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
@@ -17,154 +26,169 @@
             min-height: 100vh;
         }
 
+        /* The "Lalach" Banner - Top Priority */
+        #promo-banner {
+            width: 100%;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 15px 0;
+            text-align: center;
+            font-weight: 800;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+
         .engine-card { 
-            background: #111827; /* Card color from rembghd.com */
+            background: var(--card-bg); 
             width: 100%; 
             max-width: 550px; 
             padding: 40px; 
-            border-radius: 20px; 
-            border: 1px solid #1f2937; 
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            margin-top: 50px;
+            border-radius: 24px; 
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
+            margin: 30px 10px;
         }
 
-        .logo-text {
-            font-size: 32px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .logo-text span { color: #fbbf24; /* Yellow accent from your logo */ }
+        /* Site Logo Style */
+        .logo-container { text-align: center; margin-bottom: 30px; }
+        .logo-text { font-size: 38px; font-weight: 900; letter-spacing: -1px; margin: 0; }
+        .logo-text span { color: var(--primary-yellow); }
+        .tagline { color: var(--text-gray); font-size: 14px; margin-top: 5px; font-weight: 500; }
 
-        .sub-text {
-            text-align: center;
-            color: #9ca3af;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        .input-group { margin-bottom: 25px; }
-        label { 
-            display: block; 
-            margin-bottom: 10px; 
-            font-size: 14px; 
-            color: #fbbf24; /* Yellow labels like your Try Now links */
-            font-weight: 600;
-        }
+        .input-group { margin-bottom: 22px; }
+        label { display: block; margin-bottom: 8px; font-size: 12px; color: var(--primary-yellow); font-weight: 700; letter-spacing: 0.5px; }
 
         select, input[type="text"] { 
             width: 100%; 
             padding: 14px; 
-            background: #0b1120; 
+            background: var(--bg-color); 
             border: 1px solid #374151; 
             color: #ffffff; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             box-sizing: border-box; 
             font-size: 15px;
             outline: none;
-        }
-
-        select:focus, input:focus { border-color: #fbbf24; }
-
-        .hf-divider {
-            border-top: 1px solid #1f2937;
-            margin: 20px 0;
-            padding-top: 20px;
-        }
-
-        .btn-start { 
-            width: 100%; 
-            background: #fbbf24; /* Yellow button */
-            color: #000; 
-            padding: 16px; 
-            border: none; 
-            border-radius: 10px; 
-            font-weight: 800; 
-            font-size: 16px; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
             transition: 0.3s;
         }
 
-        .btn-start:hover { background: #f59e0b; transform: translateY(-2px); }
+        select:focus, input:focus { border-color: var(--primary-yellow); box-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
 
-        /* Footer & Live Stats */
-        .agent-footer {
-            margin-top: auto;
-            padding: 40px 20px;
-            text-align: center;
-            width: 100%;
+        .info-box {
+            background: rgba(31, 41, 55, 0.5);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-top: 8px;
+            border-left: 3px solid var(--primary-yellow);
         }
 
-        .live-traffic-box {
+        .btn-launch { 
+            width: 100%; 
+            background: var(--primary-yellow); 
+            color: #000; 
+            padding: 18px; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: 900; 
+            font-size: 16px; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            margin-top: 15px;
+        }
+
+        .agent-footer { margin-top: auto; padding-bottom: 30px; text-align: center; }
+        .live-traffic {
             background: rgba(251, 191, 36, 0.1);
             border: 1px solid rgba(251, 191, 36, 0.2);
             padding: 8px 20px;
             border-radius: 50px;
-            display: inline-block;
-            color: #fbbf24;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-
-        .footer-links {
-            color: #6b7280;
+            color: var(--primary-yellow);
             font-size: 12px;
-            letter-spacing: 1px;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
+    <div id="promo-banner">
+        🔥 BUMPER OFFER: Select 3 Months & Get 15 Days EXTRA FREE! 🔥
+    </div>
+
     <div class="engine-card">
-        <div class="logo-text">Rembg<span>HD</span> Agent</div>
-        <p class="sub-text">Premium AI Image processing tools for Everyone</p>
+        <div class="logo-container">
+            <h1 class="logo-text">Rembg<span>HD</span> Agent</h1>
+            <div class="tagline">Premium AI Image Processing Tools for Everyone</div>
+        </div>
 
         <div class="input-group">
-            <label>CHOOSE TEXT ENGINE</label>
+            <label>CHOOSE PRODUCTION PLAN</label>
+            <select id="subPlan" onchange="updateLimits()">
+                <option value="3m" selected>3 Months Subscription (Max Power + Bonus)</option>
+                <option value="1m">1 Month Subscription (Standard)</option>
+            </select>
+            <div id="limit-info" class="info-box">
+                Current Power: 4 Batches/Day | 100 Posts Daily Limit
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label>CONTENT BRAIN (TEXT AI)</label>
             <select id="textModel">
-                <option value="gemini">Google Gemini 1.5 (Default)</option>
+                <option value="gemini">Google Gemini 1.5 Pro</option>
                 <option value="grok">xAI Grok-1</option>
                 <option value="meta">Meta Llama 3</option>
-                <option value="groq">Groq Cloud Speed</option>
+                <option value="groq">Groq Cloud (Lightning Speed)</option>
             </select>
         </div>
 
         <div class="input-group">
             <label>TEXT API KEY</label>
-            <input type="text" placeholder="Paste your API key here...">
+            <input type="text" placeholder="Enter your API Key here...">
         </div>
 
-        <div class="hf-divider">
-            <label>IMAGE ENGINE (3 HF KEYS)</label>
-            <input type="text" placeholder="Primary HF Key" style="margin-bottom: 12px;">
-            <input type="text" placeholder="Secondary HF Key (Optional)" style="margin-bottom: 12px;">
-            <input type="text" placeholder="Tertiary HF Key (Optional)">
+        <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
+            <label>IMAGE ENGINE (3 HF KEYS FOR MAX POSTS)</label>
+            <input type="text" placeholder="HF Key 1 (Primary)" style="margin-bottom: 12px;">
+            <input type="text" placeholder="HF Key 2 (Optional)" style="margin-bottom: 12px;">
+            <input type="text" placeholder="HF Key 3 (Optional)">
         </div>
 
-        <button class="btn-start" onclick="initEngine()">Launch Production</button>
+        <button class="btn-launch" onclick="launch()">Start Production Engine</button>
     </div>
 
     <div class="agent-footer">
-        <div class="live-traffic-box">
-            ● <strong>Live Traffic:</strong> <span id="userCount">42</span> Users Active
-        </div>
-        <div class="footer-links">
-            POWERED BY REMBGHD.COM | © 2026 ALL RIGHTS RESERVED
+        <div class="live-traffic">
+            ● <strong>LIVE TRAFFIC:</strong> <span id="userCount">92</span> PRO USERS ACTIVE
         </div>
     </div>
 
     <script>
-        function initEngine() {
-            alert("Initializing SADSHA Engine... Please wait.");
+        function updateLimits() {
+            const plan = document.getElementById('subPlan').value;
+            const info = document.getElementById('limit-info');
+            const banner = document.getElementById('promo-banner');
+
+            if(plan === '3m') {
+                info.innerHTML = "Current Power: 4 Batches/Day | 100 Posts Daily Limit";
+                banner.style.display = 'block';
+            } else {
+                info.innerHTML = "Current Power: 2 Batches/Day | 50 Posts Daily Limit";
+                banner.style.display = 'none';
+            }
         }
 
-        // Simple script to fluctuate live traffic between 20-150
+        function launch() {
+            alert("SADSHA Engine is checking your credentials...");
+        }
+
+        // Live user counter
         setInterval(() => {
-            const count = Math.floor(Math.random() * (150 - 20 + 1)) + 20;
+            const count = Math.floor(Math.random() * (180 - 40 + 1)) + 40;
             document.getElementById('userCount').innerText = count;
-        }, 5000);
+        }, 3000);
     </script>
 
 </body>
