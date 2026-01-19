@@ -3,155 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA Premium Agent | rembghd.com</title>
+    <title>SADSHA Premium Agent | RembgHD</title>
     <style>
-        /* Modern Dark Theme for rembghd Agent */
+        /* RembgHD Main Site Theme Matching */
         body { 
-            background-color: #0d1117; 
-            color: #c9d1d9; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #0b1120; /* Deep dark blue from your site */
+            color: #ffffff; 
+            font-family: 'Inter', sans-serif; 
             margin: 0; 
             display: flex; 
-            justify-content: center; 
+            flex-direction: column;
             align-items: center; 
             min-height: 100vh;
         }
 
-        .engine-container { 
-            background: #161b22; 
+        .engine-card { 
+            background: #111827; /* Card color from rembghd.com */
             width: 100%; 
-            max-width: 500px; 
-            padding: 30px; 
-            border-radius: 12px; 
-            border: 1px solid #30363d; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            max-width: 550px; 
+            padding: 40px; 
+            border-radius: 20px; 
+            border: 1px solid #1f2937; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            margin-top: 50px;
         }
 
-        .header-area { text-align: center; margin-bottom: 25px; }
-        .header-area h2 { color: #58a6ff; margin: 0; font-size: 24px; }
-        .header-area p { font-size: 14px; color: #8b949e; margin-top: 5px; }
+        .logo-text {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .logo-text span { color: #fbbf24; /* Yellow accent from your logo */ }
 
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 13px; color: #8b949e; font-weight: 500; }
+        .sub-text {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group { margin-bottom: 25px; }
+        label { 
+            display: block; 
+            margin-bottom: 10px; 
+            font-size: 14px; 
+            color: #fbbf24; /* Yellow labels like your Try Now links */
+            font-weight: 600;
+        }
 
         select, input[type="text"] { 
             width: 100%; 
-            padding: 12px; 
-            background: #0d1117; 
-            border: 1px solid #30363d; 
-            color: #c9d1d9; 
-            border-radius: 6px; 
+            padding: 14px; 
+            background: #0b1120; 
+            border: 1px solid #374151; 
+            color: #ffffff; 
+            border-radius: 10px; 
             box-sizing: border-box; 
-            font-size: 14px;
-            transition: border-color 0.3s;
+            font-size: 15px;
+            outline: none;
         }
 
-        select:focus, input:focus { border-color: #58a6ff; outline: none; }
+        select:focus, input:focus { border-color: #fbbf24; }
 
-        .hf-section { 
-            border-top: 1px solid #30363d; 
-            padding-top: 20px; 
-            margin-top: 10px; 
+        .hf-divider {
+            border-top: 1px solid #1f2937;
+            margin: 20px 0;
+            padding-top: 20px;
         }
 
-        .btn-launch { 
+        .btn-start { 
             width: 100%; 
-            background: #238636; 
-            color: white; 
-            padding: 15px; 
+            background: #fbbf24; /* Yellow button */
+            color: #000; 
+            padding: 16px; 
             border: none; 
-            border-radius: 6px; 
-            font-weight: bold; 
+            border-radius: 10px; 
+            font-weight: 800; 
             font-size: 16px; 
             cursor: pointer; 
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-launch:hover { background: #2ea043; }
-
-        /* Ad & Cooldown Space */
-        #cooldown-area { 
-            margin-top: 25px; 
-            text-align: center; 
-            padding: 15px; 
-            background: #0d1117; 
-            border: 1px dashed #30363d; 
-            border-radius: 8px;
-            display: none; /* Initially hidden */
-        }
-
-        .footer-text { 
-            text-align: center; 
-            font-size: 11px; 
-            color: #484f58; 
-            margin-top: 20px; 
+            text-transform: uppercase;
             letter-spacing: 1px;
+            transition: 0.3s;
         }
 
-        .stats-badge {
-            background: #21262d;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #58a6ff;
+        .btn-start:hover { background: #f59e0b; transform: translateY(-2px); }
+
+        /* Footer & Live Stats */
+        .agent-footer {
+            margin-top: auto;
+            padding: 40px 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .live-traffic-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
             display: inline-block;
+            color: #fbbf24;
+            font-size: 13px;
             margin-bottom: 15px;
+        }
+
+        .footer-links {
+            color: #6b7280;
+            font-size: 12px;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-<div class="engine-container">
-    <div class="header-area">
-        <div class="stats-badge">Live Traffic: 84 Users</div>
-        <h2>SADSHA AGENT v1.0</h2>
-        <p>Bulk Content Production Engine</p>
+    <div class="engine-card">
+        <div class="logo-text">Rembg<span>HD</span> Agent</div>
+        <p class="sub-text">Premium AI Image processing tools for Everyone</p>
+
+        <div class="input-group">
+            <label>CHOOSE TEXT ENGINE</label>
+            <select id="textModel">
+                <option value="gemini">Google Gemini 1.5 (Default)</option>
+                <option value="grok">xAI Grok-1</option>
+                <option value="meta">Meta Llama 3</option>
+                <option value="groq">Groq Cloud Speed</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>TEXT API KEY</label>
+            <input type="text" placeholder="Paste your API key here...">
+        </div>
+
+        <div class="hf-divider">
+            <label>IMAGE ENGINE (3 HF KEYS)</label>
+            <input type="text" placeholder="Primary HF Key" style="margin-bottom: 12px;">
+            <input type="text" placeholder="Secondary HF Key (Optional)" style="margin-bottom: 12px;">
+            <input type="text" placeholder="Tertiary HF Key (Optional)">
+        </div>
+
+        <button class="btn-start" onclick="initEngine()">Launch Production</button>
     </div>
 
-    <div class="input-group">
-        <label>Select Brain (Text AI)</label>
-        <select id="textModel">
-            <option value="gemini">Google Gemini 1.5</option>
-            <option value="grok">xAI Grok-1</option>
-            <option value="meta">Meta Llama 3 (8B)</option>
-            <option value="groq">Groq Cloud (Lightning Fast)</option>
-        </select>
+    <div class="agent-footer">
+        <div class="live-traffic-box">
+            ● <strong>Live Traffic:</strong> <span id="userCount">42</span> Users Active
+        </div>
+        <div class="footer-links">
+            POWERED BY REMBGHD.COM | © 2026 ALL RIGHTS RESERVED
+        </div>
     </div>
 
-    <div class="input-group">
-        <label>Text API Key</label>
-        <input type="text" placeholder="Paste your selected model API key here...">
-    </div>
+    <script>
+        function initEngine() {
+            alert("Initializing SADSHA Engine... Please wait.");
+        }
 
-    <div class="hf-section">
-        <label>Image Engine: HuggingFace Keys (Input 1, 2, or 3)</label>
-        <input type="text" placeholder="HF Key 1 (Primary)" style="margin-bottom: 10px;">
-        <input type="text" placeholder="HF Key 2 (Optional)" style="margin-bottom: 10px;">
-        <input type="text" placeholder="HF Key 3 (Optional)">
-    </div>
-
-    <button class="btn-launch" onclick="startEngine()">INITIALIZE PRODUCTION</button>
-
-    <div id="cooldown-area">
-        <p style="color: #8b949e; font-size: 12px; margin-bottom: 10px;">Next Batch available in: 03:59:59</p>
-        <a href="https://rembghd.com" target="_blank">
-            <img src="https://via.placeholder.com/400x100.png?text=Visit+rembghd.com+for+Premium+Tools" alt="Ad Banner" style="width: 100%; border-radius: 4px;">
-        </a>
-    </div>
-
-    <div class="footer-text">
-        SECURED BY SADSHA | POWERED BY REMBGHD.COM
-    </div>
-</div>
-
-<script>
-    function startEngine() {
-        // Simple UI Toggle for testing
-        alert("SADSHA Engine Initializing...");
-        // document.getElementById('cooldown-area').style.display = 'block';
-    }
-</script>
+        // Simple script to fluctuate live traffic between 20-150
+        setInterval(() => {
+            const count = Math.floor(Math.random() * (150 - 20 + 1)) + 20;
+            document.getElementById('userCount').innerText = count;
+        }, 5000);
+    </script>
 
 </body>
 </html>
