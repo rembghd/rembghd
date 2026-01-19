@@ -4,87 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SADSHA Agent | RembgHD Premium</title>
-    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
+    <link rel="icon" type="image/png" href="https://rembghd.com/favicon.png">
     
     <style>
-        :root {
-            --bg: #0b1120;
-            --card: #111827;
-            --yellow: #fbbf24;
-            --border: #1f2937;
-        }
-
-        body { 
-            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; 
-            display: flex; flex-direction: column; min-height: 100vh;
-        }
-
-        /* Top Marketing Banner */
-        #promo-banner {
-            background: linear-gradient(90deg, var(--yellow), #f59e0b);
-            color: #000; padding: 12px; text-align: center; font-weight: 800; font-size: 14px;
-        }
-
+        :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        #promo-banner { background: linear-gradient(90deg, var(--yellow), #f59e0b); color: #000; padding: 12px; text-align: center; font-weight: 800; font-size: 14px; text-transform: uppercase; }
+        
         .main-container { display: flex; justify-content: center; gap: 30px; padding: 40px 20px; flex-wrap: wrap; }
+        
+        .banner-sidebar { width: 280px; }
+        .ad-card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 15px; text-align: center; position: sticky; top: 20px; }
+        .ad-card h3 { color: var(--yellow); margin-top: 0; font-size: 18px; }
+        .ad-card img { width: 100%; border-radius: 8px; margin: 15px 0; border: 1px solid var(--border); }
+        .ad-card p { font-size: 12px; color: #9ca3af; margin-bottom: 20px; }
+        .btn-try { background: var(--yellow); border: none; padding: 8px 20px; border-radius: 5px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 11px; }
 
-        /* Left Side: Marketing Banners */
-        .banner-sidebar { width: 300px; display: flex; flex-direction: column; gap: 20px; }
-        .ad-card { 
-            background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; 
-        }
-        .ad-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
-        .ad-card h3 { font-size: 16px; margin: 10px 0; color: var(--yellow); }
-        .ad-card p { font-size: 12px; color: #9ca3af; line-height: 1.4; }
-
-        /* Right Side: Agent Engine */
-        .engine-card { 
-            background: var(--card); width: 500px; padding: 40px; border-radius: 20px; 
-            border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
+        .engine-card { background: var(--card); width: 500px; padding: 40px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
         .logo-area { text-align: center; margin-bottom: 30px; }
-        .logo-text { font-size: 32px; font-weight: 900; margin: 0; }
+        .logo-text { font-size: 32px; font-weight: 900; margin: 0; text-transform: uppercase; }
         .logo-text span { color: var(--yellow); }
         .tagline { color: #9ca3af; font-size: 13px; margin-top: 5px; }
 
         .input-group { margin-bottom: 18px; }
         label { display: block; margin-bottom: 8px; font-size: 11px; color: var(--yellow); font-weight: 700; }
-        select, input { 
-            width: 100%; padding: 12px; background: var(--bg); border: 1px solid #374151; 
-            color: #fff; border-radius: 8px; font-size: 14px; box-sizing: border-box;
-        }
+        select, input { width: 100%; padding: 12px; background: var(--bg); border: 1px solid #374151; color: #fff; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
+        
+        .token-box { margin-top: 20px; padding: 20px; border: 1px dashed var(--yellow); border-radius: 12px; background: rgba(251, 191, 36, 0.05); }
+        .btn-launch { width: 100%; background: var(--yellow); color: #000; padding: 18px; border: none; border-radius: 10px; font-weight: 900; margin-top: 20px; cursor: pointer; letter-spacing: 1px; }
 
-        .token-box { 
-            margin-top: 20px; padding: 20px; border: 1px dashed var(--yellow); 
-            border-radius: 12px; background: rgba(251, 191, 36, 0.05); 
-        }
-
-        .btn-launch { 
-            width: 100%; background: var(--yellow); color: #000; padding: 16px; 
-            border: none; border-radius: 10px; font-weight: 800; margin-top: 20px; cursor: pointer;
-        }
-
-        /* Footer Traffic */
         .footer { margin-top: auto; padding: 20px; text-align: center; }
-        .traffic-indicator { 
-            display: inline-block; padding: 8px 15px; border-radius: 50px; 
-            background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2);
-            font-size: 12px; color: var(--yellow);
-        }
+        .traffic-indicator { display: inline-block; padding: 8px 15px; border-radius: 50px; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2); font-size: 12px; color: var(--yellow); font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <div id="promo-banner">🎁 BUMPER OFFER: 3 MONTHS PLAN GETS 15 DAYS EXTRA FREE!</div>
+    <div id="promo-banner">🎁 BUMPER OFFER: SELECT 3 MONTHS PLAN & GET 15 DAYS EXTRA FREE!</div>
 
     <div class="main-container">
         <div class="banner-sidebar">
             <div class="ad-card">
                 <h3>HD BG REMOVER</h3>
-                <p>Don't settle for low-res previews.</p>
-                <div style="background:#000; height:150px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#555;">[Before/After HD Image Here]</div>
+                <p>Don't settle for low-res previews. Get full HD quality instantly.</p>
+                <img src="https://rembghd.com/static/images/hero-after.jpg" alt="HD Sample">
                 <p><strong>It's free & always will be.</strong></p>
-                <button style="background:var(--yellow); border:none; padding:5px 15px; border-radius:5px; font-size:10px; cursor:pointer;">TRY NOW</button>
+                <button class="btn-try" onclick="window.open('https://rembghd.com','_blank')">TRY NOW</button>
             </div>
         </div>
 
@@ -95,48 +60,56 @@
             </div>
 
             <div class="input-group">
-                <label>PLAN SELECTION</label>
-                <select id="plan" onchange="updateTokenText()">
-                    <option value="3m" selected>3 Months (4 Batches | 40 Word Token)</option>
-                    <option value="1m">1 Month (2 Batches | 30 Word Token)</option>
+                <label>PRODUCTION PLAN</label>
+                <select id="plan" onchange="updateTokenReq()">
+                    <option value="3m" selected>3 Months Subscription (4 Batches / 40 Word Token)</option>
+                    <option value="1m">1 Month Subscription (2 Batches / 30 Word Token)</option>
                 </select>
             </div>
 
             <div class="input-group">
-                <label>IMAGE ENGINE KEYS</label>
-                <input type="text" placeholder="Key 1" style="margin-bottom:8px">
-                <input type="text" placeholder="Key 2" style="margin-bottom:8px">
-                <input type="text" placeholder="Key 3">
+                <label>IMAGE ENGINE (3 HF KEYS)</label>
+                <input type="text" placeholder="HuggingFace Key 1" style="margin-bottom:8px">
+                <input type="text" placeholder="HuggingFace Key 2" style="margin-bottom:8px">
+                <input type="text" placeholder="HuggingFace Key 3">
             </div>
 
             <div class="token-box">
                 <label id="tokenLabel">SUBSCRIPTION TOKEN (40 WORDS REQUIRED)</label>
-                <input type="text" placeholder="Enter Token...">
+                <input type="text" id="tokenInput" placeholder="Paste your 40-word token here...">
             </div>
 
-            <button class="btn-launch">START PRODUCTION</button>
+            <button class="btn-launch" onclick="validate()">START PRODUCTION ENGINE</button>
         </div>
     </div>
 
     <div class="footer">
-        <div class="traffic-indicator">
-            ● LIVE TRAFFIC: <span id="users">12</span> PRO USERS ACTIVE
-        </div>
+        <div class="traffic-indicator">● LIVE TRAFFIC: <span id="usersCount">14</span> PRO USERS ACTIVE</div>
     </div>
 
     <script>
-        // Update Token Text based on plan
-        function updateTokenText() {
+        function updateTokenReq() {
             const plan = document.getElementById('plan').value;
-            document.getElementById('tokenLabel').innerText = plan === '3m' ? 
-                "SUBSCRIPTION TOKEN (40 WORDS REQUIRED)" : "SUBSCRIPTION TOKEN (30 WORDS REQUIRED)";
+            const label = document.getElementById('tokenLabel');
+            const banner = document.getElementById('promo-banner');
+            if(plan === '3m') {
+                label.innerText = "SUBSCRIPTION TOKEN (40 WORDS REQUIRED)";
+                banner.style.display = 'block';
+            } else {
+                label.innerText = "SUBSCRIPTION TOKEN (30 WORDS REQUIRED)";
+                banner.style.display = 'none';
+            }
         }
 
-        // Realistic Timer: Update every 1 minute (60000ms)
+        // Realistic 1-Minute Traffic Update (Max 25)
         setInterval(() => {
-            const count = Math.floor(Math.random() * (25 - 5 + 1)) + 5;
-            document.getElementById('users').innerText = count;
+            const count = Math.floor(Math.random() * (25 - 8 + 1)) + 8;
+            document.getElementById('usersCount').innerText = count;
         }, 60000);
+
+        function validate() {
+            alert("SADSHA Engine: Initializing connection...");
+        }
     </script>
 </body>
 </html>
