@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SADSHA Agent | RembgHD Premium</title>
     
-    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/shield-with-user.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/fbbf24/user-male-circle.png">
     
     <style>
         :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; }
@@ -15,31 +15,31 @@
         
         .main-container { display: flex; justify-content: center; gap: 30px; padding: 40px 20px; flex-wrap: wrap; align-items: flex-start; }
         
-        /* Side Banner */
+        /* Left Side Marketing */
         .banner-sidebar { width: 280px; }
-        .ad-card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 15px; text-align: center; position: sticky; top: 20px; }
-        .ad-card h3 { color: var(--yellow); margin-top: 0; font-size: 18px; }
-        .ad-card .img-box { width: 100%; height: 200px; background: #000; border-radius: 8px; margin: 15px 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); overflow: hidden; }
+        .ad-card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 15px; text-align: center; position: sticky; top: 20px; }
+        .ad-card h3 { color: var(--yellow); margin-top: 0; font-size: 18px; font-weight: 800; }
+        .ad-card .img-box { width: 100%; height: 200px; background: #000; border-radius: 8px; margin: 15px 0; border: 1px solid var(--border); overflow: hidden; }
         .ad-card img { width: 100%; height: 100%; object-fit: cover; }
-        .ad-card p { font-size: 12px; color: #9ca3af; margin-bottom: 20px; }
-        .btn-try { width: 100%; background: var(--yellow); border: none; padding: 10px; border-radius: 5px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 11px; }
+        .ad-card p { font-size: 12px; color: #9ca3af; margin-bottom: 20px; line-height: 1.5; }
+        .btn-try { width: 100%; background: var(--yellow); border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 11px; }
 
-        /* Main Engine Card (Logo Box Removed) */
-        .engine-card { background: var(--card); width: 500px; padding: 40px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .logo-area { text-align: center; margin-bottom: 35px; }
-        .logo-text { font-size: 38px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+        /* Clean Dashboard (No Icons) */
+        .engine-card { background: var(--card); width: 500px; padding: 50px 40px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .logo-area { text-align: center; margin-bottom: 40px; }
+        .logo-text { font-size: 38px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
         .logo-text span { color: var(--yellow); }
-        .tagline { color: #9ca3af; font-size: 13px; margin-top: 8px; font-weight: 500; }
+        .tagline { color: #9ca3af; font-size: 13px; margin-top: 10px; font-weight: 500; }
 
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 11px; color: var(--yellow); font-weight: 700; text-transform: uppercase; }
-        select, input { width: 100%; padding: 12px; background: var(--bg); border: 1px solid #374151; color: #fff; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; }
+        .input-group { margin-bottom: 22px; }
+        label { display: block; margin-bottom: 10px; font-size: 11px; color: var(--yellow); font-weight: 800; text-transform: uppercase; }
+        select, input { width: 100%; padding: 14px; background: var(--bg); border: 1px solid #374151; color: #fff; border-radius: 10px; font-size: 14px; box-sizing: border-box; outline: none; }
         
-        .token-box { margin-top: 25px; padding: 20px; border: 1px dashed var(--yellow); border-radius: 12px; background: rgba(251, 191, 36, 0.05); }
-        .btn-launch { width: 100%; background: var(--yellow); color: #000; padding: 18px; border: none; border-radius: 10px; font-weight: 900; margin-top: 25px; cursor: pointer; font-size: 16px; }
+        .token-box { margin-top: 30px; padding: 25px; border: 1px dashed var(--yellow); border-radius: 15px; background: rgba(251, 191, 36, 0.03); }
+        .btn-launch { width: 100%; background: var(--yellow); color: #000; padding: 20px; border: none; border-radius: 12px; font-weight: 900; margin-top: 30px; cursor: pointer; font-size: 16px; }
 
-        .footer { margin-top: auto; padding: 25px; text-align: center; }
-        .traffic-indicator { display: inline-block; padding: 10px 20px; border-radius: 50px; background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2); font-size: 12px; color: var(--yellow); font-weight: 700; }
+        .footer { margin-top: auto; padding: 30px; text-align: center; }
+        .traffic-indicator { display: inline-block; padding: 10px 25px; border-radius: 50px; background: rgba(251, 191, 36, 0.05); border: 1px solid rgba(251, 191, 36, 0.2); font-size: 12px; color: var(--yellow); font-weight: 800; }
     </style>
 </head>
 <body>
@@ -52,7 +52,7 @@
                 <h3>HD BG REMOVER</h3>
                 <p>Don't settle for low-res previews. Get full HD quality instantly.</p>
                 <div class="img-box">
-                    <img src="https://i.ibb.co/XfXf8xR/red-saree-sample.jpg" alt="HD Before/After">
+                    <img src="https://i.ibb.co/XfXf8xR/red-saree-sample.jpg" alt="HD Sample">
                 </div>
                 <p><strong>It's free & always will be.</strong></p>
                 <button class="btn-try" onclick="window.open('https://rembghd.com','_blank')">TRY NOW FOR FREE</button>
@@ -66,7 +66,7 @@
             </div>
 
             <div class="input-group">
-                <label>PLAN SELECTION</label>
+                <label>PRODUCTION PLAN</label>
                 <select id="plan" onchange="updateUI()">
                     <option value="3m" selected>3 Months Subscription (4 Batches | 40 Word Token)</option>
                     <option value="1m">1 Month Subscription (2 Batches | 30 Word Token)</option>
@@ -75,8 +75,8 @@
 
             <div class="input-group">
                 <label>IMAGE ENGINE (3 HF KEYS)</label>
-                <input type="text" placeholder="HuggingFace Key 1" style="margin-bottom:8px">
-                <input type="text" placeholder="HuggingFace Key 2" style="margin-bottom:8px">
+                <input type="text" placeholder="HuggingFace Key 1" style="margin-bottom:10px">
+                <input type="text" placeholder="HuggingFace Key 2" style="margin-bottom:10px">
                 <input type="text" placeholder="HuggingFace Key 3">
             </div>
 
@@ -90,7 +90,7 @@
     </div>
 
     <div class="footer">
-        <div class="traffic-indicator">● LIVE TRAFFIC: <span id="users">18</span> PRO USERS ACTIVE</div>
+        <div class="traffic-indicator">● LIVE TRAFFIC: <span id="users">14</span> PRO USERS ACTIVE</div>
     </div>
 
     <script>
@@ -100,9 +100,9 @@
             label.innerText = plan === '3m' ? "SUBSCRIPTION TOKEN (40 WORDS REQUIRED)" : "SUBSCRIPTION TOKEN (30 WORDS REQUIRED)";
         }
 
-        // 1-Minute Traffic Update (Realistic Under 25)
+        // 1-Minute Traffic Update
         setInterval(() => {
-            const count = Math.floor(Math.random() * (25 - 5 + 1)) + 5;
+            const count = Math.floor(Math.random() * (25 - 8 + 1)) + 8;
             document.getElementById('users').innerText = count;
         }, 60000);
     </script>
