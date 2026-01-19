@@ -3,182 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA Agent | Premium Production Engine</title>
-    
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1077/1077114.png">
+    <title>SADSHA Agent | RembgHD Premium</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
     
     <style>
         :root {
-            --bg-color: #0b1120;
-            --card-bg: #111827;
-            --primary-yellow: #fbbf24;
-            --text-gray: #9ca3af;
-            --border-color: #1f2937;
+            --bg: #0b1120;
+            --card: #111827;
+            --yellow: #fbbf24;
+            --border: #1f2937;
         }
 
         body { 
-            background-color: var(--bg-color); 
-            color: #ffffff; 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            min-height: 100vh;
+            background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; 
+            display: flex; flex-direction: column; min-height: 100vh;
         }
 
+        /* Top Marketing Banner */
         #promo-banner {
-            width: 100%;
-            background: linear-gradient(90deg, #fbbf24, #f59e0b);
-            color: #000;
-            padding: 12px 0;
-            text-align: center;
-            font-weight: 800;
-            font-size: 16px;
-            text-transform: uppercase;
+            background: linear-gradient(90deg, var(--yellow), #f59e0b);
+            color: #000; padding: 12px; text-align: center; font-weight: 800; font-size: 14px;
         }
 
+        .main-container { display: flex; justify-content: center; gap: 30px; padding: 40px 20px; flex-wrap: wrap; }
+
+        /* Left Side: Marketing Banners */
+        .banner-sidebar { width: 300px; display: flex; flex-direction: column; gap: 20px; }
+        .ad-card { 
+            background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 15px; text-align: center; 
+        }
+        .ad-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
+        .ad-card h3 { font-size: 16px; margin: 10px 0; color: var(--yellow); }
+        .ad-card p { font-size: 12px; color: #9ca3af; line-height: 1.4; }
+
+        /* Right Side: Agent Engine */
         .engine-card { 
-            background: var(--card-bg); 
-            width: 100%; 
-            max-width: 550px; 
-            padding: 40px; 
-            border-radius: 24px; 
-            border: 1px solid var(--border-color); 
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
-            margin: 20px 10px;
+            background: var(--card); width: 500px; padding: 40px; border-radius: 20px; 
+            border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        .logo-container { text-align: center; margin-bottom: 30px; }
-        .logo-text { font-size: 38px; font-weight: 900; letter-spacing: -1px; margin: 0; }
-        .logo-text span { color: var(--primary-yellow); }
-        .tagline { color: var(--text-gray); font-size: 14px; margin-top: 5px; font-weight: 500; }
+        .logo-area { text-align: center; margin-bottom: 30px; }
+        .logo-text { font-size: 32px; font-weight: 900; margin: 0; }
+        .logo-text span { color: var(--yellow); }
+        .tagline { color: #9ca3af; font-size: 13px; margin-top: 5px; }
 
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 12px; color: var(--primary-yellow); font-weight: 700; }
-
-        select, input[type="text"] { 
-            width: 100%; 
-            padding: 12px; 
-            background: var(--bg-color); 
-            border: 1px solid #374151; 
-            color: #ffffff; 
-            border-radius: 10px; 
-            box-sizing: border-box; 
-            font-size: 14px;
-            outline: none;
+        .input-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; font-size: 11px; color: var(--yellow); font-weight: 700; }
+        select, input { 
+            width: 100%; padding: 12px; background: var(--bg); border: 1px solid #374151; 
+            color: #fff; border-radius: 8px; font-size: 14px; box-sizing: border-box;
         }
 
-        .token-area {
-            border: 1px dashed var(--primary-yellow);
-            padding: 20px;
-            border-radius: 15px;
-            background: rgba(251, 191, 36, 0.05);
-            margin-top: 20px;
+        .token-box { 
+            margin-top: 20px; padding: 20px; border: 1px dashed var(--yellow); 
+            border-radius: 12px; background: rgba(251, 191, 36, 0.05); 
         }
 
         .btn-launch { 
-            width: 100%; 
-            background: var(--primary-yellow); 
-            color: #000; 
-            padding: 18px; 
-            border: none; 
-            border-radius: 12px; 
-            font-weight: 900; 
-            font-size: 16px; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            margin-top: 25px;
+            width: 100%; background: var(--yellow); color: #000; padding: 16px; 
+            border: none; border-radius: 10px; font-weight: 800; margin-top: 20px; cursor: pointer;
         }
 
-        .agent-footer { padding: 20px; text-align: center; }
-        .live-traffic {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.2);
-            padding: 8px 20px;
-            border-radius: 50px;
-            color: var(--primary-yellow);
-            font-size: 12px;
+        /* Footer Traffic */
+        .footer { margin-top: auto; padding: 20px; text-align: center; }
+        .traffic-indicator { 
+            display: inline-block; padding: 8px 15px; border-radius: 50px; 
+            background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2);
+            font-size: 12px; color: var(--yellow);
         }
     </style>
 </head>
 <body>
 
-    <div id="promo-banner">🔥 BUMPER OFFER: Select 3 Months & Get 15 Days EXTRA FREE! 🔥</div>
+    <div id="promo-banner">🎁 BUMPER OFFER: 3 MONTHS PLAN GETS 15 DAYS EXTRA FREE!</div>
 
-    <div class="engine-card">
-        <div class="logo-container">
-            <h1 class="logo-text">SADSHA<span> AGENT</span></h1>
-            <div class="tagline">Premium AI Image processing tools for Everyone</div>
+    <div class="main-container">
+        <div class="banner-sidebar">
+            <div class="ad-card">
+                <h3>HD BG REMOVER</h3>
+                <p>Don't settle for low-res previews.</p>
+                <div style="background:#000; height:150px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#555;">[Before/After HD Image Here]</div>
+                <p><strong>It's free & always will be.</strong></p>
+                <button style="background:var(--yellow); border:none; padding:5px 15px; border-radius:5px; font-size:10px; cursor:pointer;">TRY NOW</button>
+            </div>
         </div>
 
-        <div class="input-group">
-            <label>CHOOSE PRODUCTION PLAN</label>
-            <select id="subPlan" onchange="updateUI()">
-                <option value="3m" selected>3 Months Subscription (4 Batches/Day)</option>
-                <option value="1m">1 Month Subscription (2 Batches/Day)</option>
-            </select>
-        </div>
+        <div class="engine-card">
+            <div class="logo-area">
+                <h1 class="logo-text">SADSHA<span> AGENT</span></h1>
+                <div class="tagline">Premium AI Image processing tools for Everyone</div>
+            </div>
 
-        <div class="input-group">
-            <label>TEXT AI ENGINE</label>
-            <select id="textModel">
-                <option value="gemini">Google Gemini 1.5 Pro</option>
-                <option value="grok">xAI Grok-1</option>
-                <option value="meta">Meta Llama 3</option>
-            </select>
-        </div>
+            <div class="input-group">
+                <label>PLAN SELECTION</label>
+                <select id="plan" onchange="updateTokenText()">
+                    <option value="3m" selected>3 Months (4 Batches | 40 Word Token)</option>
+                    <option value="1m">1 Month (2 Batches | 30 Word Token)</option>
+                </select>
+            </div>
 
-        <div class="input-group">
-            <label>TEXT API KEY</label>
-            <input type="text" placeholder="Paste your API Key here...">
-        </div>
+            <div class="input-group">
+                <label>IMAGE ENGINE KEYS</label>
+                <input type="text" placeholder="Key 1" style="margin-bottom:8px">
+                <input type="text" placeholder="Key 2" style="margin-bottom:8px">
+                <input type="text" placeholder="Key 3">
+            </div>
 
-        <div class="input-group">
-            <label>IMAGE ENGINE (3 HF KEYS)</label>
-            <input type="text" placeholder="HF Key 1" style="margin-bottom: 8px;">
-            <input type="text" placeholder="HF Key 2" style="margin-bottom: 8px;">
-            <input type="text" placeholder="HF Key 3">
-        </div>
+            <div class="token-box">
+                <label id="tokenLabel">SUBSCRIPTION TOKEN (40 WORDS REQUIRED)</label>
+                <input type="text" placeholder="Enter Token...">
+            </div>
 
-        <div class="token-area">
-            <label id="tokenLabel">SUBSCRIPTION TOKEN (40 WORDS REQUIRED)</label>
-            <input type="text" id="userToken" placeholder="Paste your unique token here...">
+            <button class="btn-launch">START PRODUCTION</button>
         </div>
-
-        <button class="btn-launch" onclick="launch()">START PRODUCTION ENGINE</button>
     </div>
 
-    <div class="agent-footer">
-        <div class="live-traffic">
-            ● <strong>LIVE TRAFFIC:</strong> <span id="userCount">18</span> PRO USERS ACTIVE
+    <div class="footer">
+        <div class="traffic-indicator">
+            ● LIVE TRAFFIC: <span id="users">12</span> PRO USERS ACTIVE
         </div>
     </div>
 
     <script>
-        function updateUI() {
-            const plan = document.getElementById('subPlan').value;
-            const label = document.getElementById('tokenLabel');
-            const banner = document.getElementById('promo-banner');
-
-            if(plan === '3m') {
-                label.innerText = "SUBSCRIPTION TOKEN (40 WORDS REQUIRED)";
-                banner.style.display = 'block';
-            } else {
-                label.innerText = "SUBSCRIPTION TOKEN (30 WORDS REQUIRED)";
-                banner.style.display = 'none';
-            }
+        // Update Token Text based on plan
+        function updateTokenText() {
+            const plan = document.getElementById('plan').value;
+            document.getElementById('tokenLabel').innerText = plan === '3m' ? 
+                "SUBSCRIPTION TOKEN (40 WORDS REQUIRED)" : "SUBSCRIPTION TOKEN (30 WORDS REQUIRED)";
         }
 
-        // Live Traffic Under 25
+        // Realistic Timer: Update every 1 minute (60000ms)
         setInterval(() => {
             const count = Math.floor(Math.random() * (25 - 5 + 1)) + 5;
-            document.getElementById('userCount').innerText = count;
-        }, 4000);
-
-        function launch() {
-            alert("Validating Token and Keys...");
-        }
+            document.getElementById('users').innerText = count;
+        }, 60000);
     </script>
 </body>
 </html>
