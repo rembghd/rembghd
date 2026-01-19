@@ -2,42 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gabbar Gemini Agent</title>
+    <title>Chic Daily - Production Engine</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
-        body { background: #080808; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; display: flex; justify-content: center; }
-        .panel { width: 100%; max-width: 500px; background: #121212; border: 1px solid #333; padding: 30px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.7); }
-        h2 { color: #4285F4; text-align: center; } /* Gemini Blue */
-        input { width: 100%; padding: 14px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 10px; box-sizing: border-box; }
-        button { background: #4285F4; color: #fff; border: none; padding: 16px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
-        button:hover { background: #34a853; } /* Turns green on hover */
-        #log-window { margin-top: 20px; background: #000; height: 250px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 11px; border: 1px solid #222; border-radius: 10px; color: #00ff88; line-height: 1.5; }
+        body { background: #050505; color: #e2e8f0; font-family: 'Segoe UI', sans-serif; padding: 20px; display: flex; justify-content: center; }
+        .panel { width: 100%; max-width: 500px; background: #111; border: 1px solid #222; padding: 30px; border-radius: 15px; border-top: 4px solid #4285F4; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: #4285F4; text-align: center; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
+        #log-window { margin-top: 20px; background: #000; height: 300px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 11px; border: 1px solid #222; border-radius: 8px; color: #00ff88; line-height: 1.6; }
+        button { background: #4285F4; color: #fff; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:disabled { background: #222; color: #555; cursor: not-allowed; }
+        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <div class="panel">
     <div id="setup-ui">
-        <h2>🚀 Unlock Gemini Agent</h2>
-        <input type="password" id="gemini_key" placeholder="Paste Gemini API Key (AIza...)">
-        <input type="password" id="hf_keys" placeholder="Paste HF Keys (comma separated)">
-        <button onclick="unlock()">INITIALIZE SYSTEM</button>
+        <h2>🔐 Initialize Engine</h2>
+        <input type="password" id="gemini_key" placeholder="Gemini API Key (AIza...)">
+        <input type="password" id="hf_keys" placeholder="3 HF Keys (comma separated)">
+        <button onclick="unlock()">UNLOCK SYSTEM</button>
     </div>
 
     <div id="main-ui" style="display:none;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3 style="color:#4285F4">Chic Daily Production</h3>
-            <span id="count-display" style="font-size:20px; font-weight:bold;">0/25</span>
+        <div class="status-header">
+            <h3 style="margin:0; color:#4285F4;">Production Mode</h3>
+            <div id="count-display" style="font-size:22px; font-weight:bold; color:#00ff88;">0/25</div>
         </div>
-        <button id="run-btn" onclick="startProduction()">🔥 START 25 POSTS BATCH</button>
-        <div id="log-window">Gemini Engine Standby...</div>
+        <button id="run-btn" onclick="startProduction()">🚀 FIRE 25 POSTS BATCH</button>
+        <div id="log-window">System Standby... Ready for deployment.</div>
     </div>
 </div>
 
 <script>
     let KEYS = { gemini: "", hf: [], currentHF: 0 };
     const zip = new JSZip();
-    let csvData = "image_name,caption\n";
+    let csvData = "image_name,caption\n"; // Headers for CSV
 
     function unlock() {
         const gem = document.getElementById('gemini_key').value.trim();
@@ -47,8 +48,8 @@
             KEYS.hf = hf.split(',').map(k => k.trim());
             document.getElementById('setup-ui').style.display = 'none';
             document.getElementById('main-ui').style.display = 'block';
-            log("System Authenticated via Google AI Studio.");
-        } else { alert("Please provide both API keys."); }
+            log("Engine Online. Gemini & Flux linked.");
+        } else { alert("Please enter both Gemini and HF keys!"); }
     }
 
     function log(msg, color = "#00ff88") {
@@ -72,58 +73,71 @@
     async function fluxCall(prompt) {
         const key = KEYS.hf[KEYS.currentHF];
         KEYS.currentHF = (KEYS.currentHF + 1) % KEYS.hf.length;
+        
         const r = await fetch("https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell", {
             headers: { Authorization: `Bearer ${key}` },
             method: "POST",
-            body: JSON.stringify({ inputs: prompt + " | high-end luxury streetwear, cinematic" }),
+            body: JSON.stringify({ inputs: prompt + " | high-end luxury street fashion photography, cinematic lighting, 8k" }),
         });
+
+        if(!r.ok) throw new Error("Flux API error. Check HF Key/Quota.");
         return await r.blob();
     }
 
     async function startProduction() {
-        document.getElementById('run-btn').disabled = true;
-        log("Gemini is analyzing USA 2026 trends...", "#4285F4");
+        const btn = document.getElementById('run-btn');
+        btn.disabled = true;
+        log("Gemini is analyzing USA 2026 Fashion Trends...", "#4285F4");
         
         try {
-            const trends = ["Luxury Cyberpunk", "Techwear Streetstyle", "Quiet Luxury NYC", "Vintage Grunge 2026", "Sustainable High-Fashion"];
+            const trends = ["Cyberpunk Streetwear", "Quiet Luxury NYC", "Techwear Fusion", "Vintage HipHop 2026", "Sustainable High-Fashion"];
             let total = 0;
 
             for (let trend of trends) {
-                log(`Trend Spotted: ${trend}`, "#fff");
+                log(`Working on Trend: ${trend}`, "#fff");
                 for (let i = 0; i < 5; i++) {
                     total++;
                     document.getElementById('count-display').innerText = `${total}/25`;
                     
-                    const content = await geminiCall(`Create a viral FB post and image prompt for: ${trend}. Use format: [C]caption[P]prompt`);
-                    if(content === "error" || !content.includes('[P]')) continue;
+                    // 1. Generate Text
+                    const content = await geminiCall(`Trend: ${trend}. Write a viral FB caption and 1-sentence prompt. Format: [C]caption[P]prompt`);
+                    
+                    let caption = `Exclusive look: ${trend} style. #Fashion`, prompt = trend;
+                    if(content !== "error" && content.includes('[P]')) {
+                        const parts = content.split('[P]');
+                        caption = parts[0].replace('[C]', '').trim();
+                        prompt = parts[1].trim();
+                    }
 
-                    const parts = content.split('[P]');
-                    const caption = parts[0].replace('[C]', '').trim();
-                    const prompt = parts[1].trim();
-
-                    log(`Generating Image ${total}...`, "#888");
+                    // 2. Generate Image
+                    log(`Generating Image ${total}...`, "#4285F4");
                     const imgBlob = await fluxCall(prompt);
                     
-                    const fileName = `chic_${total}.jpg`;
+                    // 3. Match Filenames Exactly
+                    const fileName = `chic_daily_post_${total}.jpg`; // Fixed filename
+                    
+                    // Add Image to ZIP
                     zip.file(fileName, imgBlob);
+                    
+                    // Add to CSV with same filename
                     csvData += `"${fileName}","${caption.replace(/"/g, '""')}"\n`;
                     
-                    log(`✅ Post ${total} Stored in Buffer.`);
-                    await new Promise(r => setTimeout(r, 1500)); // Rate limiting safety
+                    log(`✅ Match Success: ${fileName}`, "#00ff88");
+                    await new Promise(r => setTimeout(r, 1500)); // Safety gap
                 }
             }
 
-            log("Assembling All Assets into ZIP...", "#4285F4");
-            zip.file("meta_upload.csv", csvData);
-            const content = await zip.generateAsync({type:"blob"});
+            log("Finalizing ZIP Archive...", "#fff");
+            zip.file("meta_upload_this.csv", csvData);
+            const finalBlob = await zip.generateAsync({type:"blob"});
             const a = document.createElement("a");
-            a.href = URL.createObjectURL(content);
-            a.download = "ChicDaily_Gemini_Batch.zip";
+            a.href = URL.createObjectURL(finalBlob);
+            a.download = "ChicDaily_Final_Batch.zip";
             a.click();
-            log("🏁 ALL DONE. DOWNLOAD STARTED.");
+            log("🔥 MISSION SUCCESSFUL! ZIP DOWNLOADED.");
 
         } catch (e) { log("CRITICAL ERROR: " + e.message, "#ff4444"); }
-        document.getElementById('run-btn').disabled = false;
+        btn.disabled = false;
     }
 </script>
 </body>
