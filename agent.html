@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA Agent | RembgHD - Premium Production Engine</title>
-    <link rel="icon" type="image/png" href="https://rembghd.com/favicon.png">
+    <title>SADSHA Agent | Premium Production Engine</title>
+    
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1077/1077114.png">
     
     <style>
         :root {
@@ -26,18 +27,15 @@
             min-height: 100vh;
         }
 
-        /* The "Lalach" Banner - Top Priority */
         #promo-banner {
             width: 100%;
             background: linear-gradient(90deg, #fbbf24, #f59e0b);
             color: #000;
-            padding: 15px 0;
+            padding: 12px 0;
             text-align: center;
             font-weight: 800;
-            font-size: 18px;
+            font-size: 16px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
         }
 
         .engine-card { 
@@ -48,41 +46,35 @@
             border-radius: 24px; 
             border: 1px solid var(--border-color); 
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
-            margin: 30px 10px;
+            margin: 20px 10px;
         }
 
-        /* Site Logo Style */
         .logo-container { text-align: center; margin-bottom: 30px; }
         .logo-text { font-size: 38px; font-weight: 900; letter-spacing: -1px; margin: 0; }
         .logo-text span { color: var(--primary-yellow); }
         .tagline { color: var(--text-gray); font-size: 14px; margin-top: 5px; font-weight: 500; }
 
-        .input-group { margin-bottom: 22px; }
-        label { display: block; margin-bottom: 8px; font-size: 12px; color: var(--primary-yellow); font-weight: 700; letter-spacing: 0.5px; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 12px; color: var(--primary-yellow); font-weight: 700; }
 
         select, input[type="text"] { 
             width: 100%; 
-            padding: 14px; 
+            padding: 12px; 
             background: var(--bg-color); 
             border: 1px solid #374151; 
             color: #ffffff; 
-            border-radius: 12px; 
+            border-radius: 10px; 
             box-sizing: border-box; 
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
-            transition: 0.3s;
         }
 
-        select:focus, input:focus { border-color: var(--primary-yellow); box-shadow: 0 0 10px rgba(251, 191, 36, 0.2); }
-
-        .info-box {
-            background: rgba(31, 41, 55, 0.5);
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 13px;
-            color: var(--text-gray);
-            margin-top: 8px;
-            border-left: 3px solid var(--primary-yellow);
+        .token-area {
+            border: 1px dashed var(--primary-yellow);
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(251, 191, 36, 0.05);
+            margin-top: 20px;
         }
 
         .btn-launch { 
@@ -96,10 +88,10 @@
             font-size: 16px; 
             cursor: pointer; 
             text-transform: uppercase;
-            margin-top: 15px;
+            margin-top: 25px;
         }
 
-        .agent-footer { margin-top: auto; padding-bottom: 30px; text-align: center; }
+        .agent-footer { padding: 20px; text-align: center; }
         .live-traffic {
             background: rgba(251, 191, 36, 0.1);
             border: 1px solid rgba(251, 191, 36, 0.2);
@@ -107,89 +99,86 @@
             border-radius: 50px;
             color: var(--primary-yellow);
             font-size: 12px;
-            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-    <div id="promo-banner">
-        🔥 BUMPER OFFER: Select 3 Months & Get 15 Days EXTRA FREE! 🔥
-    </div>
+    <div id="promo-banner">🔥 BUMPER OFFER: Select 3 Months & Get 15 Days EXTRA FREE! 🔥</div>
 
     <div class="engine-card">
         <div class="logo-container">
-            <h1 class="logo-text">Rembg<span>HD</span> Agent</h1>
-            <div class="tagline">Premium AI Image Processing Tools for Everyone</div>
+            <h1 class="logo-text">SADSHA<span> AGENT</span></h1>
+            <div class="tagline">Premium AI Image processing tools for Everyone</div>
         </div>
 
         <div class="input-group">
             <label>CHOOSE PRODUCTION PLAN</label>
-            <select id="subPlan" onchange="updateLimits()">
-                <option value="3m" selected>3 Months Subscription (Max Power + Bonus)</option>
-                <option value="1m">1 Month Subscription (Standard)</option>
+            <select id="subPlan" onchange="updateUI()">
+                <option value="3m" selected>3 Months Subscription (4 Batches/Day)</option>
+                <option value="1m">1 Month Subscription (2 Batches/Day)</option>
             </select>
-            <div id="limit-info" class="info-box">
-                Current Power: 4 Batches/Day | 100 Posts Daily Limit
-            </div>
         </div>
 
         <div class="input-group">
-            <label>CONTENT BRAIN (TEXT AI)</label>
+            <label>TEXT AI ENGINE</label>
             <select id="textModel">
                 <option value="gemini">Google Gemini 1.5 Pro</option>
                 <option value="grok">xAI Grok-1</option>
                 <option value="meta">Meta Llama 3</option>
-                <option value="groq">Groq Cloud (Lightning Speed)</option>
             </select>
         </div>
 
         <div class="input-group">
             <label>TEXT API KEY</label>
-            <input type="text" placeholder="Enter your API Key here...">
+            <input type="text" placeholder="Paste your API Key here...">
         </div>
 
-        <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
-            <label>IMAGE ENGINE (3 HF KEYS FOR MAX POSTS)</label>
-            <input type="text" placeholder="HF Key 1 (Primary)" style="margin-bottom: 12px;">
-            <input type="text" placeholder="HF Key 2 (Optional)" style="margin-bottom: 12px;">
-            <input type="text" placeholder="HF Key 3 (Optional)">
+        <div class="input-group">
+            <label>IMAGE ENGINE (3 HF KEYS)</label>
+            <input type="text" placeholder="HF Key 1" style="margin-bottom: 8px;">
+            <input type="text" placeholder="HF Key 2" style="margin-bottom: 8px;">
+            <input type="text" placeholder="HF Key 3">
         </div>
 
-        <button class="btn-launch" onclick="launch()">Start Production Engine</button>
+        <div class="token-area">
+            <label id="tokenLabel">SUBSCRIPTION TOKEN (40 WORDS REQUIRED)</label>
+            <input type="text" id="userToken" placeholder="Paste your unique token here...">
+        </div>
+
+        <button class="btn-launch" onclick="launch()">START PRODUCTION ENGINE</button>
     </div>
 
     <div class="agent-footer">
         <div class="live-traffic">
-            ● <strong>LIVE TRAFFIC:</strong> <span id="userCount">92</span> PRO USERS ACTIVE
+            ● <strong>LIVE TRAFFIC:</strong> <span id="userCount">18</span> PRO USERS ACTIVE
         </div>
     </div>
 
     <script>
-        function updateLimits() {
+        function updateUI() {
             const plan = document.getElementById('subPlan').value;
-            const info = document.getElementById('limit-info');
+            const label = document.getElementById('tokenLabel');
             const banner = document.getElementById('promo-banner');
 
             if(plan === '3m') {
-                info.innerHTML = "Current Power: 4 Batches/Day | 100 Posts Daily Limit";
+                label.innerText = "SUBSCRIPTION TOKEN (40 WORDS REQUIRED)";
                 banner.style.display = 'block';
             } else {
-                info.innerHTML = "Current Power: 2 Batches/Day | 50 Posts Daily Limit";
+                label.innerText = "SUBSCRIPTION TOKEN (30 WORDS REQUIRED)";
                 banner.style.display = 'none';
             }
         }
 
-        function launch() {
-            alert("SADSHA Engine is checking your credentials...");
-        }
-
-        // Live user counter
+        // Live Traffic Under 25
         setInterval(() => {
-            const count = Math.floor(Math.random() * (180 - 40 + 1)) + 40;
+            const count = Math.floor(Math.random() * (25 - 5 + 1)) + 5;
             document.getElementById('userCount').innerText = count;
-        }, 3000);
-    </script>
+        }, 4000);
 
+        function launch() {
+            alert("Validating Token and Keys...");
+        }
+    </script>
 </body>
 </html>
