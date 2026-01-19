@@ -1,47 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Gabbar Agent - Chic Daily</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <style>
-        body { background: #050505; color: #e2e8f0; font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
-        .panel { width: 100%; max-width: 600px; background: #111; border: 1px solid #222; padding: 30px; border-radius: 15px; border-top: 4px solid #00ff88; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
-        #log-window { margin-top: 20px; background: #000; height: 300px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 12px; border: 1px solid #222; color: #00ff88; }
-        button { background: #00ff88; color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        button:disabled { background: #222; color: #555; cursor: not-allowed; }
-        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    </style>
-</head>
-<body>
-
-<div class="panel">
-    <div id="setup-ui">
-        <h2>🔒 Unlock Gabbar Engine</h2>
-        <input type="password" id="groq_key" placeholder="Enter Groq API Key (gsk_...)">
-        <input type="password" id="hf_keys" placeholder="Enter HuggingFace Keys (comma separated)">
-        <button onclick="unlock()">Unlock System</button>
-    </div>
-
-    <div id="main-ui" style="display:none;">
-        <div class="status-header">
-            <h2 style="margin:0">Chic Daily Agent</h2>
-            <div id="count-display" style="font-size:20px; color:#00ff88">0/25</div>
-        </div>
-        <button id="run-btn" onclick="startBatch()">🚀 Fire Production Batch</button>
-        <div id="log-window">System Standby... Ready.</div>
-    </div>
-</div>
-
-<script>
-    let KEYS = { groq: "", hf: [], currentHF: 0 };
-    const zip = new JSZip();
-    let csvData = "image_name,caption\n";
-
-    function unlock() {
-        const g = document.getElementById('groq_key').value.trim();
-        const h = document.getElementById('hf_keys').value.split(',').map(k => k.trim()).filter(k => k !== "");
-        if(g && h.length > 0) {
-            KEYS.groq = g; KEYS.hf = h;
-            document.getElementById('setup-ui').style.display =
+function unlock() {
+    const g = document.getElementById('groq_key').value.trim();
+    const h_raw = document.getElementById('hf_keys').value.trim();
+    
+    if(!g) { alert("Groq Key missing!"); return; }
+    if(!h_raw) { alert("HF Keys missing!"); return; }
+    
+    const h = h_raw.split(',').map(k => k.trim()).filter(k => k !== "");
+    
+    if(g && h.length > 0) {
+        KEYS.groq = g; 
+        KEYS.hf = h;
+        document.getElementById('setup-ui').style.display = 'none';
+        document.getElementById('main-ui').style.display = 'block';
+        log("Security Cleared. System Online.");
+    } else { 
+        alert("Make sure keys are separated by commas!"); 
+    }
+}
