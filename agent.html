@@ -1,70 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Gabbar Agent - Chic Daily</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <style>
-        body { background: #050505; color: #e2e8f0; font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
-        .panel { width: 100%; max-width: 500px; background: #111; border: 1px solid #222; padding: 30px; border-radius: 15px; border-top: 4px solid #00ff88; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
-        #log-window { margin-top: 20px; background: #000; height: 250px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 12px; border: 1px solid #222; color: #00ff88; }
-        button { background: #00ff88; color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
-        button:hover { background: #fff; }
-    </style>
-</head>
-<body>
+// Global State
+window.KEYS = { gemini: "", hf: [], currentHF: 0 };
+const zip = new JSZip();
+let csvData = "image_name,caption\n";
 
-<div class="panel">
-    <div id="setup-ui">
-        <h2 style="color:#00ff88">🚀 Unlock Gabbar</h2>
-        <input type="text" id="groq_key" placeholder="Paste Groq Key Here">
-        <input type="text" id="hf_keys" placeholder="Paste HF Keys (comma separated)">
-        <button id="unlock-btn" onclick="unlock()">Unlock System Now</button>
-    </div>
+async function geminiCall(prompt) {
+    try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${window.KEYS.gemini}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }]
+            })
+        });
+        const data = await response.json();
+        return data.candidates[0].content.parts[0].text;
+    } catch (e) {
+        console.error("Gemini Error:", e);
+        return "error";
+    }
+}
 
-    <div id="main-ui" style="display:none;">
-        <h2 id="count-display">0/25 Posts</h2>
-        <button id="run-btn" onclick="startBatch()">🚀 Fire Production</button>
-        <div id="log-window">System Standby...</div>
-    </div>
-</div>
+async function startProduction() {
+    const btn = document.getElementById('run-btn');
+    btn.disabled = true;
+    const logWin = document.getElementById('log-window');
+    const log = (msg, color="#888") => {
+        logWin.innerHTML += `<div style="color:${color}">> ${msg}</div>`;
+        logWin.scrollTop = logWin.scrollHeight;
+    };
 
-<script>
-    let KEYS = { groq: "", hf: [], currentHF: 0 };
-    const zip = new JSZip();
+    log("Starting Gemini-Flux Engine...", "#00ff88");
 
-    function unlock() {
-        console.log("Unlock button clicked");
-        const g = document.getElementById('groq_key').value.trim();
-        const h = document.getElementById('hf_keys').value.trim();
-        
-        if(!g || !h) {
-            alert("Both keys are required!");
-            return;
+    try {
+        const trends = ["Cyberpunk Streetwear USA", "Quiet Luxury 2026", "Techwear Fashion", "Vintage HipHop Style", "Sustainable Chic"];
+        let total = 0;
+
+        for (let trend of trends) {
+            log(`Trend: ${trend}`, "#fff");
+            for (let i = 0; i < 5; i++) {
+                total++;
+                document.getElementById('count-display').innerText = `${total}/25`;
+
+                // Gemini se Caption aur Prompt lena
+                const content = await geminiCall(`Trend: ${trend}. Write a viral Facebook caption and a 1-sentence image prompt. Format strictly as: [C]caption[P]prompt`);
+                
+                if(content === "error" || !content.includes('[P]')) {
+                    log("Gemini failed, skipping post...", "#ff4444");
+                    continue;
+                }
+
+                const parts = content.split('[P]');
+                const caption = parts[0].replace('[C]', '').trim();
+                const prompt = parts[1].trim();
+
+                // Flux se Image lena
+                log(`Generating Image ${total}...`);
+                const imgBlob = await fluxCall(prompt); // purana fluxCall function use hoga
+                
+                const fileName = `post_${total}.jpg`;
+                zip.file(fileName, imgBlob);
+                csvData += `"${fileName}","${caption.replace(/"/g, '""')}"\n`;
+                
+                log(`✅ Post ${total} Ready`, "#00ff88");
+                await new Promise(r => setTimeout(r, 1000));
+            }
         }
 
-        KEYS.groq = g;
-        KEYS.hf = h.split(',').map(k => k.trim()).filter(k => k !== "");
-        
-        document.getElementById('setup-ui').style.display = 'none';
-        document.getElementById('main-ui').style.display = 'block';
-        alert("System Unlocked Successfully!");
-    }
+        log("Finalizing ZIP Pack...", "#fff");
+        zip.file("meta_upload.csv", csvData);
+        const blob = await zip.generateAsync({type:"blob"});
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "Gemini_Fashion_Batch.zip";
+        a.click();
+        log("🔥 MISSION SUCCESSFUL!");
 
-    function log(msg) {
-        const win = document.getElementById('log-window');
-        win.innerHTML += `<div>> ${msg}</div>`;
-        win.scrollTop = win.scrollHeight;
-    }
-
-    async function startBatch() {
-        document.getElementById('run-btn').disabled = true;
-        log("Process started...");
-        // Logic starts here...
-        log("API connecting...");
-        alert("Starting Production... Check logs below.");
-    }
-</script>
-</body>
-</html>
+    } catch (e) { log("System Error: " + e.message, "#ff4444"); }
+    btn.disabled = false;
+}
