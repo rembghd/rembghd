@@ -1,19 +1,70 @@
-function unlock() {
-    const g = document.getElementById('groq_key').value.trim();
-    const h_raw = document.getElementById('hf_keys').value.trim();
-    
-    if(!g) { alert("Groq Key missing!"); return; }
-    if(!h_raw) { alert("HF Keys missing!"); return; }
-    
-    const h = h_raw.split(',').map(k => k.trim()).filter(k => k !== "");
-    
-    if(g && h.length > 0) {
-        KEYS.groq = g; 
-        KEYS.hf = h;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gabbar Agent - Chic Daily</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        body { background: #050505; color: #e2e8f0; font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
+        .panel { width: 100%; max-width: 500px; background: #111; border: 1px solid #222; padding: 30px; border-radius: 15px; border-top: 4px solid #00ff88; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; }
+        #log-window { margin-top: 20px; background: #000; height: 250px; overflow-y: auto; padding: 15px; font-family: monospace; font-size: 12px; border: 1px solid #222; color: #00ff88; }
+        button { background: #00ff88; color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
+        button:hover { background: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="panel">
+    <div id="setup-ui">
+        <h2 style="color:#00ff88">🚀 Unlock Gabbar</h2>
+        <input type="text" id="groq_key" placeholder="Paste Groq Key Here">
+        <input type="text" id="hf_keys" placeholder="Paste HF Keys (comma separated)">
+        <button id="unlock-btn" onclick="unlock()">Unlock System Now</button>
+    </div>
+
+    <div id="main-ui" style="display:none;">
+        <h2 id="count-display">0/25 Posts</h2>
+        <button id="run-btn" onclick="startBatch()">🚀 Fire Production</button>
+        <div id="log-window">System Standby...</div>
+    </div>
+</div>
+
+<script>
+    let KEYS = { groq: "", hf: [], currentHF: 0 };
+    const zip = new JSZip();
+
+    function unlock() {
+        console.log("Unlock button clicked");
+        const g = document.getElementById('groq_key').value.trim();
+        const h = document.getElementById('hf_keys').value.trim();
+        
+        if(!g || !h) {
+            alert("Both keys are required!");
+            return;
+        }
+
+        KEYS.groq = g;
+        KEYS.hf = h.split(',').map(k => k.trim()).filter(k => k !== "");
+        
         document.getElementById('setup-ui').style.display = 'none';
         document.getElementById('main-ui').style.display = 'block';
-        log("Security Cleared. System Online.");
-    } else { 
-        alert("Make sure keys are separated by commas!"); 
+        alert("System Unlocked Successfully!");
     }
-}
+
+    function log(msg) {
+        const win = document.getElementById('log-window');
+        win.innerHTML += `<div>> ${msg}</div>`;
+        win.scrollTop = win.scrollHeight;
+    }
+
+    async function startBatch() {
+        document.getElementById('run-btn').disabled = true;
+        log("Process started...");
+        // Logic starts here...
+        log("API connecting...");
+        alert("Starting Production... Check logs below.");
+    }
+</script>
+</body>
+</html>
