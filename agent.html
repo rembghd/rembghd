@@ -2,61 +2,127 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gabbar Agent - Secure Panel</title>
+    <title>Gabbar Agent - Chic Daily</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
-        body { background: #050505; color: #e2e8f0; font-family: 'Inter', sans-serif; padding: 20px; }
-        .panel { max-width: 700px; margin: auto; background: #111; border: 1px solid #222; padding: 25px; border-radius: 12px; border-top: 4px solid #ff4444; }
-        input { width: 100%; padding: 10px; margin: 10px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 5px; box-sizing: border-box; }
-        #log-window { margin-top: 20px; background: #000; height: 300px; overflow-y: auto; padding: 15px; font-size: 12px; border: 1px solid #333; color: #adbac7; }
-        button { background: #00ff88; color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .setup-box { border-bottom: 1px solid #333; margin-bottom: 20px; padding-bottom: 20px; }
+        body { background: #050505; color: #e2e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; display: flex; justify-content: center; }
+        .panel { width: 100%; max-width: 600px; background: #111; border: 1px solid #222; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-top: 4px solid #00ff88; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #1a1a1a; border: 1px solid #333; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        #log-window { margin-top: 20px; background: #000; height: 300px; overflow-y: auto; padding: 15px; font-family: 'Courier New', monospace; font-size: 12px; border: 1px solid #222; border-radius: 8px; color: #00ff88; line-height: 1.6; }
+        button { background: #00ff88; color: #000; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #00cc6e; transform: translateY(-2px); }
+        button:disabled { background: #222; color: #555; cursor: not-allowed; transform: none; }
+        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .counter { font-size: 24px; font-weight: bold; color: #00ff88; }
     </style>
 </head>
 <body>
 
 <div class="panel">
-    <h2>🔐 Gabbar Secure Agent</h2>
-    
-    <div id="setup" class="setup-box">
-        <p style="font-size:12px; color:#aaa;">Enter your keys once. They stay in your browser only.</p>
-        <input type="password" id="groq_input" placeholder="Enter Groq API Key">
-        <input type="password" id="hf_inputs" placeholder="Enter 3 HF Keys (comma separated)">
-        <button onclick="saveConfig()">Save & Unlock Agent</button>
+    <div id="setup-ui">
+        <h2>🔒 Unlock Gabbar Engine</h2>
+        <p style="color:#666; font-size: 13px;">Keys are stored locally in your browser. Never sent to GitHub.</p>
+        <input type="password" id="groq_key" placeholder="Enter Groq API Key (gsk_...)">
+        <input type="password" id="hf_keys" placeholder="Enter 3 HF Keys (comma separated)">
+        <button onclick="unlock()">Unlock & Load System</button>
     </div>
 
     <div id="main-ui" style="display:none;">
-        <h3 id="counter" style="color:#00ff88">Ready to generate 50 posts</h3>
-        <button onclick="startProduction()">🚀 Start Production</button>
-        <div id="log-window">System Ready...</div>
+        <div class="status-header">
+            <h2 style="margin:0">Chic Daily Agent</h2>
+            <div class="counter" id="count-display">0/50</div>
+        </div>
+        <p style="color:#888; margin-top:-15px; font-size: 13px;">Niche: USA High-End Street Fashion</p>
+        <button id="run-btn" onclick="startBatch()">🚀 Fire 50 Posts Batch</button>
+        <div id="log-window">System Standby... Ready for deployment.</div>
     </div>
 </div>
 
 <script>
-    let config = { groq: "", hf: [] };
+    let KEYS = { groq: "", hf: [], currentHF: 0 };
+    const zip = new JSZip();
+    let csvData = "image_name,caption\n";
 
-    function saveConfig() {
-        const groq = document.getElementById('groq_input').value;
-        const hf = document.getElementById('hf_inputs').value.split(',');
-        if(groq && hf.length > 0) {
-            config.groq = groq.trim();
-            config.hf = hf.map(k => k.trim());
-            document.getElementById('setup').style.display = 'none';
+    function unlock() {
+        const g = document.getElementById('groq_key').value.trim();
+        const h = document.getElementById('hf_keys').value.split(',').map(k => k.trim());
+        if(g && h.length > 0) {
+            KEYS.groq = g; KEYS.hf = h;
+            document.getElementById('setup-ui').style.display = 'none';
             document.getElementById('main-ui').style.display = 'block';
-            writeLog("Keys loaded securely. Agent Unlocked.");
-        } else { alert("Please enter all keys!"); }
+        } else { alert("Please enter valid keys!"); }
     }
 
-    function writeLog(msg) {
-        document.getElementById('log-window').innerHTML += `<div>${new Date().toLocaleTimeString()} - ${msg}</div>`;
+    function log(msg, color = "#00ff88") {
+        const win = document.getElementById('log-window');
+        win.innerHTML += `<div style="color:${color}">> ${new Date().toLocaleTimeString()}: ${msg}</div>`;
+        win.scrollTop = win.scrollHeight;
     }
 
-    // Yahan baki wahi logic ayega jo maine pehle dia tha, 
-    // bas keys config object se uthayi jayengi.
-    async function startProduction() {
-        writeLog("Starting Batch process with " + config.hf.length + " keys rotation...");
-        // Logic execution...
+    async function groqCall(prompt) {
+        const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${KEYS.groq}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ model: "llama-3.1-70b-versatile", messages: [{role: "user", content: prompt}] })
+        });
+        const d = await r.json();
+        return d.choices[0].message.content;
+    }
+
+    async function fluxCall(prompt) {
+        const key = KEYS.hf[KEYS.currentHF];
+        KEYS.currentHF = (KEYS.currentHF + 1) % KEYS.hf.length;
+        const r = await fetch("https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell", {
+            headers: { Authorization: `Bearer ${key}` },
+            method: "POST",
+            body: JSON.stringify({ inputs: prompt + " | high-end luxury streetwear, cinematic lighting, 8k, professional photography" }),
+        });
+        return await r.blob();
+    }
+
+    async function startBatch() {
+        document.getElementById('run-btn').disabled = true;
+        log("Initiating USA Fashion Trend Scouting...", "#fff");
+        
+        try {
+            const trendsRaw = await groqCall("List 10 specific high-end street fashion trends in USA for 2026. Names only, separated by commas.");
+            const trends = trendsRaw.split(',').map(t => t.trim());
+            
+            let total = 0;
+            for (let trend of trends) {
+                log(`Processing Trend: ${trend.toUpperCase()}`, "#34d399");
+                for (let i = 0; i < 5; i++) {
+                    total++;
+                    document.getElementById('count-display').innerText = `${total}/50`;
+                    
+                    const content = await groqCall(`Trend: ${trend}. Write: 1) A viral long Facebook caption with hashtags. 2) A 1-sentence image prompt. Format: [C]caption[P]prompt`);
+                    const parts = content.split('[P]');
+                    const caption = parts[0].replace('[C]', '').trim();
+                    const prompt = parts[1] || trend;
+
+                    const imgBlob = await fluxCall(prompt);
+                    const fileName = `post_${total}.jpg`;
+                    zip.file(fileName, imgBlob);
+                    csvData += `"${fileName}","${caption.replace(/"/g, '""')}"\n`;
+                    
+                    log(`Post ${total} created successfully.`, "#888");
+                    await new Promise(r => setTimeout(r, 500));
+                }
+            }
+
+            log("All posts generated. Finalizing ZIP...", "#fff");
+            zip.file("meta_upload_this.csv", csvData);
+            const content = await zip.generateAsync({type:"blob"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(content);
+            a.download = "ChicDaily_50_Batch.zip";
+            a.click();
+            log("✅ MISSION SUCCESSFUL. ZIP DOWNLOADED.", "#00ff88");
+
+        } catch (e) { log("ERROR: " + e.message, "#ff4444"); }
+        document.getElementById('run-btn').disabled = false;
     }
 </script>
+
 </body>
 </html>
