@@ -2,267 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA Agent | RembgHD Premium</title>
+    <title>SADSHA Agent | Production Engine</title>
     <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/fbbf24/user-male-circle.png">
     <style>
-        :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; --text: #9ca3af; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; min-height: 100vh; overflow-x: hidden; }
+        :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
+        .app-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
         
-        /* Layout */
-        .app-container { max-width: 1200px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
+        label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+        input, select, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box; }
         
-        /* Banners */
-        #promo-banner { display: none; background: linear-gradient(90deg, var(--yellow), #f59e0b); color: #000; padding: 12px; text-align: center; font-weight: 800; border-radius: 10px; margin-bottom: 20px; }
-
-        /* Input Fields */
-        label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
-        input, select, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 8px; outline: none; margin-bottom: 15px; font-size: 14px; box-sizing: border-box; }
-        input:focus { border-color: var(--yellow); }
-
-        /* Buttons */
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-main { background: var(--yellow); color: #000; }
-        .btn-check { background: var(--border); color: var(--yellow); font-size: 10px; width: auto; padding: 5px 15px; float: right; }
-
-        /* Status & Meter */
-        .meter-box { background: #000; padding: 15px; border-radius: 10px; border-left: 4px solid var(--yellow); text-align: center; }
-        .meter-val { font-size: 28px; font-weight: 900; display: block; }
-
-        /* Terminal & Progress */
-        .terminal { background: #050505; color: #10b981; font-family: 'Courier New', monospace; padding: 15px; border-radius: 8px; font-size: 12px; height: 120px; overflow-y: auto; border: 1px solid var(--border); }
-        .progress-bar { width: 100%; height: 8px; background: var(--border); border-radius: 10px; margin: 15px 0; overflow: hidden; }
-        .progress-fill { width: 0%; height: 100%; background: var(--yellow); transition: 0.4s; }
-
-        /* Gate (Initial State) */
-        #main-dashboard { display: none; }
-        #token-gate { max-width: 500px; margin: 100px auto; text-align: center; }
-
-        /* Cooldown Overlay */
-        #cooldown-ui { display: none; text-align: center; padding: 40px; }
-        .countdown { font-size: 40px; font-weight: 900; color: var(--yellow); margin: 20px 0; }
+        .btn-main { width: 100%; padding: 15px; background: var(--yellow); color: #000; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .meter-box { background: #000; padding: 15px; border-radius: 8px; border-left: 4px solid var(--yellow); text-align: center; }
+        
+        /* Modal Gate */
+        #token-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 15px; width: 400px; border: 1px solid var(--yellow); text-align: center; }
+        
+        /* Terminal */
+        .terminal { background: #000; color: #10b981; font-family: monospace; padding: 15px; height: 100px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
-<div id="token-gate" class="card">
-    <h1 style="color: var(--yellow); margin-top: 0;">SADSHA GATE</h1>
-    <p style="color: var(--text); font-size: 14px;">Enter your 30 or 40 word Subscription Token to unlock the engine.</p>
-    <div class="input-group" style="margin-top: 30px;">
-        <label>SECRET TOKEN</label>
-        <textarea id="tokenInput" placeholder="Paste your 30 (1M) or 40 (3M) word token here..." style="height: 100px;"></textarea>
+<div class="app-container">
+    <div class="sidebar">
+        <div class="card">
+            <label>Batch Capacity</label>
+            <div class="meter-box">
+                <span id="max-posts" style="font-size: 30px; font-weight: 900;">0</span>
+                <div style="font-size: 10px;">POSTS ALLOWED</div>
+            </div>
+        </div>
+        <div class="card" style="text-align: center;">
+            <p style="font-size: 10px;">PROMOTED BY REMBGHD</p>
+            <img src="https://i.ibb.co/XfXf8xR/red-saree-sample.jpg" style="width: 100%; border-radius: 5px;">
+        </div>
     </div>
-    <button class="btn btn-main" onclick="validateAccess()">Unlock Dashboard</button>
+
+    <div class="main-engine">
+        <div class="card">
+            <h2 style="margin-top:0;">SADSHA <span style="color:var(--yellow);">AGENT</span></h2>
+            
+            <label>Text Model & API Key</label>
+            <div style="display:flex; gap:10px;">
+                <select style="width:30%"><option>Gemini</option><option>Groq</option></select>
+                <input type="password" placeholder="API Key">
+            </div>
+
+            <label>Prompt Category</label>
+            <select>
+                <option>Product Photography</option><option>Quotes</option><option>Funny/Meme</option>
+                <option>Nature</option><option>Interior Design</option><option>Fashion</option>
+            </select>
+
+            <label>HF Image Keys (1-3 Keys)</label>
+            <input type="text" class="hf-key" placeholder="HF Key 1" oninput="updateMeter()">
+            <input type="text" class="hf-key" placeholder="HF Key 2" oninput="updateMeter()">
+            <input type="text" class="hf-key" placeholder="HF Key 3" oninput="updateMeter()">
+
+            <button class="btn-main" onclick="openTokenGate()">Launch Production</button>
+        </div>
+
+        <div class="card" id="output-section" style="display:none;">
+            <label>Live Production Terminal</label>
+            <div class="terminal" id="term">Standing by...</div>
+            <button class="btn-main" style="margin-top:15px;" onclick="exportCSV()">Download Meta Package (.CSV)</button>
+        </div>
+    </div>
 </div>
 
-<div id="main-dashboard">
-    <div id="promo-banner">🔥 BUMPER OFFER ACTIVE: +15 DAYS EXTRA ADDED TO YOUR ACCOUNT! 🔥</div>
-    
-    <div class="app-container">
-        <div class="sidebar">
-            <div class="card">
-                <label>Subscription Status</label>
-                <div id="days-left" style="font-size: 20px; font-weight: 900; color: var(--yellow);">30 DAYS LEFT</div>
-                <p id="plan-tag" style="font-size: 11px; color: var(--text);">Plan: Detecting...</p>
-            </div>
-
-            <div class="card">
-                <label>Batch Capacity</label>
-                <div class="meter-box">
-                    <span class="meter-val" id="capacity-meter">0</span>
-                    <span style="font-size: 10px; font-weight: 800;">MAX POSTS ALLOWED</span>
-                </div>
-            </div>
-
-            <div class="card" style="text-align: center;">
-                <p style="font-size: 10px; color: var(--text);">SPONSORED BY</p>
-                <a href="https://rembghd.com" target="_blank">
-                    <img src="https://i.ibb.co/XfXf8xR/red-saree-sample.jpg" style="width: 100%; border-radius: 8px; border: 1px solid var(--border);">
-                </a>
-                <p style="font-size: 12px; margin-top: 10px; font-weight: 700;">FREE HD BG REMOVER</p>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="card" id="engine-form">
-                <h2 style="margin-top: 0;">SADSHA <span style="color: var(--yellow);">AGENT</span></h2>
-                
-                <div class="input-group">
-                    <label>Text Model (The Brain) <button class="btn-check" onclick="logTerminal('API Key Validated!')">Check Connection</button></label>
-                    <div style="display: flex; gap: 10px;">
-                        <select id="textModel" style="width: 30%;">
-                            <option>Gemini</option><option>Grok</option><option>Groq</option><option>Meta AI</option>
-                        </select>
-                        <input type="password" placeholder="Paste your API Key here...">
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label>Custom Prompt (Override Categories)</label>
-                    <textarea id="customPrompt" placeholder="Write your own style or instructions..."></textarea>
-                </div>
-
-                <div class="input-group">
-                    <label>Image Engine (HuggingFace Keys)</label>
-                    <input type="text" class="hf-key" placeholder="HF Key 1" oninput="updateMeter()">
-                    <input type="text" class="hf-key" placeholder="HF Key 2" oninput="updateMeter()">
-                    <input type="text" class="hf-key" placeholder="HF Key 3" oninput="updateMeter()">
-                </div>
-
-                <button class="btn btn-main" onclick="startProduction()">Start Production Engine</button>
-            </div>
-
-            <div class="card" id="cooldown-ui">
-                <h2 id="cooldown-title">ENGINE PROCESSING...</h2>
-                <div class="progress-bar"><div class="progress-fill" id="p-bar"></div></div>
-                <div class="terminal" id="term">Ready to fire...</div>
-                
-                <div id="timer-box" style="display: none;">
-                    <div class="countdown" id="cooldown-timer">04:00:00</div>
-                    <p style="color: var(--text);">Cooldown Active. Please wait for your next batch.</p>
-                </div>
-
-                <button id="download-btn" class="btn btn-main" style="display: none; margin-top: 20px;" onclick="exportMetaCSV()">Download Meta Upload Package (CSV)</button>
-            </div>
-        </div>
+<div id="token-modal">
+    <div class="modal-content">
+        <h3 style="color:var(--yellow);">Subscription Required</h3>
+        <p style="font-size:12px; color:#9ca3af;">Enter your 30 (1M) or 40 (3M) word token to start.</p>
+        <textarea id="token-input" placeholder="Paste token here..." style="height:80px;"></textarea>
+        <button class="btn-main" onclick="verifyAndFire()">Unlock & Start Engine</button>
+        <p style="font-size:10px; cursor:pointer; margin-top:10px;" onclick="closeModal()">Cancel</p>
     </div>
 </div>
 
 <script>
-    let currentPlan = { cooldown: 4, batches: 2, posts: 0 };
+    let activePosts = 0;
 
-    // --- 1. Token Validation ---
-    function validateAccess() {
-        const token = document.getElementById('tokenInput').value.trim();
-        const words = token.split(/\s+/).length;
-
-        if (token.startsWith("1M-") && words === 30) {
-            login(30, "1 Month Plan", 4);
-        } else if (token.startsWith("3M-") && words === 40) {
-            document.getElementById('promo-banner').style.display = 'block';
-            login(30, "3 Month Plan (+15 Days)", 2);
-        } else {
-            alert("Invalid Token! Check word count (30 for 1M, 40 for 3M) and prefix.");
-        }
-    }
-
-    function login(days, planName, cooldown) {
-        currentPlan.cooldown = cooldown;
-        localStorage.setItem('sadsha_auth', 'true');
-        localStorage.setItem('sadsha_cooldown_val', cooldown);
-        
-        document.getElementById('token-gate').style.display = 'none';
-        document.getElementById('main-dashboard').style.display = 'block';
-        document.getElementById('plan-tag').innerText = "Plan: " + planName;
-        checkCooldown();
-    }
-
-    // --- 2. Meter Logic ---
     function updateMeter() {
         let keys = 0;
-        document.querySelectorAll('.hf-key').forEach(el => { if(el.value.length > 10) keys++; });
-        
-        const limits = [0, 10, 15, 20];
-        currentPlan.posts = limits[keys];
-        document.getElementById('capacity-meter').innerText = currentPlan.posts;
+        document.querySelectorAll('.hf-key').forEach(input => { if(input.value.length > 10) keys++; });
+        activePosts = [0, 10, 15, 20][keys] || 0;
+        document.getElementById('max-posts').innerText = activePosts;
     }
 
-    // --- 3. Production & Terminal ---
-    function logTerminal(msg) {
-        const term = document.getElementById('term');
-        term.innerHTML += `> ${msg}<br>`;
-        term.scrollTop = term.scrollHeight;
+    function openTokenGate() {
+        if(activePosts === 0) return alert("Please enter at least 1 HF Key.");
+        document.getElementById('token-modal').style.display = 'flex';
     }
 
-    function startProduction() {
-        if(currentPlan.posts === 0) return alert("Add at least 1 HF Key!");
+    function closeModal() { document.getElementById('token-modal').style.display = 'none'; }
+
+    function verifyAndFire() {
+        const token = document.getElementById('token-input').value.trim();
+        const words = token.split(/\s+/).length;
         
-        document.getElementById('engine-form').style.display = 'none';
-        document.getElementById('cooldown-ui').style.display = 'block';
-        
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 5;
-            document.getElementById('p-bar').style.width = progress + "%";
-            
-            if(progress === 10) logTerminal("Initializing SADSHA Engine...");
-            if(progress === 30) logTerminal("Fetching Captions via " + document.getElementById('textModel').value + "...");
-            if(progress === 60) logTerminal("Generating Images (Stealth Backup Active)...");
-            if(progress === 90) logTerminal("Finalizing Meta CSV Export...");
-
-            if (progress >= 100) {
-                clearInterval(interval);
-                logTerminal("SUCCESS: Batch Completed.");
-                document.getElementById('download-btn').style.display = 'block';
-                document.getElementById('cooldown-title').innerText = "BATCH FINISHED";
-                
-                // Set Cooldown
-                const end = Date.now() + (currentPlan.cooldown * 60 * 60 * 1000);
-                localStorage.setItem('sadsha_timer', end);
-                setTimeout(checkCooldown, 2000);
-            }
-        }, 300);
-    }
-
-    // --- 4. Cooldown & Persistent Timer ---
-    function checkCooldown() {
-        const endTime = localStorage.getItem('sadsha_timer');
-        if (!endTime) return;
-
-        const remaining = endTime - Date.now();
-        if (remaining > 0) {
-            document.getElementById('engine-form').style.display = 'none';
-            document.getElementById('cooldown-ui').style.display = 'block';
-            document.getElementById('timer-box').style.display = 'block';
-            document.getElementById('cooldown-title').innerText = "COOLDOWN ACTIVE";
-            runTimer(remaining);
+        if ((token.startsWith("1M-") && words === 30) || (token.startsWith("3M-") && words === 40)) {
+            closeModal();
+            startEngine();
         } else {
-            document.getElementById('engine-form').style.display = 'block';
-            document.getElementById('cooldown-ui').style.display = 'none';
+            alert("Invalid Token Format or Word Count!");
         }
     }
 
-    function runTimer(ms) {
-        const timerEl = document.getElementById('cooldown-timer');
-        const x = setInterval(() => {
-            const now = Date.now();
-            const distance = localStorage.getItem('sadsha_timer') - now;
-
-            const h = Math.floor(distance / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-            timerEl.innerHTML = `${h}h ${m}m ${s}s`;
-
-            if (distance < 0) {
-                clearInterval(x);
-                location.reload();
-            }
-        }, 1000);
+    function startEngine() {
+        document.getElementById('output-section').style.display = 'block';
+        const term = document.getElementById('term');
+        term.innerHTML = "> Initializing SADSHA...<br>> Token Validated...<br>> Starting Batch of " + activePosts + " posts...";
+        // Yahan par hum production logic connect karenge
     }
 
-    // --- 5. Meta CSV Export ---
-    function exportMetaCSV() {
-        let csvContent = "data:text/csv;charset=utf-8,file_name,caption\n";
-        for(let i=1; i<=currentPlan.posts; i++) {
-            csvContent += `sadsha_post_${i}.jpg, "Awesome SADSHA generated caption for post ${i}"\n`;
-        }
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "meta_upload_package.csv");
-        document.body.appendChild(link);
-        link.click();
+    function exportCSV() {
+        let csv = "file_name,caption\n";
+        for(let i=1; i<=activePosts; i++) { csv += `sadsha_img_${i}.jpg, "Auto Generated Caption ${i}"\n`; }
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'meta_upload.csv';
+        a.click();
     }
-
-    // On Load
-    window.onload = () => {
-        if(localStorage.getItem('sadsha_auth')) {
-            login(30, "Active Session", localStorage.getItem('sadsha_cooldown_val'));
-        }
-    };
 </script>
-
 </body>
 </html>
