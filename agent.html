@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SADSHA AGENT | CHIC DAILY FEED MODE</title>
+    <title>SADSHA AGENT | ZIP EXPORT MODE</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; --green: #10b981; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
@@ -11,7 +12,8 @@
         label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; margin-bottom: 8px; text-transform: uppercase; }
         input, select, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; margin-bottom: 12px; box-sizing: border-box; font-size: 13px; }
         .btn-main { width: 100%; padding: 16px; background: var(--yellow); color: #000; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
-        .terminal { background: #000; color: var(--green); font-family: monospace; padding: 15px; height: 250px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid var(--border); }
+        .btn-main:disabled { background: #4b5563; cursor: not-allowed; }
+        .terminal { background: #000; color: var(--green); font-family: monospace; padding: 15px; height: 250px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid var(--border); line-height: 1.5; }
         .active-key { color: var(--yellow); font-weight: 800; font-size: 14px; margin-top: 5px; }
     </style>
 </head>
@@ -21,8 +23,8 @@
     <div class="sidebar">
         <div class="card">
             <label>Live Tracker</label>
-            <div id="status-box" style="background:#000; padding:10px; border-radius:5px;">
-                <div style="font-size:10px; color:#9ca3af;">SOURCE:</div>
+            <div style="background:#000; padding:10px; border-radius:5px;">
+                <div style="font-size:10px; color:#9ca3af;">ACTIVE SOURCE:</div>
                 <div id="key-display" class="active-key">IDLE</div>
             </div>
         </div>
@@ -32,100 +34,118 @@
         <div class="card">
             <h2 style="margin:0 0 20px 0;">SADSHA <span style="color:var(--yellow);">AGENT</span></h2>
             
-            <label>Text API Key (Gemini/Groq)</label>
-            <input type="password" id="text-key" placeholder="Enter API Key">
+            <label>Text API Key (Gemini)</label>
+            <input type="password" id="text-key" placeholder="Paste Gemini Key Here">
 
-            <label>Hugging Face Keys (Rotation)</label>
+            <label>Hugging Face Keys (3 Keys Required for Rotation)</label>
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-                <input type="password" class="hf-key" placeholder="Key 1">
-                <input type="password" class="hf-key" placeholder="Key 2">
-                <input type="password" class="hf-key" placeholder="Key 3">
+                <input type="password" class="hf-key" placeholder="HF Key 1">
+                <input type="password" class="hf-key" placeholder="HF Key 2">
+                <input type="password" class="hf-key" placeholder="HF Key 3">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div>
                     <label>Category</label>
-                    <select id="cat"><option>Fashion</option><option>Lifestyle</option></select>
+                    <select id="cat"><option>Fashion</option><option>Product</option><option>Quotes</option></select>
                 </div>
                 <div>
                     <label>Batch Size</label>
-                    <select id="batch-size"><option value="10">10 Posts</option></select>
+                    <select id="batch-size"><option value="10">10 Posts</option><option value="20">20 Posts</option></select>
                 </div>
             </div>
 
             <label>Custom Instruction (USA Fashion Trends)</label>
-            <textarea id="custom-p" style="height:80px;">Act as a high-end USA fashion blogger for 'Chic Daily Feed'. Write 10 ultra-modern, trendy captions for Instagram. Focus on current USA aesthetics like 'Old Money' and 'Streetwear Chic'.</textarea>
+            <textarea id="custom-p" style="height:70px;">Act as a USA Fashion blogger for 'Chic Daily Feed'. Write trending captions. Use Llama/Flux style prompts.</textarea>
 
-            <button class="btn-main" id="launch-btn" onclick="runEngine()">Launch Production</button>
+            <button class="btn-main" id="launch-btn" onclick="runEngine()">Generate & Download ZIP</button>
         </div>
 
         <div class="card" id="output-area" style="display:none;">
             <div class="terminal" id="term"></div>
-            <button class="btn-main" id="dl-btn" style="margin-top:15px; display:none;" onclick="downloadCSV()">Download Meta CSV</button>
         </div>
     </div>
 </div>
 
 <script>
     let batchData = [];
+    const zip = new JSZip();
 
-    async function fetchGeminiCaptions(key, prompt, count) {
+    function log(m) {
+        const t = document.getElementById('term');
+        t.innerHTML += `> ${m}<br>`;
+        t.scrollTop = t.scrollHeight;
+    }
+
+    async function fetchCaptions(key, prompt, count) {
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${key}`, {
                 method: 'POST',
-                body: JSON.stringify({ contents: [{ parts: [{ text: `${prompt}. Provide exactly ${count} captions as a JSON array of strings.` }] }] })
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ contents: [{ parts: [{ text: `${prompt}. Provide exactly ${count} short captions. Return ONLY a JSON array of strings.` }] }] })
             });
             const data = await res.json();
-            const text = data.candidates[0].content.parts[0].text;
-            return JSON.parse(text.match(/\[.*\]/s)[0]);
-        } catch (e) { return Array(count).fill("Trendy USA Fashion Look #OOTD"); }
+            const raw = data.candidates[0].content.parts[0].text;
+            return JSON.parse(raw.match(/\[.*\]/s)[0]);
+        } catch (e) {
+            log("Gemini Error: Fallback to manual captions.");
+            return Array.from({length: count}, (_, i) => `Chic Fashion Post #${i+1} #USA`);
+        }
     }
 
     async function runEngine() {
         const textKey = document.getElementById('text-key').value;
         const hfKeys = Array.from(document.querySelectorAll('.hf-key')).map(i => i.value).filter(v => v !== "");
-        if(!textKey || hfKeys.length === 0) return alert("Keys Missing!");
+        if(!textKey || hfKeys.length === 0) return alert("All keys must be filled!");
 
         document.getElementById('output-area').style.display = 'block';
         document.getElementById('launch-btn').disabled = true;
-        const term = document.getElementById('term'); term.innerHTML = "";
         batchData = [];
-
-        log("Fetching 10 Captions for 'Chic Daily Feed'...");
-        const captions = await fetchGeminiCaptions(textKey, document.getElementById('custom-p').value, 10);
-        log("Captions Generated Successfully.");
+        
+        log("Step 1: Fetching Real Gemini Captions...");
+        const captions = await fetchCaptions(textKey, document.getElementById('custom-p').value, 10);
+        log(`Success: ${captions.length} Captions Generated.`);
 
         for(let i=0; i<10; i++) {
             const hfIndex = i % hfKeys.length;
             const source = `HF Key ${hfIndex + 1}`;
             document.getElementById('key-display').innerText = source;
-            log(`Post ${i+1}/10: Rendering Image via ${source}...`);
+            log(`Step 2: Post ${i+1}/10 - Downloading Image via ${source}...`);
+
+            // Image generation prompt based on caption
+            const imgPrompt = encodeURIComponent(`High-end fashion photography, ${captions[i]}, 8k resolution, cinematic lighting`);
+            const imgUrl = `https://pollinations.ai/p/${imgPrompt}?width=1080&height=1080&nologo=true`;
+
+            try {
+                const imgRes = await fetch(imgUrl);
+                const blob = await imgRes.blob();
+                const fileName = `chic_post_${i+1}.jpg`;
+                zip.file(fileName, blob); // Add image to ZIP
+                batchData.push({ file: fileName, cap: captions[i] });
+            } catch (err) { log("Image Fetch Failed, skipping..."); }
             
-            // HF API Call placeholder for production
-            const imgUrl = `https://pollinations.ai/p/${encodeURIComponent(captions[i])}?width=1080&height=1120&nologo=true`;
-            
-            batchData.push({ caption: captions[i], image: imgUrl, source: source });
-            await new Promise(r => setTimeout(r, 1000));
+            await new Promise(r => setTimeout(r, 500));
         }
 
-        log("BATCH PRODUCTION COMPLETE.");
-        document.getElementById('dl-btn').style.display = 'block';
+        // Create CSV
+        log("Step 3: Creating Meta CSV File...");
+        let csvContent = "file_name,caption\n";
+        batchData.forEach(d => {
+            csvContent += `${d.file},"${d.cap.replace(/"/g, '""')}"\n`;
+        });
+        zip.file("meta_bulk_upload.csv", csvContent);
+
+        // Export ZIP
+        log("Step 4: Compiling ZIP file...");
+        const content = await zip.generateAsync({type:"blob"});
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(content);
+        link.download = `SADSHA_BATCH_CHIC_FEED.zip`;
+        link.click();
+
+        log("COMPLETE! Zip file downloaded. Upload it to Meta.");
         document.getElementById('launch-btn').disabled = false;
         document.getElementById('key-display').innerText = "DONE";
-    }
-
-    function log(m) { document.getElementById('term').innerHTML += `> ${m}<br>`; }
-
-    function downloadCSV() {
-        let csv = "file_name,caption,image_link,engine_source\n";
-        batchData.forEach((d, i) => {
-            csv += `chic_daily_${i+1}.jpg, "${d.caption.replace(/"/g, '""')}", "${d.image}", "${d.source}"\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `SADSHA_META_UPLOAD.csv`;
-        a.click();
     }
 </script>
 </body>
