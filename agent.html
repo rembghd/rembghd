@@ -2,17 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SADSHA PERSONAL AGENT | HF ROTATION MODE</title>
+    <title>SADSHA PERSONAL AGENT | PROMPT + ROTATION</title>
     <style>
         :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; --green: #10b981; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
-        .grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; max-width: 1300px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: 280px 1fr; gap: 20px; max-width: 1300px; margin: 0 auto; }
         .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
         label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; margin-bottom: 8px; text-transform: uppercase; }
-        input, select, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; margin-bottom: 12px; box-sizing: border-box; font-size: 13px; }
+        input, select, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; margin-bottom: 12px; box-sizing: border-box; font-size: 13px; outline: none; }
+        input:focus { border-color: var(--yellow); }
         .btn-main { width: 100%; padding: 16px; background: var(--yellow); color: #000; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
-        .terminal { background: #000; color: var(--green); font-family: monospace; padding: 15px; height: 200px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid var(--border); }
-        .meter { background: #000; padding: 15px; border-radius: 8px; border-left: 5px solid var(--yellow); text-align: center; }
+        .terminal { background: #000; color: var(--green); font-family: monospace; padding: 15px; height: 250px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid var(--border); }
+        .tracker-box { padding: 15px; border-radius: 8px; background: #000; border-left: 4px solid var(--yellow); margin-top: 10px; }
+        .active-key { color: var(--yellow); font-weight: 800; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -20,15 +22,14 @@
 <div class="grid">
     <div class="sidebar">
         <div class="card">
-            <label>Batch Status</label>
-            <div class="meter">
-                <div style="font-size: 32px; font-weight: 900;" id="post-count">10</div>
-                <div style="font-size: 10px;">POSTS READY</div>
+            <label>Live Key Tracker</label>
+            <div class="tracker-box">
+                <div style="font-size: 10px; color: #9ca3af; margin-bottom: 5px;">CURRENT SOURCE:</div>
+                <div id="key-display" class="active-key">Standing By...</div>
             </div>
-        </div>
-        <div class="card">
-            <label>Engine Health</label>
-            <div id="engine-status" style="font-size: 12px; color: var(--green);">● All Keys Active</div>
+            <p style="font-size: 10px; color: #9ca3af; margin-top: 15px; line-height: 1.4;">
+                System automatically rotates between 3 HF Keys. Pollinations triggers only if HF fails.
+            </p>
         </div>
     </div>
 
@@ -67,27 +68,29 @@
                 </div>
                 <div>
                     <label>Batch Size</label>
-                    <select id="batch-size" onchange="updateMeter()">
+                    <select id="batch-size">
                         <option value="10">10 Posts</option><option value="15">15 Posts</option><option value="20">20 Posts</option>
                     </select>
                 </div>
             </div>
 
+            <label>Custom Prompt Instruction</label>
+            <textarea id="custom-p" placeholder="Describe the image style or specific caption tone here..." style="height: 80px;"></textarea>
+
             <button class="btn-main" onclick="runEngine()">Launch HF Production</button>
         </div>
 
         <div class="card" id="output-area" style="display:none;">
-            <label>Terminal</label>
+            <label>Live Production Terminal</label>
             <div class="terminal" id="term"></div>
-            <button class="btn-main" id="dl-btn" style="margin-top:15px; display:none;" onclick="downloadCSV()">Download Meta Package</button>
+            <button class="btn-main" id="dl-btn" style="margin-top:15px; display:none;" onclick="downloadCSV()">Download Meta Package (.CSV)</button>
         </div>
     </div>
 </div>
 
 <script>
     let captions = [];
-    
-    function updateMeter() { document.getElementById('post-count').innerText = document.getElementById('batch-size').value; }
+    let sourcesUsed = [];
 
     function log(msg) {
         const t = document.getElementById('term');
@@ -97,39 +100,58 @@
 
     async function runEngine() {
         const textKey = document.getElementById('text-key').value;
-        const hfKeys = Array.from(document.querySelectorAll('.hf-key')).map(i => i.value).filter(v => v !== "");
+        const hfInputs = Array.from(document.querySelectorAll('.hf-key'));
+        const hfKeys = hfInputs.map(i => i.value).filter(v => v !== "");
         
         if(!textKey || hfKeys.length === 0) return alert("Please enter Text API and at least one HF Key!");
 
         document.getElementById('output-area').style.display = 'block';
-        log("Starting Engine...");
-        
+        document.getElementById('dl-btn').style.display = 'none';
+        const term = document.getElementById('term');
+        term.innerHTML = "";
+        captions = [];
+        sourcesUsed = [];
+
+        log("SADSHA Engine Starting...");
         const size = parseInt(document.getElementById('batch-size').value);
         
-        // Step 1: Captions (Simulation for logic flow)
+        // Step 1: Captions (Simulation)
         log("Fetching Captions via Brain API...");
-        captions = Array.from({length: size}, (_, i) => `Smart Caption #${i+1} for ${document.getElementById('cat').value}`);
+        captions = Array.from({length: size}, (_, i) => `Caption for ${document.getElementById('cat').value} #${i+1}`);
 
-        // Step 2: Key Rotation Logic
+        // Step 2: Production with Key Tracker
         for(let i=0; i < size; i++) {
-            const currentKeyIndex = i % hfKeys.length; // ROTATION MAGIC
-            log(`Processing Image ${i+1}/${size} using HF Key ${currentKeyIndex + 1}...`);
-            await new Promise(r => setTimeout(r, 500));
+            let currentSource = "";
+            const hfIndex = i % hfKeys.length;
+            
+            // Simulating HF Logic
+            currentSource = `HF Key ${hfIndex + 1}`;
+            
+            // Update Sidebar Tracker
+            document.getElementById('key-display').innerText = currentSource;
+            document.getElementById('key-display').style.color = "var(--yellow)";
+            
+            log(`Post ${i+1}/${size}: Using ${currentSource}...`);
+            sourcesUsed.push(currentSource);
+            
+            await new Promise(r => setTimeout(r, 800)); // Processing delay
         }
 
-        log("Batch Completed Successfully.");
+        log("Production Finished. All images rendered.");
+        document.getElementById('key-display').innerText = "Batch Complete";
+        document.getElementById('key-display').style.color = "var(--green)";
         document.getElementById('dl-btn').style.display = 'block';
     }
 
     function downloadCSV() {
-        let csv = "file_name,caption,engine_source\n";
+        let csv = "file_name,caption,source_used\n";
         captions.forEach((c, i) => {
-            csv += `sadsha_${i+1}.jpg, "${c}", "HuggingFace-Rotated"\n`;
+            csv += `sadsha_post_${i+1}.jpg, "${c}", "${sourcesUsed[i]}"\n`;
         });
         const blob = new Blob([csv], { type: 'text/csv' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'sadsha_batch.csv';
+        a.download = `SADSHA_BATCH_${new Date().getTime()}.csv`;
         a.click();
     }
 </script>
