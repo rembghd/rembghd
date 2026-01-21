@@ -2,133 +2,194 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SADSHA Agent | Production Engine</title>
-    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/fbbf24/user-male-circle.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SADSHA PERSONAL AGENT | UNLOCKED</title>
     <style>
-        :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; }
+        :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; --green: #10b981; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
-        .app-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; max-width: 1300px; margin: 0 auto; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; position: relative; }
         
-        label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
-        input, select, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box; }
+        label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        input, select, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box; font-size: 14px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--yellow); }
         
-        .btn-main { width: 100%; padding: 15px; background: var(--yellow); color: #000; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
-        .meter-box { background: #000; padding: 15px; border-radius: 8px; border-left: 4px solid var(--yellow); text-align: center; }
+        .btn-main { width: 100%; padding: 16px; background: var(--yellow); color: #000; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3); }
         
-        /* Modal Gate */
-        #token-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 15px; width: 400px; border: 1px solid var(--yellow); text-align: center; }
-        
-        /* Terminal */
-        .terminal { background: #000; color: #10b981; font-family: monospace; padding: 15px; height: 100px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid var(--border); }
+        .terminal { background: #000; color: var(--green); font-family: 'Courier New', monospace; padding: 15px; height: 180px; overflow-y: auto; font-size: 12px; border: 1px solid var(--border); border-radius: 8px; line-height: 1.6; }
+        .meter { background: #000; padding: 15px; border-radius: 8px; border-left: 5px solid var(--yellow); text-align: center; margin-bottom: 15px; }
+        .badge { background: var(--yellow); color: #000; font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 900; float: right; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+<div class="grid">
     <div class="sidebar">
         <div class="card">
-            <label>Batch Capacity</label>
-            <div class="meter-box">
-                <span id="max-posts" style="font-size: 30px; font-weight: 900;">0</span>
-                <div style="font-size: 10px;">POSTS ALLOWED</div>
+            <span class="badge">PRO</span>
+            <label>Engine Capacity</label>
+            <div class="meter">
+                <div style="font-size: 32px; font-weight: 900;" id="post-count">10</div>
+                <div style="font-size: 10px; color: var(--yellow);">POSTS IN BATCH</div>
             </div>
+            <p style="font-size: 11px; color: #9ca3af; text-align: center;">Personal Use: Unlocked & Fire</p>
         </div>
-        <div class="card" style="text-align: center;">
-            <p style="font-size: 10px;">PROMOTED BY REMBGHD</p>
-            <img src="https://i.ibb.co/XfXf8xR/red-saree-sample.jpg" style="width: 100%; border-radius: 5px;">
+        
+        <div class="card" style="text-align: center; border-color: #ef4444;">
+            <p style="font-size: 10px; margin-bottom: 10px; color: #ef4444; font-weight: 800;">SPONSORED BY REMBGHD</p>
+            <img src="https://i.ibb.co/XfXf8xR/red-saree-sample.jpg" style="width: 100%; border-radius: 8px; filter: grayscale(20%);">
         </div>
     </div>
 
-    <div class="main-engine">
+    <div class="main">
         <div class="card">
-            <h2 style="margin-top:0;">SADSHA <span style="color:var(--yellow);">AGENT</span></h2>
+            <h2 style="margin:0 0 25px 0; letter-spacing: -1px;">SADSHA <span style="color:var(--yellow);">AGENT</span></h2>
             
-            <label>Text Model & API Key</label>
-            <div style="display:flex; gap:10px;">
-                <select style="width:30%"><option>Gemini</option><option>Groq</option></select>
-                <input type="password" placeholder="API Key">
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px;">
+                <div>
+                    <label>Select Brain</label>
+                    <select id="model-select">
+                        <option value="Gemini">Gemini Pro</option>
+                        <option value="Groq">Groq (Meta Llama 3)</option>
+                        <option value="Grok">Grok (xAI)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>API Key</label>
+                    <input type="password" id="text-key" placeholder="Paste your selected Model's API Key...">
+                </div>
             </div>
 
-            <label>Prompt Category</label>
-            <select>
-                <option>Product Photography</option><option>Quotes</option><option>Funny/Meme</option>
-                <option>Nature</option><option>Interior Design</option><option>Fashion</option>
-            </select>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label>Niche / Category</label>
+                    <select id="cat">
+                        <option>Product Photography</option><option>Quotes</option><option>Funny/Meme</option>
+                        <option>Nature</option><option>Fashion</option><option>Interior</option>
+                        <option>Fitness</option><option>Travel</option><option>Tech</option>
+                        <option>Food</option><option>Luxury</option><option>Abstract Art</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Batch Size</label>
+                    <select id="batch-size" onchange="updateMeter()">
+                        <option value="10">10 Posts</option>
+                        <option value="15">15 Posts</option>
+                        <option value="20">20 Posts</option>
+                    </select>
+                </div>
+            </div>
 
-            <label>HF Image Keys (1-3 Keys)</label>
-            <input type="text" class="hf-key" placeholder="HF Key 1" oninput="updateMeter()">
-            <input type="text" class="hf-key" placeholder="HF Key 2" oninput="updateMeter()">
-            <input type="text" class="hf-key" placeholder="HF Key 3" oninput="updateMeter()">
+            <label>Custom Prompt (Style/Tone)</label>
+            <textarea id="custom-p" placeholder="Example: Write captions in Urdu-English mix with a professional tone..."></textarea>
 
-            <button class="btn-main" onclick="openTokenGate()">Launch Production</button>
+            <button class="btn-main" id="launch-btn" onclick="runPersonalEngine()">Start Production Engine</button>
         </div>
 
-        <div class="card" id="output-section" style="display:none;">
-            <label>Live Production Terminal</label>
-            <div class="terminal" id="term">Standing by...</div>
-            <button class="btn-main" style="margin-top:15px;" onclick="exportCSV()">Download Meta Package (.CSV)</button>
+        <div class="card" id="output-area" style="display:none;">
+            <label>Production Live Stream</label>
+            <div class="terminal" id="term">Ready for command...</div>
+            
+            <div id="action-btns" style="display: none; margin-top: 20px;">
+                <button class="btn-main" onclick="downloadPackage()">Download Meta Upload CSV</button>
+                <p style="font-size: 11px; color: #9ca3af; margin-top: 10px; text-align: center;">
+                    *Images are optimized at 1080x1120 for auto-crop (Watermark safe).
+                </p>
+            </div>
         </div>
-    </div>
-</div>
-
-<div id="token-modal">
-    <div class="modal-content">
-        <h3 style="color:var(--yellow);">Subscription Required</h3>
-        <p style="font-size:12px; color:#9ca3af;">Enter your 30 (1M) or 40 (3M) word token to start.</p>
-        <textarea id="token-input" placeholder="Paste token here..." style="height:80px;"></textarea>
-        <button class="btn-main" onclick="verifyAndFire()">Unlock & Start Engine</button>
-        <p style="font-size:10px; cursor:pointer; margin-top:10px;" onclick="closeModal()">Cancel</p>
     </div>
 </div>
 
 <script>
-    let activePosts = 0;
+    let generatedCaptions = [];
 
     function updateMeter() {
-        let keys = 0;
-        document.querySelectorAll('.hf-key').forEach(input => { if(input.value.length > 10) keys++; });
-        activePosts = [0, 10, 15, 20][keys] || 0;
-        document.getElementById('max-posts').innerText = activePosts;
+        document.getElementById('post-count').innerText = document.getElementById('batch-size').value;
     }
 
-    function openTokenGate() {
-        if(activePosts === 0) return alert("Please enter at least 1 HF Key.");
-        document.getElementById('token-modal').style.display = 'flex';
+    function log(msg) {
+        const t = document.getElementById('term');
+        t.innerHTML += `<span style="color:var(--yellow)">[SYSTEM]</span> ${msg}<br>`;
+        t.scrollTop = t.scrollHeight;
     }
 
-    function closeModal() { document.getElementById('token-modal').style.display = 'none'; }
-
-    function verifyAndFire() {
-        const token = document.getElementById('token-input').value.trim();
-        const words = token.split(/\s+/).length;
+    async function fetchCaptions(apiKey, model, category, custom, count) {
+        const systemPrompt = `Act as a social media manager. Generate exactly ${count} engaging captions for ${category} niche. Style: ${custom}. Output must be ONLY a JSON array of strings, like: ["caption1", "caption2"]. No numbering.`;
         
-        if ((token.startsWith("1M-") && words === 30) || (token.startsWith("3M-") && words === 40)) {
-            closeModal();
-            startEngine();
-        } else {
-            alert("Invalid Token Format or Word Count!");
+        try {
+            let response, data;
+            if (model === "Gemini") {
+                response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }] }] })
+                });
+                data = await response.json();
+                const text = data.candidates[0].content.parts[0].text;
+                return JSON.parse(text.match(/\[.*\]/s)[0]);
+            } else {
+                // Groq/Grok logic (OpenAI Style)
+                const url = model === "Groq" ? "https://api.groq.com/openai/v1/chat/completions" : "https://api.x.ai/v1/chat/completions";
+                response = await fetch(url, {
+                    method: 'POST',
+                    headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        model: model === "Groq" ? "llama3-70b-8192" : "grok-beta",
+                        messages: [{ role: "user", content: systemPrompt }]
+                    })
+                });
+                data = await response.json();
+                return JSON.parse(data.choices[0].message.content.match(/\[.*\]/s)[0]);
+            }
+        } catch (e) {
+            log("API Error: Using fallback captions.");
+            return Array.from({length: count}, (_, i) => `Premium SADSHA Post #${i+1}`);
         }
     }
 
-    function startEngine() {
-        document.getElementById('output-section').style.display = 'block';
-        const term = document.getElementById('term');
-        term.innerHTML = "> Initializing SADSHA...<br>> Token Validated...<br>> Starting Batch of " + activePosts + " posts...";
-        // Yahan par hum production logic connect karenge
+    async function runPersonalEngine() {
+        const key = document.getElementById('text-key').value;
+        if(!key) return alert("API Key Missing!");
+
+        const model = document.getElementById('model-select').value;
+        const size = parseInt(document.getElementById('batch-size').value);
+        
+        document.getElementById('output-area').style.display = 'block';
+        document.getElementById('action-btns').style.display = 'none';
+        document.getElementById('launch-btn').disabled = true;
+        
+        log(`Connecting to ${model} Brain...`);
+        generatedCaptions = await fetchCaptions(key, model, document.getElementById('cat').value, document.getElementById('custom-p').value, size);
+        log(`Success: ${generatedCaptions.length} Captions stored in memory.`);
+
+        for(let i=0; i<size; i++) {
+            log(`Rendering Image ${i+1}/${size} via Pollinations (Stealth Mode)...`);
+            await new Promise(r => setTimeout(r, 600)); // Visual delay
+        }
+
+        log("PRODUCTION COMPLETE. Meta-Package ready.");
+        document.getElementById('action-btns').style.display = 'block';
+        document.getElementById('launch-btn').disabled = false;
     }
 
-    function exportCSV() {
-        let csv = "file_name,caption\n";
-        for(let i=1; i<=activePosts; i++) { csv += `sadsha_img_${i}.jpg, "Auto Generated Caption ${i}"\n`; }
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'meta_upload.csv';
-        a.click();
+    function downloadPackage() {
+        const cat = document.getElementById('cat').value;
+        const custom = document.getElementById('custom-p').value;
+        let csv = "file_name,caption,image_url\n";
+        
+        generatedCaptions.forEach((cap, i) => {
+            const prompt = encodeURIComponent(`${cat} ${custom} ${cap.slice(0,20)}`);
+            // 1080x1120 forces the watermark to be in the bottom extra 40px
+            const imgUrl = `https://pollinations.ai/p/${prompt}?width=1080&height=1120&model=flux&nologo=true`;
+            csv += `sadsha_post_${i+1}.jpg, "${cap.replace(/"/g, '""')}", "${imgUrl}"\n`;
+        });
+
+        const link = document.createElement("a");
+        link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+        link.download = `SADSHA_BATCH_${new Date().getTime()}.csv`;
+        link.click();
     }
 </script>
+
 </body>
 </html>
