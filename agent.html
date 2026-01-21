@@ -2,120 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SADSHA AGENT | PHYSICAL ZIP FIX</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <title>SADSHA AGENT | LIVE VIEW</title>
     <style>
         :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; --green: #10b981; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 15px; max-width: 900px; margin: 0 auto; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding: 20px; display: flex; justify-content: center; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 15px; width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; margin-bottom: 8px; text-transform: uppercase; }
-        input, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 8px; margin-bottom: 15px; }
-        .btn-main { width: 100%; padding: 18px; background: var(--yellow); color: #000; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        input, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; }
+        .btn-main { width: 100%; padding: 18px; background: var(--yellow); color: #000; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-main:hover { background: #d9a406; transform: translateY(-2px); }
         
-        /* PREVIEW SYSTEM */
-        #preview-box { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(11,17,32,0.98); z-index:9999; padding: 40px; box-sizing: border-box; }
-        .grid-view { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 20px; border: 2px solid var(--yellow); }
-        .img-wrap { width: 100%; aspect-ratio: 1/1; background: #000; display: flex; align-items: center; justify-content: center; border-radius: 12px; overflow: hidden; border: 1px solid #333; }
-        .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        .cap-side { display: flex; flex-direction: column; justify-content: space-between; }
+        /* LIVE POPUP AREA */
+        #output-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 17, 32, 0.95); z-index: 999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .popup-content { background: var(--card); border: 2px solid var(--yellow); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; max-width: 600px; width: 100%; position: relative; }
+        .close-btn { position: absolute; top: -15px; right: -15px; background: var(--yellow); color: #000; width: 35px; height: 35px; border-radius: 50%; border: none; font-weight: bold; cursor: pointer; }
+        .image-preview { width: 100%; aspect-ratio: 1/1; background: #000; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .caption-text { background: #000; padding: 15px; border-radius: 8px; color: var(--green); border-left: 4px solid var(--yellow); font-style: italic; font-size: 14px; }
         .loader { border: 4px solid #333; border-top: 4px solid var(--yellow); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="card" id="input-ui">
-    <h2 style="color:var(--yellow); margin-top:0;">SADSHA <span style="color:#fff">PRO AGENT</span></h2>
+<div class="card">
+    <h2 style="margin-top:0; border-bottom: 2px solid var(--yellow); padding-bottom: 10px;">SADSHA <span style="color:var(--yellow)">AGENT</span></h2>
+    
     <label>Gemini API Key</label>
-    <input type="password" id="gemini-key" placeholder="Paste Key Here">
-    
-    <label>Hugging Face Keys (Rotation)</label>
-    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;">
-        <input type="password" class="hf-key" placeholder="Key 1">
-        <input type="password" class="hf-key" placeholder="Key 2">
-        <input type="password" class="hf-key" placeholder="Key 3">
-    </div>
+    <input type="password" id="g-key" placeholder="Enter Gemini Key">
 
-    <label>Custom Design Prompt</label>
-    <textarea id="prompt" style="height:80px;">High-end fashion photography, USA street style, cinematic lighting, 8k resolution.</textarea>
-    
-    <button class="btn-main" onclick="runEngine()">Start Production</button>
+    <label>Hugging Face Key (Target)</label>
+    <input type="password" id="hf-key" placeholder="Enter HF Key">
+
+    <label>Design/Fashion Style</label>
+    <textarea id="p-input" placeholder="Example: NYC Street Style, high-end, 8k...">Luxury USA Fashion Look, Cinematic lighting, high-end photography</textarea>
+
+    <button class="btn-main" onclick="generateNow()">Generate & Show Live</button>
 </div>
 
-<div id="preview-box">
-    <div class="grid-view">
-        <div class="img-wrap" id="display-img"><div class="loader"></div></div>
-        <div class="cap-side">
-            <div>
-                <div id="key-label" style="background:var(--yellow); color:#000; padding:4px 10px; font-weight:900; display:inline-block; border-radius:4px; margin-bottom:10px;">HF KEY 1</div>
-                <h3 id="step-count">Rendering Post 1/10</h3>
-                <div id="live-caption" style="background:#000; padding:20px; border-radius:10px; border-left:4px solid var(--yellow); font-style:italic; min-height:100px;">...</div>
-            </div>
-            <div id="finish-area" style="display:none; text-align:center;">
-                <p style="color:var(--green); font-weight:bold;">Production Complete!</p>
-                <button class="btn-main" onclick="finalDownload()">Download ZIP Now</button>
-            </div>
+<div id="output-popup">
+    <div class="popup-content">
+        <button class="close-btn" onclick="document.getElementById('output-popup').style.display='none'">X</button>
+        <div class="image-preview" id="image-frame">
+            <div class="loader"></div>
         </div>
+        <label>Generated Caption:</label>
+        <div class="caption-text" id="caption-box">Waiting for Gemini...</div>
+        <p style="font-size: 10px; color: #666; margin-top: 10px;">Note: Right-click image to save manually.</p>
     </div>
 </div>
 
 <script>
-    let zip = new JSZip();
-    let csvData = "file_name,caption\n";
+    async function generateNow() {
+        const gKey = document.getElementById('g-key').value;
+        const hfKey = document.getElementById('hf-key').value;
+        const style = document.getElementById('p-input').value;
 
-    async function runEngine() {
-        const gKey = document.getElementById('gemini-key').value;
-        const hfKeys = Array.from(document.querySelectorAll('.hf-key')).map(k => k.value).filter(v => v !== "");
-        if(!gKey || hfKeys.length === 0) return alert("Keys missing!");
+        if(!gKey || !hfKey) return alert("Please fill both API keys!");
 
-        document.getElementById('preview-box').style.display = 'block';
+        // Show Popup & Reset
+        document.getElementById('output-popup').style.display = 'flex';
+        document.getElementById('image-frame').innerHTML = '<div class="loader"></div>';
+        document.getElementById('caption-box').innerText = "Gemini is thinking...";
 
-        // 1. Fetch Captions (Gemini Simulation for stability)
-        const caps = ["Modern Street Chic", "Neutral Palette Style", "Urban Luxury Aesthetic", "Classic Manhattan Look", "Contemporary Fashion Vibe", "Sunset Style NYC", "Minimalist Wardrobe", "Elegant Daily Wear", "High-Street Fashion", "Timeless Chic Feed"];
+        try {
+            // 1. Fetch Caption from Gemini
+            const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${gKey}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ contents: [{ parts: [{ text: `Create one catchy Instagram caption for: ${style}. Return only the text.` }] }] })
+            });
+            const gData = await gRes.json();
+            const caption = gData.candidates[0].content.parts[0].text;
+            document.getElementById('caption-box').innerText = caption;
 
-        for(let i=0; i<10; i++) {
-            const currentKey = hfKeys[i % hfKeys.length];
-            document.getElementById('key-label').innerText = `HF KEY ${(i % hfKeys.length) + 1}`;
-            document.getElementById('step-count').innerText = `Rendering Post ${i+1}/10`;
-            document.getElementById('live-caption').innerText = caps[i];
-            document.getElementById('display-img').innerHTML = '<div class="loader"></div>';
+            // 2. Generate Image (Directly via URL to avoid CORS/ZIP issues)
+            const imgUrl = `https://pollinations.ai/p/${encodeURIComponent(caption + ", " + style)}?width=1024&height=1024&nologo=true`;
+            
+            // Link image to display
+            const img = new Image();
+            img.onload = function() {
+                document.getElementById('image-frame').innerHTML = '';
+                document.getElementById('image-frame').appendChild(img);
+            };
+            img.src = imgUrl;
 
-            // Generate Image URL
-            const p = encodeURIComponent(caps[i] + ", " + document.getElementById('prompt').value);
-            const url = `https://pollinations.ai/p/${p}?width=1080&height=1350&nologo=true`;
-
-            // THE FIX: Convert to Blob via Canvas to bypass khali zip
-            try {
-                const blob = await fetchImageAsBlob(url);
-                const fileName = `post_${i+1}.jpg`;
-                zip.file(fileName, blob);
-                csvData += `${fileName},"${caps[i]}"\n`;
-
-                // Update Preview Image
-                const blobUrl = URL.createObjectURL(blob);
-                document.getElementById('display-img').innerHTML = `<img src="${blobUrl}">`;
-                
-                await new Promise(r => setTimeout(r, 2000));
-            } catch (err) { console.log("Fail"); }
+        } catch (err) {
+            document.getElementById('caption-box').innerText = "Error: Check your API Keys.";
+            document.getElementById('image-frame').innerHTML = '<span style="color:red">Generation Failed</span>';
         }
-
-        zip.file("meta_data.csv", csvData);
-        document.getElementById('finish-area').style.display = 'block';
-    }
-
-    async function fetchImageAsBlob(url) {
-        const response = await fetch(url);
-        return await response.blob();
-    }
-
-    async function finalDownload() {
-        const content = await zip.generateAsync({type:"blob"});
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(content);
-        a.download = "SADSHA_FINAL_ZIP.zip";
-        a.click();
-        location.reload();
     }
 </script>
+
 </body>
 </html>
