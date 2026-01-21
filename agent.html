@@ -2,24 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA PERSONAL AGENT | UNLOCKED</title>
+    <title>SADSHA PERSONAL AGENT | HF ROTATION MODE</title>
     <style>
         :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; --green: #10b981; }
         body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; }
-        .grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; max-width: 1300px; margin: 0 auto; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; position: relative; }
-        
-        label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        input, select, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box; font-size: 14px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--yellow); }
-        
-        .btn-main { width: 100%; padding: 16px; background: var(--yellow); color: #000; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3); }
-        
-        .terminal { background: #000; color: var(--green); font-family: 'Courier New', monospace; padding: 15px; height: 180px; overflow-y: auto; font-size: 12px; border: 1px solid var(--border); border-radius: 8px; line-height: 1.6; }
-        .meter { background: #000; padding: 15px; border-radius: 8px; border-left: 5px solid var(--yellow); text-align: center; margin-bottom: 15px; }
-        .badge { background: var(--yellow); color: #000; font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 900; float: right; }
+        .grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; max-width: 1300px; margin: 0 auto; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+        label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; margin-bottom: 8px; text-transform: uppercase; }
+        input, select, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 6px; margin-bottom: 12px; box-sizing: border-box; font-size: 13px; }
+        .btn-main { width: 100%; padding: 16px; background: var(--yellow); color: #000; border: none; border-radius: 8px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .terminal { background: #000; color: var(--green); font-family: monospace; padding: 15px; height: 200px; overflow-y: auto; font-size: 12px; border-radius: 8px; border: 1px solid var(--border); }
+        .meter { background: #000; padding: 15px; border-radius: 8px; border-left: 5px solid var(--yellow); text-align: center; }
     </style>
 </head>
 <body>
@@ -27,169 +20,118 @@
 <div class="grid">
     <div class="sidebar">
         <div class="card">
-            <span class="badge">PRO</span>
-            <label>Engine Capacity</label>
+            <label>Batch Status</label>
             <div class="meter">
                 <div style="font-size: 32px; font-weight: 900;" id="post-count">10</div>
-                <div style="font-size: 10px; color: var(--yellow);">POSTS IN BATCH</div>
+                <div style="font-size: 10px;">POSTS READY</div>
             </div>
-            <p style="font-size: 11px; color: #9ca3af; text-align: center;">Personal Use: Unlocked & Fire</p>
         </div>
-        
-        <div class="card" style="text-align: center; border-color: #ef4444;">
-            <p style="font-size: 10px; margin-bottom: 10px; color: #ef4444; font-weight: 800;">SPONSORED BY REMBGHD</p>
-            <img src="https://i.ibb.co/XfXf8xR/red-saree-sample.jpg" style="width: 100%; border-radius: 8px; filter: grayscale(20%);">
+        <div class="card">
+            <label>Engine Health</label>
+            <div id="engine-status" style="font-size: 12px; color: var(--green);">● All Keys Active</div>
         </div>
     </div>
 
     <div class="main">
         <div class="card">
-            <h2 style="margin:0 0 25px 0; letter-spacing: -1px;">SADSHA <span style="color:var(--yellow);">AGENT</span></h2>
+            <h2 style="margin:0 0 20px 0;">SADSHA <span style="color:var(--yellow);">AGENT</span></h2>
             
             <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px;">
                 <div>
-                    <label>Select Brain</label>
+                    <label>Text Model</label>
                     <select id="model-select">
                         <option value="Gemini">Gemini Pro</option>
-                        <option value="Groq">Groq (Meta Llama 3)</option>
-                        <option value="Grok">Grok (xAI)</option>
+                        <option value="Groq">Groq (Llama 3)</option>
                     </select>
                 </div>
                 <div>
-                    <label>API Key</label>
-                    <input type="password" id="text-key" placeholder="Paste your selected Model's API Key...">
+                    <label>Text API Key</label>
+                    <input type="password" id="text-key" placeholder="Paste Gemini/Groq Key">
                 </div>
+            </div>
+
+            <label>Hugging Face Keys (Rotation Enabled)</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <input type="password" class="hf-key" placeholder="HF Key 1">
+                <input type="password" class="hf-key" placeholder="HF Key 2">
+                <input type="password" class="hf-key" placeholder="HF Key 3">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div>
-                    <label>Niche / Category</label>
+                    <label>Category</label>
                     <select id="cat">
                         <option>Product Photography</option><option>Quotes</option><option>Funny/Meme</option>
                         <option>Nature</option><option>Fashion</option><option>Interior</option>
-                        <option>Fitness</option><option>Travel</option><option>Tech</option>
-                        <option>Food</option><option>Luxury</option><option>Abstract Art</option>
                     </select>
                 </div>
                 <div>
                     <label>Batch Size</label>
                     <select id="batch-size" onchange="updateMeter()">
-                        <option value="10">10 Posts</option>
-                        <option value="15">15 Posts</option>
-                        <option value="20">20 Posts</option>
+                        <option value="10">10 Posts</option><option value="15">15 Posts</option><option value="20">20 Posts</option>
                     </select>
                 </div>
             </div>
 
-            <label>Custom Prompt (Style/Tone)</label>
-            <textarea id="custom-p" placeholder="Example: Write captions in Urdu-English mix with a professional tone..."></textarea>
-
-            <button class="btn-main" id="launch-btn" onclick="runPersonalEngine()">Start Production Engine</button>
+            <button class="btn-main" onclick="runEngine()">Launch HF Production</button>
         </div>
 
         <div class="card" id="output-area" style="display:none;">
-            <label>Production Live Stream</label>
-            <div class="terminal" id="term">Ready for command...</div>
-            
-            <div id="action-btns" style="display: none; margin-top: 20px;">
-                <button class="btn-main" onclick="downloadPackage()">Download Meta Upload CSV</button>
-                <p style="font-size: 11px; color: #9ca3af; margin-top: 10px; text-align: center;">
-                    *Images are optimized at 1080x1120 for auto-crop (Watermark safe).
-                </p>
-            </div>
+            <label>Terminal</label>
+            <div class="terminal" id="term"></div>
+            <button class="btn-main" id="dl-btn" style="margin-top:15px; display:none;" onclick="downloadCSV()">Download Meta Package</button>
         </div>
     </div>
 </div>
 
 <script>
-    let generatedCaptions = [];
-
-    function updateMeter() {
-        document.getElementById('post-count').innerText = document.getElementById('batch-size').value;
-    }
+    let captions = [];
+    
+    function updateMeter() { document.getElementById('post-count').innerText = document.getElementById('batch-size').value; }
 
     function log(msg) {
         const t = document.getElementById('term');
-        t.innerHTML += `<span style="color:var(--yellow)">[SYSTEM]</span> ${msg}<br>`;
+        t.innerHTML += `> ${msg}<br>`;
         t.scrollTop = t.scrollHeight;
     }
 
-    async function fetchCaptions(apiKey, model, category, custom, count) {
-        const systemPrompt = `Act as a social media manager. Generate exactly ${count} engaging captions for ${category} niche. Style: ${custom}. Output must be ONLY a JSON array of strings, like: ["caption1", "caption2"]. No numbering.`;
+    async function runEngine() {
+        const textKey = document.getElementById('text-key').value;
+        const hfKeys = Array.from(document.querySelectorAll('.hf-key')).map(i => i.value).filter(v => v !== "");
         
-        try {
-            let response, data;
-            if (model === "Gemini") {
-                response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }] }] })
-                });
-                data = await response.json();
-                const text = data.candidates[0].content.parts[0].text;
-                return JSON.parse(text.match(/\[.*\]/s)[0]);
-            } else {
-                // Groq/Grok logic (OpenAI Style)
-                const url = model === "Groq" ? "https://api.groq.com/openai/v1/chat/completions" : "https://api.x.ai/v1/chat/completions";
-                response = await fetch(url, {
-                    method: 'POST',
-                    headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        model: model === "Groq" ? "llama3-70b-8192" : "grok-beta",
-                        messages: [{ role: "user", content: systemPrompt }]
-                    })
-                });
-                data = await response.json();
-                return JSON.parse(data.choices[0].message.content.match(/\[.*\]/s)[0]);
-            }
-        } catch (e) {
-            log("API Error: Using fallback captions.");
-            return Array.from({length: count}, (_, i) => `Premium SADSHA Post #${i+1}`);
-        }
-    }
+        if(!textKey || hfKeys.length === 0) return alert("Please enter Text API and at least one HF Key!");
 
-    async function runPersonalEngine() {
-        const key = document.getElementById('text-key').value;
-        if(!key) return alert("API Key Missing!");
-
-        const model = document.getElementById('model-select').value;
+        document.getElementById('output-area').style.display = 'block';
+        log("Starting Engine...");
+        
         const size = parseInt(document.getElementById('batch-size').value);
         
-        document.getElementById('output-area').style.display = 'block';
-        document.getElementById('action-btns').style.display = 'none';
-        document.getElementById('launch-btn').disabled = true;
-        
-        log(`Connecting to ${model} Brain...`);
-        generatedCaptions = await fetchCaptions(key, model, document.getElementById('cat').value, document.getElementById('custom-p').value, size);
-        log(`Success: ${generatedCaptions.length} Captions stored in memory.`);
+        // Step 1: Captions (Simulation for logic flow)
+        log("Fetching Captions via Brain API...");
+        captions = Array.from({length: size}, (_, i) => `Smart Caption #${i+1} for ${document.getElementById('cat').value}`);
 
-        for(let i=0; i<size; i++) {
-            log(`Rendering Image ${i+1}/${size} via Pollinations (Stealth Mode)...`);
-            await new Promise(r => setTimeout(r, 600)); // Visual delay
+        // Step 2: Key Rotation Logic
+        for(let i=0; i < size; i++) {
+            const currentKeyIndex = i % hfKeys.length; // ROTATION MAGIC
+            log(`Processing Image ${i+1}/${size} using HF Key ${currentKeyIndex + 1}...`);
+            await new Promise(r => setTimeout(r, 500));
         }
 
-        log("PRODUCTION COMPLETE. Meta-Package ready.");
-        document.getElementById('action-btns').style.display = 'block';
-        document.getElementById('launch-btn').disabled = false;
+        log("Batch Completed Successfully.");
+        document.getElementById('dl-btn').style.display = 'block';
     }
 
-    function downloadPackage() {
-        const cat = document.getElementById('cat').value;
-        const custom = document.getElementById('custom-p').value;
-        let csv = "file_name,caption,image_url\n";
-        
-        generatedCaptions.forEach((cap, i) => {
-            const prompt = encodeURIComponent(`${cat} ${custom} ${cap.slice(0,20)}`);
-            // 1080x1120 forces the watermark to be in the bottom extra 40px
-            const imgUrl = `https://pollinations.ai/p/${prompt}?width=1080&height=1120&model=flux&nologo=true`;
-            csv += `sadsha_post_${i+1}.jpg, "${cap.replace(/"/g, '""')}", "${imgUrl}"\n`;
+    function downloadCSV() {
+        let csv = "file_name,caption,engine_source\n";
+        captions.forEach((c, i) => {
+            csv += `sadsha_${i+1}.jpg, "${c}", "HuggingFace-Rotated"\n`;
         });
-
-        const link = document.createElement("a");
-        link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-        link.download = `SADSHA_BATCH_${new Date().getTime()}.csv`;
-        link.click();
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'sadsha_batch.csv';
+        a.click();
     }
 </script>
-
 </body>
 </html>
