@@ -5,20 +5,19 @@
     <title>SADSHA AGENT | LIVE VIEW</title>
     <style>
         :root { --bg: #0b1120; --card: #111827; --yellow: #fbbf24; --border: #1f2937; --green: #10b981; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding: 20px; display: flex; justify-content: center; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 15px; width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 15px; width: 550px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         label { display: block; font-size: 11px; color: var(--yellow); font-weight: 800; margin-bottom: 8px; text-transform: uppercase; }
-        input, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; }
-        .btn-main { width: 100%; padding: 18px; background: var(--yellow); color: #000; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-main:hover { background: #d9a406; transform: translateY(-2px); }
+        input, textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: #fff; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; outline: none; }
+        .btn-main { width: 100%; padding: 18px; background: var(--yellow); color: #000; border: none; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
         
-        /* LIVE POPUP AREA */
-        #output-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 17, 32, 0.95); z-index: 999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
-        .popup-content { background: var(--card); border: 2px solid var(--yellow); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; max-width: 600px; width: 100%; position: relative; }
-        .close-btn { position: absolute; top: -15px; right: -15px; background: var(--yellow); color: #000; width: 35px; height: 35px; border-radius: 50%; border: none; font-weight: bold; cursor: pointer; }
-        .image-preview { width: 100%; aspect-ratio: 1/1; background: #000; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .image-preview img { width: 100%; height: 100%; object-fit: cover; }
-        .caption-text { background: #000; padding: 15px; border-radius: 8px; color: var(--green); border-left: 4px solid var(--yellow); font-style: italic; font-size: 14px; }
+        /* POPUP SYSTEM */
+        #output-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 17, 32, 0.98); z-index: 999; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .popup-inner { background: var(--card); border: 2px solid var(--yellow); border-radius: 20px; padding: 25px; max-width: 500px; width: 100%; position: relative; text-align: center; }
+        .img-display { width: 100%; aspect-ratio: 1/1; background: #000; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; border: 1px solid #333; overflow: hidden; }
+        .img-display img { width: 100%; height: 100%; object-fit: cover; }
+        .cap-display { background: #000; padding: 15px; border-radius: 8px; color: var(--green); border-left: 4px solid var(--yellow); font-style: italic; text-align: left; min-height: 60px; }
+        .close-x { position: absolute; top: -10px; right: -10px; background: var(--yellow); color: #000; border: none; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; }
         .loader { border: 4px solid #333; border-top: 4px solid var(--yellow); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
@@ -26,70 +25,71 @@
 <body>
 
 <div class="card">
-    <h2 style="margin-top:0; border-bottom: 2px solid var(--yellow); padding-bottom: 10px;">SADSHA <span style="color:var(--yellow)">AGENT</span></h2>
+    <h2 style="margin:0 0 20px 0; color:var(--yellow)">SADSHA <span style="color:#fff">AGENT</span></h2>
     
-    <label>Gemini API Key</label>
-    <input type="password" id="g-key" placeholder="Enter Gemini Key">
+    <label>Gemini Key</label>
+    <input type="password" id="g-key" placeholder="Paste Gemini API Key">
 
-    <label>Hugging Face Key (Target)</label>
-    <input type="password" id="hf-key" placeholder="Enter HF Key">
+    <label>HF Key (Rotation)</label>
+    <input type="password" id="hf-key" placeholder="Paste HF API Key">
 
-    <label>Design/Fashion Style</label>
-    <textarea id="p-input" placeholder="Example: NYC Street Style, high-end, 8k...">Luxury USA Fashion Look, Cinematic lighting, high-end photography</textarea>
+    <label>USA Fashion Style</label>
+    <textarea id="style-input" style="height:60px;">Chic Daily Feed: High-end USA Street Style, NYC aesthetic, cinematic 8k</textarea>
 
-    <button class="btn-main" onclick="generateNow()">Generate & Show Live</button>
+    <button class="btn-main" onclick="generateBatch()">Generate & Show Live</button>
 </div>
 
 <div id="output-popup">
-    <div class="popup-content">
-        <button class="close-btn" onclick="document.getElementById('output-popup').style.display='none'">X</button>
-        <div class="image-preview" id="image-frame">
-            <div class="loader"></div>
-        </div>
-        <label>Generated Caption:</label>
-        <div class="caption-text" id="caption-box">Waiting for Gemini...</div>
-        <p style="font-size: 10px; color: #666; margin-top: 10px;">Note: Right-click image to save manually.</p>
+    <div class="popup-inner">
+        <button class="close-x" onclick="document.getElementById('output-popup').style.display='none'">X</button>
+        <div class="img-display" id="main-frame"><div class="loader"></div></div>
+        <label style="text-align:left">Generated Caption:</label>
+        <div class="cap-display" id="main-caption">Waiting for Gemini...</div>
+        <p style="font-size:11px; color:#666; margin-top:15px;">Right-click the image to save it.</p>
     </div>
 </div>
 
 <script>
-    async function generateNow() {
+    async function generateBatch() {
         const gKey = document.getElementById('g-key').value;
         const hfKey = document.getElementById('hf-key').value;
-        const style = document.getElementById('p-input').value;
+        const style = document.getElementById('style-input').value;
 
-        if(!gKey || !hfKey) return alert("Please fill both API keys!");
+        if(!gKey || !hfKey) return alert("Please enter both keys!");
 
-        // Show Popup & Reset
         document.getElementById('output-popup').style.display = 'flex';
-        document.getElementById('image-frame').innerHTML = '<div class="loader"></div>';
-        document.getElementById('caption-box').innerText = "Gemini is thinking...";
+        document.getElementById('main-frame').innerHTML = '<div class="loader"></div>';
+        document.getElementById('main-caption').innerText = "Fetching Caption...";
 
         try {
-            // 1. Fetch Caption from Gemini
+            // 1. Get Caption from Gemini
             const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${gKey}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ contents: [{ parts: [{ text: `Create one catchy Instagram caption for: ${style}. Return only the text.` }] }] })
+                body: JSON.stringify({ contents: [{ parts: [{ text: `Write a trendy Instagram fashion caption for: ${style}. Just text, no hashtags.` }] }] })
             });
             const gData = await gRes.json();
             const caption = gData.candidates[0].content.parts[0].text;
-            document.getElementById('caption-box').innerText = caption;
+            document.getElementById('main-caption').innerText = caption;
 
-            // 2. Generate Image (Directly via URL to avoid CORS/ZIP issues)
-            const imgUrl = `https://pollinations.ai/p/${encodeURIComponent(caption + ", " + style)}?width=1024&height=1024&nologo=true`;
-            
-            // Link image to display
+            // 2. Generate Image via Pollinations (Ensures No CORS/Security Block)
+            const finalPrompt = encodeURIComponent(caption + ", " + style);
+            const imgUrl = `https://pollinations.ai/p/${finalPrompt}?width=1080&height=1080&seed=${Math.floor(Math.random() * 100000)}&nologo=true`;
+
             const img = new Image();
+            img.crossOrigin = "anonymous";
             img.onload = function() {
-                document.getElementById('image-frame').innerHTML = '';
-                document.getElementById('image-frame').appendChild(img);
+                document.getElementById('main-frame').innerHTML = '';
+                document.getElementById('main-frame').appendChild(img);
+            };
+            img.onerror = function() {
+                document.getElementById('main-frame').innerHTML = '<span style="color:red">Image Load Failed</span>';
             };
             img.src = imgUrl;
 
         } catch (err) {
-            document.getElementById('caption-box').innerText = "Error: Check your API Keys.";
-            document.getElementById('image-frame').innerHTML = '<span style="color:red">Generation Failed</span>';
+            document.getElementById('main-caption').innerText = "API Error: Check Key or Connection.";
+            document.getElementById('main-frame').innerHTML = '<span style="color:red">Failed</span>';
         }
     }
 </script>
