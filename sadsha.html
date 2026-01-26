@@ -3,68 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA AI | Dashboard</title>
+    <title>SADSHA AI | Production Dashboard</title>
     <style>
         :root { --gold: #FFD700; --bg: #000000; --card: #111111; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
 
-        /* Logo Section */
-        .header-section { text-align: center; padding: 40px 20px; width: 100%; }
+        /* Brand Face */
+        .header-section { text-align: center; padding: 40px 20px 10px; width: 100%; }
         .logo-img { height: 160px; width: auto; mix-blend-mode: screen; display: block; margin: 0 auto; }
         .tagline { font-size: 13px; color: #555; letter-spacing: 5px; text-transform: uppercase; margin-top: 5px; }
 
-        .container { max-width: 1250px; width: 95%; margin-bottom: 100px; }
+        .container { max-width: 1300px; width: 95%; margin-top: 20px; margin-bottom: 100px; }
 
-        /* Mode Tabs */
-        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 30px 0; }
-        .mode-card { background: var(--card); border: 1px solid #222; padding: 25px 10px; border-radius: 12px; text-align: center; cursor: pointer; }
-        .mode-card.active { border-color: var(--gold); background: #0c0c02; border-bottom: 3px solid var(--gold); }
-
-        /* PRODUCTION CARD */
-        .scene-card { 
+        /* SINGLE MASTER PRODUCTION CARD */
+        .master-card { 
             background: #0a0a0a; 
             border: 1px solid #222; 
-            border-radius: 20px; 
+            border-radius: 25px; 
             overflow: hidden; 
             display: flex; 
             flex-direction: row; 
-            min-height: 750px; 
-            margin-top: 20px;
+            min-height: 800px; /* Vertical aspect focus */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
 
-        /* WEBVIEW AREA: PRECISION CROP & STEALH */
-        .webview-frame { 
-            flex: 1.5; 
+        /* THE STEALTH WEBVIEW: Precision Crop */
+        .webview-container { 
+            flex: 1.6; 
             position: relative; 
-            overflow: hidden; /* Important: Iske bahar ka sab hide hoga */
-            background: #000; /* Dark background before load */
+            overflow: hidden; 
+            background: #000;
             border-right: 1px solid #1a1a1a;
         }
 
-        .webview-frame iframe { 
+        .webview-container iframe { 
             position: absolute; 
-            /* TOP CROP: Header hide karne ke liye */
+            /* Upar ka kachra hide karne ke liye */
             top: -105px; 
-            /* RIGHT CROP: Share button hide karne ke liye right se thora barha diya */
+            /* Share button ko screen se bahar nikalne ke liye width barhayi hai */
             left: 0; 
-            width: calc(100% + 45px); /* 45px extra taake share button right side se bahar nikal jaye */
-            /* BOTTOM CROP: Gradio/API footer hide karne ke liye */
-            height: calc(100% + 185px); 
+            width: calc(100% + 80px); 
+            /* Gradio footer hide karne ke liye height zyada rakhi hai */
+            height: calc(100% + 200px); 
             border: none;
         }
 
-        .scene-info { flex: 1; padding: 45px; display: flex; flex-direction: column; justify-content: center; background: #050505; }
-        .scene-info span { color: var(--gold); font-size: 11px; font-weight: bold; letter-spacing: 3px; margin-bottom: 10px; display: block; }
-        .scene-info h2 { font-size: 26px; margin-bottom: 20px; color: #fff; }
-
-        .caption-box { 
-            font-size: 15px; color: #aaa; line-height: 1.8; background: #000; 
-            padding: 25px; border-radius: 12px; border: 1px solid #1a1a1a; text-align: justify; 
+        /* Narrative Info Section */
+        .narrative-section { 
+            flex: 1; 
+            padding: 50px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            background: linear-gradient(135deg, #0a0a0a 0%, #050505 100%);
         }
 
-        @media (max-width: 1000px) {
-            .scene-card { flex-direction: column; }
-            .webview-frame { height: 600px; border-right: none; }
+        .narrative-section span { color: var(--gold); font-size: 11px; font-weight: bold; letter-spacing: 4px; margin-bottom: 10px; display: block; }
+        .narrative-section h2 { font-size: 28px; margin-bottom: 25px; color: #fff; letter-spacing: 1px; }
+
+        /* Professional 250-Word Narrative Box */
+        .caption-box { 
+            font-size: 15.5px; 
+            color: #aaa; 
+            line-height: 1.9; 
+            background: rgba(255,255,255,0.02); 
+            padding: 30px; 
+            border-radius: 18px; 
+            border: 1px solid #1a1a1a; 
+            text-align: justify;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.6);
+        }
+
+        @media (max-width: 1050px) {
+            .master-card { flex-direction: column; }
+            .webview-container { height: 650px; border-right: none; border-bottom: 1px solid #1a1a1a; }
+            .webview-container iframe { width: calc(100% + 100px); }
         }
     </style>
 </head>
@@ -76,22 +89,19 @@
     </div>
 
     <div class="container">
-        <div class="mode-grid">
-            <div class="mode-card active"><h3>Standard Lite</h3><p>Vertical AI Frame</p></div>
-            <div class="mode-card"><h3>Cinema Pro</h3><p>5-Scene Cluster</p></div>
-            <div class="mode-card"><h3>Story Master</h3><p>Narrative Kit</p></div>
-        </div>
-
-        <div class="scene-card">
-            <div class="webview-frame">
+        <div class="master-card">
+            <div class="webview-container">
                 <iframe src="https://black-forest-labs-flux-1-schnell.hf.space?__theme=dark" allowfullscreen></iframe>
             </div>
             
-            <div class="scene-info">
-                <span>PRODUCTION UNIT: LITE-01</span>
+            <div class="narrative-section">
+                <span>PRODUCTION UNIT: MASTER-FRAME</span>
                 <h2>AI Visual Frame</h2>
+                
                 <div class="caption-box">
-                    This visual sequence has been meticulously generated to align with the highest standards of cinematic production. The composition utilizes advanced lighting to ensure a professional interplay of highlights and shadows, creating a deep sense of immersion. Every texture within the frame, from foreground details to atmospheric backgrounds, is balanced to maintain visual continuity. Optimized for SadSha AI's vertical workflow, this result is ready for professional export.
+                    This visual sequence has been meticulously generated to align with the highest standards of cinematic production. The composition utilizes advanced lighting to ensure a professional interplay of highlights and shadows, creating a deep sense of immersion for the viewer. Every texture within the frame, from the foreground details to the atmospheric background, is balanced to maintain visual continuity throughout the production. 
+                    <br><br>
+                    The color grading is optimized for high-contrast cinematic displays, emphasizing a moody yet realistic aesthetic. This specific frame serves as a core narrative pillar, bridging the gap between raw imagination and high-fidelity output. As part of the SadSha AI vertical workflow, this result is ready for professional export and high-end creative integration.
                 </div>
             </div>
         </div>
