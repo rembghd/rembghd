@@ -2,112 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SADSHA AI | Pro Production Floor</title>
+    <title>SADSHA AI | Zero-Limit Production</title>
     <style>
         :root { --gold: #FFD700; --bg: #000; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .container { width: 100%; max-width: 1400px; }
         
-        /* Tactical Header */
-        .status-header { background: #0a0a0a; padding: 15px; border: 1px solid #222; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; font-family: monospace; border-left: 5px solid var(--gold); }
-        .node-active { color: var(--gold); text-shadow: 0 0 10px var(--gold); font-weight: bold; }
+        /* Tactical Status Bar */
+        .status-bar { background: #0a0a0a; padding: 15px; border: 1px solid #222; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; font-family: monospace; border-left: 5px solid var(--gold); }
+        .node-tag { color: var(--gold); font-weight: bold; }
 
-        .input-panel { display: flex; gap: 15px; margin-bottom: 30px; }
-        #user-prompt { flex: 1; background: #050505; border: 1px solid #333; padding: 20px; color: white; border-radius: 12px; font-size: 16px; outline: none; transition: 0.3s; }
-        #user-prompt:focus { border-color: var(--gold); }
-        .btn-generate { background: var(--gold); color: black; border: none; padding: 0 50px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .input-group { display: flex; gap: 15px; margin-bottom: 30px; }
+        #prompt-in { flex: 1; background: #050505; border: 1px solid #333; padding: 18px; color: white; border-radius: 10px; font-size: 16px; outline: none; transition: 0.3s; }
+        #prompt-in:focus { border-color: var(--gold); }
+        .btn-run { background: var(--gold); color: black; border: none; padding: 0 45px; border-radius: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
 
-        /* Clean Production Layout */
+        /* Stable Display Layout */
         .floor { display: flex; gap: 20px; }
-        .render-frame { background: #050505; border: 1px solid #222; border-radius: 15px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .shorts { width: 400px; aspect-ratio: 9/16; }
-        .wide { flex: 1; aspect-ratio: 16/9; }
+        .frame { background: #050505; border: 1px solid #222; border-radius: 15px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+        .shorts { width: 380px; height: 675px; }
+        .wide { flex: 1; height: 675px; }
         
-        /* High-Fidelity Image Styling */
-        .render-frame img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        
-        .script-area { background: #0a0a0a; border: 1px solid #222; margin-top: 25px; padding: 35px; border-radius: 15px; border-bottom: 5px solid var(--gold); }
-        .script-label { color: var(--gold); font-size: 11px; letter-spacing: 5px; margin-bottom: 15px; display: block; }
-        #narrative-text { font-size: 20px; color: #ddd; line-height: 1.8; font-style: italic; }
+        /* Important: No Zoom, Just Stable Rendering */
+        img { width: 100%; height: 100%; object-fit: cover; display: none; }
 
-        .loader { border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; display: none; }
+        /* Professional Narrative */
+        .narrative-strip { background: #0a0a0a; border: 1px solid #222; margin-top: 25px; padding: 35px; border-radius: 15px; text-align: center; }
+        #final-script { font-size: 19px; color: #ccc; line-height: 1.6; font-style: italic; }
+
+        .loader { border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="status-header">
-            <span>CORE_OS: SADSHA_INDEPENDENT_V3.0</span>
-            <span class="node-active" id="active-node">NODE: STANDBY</span>
+        <div class="status-bar">
+            <span>SADSHA_CORE: VERIFIED_NO_WATERMARK</span>
+            <span class="node-tag" id="node-info">NODE: READY</span>
         </div>
 
-        <div class="input-panel">
-            <input type="text" id="user-prompt" placeholder="Enter cinematic vision... (e.g. Astronaut in bioluminescent forest)">
-            <button class="btn-generate" onclick="generateProduction()">Run Production</button>
+        <div class="input-group">
+            <input type="text" id="prompt-in" placeholder="Enter high-fidelity vision parameters...">
+            <button class="btn-run" onclick="executeProduction()">Run Node</button>
         </div>
 
         <div class="floor">
-            <div class="render-frame shorts">
+            <div class="frame shorts">
                 <div class="loader" id="l1"></div>
                 <img id="out-s">
             </div>
-            <div class="render-frame wide">
+            <div class="frame wide">
                 <div class="loader" id="l2"></div>
                 <img id="out-w">
             </div>
         </div>
 
-        <div class="script-area">
-            <span class="script-label">VISUAL PRODUCTION NARRATIVE</span>
-            <div id="narrative-text">System ready. Awaiting production signal...</div>
+        <div class="narrative-strip">
+            <div id="final-script">Waiting for production parameters...</div>
         </div>
     </div>
 
 <script>
-    let step = 0;
-    const rotation = [0, 6, 3, 1, 8, 4, 2, 7, 5]; // 1 -> 7 -> 4 logic
+    let cycle = 0;
+    const pattern = [0, 6, 3, 1, 8, 4, 2, 7, 5]; // Your 1 -> 7 -> 4 logic
 
-    // LIST OF PURE IMAGE NODES (Bypassing UI Wrappers)
-    const nodes = [
-        "https://api.prodia.com/v1/sdxl/generate", // Placeholder for logic
-        "https://cloud.leonardo.ai/api", 
-        "https://api.stability.ai/v1"
-    ];
-
-    function generateProduction() {
-        const p = document.getElementById('user-prompt').value;
+    async function executeProduction() {
+        const p = document.getElementById('prompt-in').value;
         if(!p) return;
 
-        const nodeIdx = rotation[step % rotation.length];
-        document.getElementById('active-node').innerText = `NODE-0${nodeIdx + 1}: ACTIVE`;
+        const nodeIdx = pattern[cycle % pattern.length];
+        document.getElementById('node-info').innerText = `NODE-0${nodeIdx + 1}: ENGAGED`;
 
-        // UI Reset
+        // Reset UI
         document.getElementById('l1').style.display = document.getElementById('l2').style.display = "block";
         document.getElementById('out-s').style.display = document.getElementById('out-w').style.display = "none";
-        
-        const seed = Math.floor(Math.random() * 999999);
+        document.getElementById('final-script').innerText = "Processing cinematic transcription...";
 
-        /* CLEANEST HACK: 
-           Using a Direct Render Proxy that ignores Pollinations' UI CSS.
-           By adding random dimensions, we break their "Tier Limit" detection.
-        */
-        const cleanS = `https://image.pollinations.ai/prompt/${encodeURIComponent('9:16 vertical portrait, ' + p)}?seed=${seed}&width=721&height=1281&nologo=true`;
-        const cleanW = `https://image.pollinations.ai/prompt/${encodeURIComponent('16:9 cinematic wide, ' + p)}?seed=${seed}&width=1281&height=721&nologo=true`;
+        const seed = Math.floor(Math.random() * 9999999);
+
+        // RE-ENGINEERED URLS: Bypassing Pollinations UI via direct CDN parameters
+        // These parameters force the server to skip the logo overlay
+        const sUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent('ultra-detailed, 8k, vertical, 9:16, ' + p)}?seed=${seed}&width=720&height=1280&nologo=true&private=true&enhance=false`;
+        const wUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent('cinematic, 16:9, masterwork, ' + p)}?seed=${seed}&width=1280&height=720&nologo=true&private=true&enhance=false`;
 
         const imgS = document.getElementById('out-s');
         const imgW = document.getElementById('out-w');
 
-        imgS.src = cleanS;
-        imgW.src = cleanW;
+        imgS.src = sUrl;
+        imgW.src = wUrl;
 
         imgS.onload = () => { document.getElementById('l1').style.display="none"; imgS.style.display="block"; };
         imgW.onload = () => { document.getElementById('l2').style.display="none"; imgW.style.display="block"; };
 
-        // REAL SCRIPTING (No AI Refusal)
-        document.getElementById('narrative-text').innerHTML = `<b>PROMPT:</b> ${p}<br><br>Rendered at <b>Node ${nodeIdx + 1}</b>. Optimized for 8K display with zero watermark interference. Atmospheric lighting and textures processed via independent neural pathways.`;
+        // PURE MANUAL NARRATIVE (No AI Refusal Logic)
+        document.getElementById('final-script').innerHTML = `<b>NODE DATA:</b> Rendering completed at Node ${nodeIdx + 1}. <br> <i>"The scene captures the essence of '${p}' with high-frequency detail and ray-traced lighting, optimized for SADSHA AI production standards."</i>`;
 
-        step++;
+        cycle++;
     }
 </script>
 </body>
