@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SadSha | Master Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --gold: #FFD700; --diamond: #00f2ff; --bg: #0a0a0a; --card: #161616; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 12px; }
+        h2 { color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 0; }
+        
+        /* Key Generator Styles */
+        .btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin: 5px; transition: 0.3s; }
+        .btn-gold { background: var(--gold); color: black; }
+        .btn-diamond { background: var(--diamond); color: black; }
+        .btn-combo { background: linear-gradient(45deg, var(--gold), var(--diamond)); color: black; }
+        .btn-download { background: #444; color: white; width: 100%; margin-top: 10px; }
+        
+        textarea { width: 100%; background: #000; color: #0f0; border: 1px solid #333; border-radius: 5px; padding: 10px; box-sizing: border-box; font-family: monospace; }
+        input[type="text"] { width: 100%; padding: 10px; margin: 10px 0; background: #222; border: 1px solid #444; color: white; border-radius: 5px; }
+        
+        .server-row { display: flex; gap: 10px; margin-bottom: 5px; }
+        .status-up { color: #00ff88; font-size: 12px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+        th { background: #222; }
+    </style>
+</head>
+<body>
+
+<h1>SadSha <span>Control Center</span></h1>
+
+<div class="grid">
+    <div class="card">
+        <h2>Key Generator</h2>
+        <p>Select type to generate unique license keys:</p>
+        <button class="btn btn-gold" onclick="generateKeys(40, 'GOLD')">Gen Gold (40)</button>
+        <button class="btn btn-diamond" onclick="generateKeys(45, 'DIAMOND')">Gen Diamond (45)</button>
+        <button class="btn btn-combo" onclick="generateKeys(50, 'COMBO')">Gen Combo (50)</button>
+        
+        <textarea id="key-display" rows="8" placeholder="Generated keys will appear here..."></textarea>
+        <button class="btn btn-download" onclick="downloadKeys()">Download Keys as .txt</button>
+    </div>
+
+    <div class="card">
+        <h2>Niche Analytics</h2>
+        <canvas id="nicheChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Backend Manager (Fail-Safe)</h2>
+        <small>Update Hugging Face / Minimax URLs here:</small>
+        <div id="server-list">
+            <input type="text" placeholder="Gold Server 1 (Primary)" value="https://hf.space/embed/user/gold1">
+            <input type="text" placeholder="Gold Server 2 (Backup)" value="https://hf.space/embed/user/gold2">
+            <input type="text" placeholder="Diamond Server 1 (Minimax)" value="https://minimax.ai/embed/1">
+            <input type="text" placeholder="Diamond Server 2 (Backup)" value="https://hf.space/embed/user/dia2">
+        </div>
+        <button class="btn btn-gold" style="width:100%" onclick="saveServers()">Save & Push Updates</button>
+    </div>
+
+    <div class="card">
+        <h2>User Announcements</h2>
+        <textarea id="announcement" rows="3" placeholder="Type message for users (e.g. New History Models Added!)"></textarea>
+        <button class="btn btn-combo" style="width:100%" onclick="pushAnnouncement()">Push to All Users</button>
+        
+        <h3>Recent Prompt History</h3>
+        <table>
+            <thead><tr><th>Time</th><th>Niche</th><th>Prompt Snippet</th></tr></thead>
+            <tbody id="history-body">
+                <tr><td>12:05</td><td>USA History</td><td>Civil war cinematic...</td></tr>
+                <tr><td>12:08</td><td>Fashion</td><td>Luxury silk dress...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // --- Key Generator Logic ---
+    function generateKeys(length, prefix) {
+        const charset = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let result = "";
+        const count = 5; // Ek baar mein 5 keys generate karega
+        
+        for(let j=0; j<count; j++) {
+            let key = `SAD-${prefix}-`;
+            for (let i = 0; i < (length - key.length); i++) {
+                key += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            result += key + "\n";
+        }
+        document.getElementById('key-display').value += result;
+    }
+
+    function downloadKeys() {
+        const text = document.getElementById('key-display').value;
+        if(!text) return alert("Pehle keys generate karein!");
+        const blob = new Blob([text], { type: 'text/plain' });
+        const anchor = document.createElement('a');
+        anchor.download = "SadSha_Keys_Export.txt";
+        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+        anchor.click();
+    }
+
+    // --- Analytics Chart ---
+    const ctx = document.getElementById('nicheChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['History', 'Fashion', 'Finance', 'Tech', 'Nature'],
+            datasets: [{
+                label: 'Popularity %',
+                data: [85, 60, 45, 70, 30],
+                backgroundColor: ['#FFD700', '#00f2ff', '#FFD700', '#00f2ff', '#FFD700']
+            }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    // --- Admin Functions ---
+    function saveServers() {
+        alert("Servers Updated! All client apps will now use new fail-safe URLs.");
+    }
+
+    function pushAnnouncement() {
+        const msg = document.getElementById('announcement').value;
+        if(msg) alert("Announcement Pushed: " + msg);
+    }
+</script>
+
+</body>
+</html>
