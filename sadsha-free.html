@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SadSha Lite | Free AI Engine</title>
+    <style>
+        body { background-color: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        .nav { padding: 15px; text-align: left; background: #1a1a1a; border-bottom: 1px solid #333; }
+        .nav a { color: #FFD700; text-decoration: none; font-weight: bold; }
+        
+        .container { padding: 20px; max-width: 800px; margin: auto; }
+        .header-box { background: #1a1a1a; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; }
+        
+        input[type="text"] { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #444; background: #222; color: white; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; }
+        .gen-btn { width: 100%; padding: 15px; background: #00ff88; color: black; border: none; border-radius: 10px; font-weight: bold; font-size: 18px; cursor: pointer; }
+        
+        .stats { display: flex; justify-content: space-around; margin: 15px 0; font-size: 14px; color: #aaa; }
+        .counter { color: #00ff88; font-weight: bold; }
+
+        /* Result area stays visible and on top */
+        #result-display { margin-top: 20px; min-height: 300px; background: #111; border-radius: 15px; border: 1px dashed #444; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .result-img { max-width: 100%; display: none; border-radius: 10px; }
+        .loader { display: none; color: #00ff88; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        
+        .dl-btn { display: none; margin-top: 15px; background: #444; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; width: 100%; }
+    </style>
+</head>
+<body>
+
+<div class="nav">
+    <a href="sadsha.html">← Back to Dashboard</a>
+</div>
+
+<div class="container">
+    <div class="header-box">
+        <h2>Lite Mode (Free)</h2>
+        <div class="stats">
+            <span>Daily Limit: <span class="counter">50/50</span></span>
+            <span>Quality: <span style="color:white">Standard</span></span>
+        </div>
+        <input type="text" id="prompt" placeholder="What do you want to create?">
+        <button class="gen-btn" onclick="generate()">Generate Masterpiece</button>
+    </div>
+
+    <div id="result-display">
+        <div id="loader" class="loader">Mixing Pixels... Please wait...</div>
+        <img id="output" class="result-img" src="">
+    </div>
+    <button id="dl-btn" class="dl-btn" onclick="download()">Download Image</button>
+</div>
+
+<script>
+    async function generate() {
+        const prompt = document.getElementById('prompt').value;
+        if(!prompt) return alert("Write something first!");
+
+        // Show Loader
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('output').style.display = 'none';
+        document.getElementById('dl-btn').style.display = 'none';
+        
+        // Pollinations AI logic
+        const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`;
+        
+        const img = document.getElementById('output');
+        img.src = url;
+        
+        img.onload = () => {
+            document.getElementById('loader').style.display = 'none';
+            img.style.display = 'block';
+            document.getElementById('dl-btn').style.display = 'block';
+            // Scroll to result for mobile users just in case
+            img.scrollIntoView({ behavior: 'smooth' });
+        };
+    }
+
+    function download() {
+        const a = document.createElement('a');
+        a.href = document.getElementById('output').src;
+        a.download = `SadSha_Free_${Date.now()}.png`;
+        a.click();
+    }
+</script>
+
+</body>
+</html>
