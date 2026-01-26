@@ -10,7 +10,13 @@
         
         /* Center Branding Section */
         .branding { text-align: center; margin-bottom: 50px; }
-        .logo-img { width: 350px; height: auto; margin-bottom: 10px; }
+        .logo-img { 
+    height: 180px; /* Isay aap 150px ya 180px kar lein, ye perfect size hai */
+    width: auto; 
+    mix-blend-mode: normal; /* Pure black background hai toh ab screen ki zaroorat nahi */
+    display: block;
+    margin: 0 auto;
+}
         .tagline { font-size: 18px; color: #888; letter-spacing: 3px; text-transform: uppercase; font-weight: 300; }
 
         .container { max-width: 1000px; width: 100%; }
