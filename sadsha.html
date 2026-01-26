@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SadSha AI | Professional Image Suite</title>
+    <title>SadSha AI Agent | Premium Visuals</title>
     <style>
-        /* Existing Styles + Image Result Styles */
         body { background-color: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        .header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.9); position: sticky; top: 0; z-index: 100; }
+        .header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.8); }
         .logo { font-size: 24px; font-weight: bold; }
         .logo span { color: #FFD700; }
         .pricing-btn { background: linear-gradient(45deg, #FFD700, #DAA520); color: black; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; }
@@ -15,18 +14,22 @@
         .main-container { padding: 40px 20px; max-width: 1200px; margin: auto; }
         .tier-row { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
         
-        .tier-card { background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 25px; width: 320px; transition: 0.3s; }
-        .gold-border { border: 2px solid #FFD700; }
-        .diamond-border { border: 2px solid #00f2ff; }
+        /* Wahi Purana Outclass Design */
+        .tier-card { background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 25px; width: 320px; transition: 0.3s; position: relative; }
+        .tier-card:hover { transform: translateY(-5px); border-color: #555; }
+        .gold-border { border: 2px solid #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.1); }
+        .diamond-border { border: 2px solid #00f2ff; box-shadow: 0 0 15px rgba(0, 242, 255, 0.1); }
+        
+        .status-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #333; margin-bottom: 15px; display: inline-block; text-transform: uppercase; font-weight: bold; }
         
         input[type="text"] { width: 100%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid #444; background: #222; color: white; box-sizing: border-box; }
-        .generate-btn { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; background: #FFD700; color: black; }
+        .generate-btn { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         
-        /* Result Display */
-        #result-area { margin-top: 50px; display: none; }
-        .result-img { max-width: 100%; border-radius: 15px; border: 2px solid #333; box-shadow: 0 0 30px rgba(0,0,0,1); }
-        .loading-spinner { display: none; color: #FFD700; margin: 20px; font-weight: bold; }
-        
+        /* Result Area - Ab ye hidden rahega jab tak zarurat na ho */
+        #result-area { margin-top: 40px; display: none; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; }
+        .result-img { max-width: 100%; border-radius: 10px; margin-top: 15px; }
+        .loader { color: #FFD700; font-weight: bold; padding: 20px; }
+
         .activation-box { margin-top: 60px; background: #111; padding: 40px; border-radius: 15px; border: 1px dashed #444; }
     </style>
 </head>
@@ -34,46 +37,64 @@
 
 <div class="header">
     <div class="logo">SadSha <span>AI</span></div>
-    <a href="sadsha-pro.html" class="pricing-btn">Get Full Access</a>
+    <a href="sadsha-pro.html" class="pricing-btn">Get Gold & Diamond Access</a>
 </div>
 
 <div class="main-container">
-    <h2>AI Creative Engine</h2>
-    
-    <div id="result-area">
-        <div class="loading-spinner" id="spinner">Creating your masterpiece... Please wait...</div>
-        <img id="output-image" class="result-img" src="" alt="AI Generated Output">
-        <br>
-        <button onclick="downloadImage()" style="margin-top:15px; background:#444; color:white; padding:10px 20px; border-radius:5px; border:none; cursor:pointer;">Download Image</button>
-    </div>
+    <h2 style="font-size: 32px;">Select Your Engine</h2>
+    <p style="color: #888;">Daily Trial Limits: 2 Posts for Premium Servers</p>
 
     <div class="tier-row">
+        <div class="tier-card">
+            <span class="status-badge">Standard Quality</span>
+            <h3>Lite Mode</h3>
+            <p style="color: #00ff88;">50/50 Daily Limit</p>
+            <input type="text" id="lite-input" placeholder="Describe your image...">
+            <button class="generate-btn" style="background: #333; color: white;" onclick="handleGen('lite')">Generate (Free)</button>
+        </div>
+
         <div class="tier-card gold-border">
+            <span class="status-badge" style="background: #FFD700; color: black;">HD Quality</span>
             <h3>Gold Server</h3>
             <p id="gold-limit">Trial: 2/2 Left</p>
-            <input type="text" id="gold-input" placeholder="Prompt for HD quality...">
-            <button id="gold-btn" class="generate-btn" onclick="startGeneration('gold')">Generate Gold</button>
+            <input type="text" id="gold-input" placeholder="Enter prompt...">
+            <button id="gold-btn" class="generate-btn" style="background: #FFD700; color: black;" onclick="handleGen('gold')">Generate Gold</button>
+            <a href="sadsha-pro.html" style="color:#FFD700; font-size:12px; text-decoration:none; display:block; margin-top:10px;">Need Activation Code?</a>
         </div>
 
         <div class="tier-card diamond-border">
+            <span class="status-badge" style="background: #00f2ff; color: black;">Ultra-Realistic</span>
             <h3>Diamond Server</h3>
             <p id="diamond-limit">Trial: 2/2 Left</p>
-            <input type="text" id="diamond-input" placeholder="Prompt for Ultra-Realistic...">
-            <button id="diamond-btn" class="generate-btn" style="background: #00f2ff;" onclick="startGeneration('diamond')">Generate Diamond</button>
+            <input type="text" id="diamond-input" placeholder="Enter viral prompt...">
+            <button id="diamond-btn" class="generate-btn" style="background: #00f2ff; color: black;" onclick="handleGen('diamond')">Generate Diamond</button>
+            <a href="sadsha-pro.html" style="color:#00f2ff; font-size:12px; text-decoration:none; display:block; margin-top:10px;">Get 50 chars Combo Code</a>
         </div>
     </div>
-    
+
+    <div id="result-area">
+        <div id="loader" class="loader" style="display:none;">Creating your visual... Please wait...</div>
+        <img id="output-image" class="result-img" src="" style="display:none;">
+        <br>
+        <button id="dl-btn" style="display:none; margin-top:10px; background:#444; color:white; border:none; padding:8px 15px; border-radius:5px; cursor:pointer;" onclick="downloadImg()">Download</button>
+    </div>
+
     <div class="activation-box">
-        <h3>Enter Activation Code</h3>
-        <input type="text" id="activation-code" placeholder="Enter 30, 40 or 50 Character Code">
-        <button class="generate-btn" style="width: 200px; background: transparent; color: #FFD700; border: 1px solid #FFD700;" onclick="verifyCode()">Activate</button>
+        <h3>Activate Full Access</h3>
+        <input type="text" id="activation-code" placeholder="Enter 30, 40, or 50 Character Code..." style="width: 50%; border: 1px solid #FFD700; text-align:center;">
+        <br>
+        <button class="generate-btn" style="width: 200px; margin-top: 10px; background: transparent; color: #FFD700; border: 1px solid #FFD700;" onclick="verifyCode()">Verify Code</button>
     </div>
 </div>
 
+<footer style="margin-top: 80px; padding: 20px; color: #444; font-size: 13px;">
+    &copy; 2026 RembgHD - SadSha AI Division
+</footer>
+
 <script>
-    const WORKER_URL = "https://sadsha.qs000990.workers.dev/"; // Aapka Cloudflare Worker URL
-    let goldTrials = localStorage.getItem('sadsha_gold') || 2;
-    let diamondTrials = localStorage.getItem('sadsha_diamond') || 2;
+    const WORKER_URL = "https://YOUR_WORKER.workers.dev"; // Cloudflare URL yahan dalain
+    let goldTrials = localStorage.getItem('sadsha_gold') === null ? 2 : parseInt(localStorage.getItem('sadsha_gold'));
+    let diamondTrials = localStorage.getItem('sadsha_diamond') === null ? 2 : parseInt(localStorage.getItem('sadsha_diamond'));
 
     function updateUI() {
         document.getElementById('gold-limit').innerText = `Trial: ${goldTrials}/2 Left`;
@@ -84,46 +105,54 @@
 
     function lock(server) {
         const btn = document.getElementById(`${server}-btn`);
+        const input = document.getElementById(`${server}-input`);
+        input.disabled = true;
         btn.innerText = "Locked 🔒";
+        btn.style.background = "#222";
+        btn.style.color = "#555";
         btn.onclick = () => { window.location.href = 'sadsha-pro.html'; };
     }
 
-    async function startGeneration(server) {
+    async function handleGen(server) {
         const prompt = document.getElementById(`${server}-input`).value;
-        if(!prompt) return alert("Please enter a prompt!");
+        if(!prompt && server !== 'lite') return alert("Please enter a prompt!");
+
+        if(server === 'lite') { alert("LITE Mode: Coming soon to direct API!"); return; }
 
         // Update Trials
         if(server === 'gold') { goldTrials--; localStorage.setItem('sadsha_gold', goldTrials); }
         if(server === 'diamond') { diamondTrials--; localStorage.setItem('sadsha_diamond', diamondTrials); }
         updateUI();
 
-        // UI Changes
+        // Show Loading Area
         document.getElementById('result-area').style.display = 'block';
-        document.getElementById('spinner').style.display = 'block';
+        document.getElementById('loader').style.display = 'block';
         document.getElementById('output-image').style.display = 'none';
+        document.getElementById('dl-btn').style.display = 'none';
 
         try {
-            const response = await fetch(WORKER_URL, {
-                method: 'POST',
-                body: JSON.stringify({ prompt, serverType: server })
-            });
-            const result = await response.json();
-            
-            // Assuming HF returns base64 or image URL in data[0]
-            document.getElementById('output-image').src = result.data[0];
-            document.getElementById('spinner').style.display = 'none';
+            const res = await fetch(WORKER_URL, { method: 'POST', body: JSON.stringify({ prompt, serverType: server }) });
+            const data = await res.json();
+            document.getElementById('output-image').src = data.data[0]; 
+            document.getElementById('loader').style.display = 'none';
             document.getElementById('output-image').style.display = 'inline-block';
-        } catch (err) {
-            alert("Error generating image. Check Worker settings.");
-            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('dl-btn').style.display = 'inline-block';
+        } catch(e) {
+            document.getElementById('loader').innerText = "Connection Error! Check Worker URL.";
         }
     }
 
-    function downloadImage() {
-        const link = document.createElement('a');
-        link.href = document.getElementById('output-image').src;
-        link.download = 'SadSha_AI_Image.png';
-        link.click();
+    function downloadImg() {
+        const a = document.createElement('a');
+        a.href = document.getElementById('output-image').src;
+        a.download = 'SadSha_AI.png';
+        a.click();
+    }
+
+    function verifyCode() {
+        const code = document.getElementById('activation-code').value;
+        if(code.length >= 30) alert("Code submitted to Admin for verification!");
+        else alert("Invalid Code length!");
     }
 
     updateUI();
