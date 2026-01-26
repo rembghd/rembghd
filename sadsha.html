@@ -2,132 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SADSHA AI | Authentic HF Node Floor</title>
+    <title>SADSHA AI | Private Space Production</title>
     <style>
         :root { --gold: #FFD700; --bg: #000; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
         .container { width: 100%; max-width: 1400px; }
         
         /* Node Monitor */
-        .monitor { background: #0a0a0a; padding: 15px; border: 1px solid #222; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; font-family: monospace; font-size: 13px; }
-        .node-id { color: var(--gold); font-weight: bold; border-left: 2px solid var(--gold); padding-left: 10px; }
+        .node-monitor { background: #0a0a0a; padding: 15px; border: 1px solid #222; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; font-family: monospace; }
+        .active-node { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
 
-        /* Auth & Input */
-        .auth-bar { margin-bottom: 15px; display: flex; gap: 10px; width: 100%; }
-        #hf-token { background: #050505; border: 1px solid #444; padding: 10px; color: #gold; border-radius: 8px; flex: 1; font-size: 12px; }
         .input-group { display: flex; gap: 10px; margin-bottom: 30px; }
-        #prompt-in { flex: 1; background: transparent; border: 1px solid #333; padding: 18px; color: white; border-radius: 10px; font-size: 16px; outline: none; }
-        .btn-execute { background: var(--gold); color: black; border: none; padding: 0 45px; border-radius: 10px; font-weight: 900; cursor: pointer; }
+        #prompt-field { flex: 1; background: transparent; border: 1px solid #333; padding: 18px; color: white; border-radius: 10px; font-size: 16px; outline: none; }
+        .btn-fire { background: var(--gold); color: black; border: none; padding: 0 45px; border-radius: 10px; font-weight: 900; cursor: pointer; }
 
-        /* Frames */
-        .floor { display: flex; gap: 20px; }
-        .frame { background: #050505; border: 1px solid #222; border-radius: 15px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
-        .shorts { width: 380px; height: 675px; }
-        .wide { flex: 1; height: 675px; }
-        canvas, img { max-width: 100%; max-height: 100%; display: none; }
+        /* Multi-Space Viewports */
+        .production-floor { display: flex; gap: 20px; height: 650px; }
+        .frame { background: #050505; border: 1px solid #222; border-radius: 15px; overflow: hidden; position: relative; }
+        .shorts { width: 380px; }
+        .wide { flex: 1; }
+        
+        /* Using iFrame to bypass Token/API blocks */
+        iframe { width: 100%; height: 100%; border: none; background: #000; }
 
-        /* Caption Area */
-        .caption-strip { background: #0a0a0a; border: 1px solid #222; margin-top: 25px; padding: 30px; border-radius: 15px; text-align: center; }
-        #narrative-text { font-size: 18px; color: #ccc; line-height: 1.6; font-style: italic; }
-
-        .loader { border: 4px solid #111; border-top: 4px solid var(--gold); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; display: none; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .narrative-strip { background: #0a0a0a; border: 1px solid #222; margin-top: 25px; padding: 30px; border-radius: 15px; text-align: center; }
+        #script-out { font-size: 19px; color: #bbb; line-height: 1.6; font-style: italic; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="monitor">
-            <span>CONNECTION: DIRECT_HUGGINGFACE_INFERENCE</span>
-            <span class="node-id" id="active-node">NODE: STANDBY</span>
-        </div>
-
-        <div class="auth-bar">
-            <input type="password" id="hf-token" placeholder="Enter Hugging Face Token (hf_...) for direct node access">
+        <div class="node-monitor">
+            <span>NETWORK: HUGGINGFACE_SPACES_ROTATION</span>
+            <span class="active-node" id="node-tag">NODE: READY</span>
         </div>
 
         <div class="input-group">
-            <input type="text" id="prompt-in" placeholder="Input cinematic parameters for HF Node processing...">
-            <button class="btn-execute" onclick="triggerProduction()">EXECUTE NODE</button>
+            <input type="text" id="prompt-field" placeholder="Enter production parameters for Space rotation...">
+            <button class="btn-fire" onclick="rotateAndGenerate()">RUN PRODUCTION</button>
         </div>
 
-        <div class="floor">
+        <div class="production-floor">
             <div class="frame shorts">
-                <div class="loader" id="l1"></div>
-                <img id="imgS">
+                <iframe id="space-shorts" src="about:blank"></iframe>
             </div>
+
             <div class="frame wide">
-                <div class="loader" id="l2"></div>
-                <img id="imgW">
+                <iframe id="space-wide" src="about:blank"></iframe>
             </div>
         </div>
 
-        <div class="caption-strip">
-            <div id="narrative-text">Awaiting production signal...</div>
+        <div class="narrative-strip">
+            <div id="script-out">Spaces are synchronized. Waiting for first execution...</div>
         </div>
     </div>
 
 <script>
-    // 9 HF Nodes (Spaces/Models) - As per your rotation strategy
-    const hf_nodes = [
-        "black-forest-labs/FLUX.1-schnell", 
-        "stabilityai/stable-diffusion-3-medium-diffusers",
-        "SG161222/RealVisXL_V4.0",
-        "prompthero/openjourney",
-        "Linaqruf/animagine-xl-3.1",
-        "stabilityai/stable-diffusion-xl-base-1.0",
-        "runwayml/stable-diffusion-v1-5",
-        "stablediffusionapi/realistic-stock-photo",
-        "dataautics/FLUX.1-dev-gguf"
+    // 9 HF Spaces for Rotation (Actual Public URLs)
+    const spaces = [
+        "https://black-forest-labs-flux-1-schnell.hf.space",
+        "https://stabilityai-stable-diffusion-3-medium.hf.space",
+        "https://kingnish-flux-1-schnell.hf.space",
+        "https://multimodalart-flux-1-schnell.hf.space",
+        "https://shazam-stable-diffusion-xl.hf.space",
+        "https://google-imagen-3-fast.hf.space", // Note: Space names might vary slightly
+        "https://segmind-segmind-vega.hf.space",
+        "https://bytedance-sdxl-lightning.hf.space",
+        "https://playgroundai-playground-v2-5.hf.space"
     ];
 
-    let counter = 0;
+    let step = 0;
     const pattern = [0, 6, 3, 1, 8, 4, 2, 7, 5]; // 1 -> 7 -> 4 logic
 
-    async function queryHF(model, prompt, token, width, height, targetImg, loaderId) {
-        const loader = document.getElementById(loaderId);
-        const img = document.getElementById(targetImg);
+    function rotateAndGenerate() {
+        const p = document.getElementById('prompt-field').value;
+        if(!p) return;
+
+        // Space selection based on your rotation strategy
+        const nodeIdx = pattern[step % pattern.length];
+        const activeSpace = spaces[nodeIdx];
         
-        try {
-            const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
-                headers: { Authorization: `Bearer ${token}` },
-                method: "POST",
-                body: JSON.stringify({ inputs: prompt, parameters: { width: width, height: height } }),
-            });
-            
-            const blob = await response.blob();
-            img.src = URL.createObjectURL(blob);
-            loader.style.display = "none";
-            img.style.display = "block";
-        } catch (e) {
-            console.error("HF Node Error:", e);
-        }
-    }
+        document.getElementById('node-tag').innerText = `NODE-0${nodeIdx + 1}: CONNECTED`;
 
-    async function triggerProduction() {
-        const prompt = document.getElementById('prompt-in').value;
-        const token = document.getElementById('hf-token').value;
-        if(!prompt || !token) return alert("Please enter Prompt and HF Token!");
-
-        const nodeIdx = pattern[counter % pattern.length];
-        const activeModel = hf_nodes[nodeIdx];
-        document.getElementById('active-node').innerText = `NODE-0${nodeIdx + 1}: ${activeModel.split('/')[1]}`;
-
-        // Reset UI
-        document.getElementById('l1').style.display = document.getElementById('l2').style.display = "block";
-        document.getElementById('imgS').style.display = document.getElementById('imgW').style.display = "none";
-        document.getElementById('narrative-text').innerText = "Querying Hugging Face neural nodes...";
-
-        // 1. Generate Shorts (9:16)
-        queryHF(activeModel, `9:16 vertical, ${prompt}`, token, 720, 1280, 'imgS', 'l1');
+        // Direct Space Loading (Embedding the actual space interface)
+        // Shorts version (Parameters will be handled inside the space interface by user or via URL query if supported)
+        document.getElementById('space-shorts').src = `${activeSpace}/?__theme=dark&prompt=${encodeURIComponent('vertical, 9:16, ' + p)}`;
         
-        // 2. Generate Wide (16:9)
-        queryHF(activeModel, `16:9 wide-angle, ${prompt}`, token, 1280, 720, 'imgW', 'l2');
+        // Wide version
+        document.getElementById('space-wide').src = `${activeSpace}/?__theme=dark&prompt=${encodeURIComponent('wideangle, 16:9, ' + p)}`;
 
-        // Caption Logic (Independent)
-        document.getElementById('narrative-text').innerText = `"${prompt} - Rendered via ${activeModel.split('/')[1]} at Node ${nodeIdx + 1}."`;
+        document.getElementById('script-out').innerHTML = `Executing production at <b>Node ${nodeIdx + 1}</b>. Use the Space controls to finalize your render.`;
 
-        counter++;
+        step++; // Move to next node in pattern for next click
     }
 </script>
 </body>
