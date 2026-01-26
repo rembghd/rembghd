@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA AI | Dual Production</title>
+    <title>SADSHA AI | Elite Production Floor</title>
     <style>
         :root { --gold: #FFD700; --bg: #000; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px; }
@@ -12,25 +12,20 @@
 
         .container { max-width: 1400px; width: 95%; display: flex; flex-direction: column; gap: 20px; }
 
-        /* Input Area */
         .control-panel { background: #0a0a0a; border: 1px solid #222; padding: 20px; border-radius: 20px; display: flex; gap: 10px; }
         #prompt-in { flex: 1; background: transparent; border: 1px solid #333; padding: 15px; color: white; border-radius: 12px; font-size: 16px; outline: none; }
         .btn-run { background: var(--gold); color: #000; border: none; padding: 0 40px; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
 
-        /* Production Floor: Side by Side */
         .production-floor { display: flex; gap: 20px; align-items: flex-start; }
-        
         .frame { background: #080808; border: 1px solid #222; border-radius: 20px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.7); color: var(--gold); padding: 4px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; border: 1px solid var(--gold); z-index: 5; }
+        .badge { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.8); color: var(--gold); padding: 4px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; border: 1px solid var(--gold); z-index: 5; }
 
-        /* 9:16 Shorts Frame */
         .shorts-frame { width: 350px; height: 622px; }
-        /* 16:9 Wide Frame */
         .wide-frame { flex: 1; height: 622px; }
 
+        /* Stable Images - No Zoom */
         img { width: 100%; height: 100%; object-fit: cover; display: none; }
         
-        /* Caption Section at Bottom */
         .narrative-strip { background: #050505; border: 1px solid #222; border-radius: 20px; padding: 30px; margin-top: 10px; text-align: center; }
         .narrative-strip span { color: var(--gold); font-size: 11px; letter-spacing: 5px; text-transform: uppercase; display: block; margin-bottom: 10px; }
         #ai-caption { font-size: 18px; color: #999; line-height: 1.6; font-style: italic; max-width: 900px; margin: 0 auto; }
@@ -47,19 +42,19 @@
 
     <div class="container">
         <div class="control-panel">
-            <input type="text" id="prompt-in" placeholder="Enter production concept (e.g. Astronaut on Mars)...">
-            <button class="btn-run" onclick="generateDual()">Run Production</button>
+            <input type="text" id="prompt-in" placeholder="Describe cinematic production (e.g. Vintage 1969 Moon Landing, 8k, FLUX style)...">
+            <button class="btn-run" onclick="generateProduction()">Run Production</button>
         </div>
 
         <div class="production-floor">
             <div class="frame shorts-frame">
-                <div class="badge">9:16 VERTICAL</div>
+                <div class="badge">9:16 SHORTS</div>
                 <div class="loader" id="l1"></div>
                 <img id="img-shorts">
             </div>
 
             <div class="frame wide-frame">
-                <div class="badge">16:9 CINEMATIC</div>
+                <div class="badge">16:9 CINEMATIC WIDE</div>
                 <div class="loader" id="l2"></div>
                 <img id="img-wide">
             </div>
@@ -67,42 +62,39 @@
 
         <div class="narrative-strip">
             <span>Production Narrative</span>
-            <div id="ai-caption">Awaiting visual synchronization...</div>
+            <div id="ai-caption">Awaiting visual synchronization for dual-frame output...</div>
         </div>
     </div>
 
 <script>
-    async function generateDual() {
+    async function generateProduction() {
         const prompt = document.getElementById('prompt-in').value;
         if(!prompt) return;
 
-        const l1 = document.getElementById('l1');
-        const l2 = document.getElementById('l2');
-        const imgS = document.getElementById('img-shorts');
-        const imgW = document.getElementById('img-wide');
+        const l1 = document.getElementById('l1'), l2 = document.getElementById('l2');
+        const imgS = document.getElementById('img-shorts'), imgW = document.getElementById('img-wide');
         const caption = document.getElementById('ai-caption');
 
         l1.style.display = l2.style.display = "block";
         imgS.style.display = imgW.style.display = "none";
-        caption.innerHTML = "Synthesizing cinematic atmosphere...";
+        caption.innerHTML = "Processing FLUX cinematic engine...";
 
+        // Using a high-quality stable mirror for FLUX to avoid Iframe blocks
         const seed = Math.floor(Math.random()*99999);
+        const base = "https://image.pollinations.ai/prompt/"; // Yahan sirf endpoint change hoga agar aapka apna FLUX API hai
 
-        // 1. Shorts Gen
-        imgS.src = `https://image.pollinations.ai/prompt/Vertical%20photography,%209:16,%20cinematic,%208k,%20${encodeURIComponent(prompt)}?width=720&height=1280&nologo=true&seed=${seed}`;
+        imgS.src = `${base}${encodeURIComponent('Vertical, 9:16, ' + prompt)}?width=720&height=1280&nologo=true&seed=${seed}`;
+        imgW.src = `${base}${encodeURIComponent('Wide angle, 16:9, ' + prompt)}?width=1280&height=720&nologo=true&seed=${seed}`;
+
         imgS.onload = () => { l1.style.display = "none"; imgS.style.display = "block"; };
-
-        // 2. Wide Gen
-        imgW.src = `https://image.pollinations.ai/prompt/Cinematic%20wide%20angle,%2016:9,%20masterpiece,%208k,%20${encodeURIComponent(prompt)}?width=1280&height=720&nologo=true&seed=${seed}`;
         imgW.onload = () => { l2.style.display = "none"; imgW.style.display = "block"; };
 
-        // 3. Narrative
         try {
-            const res = await fetch(`https://text.pollinations.ai/Write%20a%20deep%20poetic%20atmospheric%20caption%20for:%20${encodeURIComponent(prompt)}.%20Do%20NOT%20mention%20technical%20terms.%20Max%2045%20words.`);
-            let text = await res.text();
-            caption.innerHTML = `"${text.replace(/\{.*\}|assistant|content|reasoning|/gs, "").trim()}"`;
+            const res = await fetch(`https://text.pollinations.ai/Write%20a%20deep%20atmospheric%20one-paragraph%20caption%20for:%20${encodeURIComponent(prompt)}.%20Do%20NOT%20mention%20technical%20prompt%20words.%20Max%2040%20words.`);
+            let data = await res.text();
+            caption.innerHTML = `"${data.replace(/\{.*\}|assistant|content|reasoning|/gs, "").trim()}"`;
         } catch (e) {
-            caption.innerHTML = "Visuals generated. Narrative offline.";
+            caption.innerHTML = "Visuals generated via FLUX. Narrative offline.";
         }
     }
 </script>
