@@ -6,14 +6,16 @@
     <title>SadSha AI Agent | Premium Visuals</title>
     <style>
         body { background-color: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        .header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.8); }
+        .header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.8); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 24px; font-weight: bold; }
         .logo span { color: #FFD700; }
-        .pricing-btn { background: linear-gradient(45deg, #FFD700, #DAA520); color: black; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+        .pricing-btn { background: linear-gradient(45deg, #FFD700, #DAA520); color: black; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .pricing-btn:hover { transform: scale(1.05); }
         
         .main-container { padding: 40px 20px; max-width: 1200px; margin: auto; }
         .tier-row { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
         
+        /* Three Windows Design */
         .tier-card { background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 25px; width: 320px; transition: 0.3s; position: relative; }
         .tier-card:hover { transform: translateY(-5px); border-color: #555; }
         .gold-border { border: 2px solid #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.1); }
@@ -25,9 +27,8 @@
         .generate-btn { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         
         #result-area { margin-top: 40px; display: none; background: #111; padding: 20px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .result-img { max-width: 100%; border-radius: 10px; margin-top: 15px; border: 1px solid #444; }
-        .loader { color: #FFD700; font-weight: bold; padding: 20px; animation: blink 1.5s infinite; }
-        @keyframes blink { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .result-img { max-width: 100%; border-radius: 10px; margin-top: 15px; }
+        .loader { color: #FFD700; font-weight: bold; padding: 20px; }
 
         .activation-box { margin-top: 60px; background: #111; padding: 40px; border-radius: 15px; border: 1px dashed #444; }
     </style>
@@ -49,7 +50,7 @@
             <h3>Lite Mode</h3>
             <p style="color: #00ff88;">Unlimited (Standard)</p>
             <input type="text" id="lite-input" placeholder="Quick describe...">
-            <button class="generate-btn" style="background: #333; color: white;" onclick="handleGen('lite')">Generate Lite</button>
+            <button class="generate-btn" style="background: #333; color: white;" onclick="window.location.href='sadsha-free.html'">Open Lite Engine</button>
         </div>
 
         <div class="tier-card gold-border">
@@ -89,7 +90,7 @@
 </footer>
 
 <script>
-    const WORKER_URL = "https://YOUR_WORKER.workers.dev"; // Premium Bridge
+    const WORKER_URL = "https://YOUR_WORKER.workers.dev"; 
     let goldTrials = localStorage.getItem('sadsha_gold') === null ? 2 : parseInt(localStorage.getItem('sadsha_gold'));
     let diamondTrials = localStorage.getItem('sadsha_diamond') === null ? 2 : parseInt(localStorage.getItem('sadsha_diamond'));
 
@@ -114,14 +115,13 @@
         const prompt = inputField.value;
         if(!prompt) return alert("Please enter a prompt!");
 
-        // Show UI Loader
         document.getElementById('result-area').style.display = 'block';
         document.getElementById('loader').style.display = 'block';
         document.getElementById('output-image').style.display = 'none';
         document.getElementById('dl-btn').style.display = 'none';
 
         if(server === 'lite') {
-            // Pollinations AI Direct Link
+            // Pollinations Logic (Safe-kept inside script for future main-page use)
             const pollUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&nologo=true`;
             document.getElementById('output-image').src = pollUrl;
             document.getElementById('output-image').onload = () => {
@@ -130,7 +130,6 @@
                 document.getElementById('dl-btn').style.display = 'inline-block';
             };
         } else {
-            // Premium (Gold/Diamond) via Cloudflare
             if(server === 'gold') { goldTrials--; localStorage.setItem('sadsha_gold', goldTrials); }
             if(server === 'diamond') { diamondTrials--; localStorage.setItem('sadsha_diamond', diamondTrials); }
             updateUI();
