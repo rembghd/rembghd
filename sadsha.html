@@ -5,28 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SadSha AI Agent | Premium Visuals</title>
     <style>
-        body { background-color: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        .header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
-        .pricing-btn { background: linear-gradient(45deg, #FFD700, #DAA520); color: black; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+        body { background-color: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; overflow-x: hidden; }
+        .header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.8); sticky: top; }
+        .logo { font-size: 24px; font-weight: bold; letter-spacing: 1px; }
+        .logo span { color: #FFD700; }
+        .pricing-btn { background: linear-gradient(45deg, #FFD700, #DAA520); color: black; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .pricing-btn:hover { opacity: 0.8; transform: scale(1.05); }
         
         .main-container { padding: 40px 20px; max-width: 1200px; margin: auto; }
         .tier-row { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
         
         /* Tier Card Styling */
-        .tier-card { background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 20px; width: 300px; transition: 0.3s; position: relative; }
-        .tier-card:hover { transform: translateY(-10px); border-color: #555; }
-        .gold-border { border: 2px solid #FFD700; }
-        .diamond-border { border: 2px solid #00f2ff; }
+        .tier-card { background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 25px; width: 320px; transition: 0.3s; position: relative; }
+        .tier-card:hover { transform: translateY(-5px); border-color: #555; }
+        .gold-border { border: 2px solid #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.1); }
+        .diamond-border { border: 2px solid #00f2ff; box-shadow: 0 0 15px rgba(0, 242, 255, 0.1); }
         
-        .status-badge { font-size: 12px; padding: 4px 8px; border-radius: 4px; background: #333; margin-bottom: 10px; display: inline-block; }
+        .status-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #333; margin-bottom: 15px; display: inline-block; text-transform: uppercase; font-weight: bold; }
         
-        input[type="text"] { width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #222; color: white; }
-        .generate-btn { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        input[type="text"] { width: 100%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid #444; background: #222; color: white; box-sizing: border-box; }
+        input:disabled { opacity: 0.5; cursor: not-allowed; border-color: #ff4444; }
+        
+        .generate-btn { width: 100%; padding: 14px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .generate-btn:disabled { cursor: pointer; } /* Keep pointer to allow redirection click */
         
         /* Activation Area */
-        .activation-box { margin-top: 50px; background: #111; padding: 30px; border-radius: 10px; border: 1px dashed #555; }
-        .promo-text { color: #aaa; font-size: 14px; margin-top: 10px; }
-        .promo-text a { color: #FFD700; text-decoration: none; }
+        .activation-box { margin-top: 60px; background: #111; padding: 40px; border-radius: 15px; border: 1px dashed #444; }
+        #activation-code { width: 60%; max-width: 400px; border: 1px solid #FFD700; text-align: center; letter-spacing: 2px; }
+        
+        .promo-link { color: #FFD700; text-decoration: none; font-size: 13px; margin-top: 10px; display: block; }
+        .promo-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -37,48 +45,103 @@
 </div>
 
 <div class="main-container">
-    <h2>Select Your Engine</h2>
-    <p>Daily Trial Limits: 2 Posts for Premium Servers</p>
+    <h2 style="font-size: 32px;">Select Your Engine</h2>
+    <p style="color: #888;">Experience the next generation of AI image synthesis.</p>
 
     <div class="tier-row">
         <div class="tier-card">
             <span class="status-badge">Standard Quality</span>
             <h3>Lite Mode</h3>
-            <p>50/50 Daily Limit</p>
+            <p style="color: #00ff88; font-size: 14px;">50/50 Daily Limit</p>
             <input type="text" placeholder="Describe your image...">
-            <button class="generate-btn" style="background: #444; color: white;">Generate (Free)</button>
+            <button class="generate-btn" style="background: #333; color: white;" onclick="alert('LITE Engine: Processing...')">Generate (Free)</button>
         </div>
 
         <div class="tier-card gold-border">
             <span class="status-badge" style="background: #FFD700; color: black;">HD Quality</span>
             <h3>Gold Server</h3>
-            <p id="gold-limit">Trial: 2/2 Left</p>
+            <p id="gold-limit" style="font-size: 14px;">Trial: 2/2 Left</p>
             <input type="text" id="gold-input" placeholder="Enter prompt...">
-            <button class="generate-btn" style="background: #FFD700; color: black;">Generate Gold</button>
-            <div class="promo-text">Need 30/40 chars <a href="sadsha-pro.html">Activation Code?</a></div>
+            <button id="gold-btn" class="generate-btn" style="background: #FFD700; color: black;" onclick="handleGen('gold')">Generate Gold</button>
+            <a href="sadsha-pro.html" class="promo-link">Need 30/40 chars Activation Code?</a>
         </div>
 
         <div class="tier-card diamond-border">
             <span class="status-badge" style="background: #00f2ff; color: black;">Ultra-Realistic</span>
             <h3>Diamond Server</h3>
-            <p id="diamond-limit">Trial: 2/2 Left</p>
+            <p id="diamond-limit" style="font-size: 14px;">Trial: 2/2 Left</p>
             <input type="text" id="diamond-input" placeholder="Enter viral prompt...">
-            <button class="generate-btn" style="background: #00f2ff; color: black;">Generate Diamond</button>
-            <div class="promo-text">Get <a href="sadsha-pro.html">50 chars Combo Code</a></div>
+            <button id="diamond-btn" class="generate-btn" style="background: #00f2ff; color: black;" onclick="handleGen('diamond')">Generate Diamond</button>
+            <a href="sadsha-pro.html" class="promo-link">Get 50 chars Combo Code</a>
         </div>
     </div>
 
     <div class="activation-box">
         <h3>Activate Full Access</h3>
-        <input type="text" id="activation-code" placeholder="Enter 30, 40, or 50 Character Code..." style="width: 50%; border: 1px solid #FFD700;">
+        <input type="text" id="activation-code" placeholder="Enter Code Here...">
         <br>
-        <button class="generate-btn" style="width: 200px; margin-top: 10px; background: #222; color: #FFD700; border: 1px solid #FFD700;">Verify Code</button>
+        <button class="generate-btn" style="width: 200px; margin-top: 10px; background: transparent; color: #FFD700; border: 1px solid #FFD700;" onclick="verifyCode()">Verify Code</button>
     </div>
 </div>
 
-<footer style="margin-top: 100px; padding: 20px; color: #555; border-top: 1px solid #222;">
-    &copy; 2026 RembgHD - SadSha AI Division
+<footer style="margin-top: 80px; padding: 30px; color: #444; font-size: 13px; border-top: 1px solid #1a1a1a;">
+    &copy; 2026 RembgHD - SadSha AI Division | Unleashing Imagination
 </footer>
+
+<script>
+    // Initialize Limits from LocalStorage
+    let goldTrials = localStorage.getItem('sadsha_gold') === null ? 2 : parseInt(localStorage.getItem('sadsha_gold'));
+    let diamondTrials = localStorage.getItem('sadsha_diamond') === null ? 2 : parseInt(localStorage.getItem('sadsha_diamond'));
+
+    function updateUI() {
+        document.getElementById('gold-limit').innerText = `Trial: ${goldTrials}/2 Left`;
+        document.getElementById('diamond-limit').innerText = `Trial: ${diamondTrials}/2 Left`;
+
+        if(goldTrials <= 0) {
+            lock('gold');
+        }
+        if(diamondTrials <= 0) {
+            lock('diamond');
+        }
+    }
+
+    function lock(server) {
+        const input = document.getElementById(`${server}-input`);
+        const btn = document.getElementById(`${server}-btn`);
+        input.disabled = true;
+        input.placeholder = "Trial Expired!";
+        btn.innerText = "Locked 🔒 (Get Code)";
+        btn.style.background = "#222";
+        btn.style.color = "#ff4444";
+        // Change function to redirect on click when locked
+        btn.onclick = () => { window.location.href = 'sadsha-pro.html'; };
+    }
+
+    function handleGen(server) {
+        if(server === 'gold' && goldTrials > 0) {
+            goldTrials--;
+            localStorage.setItem('sadsha_gold', goldTrials);
+            alert("GOLD Engine: Processing High Quality Visual...");
+        } else if(server === 'diamond' && diamondTrials > 0) {
+            diamondTrials--;
+            localStorage.setItem('sadsha_diamond', diamondTrials);
+            alert("DIAMOND Engine: Processing Ultra-Realistic Visual...");
+        }
+        updateUI();
+    }
+
+    function verifyCode() {
+        const code = document.getElementById('activation-code').value.trim();
+        if(code.length === 30 || code.length === 40 || code.length === 50) {
+            alert("Code Submitted! Admin will verify and activate your access shortly.");
+        } else {
+            alert("Invalid Code! Please enter a 30, 40, or 50 character key.");
+        }
+    }
+
+    // Run UI update on load
+    updateUI();
+</script>
 
 </body>
 </html>
