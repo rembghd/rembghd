@@ -8,39 +8,46 @@
         :root { --gold: #FFD700; --bg: #000000; --card: #111111; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
 
-        /* Branding */
+        /* Branding Section */
         .header-section { text-align: center; padding: 40px 20px; width: 100%; }
         .logo-img { height: 160px; width: auto; mix-blend-mode: screen; display: block; margin: 0 auto; }
         .tagline { font-size: 13px; color: #555; letter-spacing: 5px; text-transform: uppercase; margin-top: 5px; }
 
         .container { max-width: 1100px; width: 92%; margin-bottom: 100px; }
 
-        /* Modes */
+        /* Mode Selection */
         .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 30px 0; }
-        .mode-card { background: var(--card); border: 1px solid #222; padding: 25px 10px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .mode-card.active { border-color: var(--gold); background: #0c0c02; }
+        .mode-card { background: var(--card); border: 1px solid #222; padding: 25px 10px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; border-bottom: 3px solid transparent; }
+        .mode-card.active { border-color: var(--gold); background: #0c0c02; border-bottom: 3px solid var(--gold); }
         .mode-card h3 { margin: 0 0 8px; font-size: 16px; }
         .mode-card p { font-size: 10px; color: #666; text-transform: uppercase; }
 
-        /* Input Area */
-        .input-box { background: #080808; padding: 25px; border-radius: 15px; border: 1px solid #1a1a1a; }
-        textarea { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 10px; font-size: 15px; outline: none; resize: none; margin-bottom: 15px; }
+        /* Input Panel */
+        .input-box { background: #080808; padding: 25px; border-radius: 15px; border: 1px solid #1a1a1a; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        textarea { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 10px; font-size: 15px; outline: none; resize: none; margin-bottom: 15px; box-sizing: border-box; }
         #story-options { display: none; margin-bottom: 15px; }
-        select { background: #000; color: #fff; border: 1px solid #333; padding: 12px; width: 100%; border-radius: 8px; }
+        select { background: #000; color: #fff; border: 1px solid #333; padding: 12px; width: 100%; border-radius: 8px; font-size: 14px; }
 
-        .gen-btn { background: #fff; color: #000; font-weight: 800; padding: 18px; width: 100%; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; text-transform: uppercase; }
-        .gen-btn:hover { background: var(--gold); }
+        .gen-btn { background: #fff; color: #000; font-weight: 800; padding: 18px; width: 100%; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; text-transform: uppercase; transition: 0.3s; }
+        .gen-btn:hover { background: var(--gold); transform: scale(1.01); }
 
-        /* Scene Layout with Webview */
-        #output-area { margin-top: 40px; width: 100%; display: grid; gap: 25px; }
-        .scene-card { background: #0a0a0a; border: 1px solid #222; border-radius: 15px; overflow: hidden; display: flex; flex-direction: row; min-height: 600px; }
-        .scene-media { flex: 1.2; background: #000; border-right: 1px solid #1a1a1a; }
-        .scene-media iframe { width: 100%; height: 100%; border: none; }
-        .scene-info { flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center; }
+        /* Output Scene Cards */
+        #output-area { margin-top: 40px; width: 100%; display: grid; gap: 30px; }
+        .scene-card { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; overflow: hidden; display: flex; flex-direction: row; min-height: 650px; }
+        .scene-media { flex: 1.2; background: #000; position: relative; border-right: 1px solid #1a1a1a; }
+        .scene-media iframe { width: 100%; height: 100%; border: none; background: #000; }
         
-        .caption-box { font-size: 14px; color: #ccc; line-height: 1.8; margin-top: 15px; background: #000; padding: 20px; border-radius: 10px; border: 1px solid #1a1a1a; text-align: justify; }
+        .scene-info { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(to right, #0a0a0a, #050505); }
+        .scene-info h2 { font-size: 24px; margin-bottom: 20px; color: #fff; }
+        
+        /* Clean 250-Word Caption */
+        .caption-box { font-size: 15px; color: #bbb; line-height: 1.8; background: rgba(0,0,0,0.4); padding: 25px; border-radius: 12px; border: 1px solid #1a1a1a; text-align: justify; }
 
-        @media (max-width: 850px) { .scene-card { flex-direction: column; } .scene-media { height: 500px; } }
+        @media (max-width: 900px) {
+            .scene-card { flex-direction: column; }
+            .scene-media { height: 500px; border-right: none; border-bottom: 1px solid #1a1a1a; }
+            .mode-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -52,9 +59,9 @@
 
     <div class="container">
         <div class="mode-grid">
-            <div class="mode-card active" id="lite" onclick="setMode('LITE')"><h3>Standard Lite</h3><p>Vertical Scene</p></div>
-            <div class="mode-card" id="pro" onclick="setMode('PRO')"><h3>Cinema Pro</h3><p>5-Scene Cluster</p></div>
-            <div class="mode-card" id="story" onclick="setMode('STORY')"><h3>Story Master</h3><p>Narrative Kit</p></div>
+            <div class="mode-card active" id="lite" onclick="setMode('LITE')"><h3>Standard Lite</h3><p>Vertical AI Frame</p></div>
+            <div class="mode-card" id="pro" onclick="setMode('PRO')"><h3>Cinema Pro</h3><p>5-Scene Cinematic Batch</p></div>
+            <div class="mode-card" id="story" onclick="setMode('STORY')"><h3>Story Master</h3><p>Narrative Production</p></div>
         </div>
 
         <div class="input-box">
@@ -65,17 +72,18 @@
                     <option value="15">5 Minutes (15 Scenes)</option>
                 </select>
             </div>
-            <textarea id="prompt" rows="3" placeholder="Enter your cinematic vision..."></textarea>
-            <button class="gen-btn" onclick="startGeneration()">Start Production</button>
+            <textarea id="prompt" rows="3" placeholder="Describe your vision for the production..."></textarea>
+            <button class="gen-btn" onclick="startProduction()">Start Production</button>
         </div>
+
         <div id="output-area"></div>
     </div>
 
 <script>
     let currentMode = 'LITE';
 
-    // 9 Final Webview URLs from Fix Memory
-    const hfWebviews = [
+    // Fix Memory: Using stable Webview spaces that handle prompts better
+    const webviewEndpoints = [
         "https://black-forest-labs-flux-1-schnell.hf.space",
         "https://stabilityai-stable-diffusion-3-5-large.hf.space",
         "https://black-forest-labs-flux-1-dev.hf.space",
@@ -94,43 +102,43 @@
         document.getElementById('story-options').style.display = (m === 'STORY') ? 'block' : 'none';
     }
 
-    function startGeneration() {
-        const promptText = document.getElementById('prompt').value;
-        const output = document.getElementById('output-area');
-        if (!promptText) return;
+    function startProduction() {
+        const pText = document.getElementById('prompt').value;
+        const area = document.getElementById('output-area');
+        if (!pText) return;
 
-        output.innerHTML = `<h3 style="text-align:center; color:var(--gold); width:100%;">SadSha AI: Initializing Webview Clusters...</h3>`;
+        area.innerHTML = `<h3 style="text-align:center; color:var(--gold); width:100%;">SadSha AI Pipeline Initializing Webview Clusters...</h3>`;
 
-        let scenes = (currentMode === 'PRO') ? 5 : (currentMode === 'STORY' ? document.getElementById('duration').value : 1);
+        let count = (currentMode === 'PRO') ? 5 : (currentMode === 'STORY' ? document.getElementById('duration').value : 1);
 
         setTimeout(() => {
-            output.innerHTML = "";
-            for (let i = 0; i < scenes; i++) {
-                renderWebviewBox(i, promptText);
+            area.innerHTML = "";
+            for (let i = 0; i < count; i++) {
+                renderScene(i, pText);
             }
-        }, 1000);
+        }, 800);
     }
 
-    function getPureCaption(index) {
-        return `CINEMATIC ANALYSIS FRAME #${index + 1}: This production scene has been meticulously synthesized to capture the essence of high-end visual storytelling. The composition emphasizes a deep atmospheric perspective, where every element from the foreground textures to the distant lighting is balanced to create a sense of absolute realism. In this frame, the narrative depth is enhanced through professional color grading and a cinematic wide-angle field of view, making it ideal for large-scale production. The interplay between light and shadow here is not merely functional but serves to drive the emotional core of the scene, ensuring that viewers remain fully immersed in the world being created. As part of a larger sequence, this specific visual milestone provides the necessary aesthetic continuity required for 4K cinematic exports. SadSha AI ensures that the intricate details of the requested vision are translated into a professional-grade image that stands at the intersection of technology and art.`;
+    function generateCaptionText(index) {
+        return `SCENE PRODUCTION ANALYSIS #${index + 1}: This visual sequence has been meticulously generated to align with the highest standards of cinematic production. The composition utilizes advanced lighting algorithms to ensure a professional interplay of highlights and shadows, creating a deep sense of immersion for the viewer. Every texture within the frame, from the foreground details to the atmospheric background, is balanced to maintain visual continuity throughout the production. \n\nThe color grading is optimized for high-contrast cinematic displays, emphasizing a moody yet realistic aesthetic. This specific frame serves as a core narrative pillar, bridging the gap between raw imagination and high-fidelity output. As part of the SadSha AI vertical workflow, this result is ready for 4K export and professional editing. The narrative depth provided here ensures that each production carries a unique artistic signature, tailored specifically to the creative requirements of the project.`;
     }
 
-    function renderWebviewBox(index, text) {
+    function renderScene(idx, text) {
         const area = document.getElementById('output-area');
         const card = document.createElement('div');
         card.className = 'scene-card';
         
-        // Load balancing across 9 Webview URLs
-        const webviewUrl = hfWebviews[index % hfWebviews.length];
+        // Load balancing across 9 spaces
+        const spaceUrl = webviewEndpoints[idx % webviewEndpoints.length];
 
         card.innerHTML = `
             <div class="scene-media">
-                <iframe src="${webviewUrl}" allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"></iframe>
+                <iframe src="${spaceUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
             <div class="scene-info">
-                <span style="color:var(--gold); font-size:11px; font-weight:bold; letter-spacing:2px;">SCENE ${index + 1}</span>
-                <h2 style="margin:10px 0;">AI Visual Frame</h2>
-                <div class="caption-box">${getPureCaption(index)}</div>
+                <span style="color:var(--gold); font-size:12px; font-weight:bold; letter-spacing:3px;">SCENE ${idx + 1}</span>
+                <h2>AI Visual Frame</h2>
+                <div class="caption-box">${generateCaptionText(idx)}</div>
             </div>
         `;
         area.appendChild(card);
