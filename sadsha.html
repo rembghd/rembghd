@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SadSha AI Agent | Premium Visuals</title>
+    <style>
+        body { background-color: #0f0f0f; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        .header { padding: 20px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        .pricing-btn { background: linear-gradient(45deg, #FFD700, #DAA520); color: black; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+        
+        .main-container { padding: 40px 20px; max-width: 1200px; margin: auto; }
+        .tier-row { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
+        
+        /* Tier Card Styling */
+        .tier-card { background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 20px; width: 300px; transition: 0.3s; position: relative; }
+        .tier-card:hover { transform: translateY(-10px); border-color: #555; }
+        .gold-border { border: 2px solid #FFD700; }
+        .diamond-border { border: 2px solid #00f2ff; }
+        
+        .status-badge { font-size: 12px; padding: 4px 8px; border-radius: 4px; background: #333; margin-bottom: 10px; display: inline-block; }
+        
+        input[type="text"] { width: 90%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #222; color: white; }
+        .generate-btn { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
+        /* Activation Area */
+        .activation-box { margin-top: 50px; background: #111; padding: 30px; border-radius: 10px; border: 1px dashed #555; }
+        .promo-text { color: #aaa; font-size: 14px; margin-top: 10px; }
+        .promo-text a { color: #FFD700; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">SadSha <span>AI</span></div>
+    <a href="sadsha-pro.html" class="pricing-btn">Get Gold & Diamond Access</a>
+</div>
+
+<div class="main-container">
+    <h2>Select Your Engine</h2>
+    <p>Daily Trial Limits: 2 Posts for Premium Servers</p>
+
+    <div class="tier-row">
+        <div class="tier-card">
+            <span class="status-badge">Standard Quality</span>
+            <h3>Lite Mode</h3>
+            <p>50/50 Daily Limit</p>
+            <input type="text" placeholder="Describe your image...">
+            <button class="generate-btn" style="background: #444; color: white;">Generate (Free)</button>
+        </div>
+
+        <div class="tier-card gold-border">
+            <span class="status-badge" style="background: #FFD700; color: black;">HD Quality</span>
+            <h3>Gold Server</h3>
+            <p id="gold-limit">Trial: 2/2 Left</p>
+            <input type="text" id="gold-input" placeholder="Enter prompt...">
+            <button class="generate-btn" style="background: #FFD700; color: black;">Generate Gold</button>
+            <div class="promo-text">Need 30/40 chars <a href="sadsha-pro.html">Activation Code?</a></div>
+        </div>
+
+        <div class="tier-card diamond-border">
+            <span class="status-badge" style="background: #00f2ff; color: black;">Ultra-Realistic</span>
+            <h3>Diamond Server</h3>
+            <p id="diamond-limit">Trial: 2/2 Left</p>
+            <input type="text" id="diamond-input" placeholder="Enter viral prompt...">
+            <button class="generate-btn" style="background: #00f2ff; color: black;">Generate Diamond</button>
+            <div class="promo-text">Get <a href="sadsha-pro.html">50 chars Combo Code</a></div>
+        </div>
+    </div>
+
+    <div class="activation-box">
+        <h3>Activate Full Access</h3>
+        <input type="text" id="activation-code" placeholder="Enter 30, 40, or 50 Character Code..." style="width: 50%; border: 1px solid #FFD700;">
+        <br>
+        <button class="generate-btn" style="width: 200px; margin-top: 10px; background: #222; color: #FFD700; border: 1px solid #FFD700;">Verify Code</button>
+    </div>
+</div>
+
+<footer style="margin-top: 100px; padding: 20px; color: #555; border-top: 1px solid #222;">
+    &copy; 2026 RembgHD - SadSha AI Division
+</footer>
+
+</body>
+</html>
