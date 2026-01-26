@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA AI | Elite Production Floor</title>
+    <title>SADSHA AI | Professional Narrative</title>
     <style>
         :root { --gold: #FFD700; --bg: #000; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px; }
-        .header { text-align: center; padding: 20px 0; }
-        .logo { height: 80px; mix-blend-mode: screen; }
+        .header { text-align: center; padding: 25px 0; }
+        .logo { height: 75px; mix-blend-mode: screen; }
 
         .container { max-width: 1400px; width: 95%; display: flex; flex-direction: column; gap: 20px; }
 
-        .control-panel { background: #0a0a0a; border: 1px solid #222; padding: 20px; border-radius: 20px; display: flex; gap: 10px; }
+        .control-panel { background: #0a0a0a; border: 1px solid #222; padding: 20px; border-radius: 20px; display: flex; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         #prompt-in { flex: 1; background: transparent; border: 1px solid #333; padding: 15px; color: white; border-radius: 12px; font-size: 16px; outline: none; }
         .btn-run { background: var(--gold); color: #000; border: none; padding: 0 40px; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
 
@@ -22,13 +22,13 @@
 
         .shorts-frame { width: 350px; height: 622px; }
         .wide-frame { flex: 1; height: 622px; }
-
-        /* Stable Images - No Zoom */
         img { width: 100%; height: 100%; object-fit: cover; display: none; }
         
-        .narrative-strip { background: #050505; border: 1px solid #222; border-radius: 20px; padding: 30px; margin-top: 10px; text-align: center; }
-        .narrative-strip span { color: var(--gold); font-size: 11px; letter-spacing: 5px; text-transform: uppercase; display: block; margin-bottom: 10px; }
-        #ai-caption { font-size: 18px; color: #999; line-height: 1.6; font-style: italic; max-width: 900px; margin: 0 auto; }
+        /* NEW CAPTION DESIGN */
+        .narrative-strip { background: #050505; border: 1px solid #222; border-radius: 20px; padding: 40px; margin-top: 10px; position: relative; }
+        .narrative-strip::before { content: '“'; position: absolute; top: 10px; left: 20px; font-size: 80px; color: #111; font-family: serif; }
+        .narrative-strip span { color: var(--gold); font-size: 11px; letter-spacing: 5px; text-transform: uppercase; display: block; margin-bottom: 15px; text-align: center; }
+        #ai-caption { font-size: 20px; color: #ccc; line-height: 1.6; font-style: italic; max-width: 900px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
 
         .loader { border: 3px solid #111; border-top: 3px solid var(--gold); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -42,19 +42,18 @@
 
     <div class="container">
         <div class="control-panel">
-            <input type="text" id="prompt-in" placeholder="Describe cinematic production (e.g. Vintage 1969 Moon Landing, 8k, FLUX style)...">
-            <button class="btn-run" onclick="generateProduction()">Run Production</button>
+            <input type="text" id="prompt-in" placeholder="Production Vision (e.g. Victorian London in Rain, 8k)...">
+            <button class="btn-run" onclick="generateAll()">Execute Production</button>
         </div>
 
         <div class="production-floor">
             <div class="frame shorts-frame">
-                <div class="badge">9:16 SHORTS</div>
+                <div class="badge">9:16 VERTICAL</div>
                 <div class="loader" id="l1"></div>
                 <img id="img-shorts">
             </div>
-
             <div class="frame wide-frame">
-                <div class="badge">16:9 CINEMATIC WIDE</div>
+                <div class="badge">16:9 CINEMATIC</div>
                 <div class="loader" id="l2"></div>
                 <img id="img-wide">
             </div>
@@ -62,12 +61,12 @@
 
         <div class="narrative-strip">
             <span>Production Narrative</span>
-            <div id="ai-caption">Awaiting visual synchronization for dual-frame output...</div>
+            <div id="ai-caption">Awaiting synchronization for high-fidelity narrative output...</div>
         </div>
     </div>
 
 <script>
-    async function generateProduction() {
+    async function generateAll() {
         const prompt = document.getElementById('prompt-in').value;
         if(!prompt) return;
 
@@ -77,24 +76,28 @@
 
         l1.style.display = l2.style.display = "block";
         imgS.style.display = imgW.style.display = "none";
-        caption.innerHTML = "Processing FLUX cinematic engine...";
+        caption.innerHTML = "Processing neural narrative clusters...";
 
-        // Using a high-quality stable mirror for FLUX to avoid Iframe blocks
         const seed = Math.floor(Math.random()*99999);
-        const base = "https://image.pollinations.ai/prompt/"; // Yahan sirf endpoint change hoga agar aapka apna FLUX API hai
-
-        imgS.src = `${base}${encodeURIComponent('Vertical, 9:16, ' + prompt)}?width=720&height=1280&nologo=true&seed=${seed}`;
-        imgW.src = `${base}${encodeURIComponent('Wide angle, 16:9, ' + prompt)}?width=1280&height=720&nologo=true&seed=${seed}`;
+        
+        // IMAGES (Stay on FLUX style via High-Speed Mirror)
+        imgS.src = `https://image.pollinations.ai/prompt/Vertical,9:16,cinematic,8k,${encodeURIComponent(prompt)}?width=720&height=1280&nologo=true&seed=${seed}`;
+        imgW.src = `https://image.pollinations.ai/prompt/Wideangle,16:9,masterpiece,8k,${encodeURIComponent(prompt)}?width=1280&height=720&nologo=true&seed=${seed}`;
 
         imgS.onload = () => { l1.style.display = "none"; imgS.style.display = "block"; };
         imgW.onload = () => { l2.style.display = "none"; imgW.style.display = "block"; };
 
+        // NEW CAPTION ENGINE (Using a more professional Text API)
         try {
-            const res = await fetch(`https://text.pollinations.ai/Write%20a%20deep%20atmospheric%20one-paragraph%20caption%20for:%20${encodeURIComponent(prompt)}.%20Do%20NOT%20mention%20technical%20prompt%20words.%20Max%2040%20words.`);
-            let data = await res.text();
-            caption.innerHTML = `"${data.replace(/\{.*\}|assistant|content|reasoning|/gs, "").trim()}"`;
+            // Using a refined prompt to get a much better 'story-teller' vibe
+            const response = await fetch(`https://text.pollinations.ai/As%20a%20professional%20cinematographer,%20write%20a%20single%20evocative%20and%20poetic%20sentence%20about%20this%20scene:%20${encodeURIComponent(prompt)}.%20No%20intro,%20no%20metadata,%20just%20the%20sentence.`);
+            let data = await response.text();
+            
+            // Removing any AI-isms
+            let clean = data.replace(/\{.*\}|assistant|content|reasoning|Here is a|Sentence:|"/gs, "").trim();
+            caption.innerHTML = `"${clean}"`;
         } catch (e) {
-            caption.innerHTML = "Visuals generated via FLUX. Narrative offline.";
+            caption.innerHTML = "Visuals locked. Narrative engine offline.";
         }
     }
 </script>
