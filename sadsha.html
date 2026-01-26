@@ -8,21 +8,17 @@
         :root { --gold: #FFD700; --bg: #000000; --card: #111111; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
 
-        /* Header Section */
         .header-section { text-align: center; padding: 40px 20px; width: 100%; }
         .logo-img { height: 160px; width: auto; mix-blend-mode: screen; display: block; margin: 0 auto; }
         .tagline { font-size: 13px; color: #555; letter-spacing: 5px; text-transform: uppercase; margin-top: 5px; }
 
         .container { max-width: 1200px; width: 95%; margin-bottom: 100px; }
 
-        /* Mode Selection Tabs */
         .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 30px 0; }
-        .mode-card { background: var(--card); border: 1px solid #222; padding: 25px 10px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .mode-card { background: var(--card); border: 1px solid #222; padding: 25px 10px; border-radius: 12px; text-align: center; cursor: pointer; }
         .mode-card.active { border-color: var(--gold); background: #0c0c02; border-bottom: 3px solid var(--gold); }
-        .mode-card h3 { margin: 0 0 8px; font-size: 16px; }
-        .mode-card p { font-size: 10px; color: #666; text-transform: uppercase; }
 
-        /* Integrated Scene Card (Replacing Input Box) */
+        /* SCENE CARD WITH PRECISION CROP */
         .scene-card { 
             background: #0a0a0a; 
             border: 1px solid #222; 
@@ -30,53 +26,41 @@
             overflow: hidden; 
             display: flex; 
             flex-direction: row; 
-            min-height: 750px; 
+            min-height: 700px; /* Reduced height to keep it tight */
             margin-top: 20px;
         }
 
-        /* Webview Crop Logic */
         .webview-frame { 
             flex: 1.4; 
             position: relative; 
-            overflow: hidden; 
-            background: #000;
+            overflow: hidden; /* This hides the parts we push outside */
+            background: #fff;
             border-right: 1px solid #1a1a1a;
         }
 
         .webview-frame iframe { 
             position: absolute; 
-            top: -160px; /* Adjust this to hide FLUX header */
+            /* UPAR KA CUT: -110px tak rakha hai taake prompt box top par sahi nazar aaye */
+            top: -110px; 
             left: 0; 
             width: 100%; 
-            height: calc(100% + 160px); 
+            /* NICHE KA CUT: Height barha di taake footer niche nikal jaye */
+            height: calc(100% + 180px); 
             border: none;
         }
 
-        .scene-info { 
-            flex: 1; 
-            padding: 40px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-        }
-
+        .scene-info { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
         .scene-info span { color: var(--gold); font-size: 11px; font-weight: bold; letter-spacing: 3px; margin-bottom: 10px; display: block; }
         .scene-info h2 { font-size: 24px; margin-bottom: 20px; color: #fff; }
 
         .caption-box { 
-            font-size: 15px; 
-            color: #aaa; 
-            line-height: 1.8; 
-            background: #000; 
-            padding: 25px; 
-            border-radius: 12px; 
-            border: 1px solid #1a1a1a; 
-            text-align: justify; 
+            font-size: 15px; color: #aaa; line-height: 1.8; background: #000; 
+            padding: 25px; border-radius: 12px; border: 1px solid #1a1a1a; text-align: justify; 
         }
 
         @media (max-width: 1000px) {
             .scene-card { flex-direction: column; }
-            .webview-frame { height: 500px; border-right: none; }
+            .webview-frame { height: 550px; border-right: none; }
         }
     </style>
 </head>
@@ -89,33 +73,21 @@
 
     <div class="container">
         <div class="mode-grid">
-            <div class="mode-card active" id="lite">
-                <h3>Standard Lite</h3>
-                <p>Vertical AI Frame</p>
-            </div>
-            <div class="mode-card" onclick="alert('Switching to Cinema Pro Batch...')">
-                <h3>Cinema Pro</h3>
-                <p>5-Scene Cluster</p>
-            </div>
-            <div class="mode-card" onclick="alert('Switching to Story Master Narrative...')">
-                <h3>Story Master</h3>
-                <p>Narrative Kit</p>
-            </div>
+            <div class="mode-card active"><h3>Standard Lite</h3><p>Vertical AI Frame</p></div>
+            <div class="mode-card"><h3>Cinema Pro</h3><p>5-Scene Cluster</p></div>
+            <div class="mode-card"><h3>Story Master</h3><p>Narrative Kit</p></div>
         </div>
 
-        <div id="main-display">
-            <div class="scene-card">
-                <div class="webview-frame">
-                    <iframe src="https://black-forest-labs-flux-1-schnell.hf.space"></iframe>
-                </div>
-                
-                <div class="scene-info">
-                    <span>PRODUCTION UNIT: LITE-01</span>
-                    <h2>AI Visual Frame</h2>
-                    
-                    <div class="caption-box">
-                        This visual sequence has been meticulously generated to align with the highest standards of cinematic production. The composition utilizes advanced lighting to ensure a professional interplay of highlights and shadows, creating a deep sense of immersion. Every texture within the frame, from foreground details to atmospheric backgrounds, is balanced to maintain visual continuity. Optimized for SadSha AI's vertical workflow, this result is ready for professional export.
-                    </div>
+        <div class="scene-card">
+            <div class="webview-frame">
+                <iframe src="https://black-forest-labs-flux-1-schnell.hf.space"></iframe>
+            </div>
+            
+            <div class="scene-info">
+                <span>PRODUCTION UNIT: LITE-01</span>
+                <h2>AI Visual Frame</h2>
+                <div class="caption-box">
+                    This visual sequence has been meticulously generated to align with the highest standards of cinematic production. The composition utilizes advanced lighting to ensure a professional interplay of highlights and shadows, creating a deep sense of immersion. Every texture within the frame, from foreground details to atmospheric backgrounds, is balanced to maintain visual continuity.
                 </div>
             </div>
         </div>
