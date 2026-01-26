@@ -15,7 +15,7 @@
         .main-container { padding: 40px 20px; max-width: 1200px; margin: auto; }
         .tier-row { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; }
         
-        /* Three Windows Design */
+        /* Three Windows Design - Intact */
         .tier-card { background: #1a1a1a; border: 1px solid #333; border-radius: 15px; padding: 25px; width: 320px; transition: 0.3s; position: relative; }
         .tier-card:hover { transform: translateY(-5px); border-color: #555; }
         .gold-border { border: 2px solid #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.1); }
@@ -50,7 +50,7 @@
             <h3>Lite Mode</h3>
             <p style="color: #00ff88;">Unlimited (Standard)</p>
             <input type="text" id="lite-input" placeholder="Quick describe...">
-            <button class="generate-btn" style="background: #333; color: white;" onclick="window.location.href='sadsha-free.html'">Open Lite Engine</button>
+            <button class="generate-btn" style="background: #333; color: white;" onclick="openLite()">Open Lite Engine</button>
         </div>
 
         <div class="tier-card gold-border">
@@ -110,6 +110,12 @@
         btn.onclick = () => { window.location.href = 'sadsha-pro.html'; };
     }
 
+    // --- NEW: Lite Engine Redirect with Prompt Transfer ---
+    function openLite() {
+        const p = document.getElementById('lite-input').value;
+        window.location.href = `sadsha-free.html?p=${encodeURIComponent(p)}`;
+    }
+
     async function handleGen(server) {
         const inputField = document.getElementById(`${server}-input`);
         const prompt = inputField.value;
@@ -120,30 +126,19 @@
         document.getElementById('output-image').style.display = 'none';
         document.getElementById('dl-btn').style.display = 'none';
 
-        if(server === 'lite') {
-            // Pollinations Logic (Safe-kept inside script for future main-page use)
-            const pollUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&nologo=true`;
-            document.getElementById('output-image').src = pollUrl;
-            document.getElementById('output-image').onload = () => {
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('output-image').style.display = 'inline-block';
-                document.getElementById('dl-btn').style.display = 'inline-block';
-            };
-        } else {
-            if(server === 'gold') { goldTrials--; localStorage.setItem('sadsha_gold', goldTrials); }
-            if(server === 'diamond') { diamondTrials--; localStorage.setItem('sadsha_diamond', diamondTrials); }
-            updateUI();
+        if(server === 'gold') { goldTrials--; localStorage.setItem('sadsha_gold', goldTrials); }
+        if(server === 'diamond') { diamondTrials--; localStorage.setItem('sadsha_diamond', diamondTrials); }
+        updateUI();
 
-            try {
-                const res = await fetch(WORKER_URL, { method: 'POST', body: JSON.stringify({ prompt, serverType: server }) });
-                const data = await res.json();
-                document.getElementById('output-image').src = data.data[0]; 
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('output-image').style.display = 'inline-block';
-                document.getElementById('dl-btn').style.display = 'inline-block';
-            } catch(e) {
-                document.getElementById('loader').innerText = "Premium Server Connection Error!";
-            }
+        try {
+            const res = await fetch(WORKER_URL, { method: 'POST', body: JSON.stringify({ prompt, serverType: server }) });
+            const data = await res.json();
+            document.getElementById('output-image').src = data.data[0]; 
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('output-image').style.display = 'inline-block';
+            document.getElementById('dl-btn').style.display = 'inline-block';
+        } catch(e) {
+            document.getElementById('loader').innerText = "Premium Server Connection Error!";
         }
     }
 
