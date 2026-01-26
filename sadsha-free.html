@@ -10,21 +10,27 @@
         .nav a { color: #FFD700; text-decoration: none; font-weight: bold; }
         
         .container { padding: 20px; max-width: 800px; margin: auto; }
-        .header-box { background: #1a1a1a; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; }
+        .header-box { background: #1a1a1a; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; position: relative; }
         
-        input[type="text"] { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #444; background: #222; color: white; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; }
-        .gen-btn { width: 100%; padding: 15px; background: #00ff88; color: black; border: none; border-radius: 10px; font-weight: bold; font-size: 18px; cursor: pointer; }
+        .input-group { position: relative; }
+        input[type="text"] { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #444; background: #222; color: white; font-size: 16px; margin-bottom: 10px; box-sizing: border-box; }
+        
+        .enhance-btn { background: #8e44ad; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; margin-bottom: 15px; transition: 0.3s; }
+        .enhance-btn:hover { background: #9b59b6; }
+
+        .gen-btn { width: 100%; padding: 15px; background: #00ff88; color: black; border: none; border-radius: 10px; font-weight: bold; font-size: 18px; cursor: pointer; transition: 0.3s; }
+        .gen-btn:active { transform: scale(0.98); }
         
         .stats { display: flex; justify-content: space-around; margin: 15px 0; font-size: 14px; color: #aaa; }
-        .counter { color: #00ff88; font-weight: bold; }
+        .counter-val { color: #00ff88; font-weight: bold; }
 
-        /* Result area stays visible and on top */
-        #result-display { margin-top: 20px; min-height: 300px; background: #111; border-radius: 15px; border: 1px dashed #444; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .result-img { max-width: 100%; display: none; border-radius: 10px; }
+        #result-display { margin-top: 20px; min-height: 400px; background: #111; border-radius: 15px; border: 1px solid #333; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .result-img { max-width: 100%; display: none; border-radius: 10px; border: 1px solid #444; }
         .loader { display: none; color: #00ff88; font-weight: bold; animation: pulse 1.5s infinite; }
+        
         @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
         
-        .dl-btn { display: none; margin-top: 15px; background: #444; color: white; padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; width: 100%; }
+        .dl-btn { display: none; margin-top: 15px; background: #444; color: white; padding: 12px; border-radius: 8px; border: none; cursor: pointer; width: 100%; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -37,11 +43,14 @@
     <div class="header-box">
         <h2>Lite Mode (Free)</h2>
         <div class="stats">
-            <span>Daily Limit: <span class="counter">50/50</span></span>
+            <span>Daily Limit: <span class="counter-val" id="count-display">50/50</span></span>
             <span>Quality: <span style="color:white">Standard</span></span>
         </div>
-        <input type="text" id="prompt" placeholder="What do you want to create?">
-        <button class="gen-btn" onclick="generate()">Generate Masterpiece</button>
+        <div class="input-group">
+            <input type="text" id="prompt-input" placeholder="What do you want to create?">
+            <button class="enhance-btn" onclick="enhancePrompt()">✨ Auto Enhance Prompt</button>
+        </div>
+        <button id="main-gen-btn" class="gen-btn" onclick="generate()">Generate Masterpiece</button>
     </div>
 
     <div id="result-display">
@@ -52,17 +61,56 @@
 </div>
 
 <script>
-    async function generate() {
-        const prompt = document.getElementById('prompt').value;
-        if(!prompt) return alert("Write something first!");
+    // 1. URL se Prompt Lena (Transfer Logic)
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedPrompt = urlParams.get('p');
+        if (sharedPrompt) {
+            document.getElementById('prompt-input').value = decodeURIComponent(sharedPrompt);
+        }
+        updateCounterUI();
+    };
 
-        // Show Loader
+    // 2. Counter Logic
+    let freeLimit = localStorage.getItem('sadsha_free_limit') === null ? 50 : parseInt(localStorage.getItem('sadsha_free_limit'));
+
+    function updateCounterUI() {
+        document.getElementById('count-display').innerText = `${freeLimit}/50`;
+        if (freeLimit <= 0) {
+            document.getElementById('main-gen-btn').disabled = true;
+            document.getElementById('main-gen-btn').style.background = "#555";
+            document.getElementById('main-gen-btn').innerText = "Limit Reached!";
+        }
+    }
+
+    // 3. Prompt Enhancer Logic
+    function enhancePrompt() {
+        const current = document.getElementById('prompt-input').value;
+        if (!current) return alert("Kuch likhein toh sahi!");
+        const adjectives = ["ultra-detailed", "cinematic lighting", "8k resolution", "masterpiece", "vibrant colors", "highly professional"];
+        const randomAdj = adjectives[Math.floor(Math.random() * adjectives.length)] + ", " + adjectives[Math.floor(Math.random() * adjectives.length)];
+        document.getElementById('prompt-input').value = `${current}, ${randomAdj}`;
+    }
+
+    // 4. Generate Logic
+    async function generate() {
+        const prompt = document.getElementById('prompt-input').value;
+        if(!prompt) return alert("Write something first!");
+        if(freeLimit <= 0) return alert("Daily limit khatam!");
+
+        // Loader & UI update
         document.getElementById('loader').style.display = 'block';
         document.getElementById('output').style.display = 'none';
         document.getElementById('dl-btn').style.display = 'none';
         
-        // Pollinations AI logic
-        const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`;
+        // Counter decrease
+        freeLimit--;
+        localStorage.setItem('sadsha_free_limit', freeLimit);
+        updateCounterUI();
+
+        // Pollinations URL
+        const seed = Math.floor(Math.random() * 9999999);
+        const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&nologo=true&seed=${seed}`;
         
         const img = document.getElementById('output');
         img.src = url;
@@ -71,7 +119,6 @@
             document.getElementById('loader').style.display = 'none';
             img.style.display = 'block';
             document.getElementById('dl-btn').style.display = 'block';
-            // Scroll to result for mobile users just in case
             img.scrollIntoView({ behavior: 'smooth' });
         };
     }
@@ -79,7 +126,7 @@
     function download() {
         const a = document.createElement('a');
         a.href = document.getElementById('output').src;
-        a.download = `SadSha_Free_${Date.now()}.png`;
+        a.download = `SadSha_Lite_${Date.now()}.png`;
         a.click();
     }
 </script>
