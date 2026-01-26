@@ -6,91 +6,191 @@
     <title>SADSHA AI | Dashboard</title>
     <style>
         :root { --gold: #FFD700; --bg: #000000; --card: #111111; }
-        body { background: var(--bg); color: white; font-family: 'Inter', 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
         
-        /* Center Branding Section */
-        .branding { text-align: center; margin-bottom: 50px; }
+        body { 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            overflow-x: hidden;
+        }
+
+        /* Branding Section */
+        .header-section { 
+            text-align: center; 
+            padding: 50px 20px 30px; 
+            width: 100%; 
+        }
+        
         .logo-img { 
-    height: 180px; /* Isay aap 150px ya 180px kar lein, ye perfect size hai */
-    width: auto; 
-    mix-blend-mode: normal; /* Pure black background hai toh ab screen ki zaroorat nahi */
-    display: block;
-    margin: 0 auto;
-}
-        .tagline { font-size: 18px; color: #888; letter-spacing: 3px; text-transform: uppercase; font-weight: 300; }
+            height: 180px; /* Aapke bataye hue size ke mutabiq */
+            width: auto; 
+            mix-blend-mode: screen; /* Background merge fix */
+            display: block;
+            margin: 0 auto;
+        }
 
-        .container { max-width: 1000px; width: 100%; }
+        .tagline { 
+            font-size: 14px; 
+            color: #555; 
+            letter-spacing: 6px; 
+            text-transform: uppercase; 
+            margin-top: 10px;
+            font-weight: 300;
+        }
 
-        /* 3 Boxes Layout */
-        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-        .mode-card { background: var(--card); border: 1px solid #222; padding: 30px 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s ease; }
-        .mode-card:hover { border-color: #444; }
-        .mode-card.active { border-color: var(--gold); background: #0f0f03; box-shadow: 0 0 20px rgba(255, 215, 0, 0.05); }
-        .mode-card h3 { margin: 0 0 10px; font-size: 18px; color: #fff; }
+        .container { 
+            max-width: 1100px; 
+            width: 90%; 
+            margin-bottom: 100px;
+        }
+
+        /* 3-Box Mode Grid */
+        .mode-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px; 
+            margin: 40px 0; 
+        }
+
+        .mode-card { 
+            background: var(--card); 
+            border: 1px solid #222; 
+            padding: 30px 15px; 
+            border-radius: 15px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        .mode-card:hover { border-color: #444; transform: translateY(-3px); }
+
+        .mode-card.active { 
+            border-color: var(--gold); 
+            background: #0c0c02; 
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.05); 
+        }
+
+        .mode-card h3 { margin: 0 0 10px; font-size: 18px; color: #fff; text-transform: uppercase; }
         .mode-card p { font-size: 11px; color: #666; margin: 0; line-height: 1.5; }
 
         /* Input Area */
-        .input-box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid #222; }
-        textarea { width: 100%; padding: 20px; background: #080808; border: 1px solid #333; color: white; border-radius: 10px; font-size: 16px; box-sizing: border-box; outline: none; margin-bottom: 20px; transition: 0.3s; }
+        .input-box { 
+            background: #080808; 
+            padding: 30px; 
+            border-radius: 20px; 
+            border: 1px solid #1a1a1a; 
+        }
+
+        textarea { 
+            width: 100%; 
+            padding: 20px; 
+            background: #000; 
+            border: 1px solid #333; 
+            color: white; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            box-sizing: border-box; 
+            margin-bottom: 20px; 
+            outline: none; 
+            resize: none;
+            transition: 0.3s;
+        }
+        
         textarea:focus { border-color: var(--gold); }
-        
-        /* Story Master Dropdown - Hidden by default */
+
+        /* Story Master Options */
         #story-options { display: none; margin-bottom: 20px; }
-        .story-label { color: var(--gold); font-size: 12px; margin-bottom: 8px; display: block; font-weight: bold; }
-        select { background: #080808; color: #fff; border: 1px solid #333; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; }
-
-        .gen-btn { background: #ffffff; color: #000; font-weight: 900; padding: 20px; width: 100%; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; letter-spacing: 1px; transition: 0.3s; }
-        .gen-btn:hover { background: var(--gold); transform: translateY(-2px); }
-
-        /* Production Output Grid */
-        #output-area { margin-top: 50px; width: 100%; display: grid; gap: 30px; }
-        .scene-card { background: #0a0a0a; border: 1px solid #222; border-radius: 15px; display: flex; flex-direction: row; overflow: hidden; min-height: 280px; }
-        .scene-media { width: 450px; background: #000; }
-        .scene-info { padding: 30px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
-        iframe { width: 100%; height: 100%; border: none; }
+        .option-label { color: var(--gold); font-size: 12px; font-weight: bold; margin-bottom: 8px; display: block; }
         
-        @media (max-width: 768px) {
+        select { 
+            background: #000; 
+            color: #fff; 
+            border: 1px solid #333; 
+            padding: 12px; 
+            width: 100%; 
+            border-radius: 8px; 
+            outline: none;
+        }
+
+        .gen-btn { 
+            background: #ffffff; 
+            color: #000; 
+            font-weight: 800; 
+            padding: 20px; 
+            width: 100%; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            text-transform: uppercase;
+            transition: 0.3s; 
+        }
+
+        .gen-btn:hover { background: var(--gold); transform: scale(1.01); }
+
+        /* Results Display */
+        #output-area { margin-top: 50px; width: 100%; display: grid; gap: 30px; }
+        
+        .scene-card { 
+            background: #0a0a0a; 
+            border: 1px solid #222; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: row; 
+            min-height: 500px;
+        }
+
+        .scene-media { flex: 1.2; background: #000; position: relative; }
+        .scene-info { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+
+        iframe { width: 100%; height: 100%; border: none; }
+
+        @media (max-width: 850px) {
             .mode-grid { grid-template-columns: 1fr; }
             .scene-card { flex-direction: column; }
-            .scene-media { width: 100%; height: 250px; }
+            .scene-media { height: 400px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="branding">
+    <div class="header-section">
         <img src="https://raw.githubusercontent.com/rembghd/rembghd/main/logo.jpg.webp" alt="SadSha AI" class="logo-img">
         <div class="tagline">Crafting Tomorrow's Visuals</div>
     </div>
 
     <div class="container">
         <div class="mode-grid">
-            <div class="mode-card active" id="mode-lite" onclick="setMode('LITE')">
+            <div class="mode-card active" id="lite" onclick="setMode('LITE')">
                 <h3>Standard Lite</h3>
-                <p>High-Quality Single Scene<br>250 Word Script Narrative</p>
+                <p>Single Frame Production<br>250 Word Script</p>
             </div>
-            <div class="mode-card" id="mode-pro" onclick="setMode('PRO')">
+            <div class="mode-card" id="pro" onclick="setMode('PRO')">
                 <h3>Cinema Pro</h3>
-                <p>Ultra-HD 4K Images<br>Batch Mode (5 Variations)</p>
+                <p>5-Scene Cinematic Batch<br>Ultra-HD 4K Rendering</p>
             </div>
-            <div class="mode-card" id="mode-story" onclick="setMode('STORY')">
+            <div class="mode-card" id="story" onclick="setMode('STORY')">
                 <h3>Story Master</h3>
-                <p>15-Scene Content Kit<br>Full 5-Min Video Material</p>
+                <p>15-Scene Narrative Kit<br>Full 5-Min Production</p>
             </div>
         </div>
 
         <div class="input-box">
             <div id="story-options">
-                <span class="story-label">PRODUCTION DURATION:</span>
-                <select id="story-duration">
+                <span class="option-label">SELECT PRODUCTION SCALE:</span>
+                <select id="duration">
                     <option value="3">1 Minute (3 Scenes)</option>
                     <option value="8">3 Minutes (8 Scenes)</option>
                     <option value="15">5 Minutes (15 Scenes)</option>
                 </select>
             </div>
-
-            <textarea id="prompt" rows="4" placeholder="Describe your vision or story here..."></textarea>
-            <button class="gen-btn" onclick="startGeneration()">START PRODUCTION</button>
+            <textarea id="prompt" rows="3" placeholder="Describe the cinematic story or visual you want to create..."></textarea>
+            <button class="gen-btn" onclick="startProduction()">START PRODUCTION</button>
         </div>
 
         <div id="output-area"></div>
@@ -101,60 +201,62 @@
 
     function setMode(m) {
         selectedMode = m;
-        // UI Updates
+        // Update UI
         document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
-        if(m === 'LITE') document.getElementById('mode-lite').classList.add('active');
-        if(m === 'PRO') document.getElementById('mode-pro').classList.add('active');
-        if(m === 'STORY') document.getElementById('mode-story').classList.add('active');
+        document.getElementById(m.toLowerCase()).classList.add('active');
         
-        // Show dropdown only for Story mode
+        // Toggle Story Options
         document.getElementById('story-options').style.display = (m === 'STORY') ? 'block' : 'none';
     }
 
-    function startGeneration() {
-        const promptInput = document.getElementById('prompt').value;
-        const output = document.getElementById('output-area');
-        
-        if(!promptInput) { alert("Please enter a prompt!"); return; }
+    function startProduction() {
+        const promptValue = document.getElementById('prompt').value;
+        const outputArea = document.getElementById('output-area');
 
-        output.innerHTML = "<h3 style='text-align:center; color:var(--gold);'>AI is rendering your request...</h3>";
-        
+        if (!promptValue) {
+            alert("Please enter a prompt to begin!");
+            return;
+        }
+
+        // Show Loading State
+        outputArea.innerHTML = `<h2 style="text-align:center; color:var(--gold); margin-top:50px;">Rendering Your Vision...</h2>`;
+
         let totalScenes = 1;
-        if(selectedMode === 'PRO') totalScenes = 5;
-        if(selectedMode === 'STORY') totalScenes = document.getElementById('story-duration').value;
+        if (selectedMode === 'PRO') totalScenes = 5;
+        if (selectedMode === 'STORY') totalScenes = document.getElementById('duration').value;
 
-        // Small delay for "feel"
+        // Simulate Rendering Delay
         setTimeout(() => {
-            output.innerHTML = "";
-            for(let i=1; i<=totalScenes; i++) {
-                renderSceneBox(i, promptInput);
+            outputArea.innerHTML = ""; // Clear loader
+            for (let i = 1; i <= totalScenes; i++) {
+                renderScene(i, promptValue);
             }
-        }, 1200);
+        }, 1500);
     }
 
-    function renderSceneBox(index, text) {
+    function renderScene(index, promptText) {
         const area = document.getElementById('output-area');
         const card = document.createElement('div');
         card.className = 'scene-card';
-        
-        // Secret Obfuscated Engine URL
-        const engineBase = atob("aHR0cHM6Ly9wb2xsaW5hdGlvbnMuYWkvcy8="); 
-        const finalPrompt = encodeURIComponent(text + " cinematic scene " + index);
-        
+
+        // Using Pollinations/HuggingFace style URL for testing
+        const engineUrl = `https://pollinations.ai/p/${encodeURIComponent(promptText + " cinematic scene " + index)}?width=1080&height=1920&model=flux&nologo=true`;
+
         card.innerHTML = `
             <div class="scene-media">
-                <iframe src="${engineBase}${finalPrompt}?width=1080&height=1920&model=flux&nologo=true" scrolling="no"></iframe>
+                <iframe src="${engineUrl}" scrolling="no"></iframe>
             </div>
             <div class="scene-info">
-                <span style="color:var(--gold); font-size:12px; font-weight:bold;">SCENE ${index} [${selectedMode} MODE]</span>
-                <p style="color:#eee; font-size:14px; line-height:1.7; margin: 15px 0;">
-                    Your AI-generated script for Scene ${index} is ready. This narrative is optimized for vertical video formats like TikTok and Reels. 
+                <span style="color:var(--gold); font-size:12px; font-weight:bold; letter-spacing:2px;">SCENE ${index} [${selectedMode}]</span>
+                <h1 style="margin:15px 0; font-size:24px;">AI Visual Script</h1>
+                <p style="color:#777; line-height:1.8; margin-bottom:25px;">
+                    This scene has been processed using the SadSha AI engine. The visual above represents frame ${index} of your requested production.
                     <br><br>
-                    <strong>Prompt:</strong> ${text}
+                    <strong>Base Prompt:</strong> ${promptText}
                 </p>
                 <div style="display:flex; gap:10px;">
-                    <button style="flex:1; padding:10px; background:#222; color:#fff; border:1px solid #333; border-radius:5px; cursor:pointer;">Download Image</button>
-                    <button style="flex:1; padding:10px; background:#222; color:#fff; border:1px solid #333; border-radius:5px; cursor:pointer;">Copy Script</button>
+                    <button onclick="window.open('${engineUrl}')" style="flex:1; padding:12px; background:#1a1a1a; color:#fff; border:1px solid #333; border-radius:8px; cursor:pointer;">Full Resolution</button>
+                    <button style="flex:1; padding:12px; background:#1a1a1a; color:#fff; border:1px solid #333; border-radius:8px; cursor:pointer;">Copy Scene Script</button>
                 </div>
             </div>
         `;
