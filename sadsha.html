@@ -8,17 +8,19 @@
         :root { --gold: #FFD700; --bg: #000000; --card: #111111; }
         body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; }
 
+        /* Logo Section */
         .header-section { text-align: center; padding: 40px 20px; width: 100%; }
         .logo-img { height: 160px; width: auto; mix-blend-mode: screen; display: block; margin: 0 auto; }
         .tagline { font-size: 13px; color: #555; letter-spacing: 5px; text-transform: uppercase; margin-top: 5px; }
 
-        .container { max-width: 1200px; width: 95%; margin-bottom: 100px; }
+        .container { max-width: 1250px; width: 95%; margin-bottom: 100px; }
 
+        /* Mode Tabs */
         .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 30px 0; }
         .mode-card { background: var(--card); border: 1px solid #222; padding: 25px 10px; border-radius: 12px; text-align: center; cursor: pointer; }
         .mode-card.active { border-color: var(--gold); background: #0c0c02; border-bottom: 3px solid var(--gold); }
 
-        /* SCENE CARD WITH PRECISION CROP */
+        /* PRODUCTION CARD */
         .scene-card { 
             background: #0a0a0a; 
             border: 1px solid #222; 
@@ -26,32 +28,34 @@
             overflow: hidden; 
             display: flex; 
             flex-direction: row; 
-            min-height: 700px; /* Reduced height to keep it tight */
+            min-height: 750px; 
             margin-top: 20px;
         }
 
+        /* WEBVIEW AREA: PRECISION CROP & STEALH */
         .webview-frame { 
-            flex: 1.4; 
+            flex: 1.5; 
             position: relative; 
-            overflow: hidden; /* This hides the parts we push outside */
-            background: #fff;
+            overflow: hidden; /* Important: Iske bahar ka sab hide hoga */
+            background: #000; /* Dark background before load */
             border-right: 1px solid #1a1a1a;
         }
 
         .webview-frame iframe { 
             position: absolute; 
-            /* UPAR KA CUT: -110px tak rakha hai taake prompt box top par sahi nazar aaye */
-            top: -110px; 
+            /* TOP CROP: Header hide karne ke liye */
+            top: -105px; 
+            /* RIGHT CROP: Share button hide karne ke liye right se thora barha diya */
             left: 0; 
-            width: 100%; 
-            /* NICHE KA CUT: Height barha di taake footer niche nikal jaye */
-            height: calc(100% + 180px); 
+            width: calc(100% + 45px); /* 45px extra taake share button right side se bahar nikal jaye */
+            /* BOTTOM CROP: Gradio/API footer hide karne ke liye */
+            height: calc(100% + 185px); 
             border: none;
         }
 
-        .scene-info { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+        .scene-info { flex: 1; padding: 45px; display: flex; flex-direction: column; justify-content: center; background: #050505; }
         .scene-info span { color: var(--gold); font-size: 11px; font-weight: bold; letter-spacing: 3px; margin-bottom: 10px; display: block; }
-        .scene-info h2 { font-size: 24px; margin-bottom: 20px; color: #fff; }
+        .scene-info h2 { font-size: 26px; margin-bottom: 20px; color: #fff; }
 
         .caption-box { 
             font-size: 15px; color: #aaa; line-height: 1.8; background: #000; 
@@ -60,7 +64,7 @@
 
         @media (max-width: 1000px) {
             .scene-card { flex-direction: column; }
-            .webview-frame { height: 550px; border-right: none; }
+            .webview-frame { height: 600px; border-right: none; }
         }
     </style>
 </head>
@@ -80,14 +84,14 @@
 
         <div class="scene-card">
             <div class="webview-frame">
-                <iframe src="https://black-forest-labs-flux-1-schnell.hf.space"></iframe>
+                <iframe src="https://black-forest-labs-flux-1-schnell.hf.space?__theme=dark" allowfullscreen></iframe>
             </div>
             
             <div class="scene-info">
                 <span>PRODUCTION UNIT: LITE-01</span>
                 <h2>AI Visual Frame</h2>
                 <div class="caption-box">
-                    This visual sequence has been meticulously generated to align with the highest standards of cinematic production. The composition utilizes advanced lighting to ensure a professional interplay of highlights and shadows, creating a deep sense of immersion. Every texture within the frame, from foreground details to atmospheric backgrounds, is balanced to maintain visual continuity.
+                    This visual sequence has been meticulously generated to align with the highest standards of cinematic production. The composition utilizes advanced lighting to ensure a professional interplay of highlights and shadows, creating a deep sense of immersion. Every texture within the frame, from foreground details to atmospheric backgrounds, is balanced to maintain visual continuity. Optimized for SadSha AI's vertical workflow, this result is ready for professional export.
                 </div>
             </div>
         </div>
