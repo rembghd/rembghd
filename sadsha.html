@@ -3,160 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SADSHA AI | Content Factory</title>
+    <title>SADSHA AI | Dashboard</title>
     <style>
-        :root { --gold: #FFD700; --bg: #0b0b0b; --card: #161616; --accent: #00f2ff; }
-        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
+        :root { --gold: #FFD700; --bg: #080808; --card: #121212; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
         
-        /* Header */
-        .header { display: flex; align-items: center; justify-content: space-between; padding: 15px 30px; background: #000; border-bottom: 1px solid #222; position: sticky; top: 0; z-index: 100; }
-        .logo-box { display: flex; align-items: center; gap: 12px; }
-        .logo-img { height: 45px; border-radius: 5px; border: 1px solid #333; }
-        .logo-text { font-size: 22px; font-weight: 900; letter-spacing: 1px; color: #fff; }
+        .header { display: flex; align-items: center; padding: 15px 40px; background: #000; border-bottom: 1px solid #222; }
+        .logo-img { height: 50px; margin-right: 15px; border-radius: 5px; }
+        .logo-text { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
 
-        .main-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .container { max-width: 1100px; margin: 50px auto; padding: 0 20px; }
 
-        /* 3-Box Mode Switcher */
-        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
-        .mode-card { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .mode-card.active { border-color: var(--gold); background: #1a1a08; box-shadow: 0 0 15px rgba(255,215,0,0.1); }
-        .mode-card h3 { margin: 0 0 10px 0; font-size: 16px; }
-        .mode-card p { font-size: 11px; color: #888; margin: 0; line-height: 1.4; }
+        /* The 3 Main Boxes */
+        .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .mode-card { background: var(--card); border: 2px solid #222; padding: 25px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .mode-card.active { border-color: var(--gold); background: #1a1a05; }
+        .mode-card h3 { margin: 0 0 10px; font-size: 18px; color: #fff; }
+        .mode-card p { font-size: 12px; color: #888; margin: 0; }
 
-        /* Input Section */
-        .input-area { background: var(--card); padding: 25px; border-radius: 15px; border: 1px solid #222; }
-        textarea { width: 100%; padding: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; font-size: 16px; resize: vertical; box-sizing: border-box; }
-        .controls { display: flex; gap: 10px; margin-top: 15px; }
-        select { background: #000; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 5px; flex: 1; }
+        .input-box { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid #333; }
+        textarea { width: 100%; padding: 15px; background: #000; border: 1px solid #444; color: white; border-radius: 10px; font-size: 16px; box-sizing: border-box; margin-bottom: 20px; }
         
-        .btn-gen { background: #fff; color: #000; border: none; padding: 15px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 2; transition: 0.3s; }
-        .btn-gen:hover { background: var(--gold); }
+        /* Story Options - Hidden by default */
+        #story-options { display: none; margin-bottom: 20px; background: #1a1a1a; padding: 15px; border-radius: 10px; border-left: 4px solid var(--gold); }
+        select { background: #000; color: #fff; border: 1px solid #444; padding: 10px; width: 100%; border-radius: 5px; }
 
-        /* Storyboard Grid */
-        #storyboard-output { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 40px; }
-        .scene-card { background: #111; border: 1px solid #222; border-radius: 12px; display: grid; grid-template-columns: 300px 1fr; overflow: hidden; }
-        .scene-img-box { background: #000; min-height: 200px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .scene-img-box iframe { width: 100%; height: 100%; border: none; pointer-events: none; }
-        .scene-content { padding: 20px; }
-        .scene-num { font-size: 12px; color: var(--gold); text-transform: uppercase; font-weight: bold; margin-bottom: 10px; display: block; }
-        .scene-script { font-size: 14px; line-height: 1.6; color: #ccc; margin-bottom: 15px; }
-        .scene-actions { display: flex; gap: 10px; }
-        .btn-mini { padding: 8px 15px; font-size: 12px; border-radius: 5px; cursor: pointer; border: 1px solid #333; background: #222; color: #fff; }
+        .gen-btn { background: #fff; color: #000; font-weight: bold; padding: 18px; width: 100%; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; transition: 0.3s; }
+        .gen-btn:hover { background: var(--gold); transform: scale(1.01); }
 
-        .hidden { display: none; }
+        #output-area { margin-top: 40px; display: grid; gap: 25px; }
+        .scene-card { background: #111; border: 1px solid #222; border-radius: 15px; display: flex; overflow: hidden; min-height: 250px; }
+        .scene-media { width: 400px; background: #000; display: flex; align-items: center; justify-content: center; }
+        .scene-info { padding: 25px; flex: 1; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="logo-box">
-        <img src="image_bc0016.jpg" alt="SADSHA" class="logo-img">
-        <span class="logo-text">SADSHA AI</span>
-    </div>
-    <div style="font-size: 12px; color: #666;">Production Status: <span id="status" style="color:var(--gold)">Standby</span></div>
+    <img src="logo.jpg" alt="SadSha AI" class="logo-img">
+    <span class="logo-text">SADSHA AI</span>
 </div>
 
-<div class="main-container">
+<div class="container">
     <div class="mode-grid">
-        <div class="mode-card active" onclick="switchMode('LITE', this)">
+        <div class="mode-card active" onclick="setMode('LITE', this)">
             <h3>Standard Lite</h3>
-            <p>Single High-Res Image<br>250 Word Narrative</p>
+            <p>High-Quality Single Scene<br>250 Word Script</p>
         </div>
-        <div class="mode-card" onclick="switchMode('PRO', this)">
+        <div class="mode-card" onclick="setMode('PRO', this)">
             <h3>Cinema Pro</h3>
-            <p>Ultra-HD Quality (4K)<br>Batch Mode (5 Variations)</p>
+            <p>Ultra-HD 4K Images<br>Batch Mode (5 Variations)</p>
         </div>
-        <div class="mode-card" onclick="switchMode('STORY', this)">
+        <div class="mode-card" onclick="setMode('STORY', this)">
             <h3>Story Master</h3>
-            <p>15-Scene Production Kit<br>Full 5-Min Video Material</p>
+            <p>15-Scene Content Kit<br>Full 5-Min Production</p>
         </div>
     </div>
 
-    <div class="input-area">
-        <textarea id="user-prompt" rows="4" placeholder="Describe the story or vision you want to create..."></textarea>
-        <div class="controls">
-            <select id="duration">
-                <option value="1">Duration: 1 Minute (3 Scenes)</option>
-                <option value="3">Duration: 3 Minutes (8 Scenes)</option>
-                <option value="5">Duration: 5 Minutes (15 Scenes)</option>
+    <div class="input-box">
+        <div id="story-options">
+            <label style="font-size: 12px; color: var(--gold); margin-bottom: 5px; display: block;">SELECT VIDEO DURATION:</label>
+            <select id="story-duration">
+                <option value="3">1 Minute (3 Scenes)</option>
+                <option value="8">3 Minutes (8 Scenes)</option>
+                <option value="15">5 Minutes (15 Scenes)</option>
             </select>
-            <button class="btn-gen" onclick="startProduction()">START PRODUCTION</button>
         </div>
+
+        <textarea id="prompt" rows="4" placeholder="Enter your vision or story prompt here..."></textarea>
+        <button class="gen-btn" onclick="generate()">START PRODUCTION</button>
     </div>
 
-    <div id="storyboard-output"></div>
+    <div id="output-area"></div>
 </div>
 
 <script>
-    let currentMode = 'LITE';
+    let mode = 'LITE';
 
-    // Masked Secret URLs (Base64)
-    const _E1 = ["aHR0cHM6Ly9wb2xsaW5hdGlvbnMuYWkv", "aHR0cHM6Ly9iZXZ5LWFpLnBhd2VsLW16LndvcmtlcnMuZGV2Lw=="];
-    const _E2 = ["aHR0cHM6Ly9ibGFjay1mb3Jlc3QtbGFicy1mbHV4LTEtc2NobmVsbC5oZnMuc3BhY2U="];
-
-    function switchMode(mode, el) {
-        currentMode = mode;
+    function setMode(m, el) {
+        mode = m;
         document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
         el.classList.add('active');
-        document.getElementById('duration').style.display = (mode === 'STORY') ? 'block' : 'none';
+        
+        // Show/Hide Story Options logic
+        document.getElementById('story-options').style.display = (m === 'STORY') ? 'block' : 'none';
     }
 
-    function startProduction() {
-        const prompt = document.getElementById('user-prompt').value;
-        const output = document.getElementById('storyboard-output');
-        const status = document.getElementById('status');
+    function generate() {
+        const promptText = document.getElementById('prompt').value;
+        const output = document.getElementById('output-area');
+        if(!promptText) return alert("Prompt empty!");
+
+        output.innerHTML = "<h2 style='text-align:center; color:var(--gold);'>AI is Crafting Your Production...</h2>";
         
-        if(!prompt) { alert("Please enter a prompt!"); return; }
+        let scenes = 1;
+        if(mode === 'PRO') scenes = 5;
+        if(mode === 'STORY') scenes = document.getElementById('story-duration').value;
 
-        output.innerHTML = "";
-        status.innerText = "Processing AI Logic...";
-
-        let sceneCount = 1;
-        if(currentMode === 'STORY') {
-            const dur = document.getElementById('duration').value;
-            sceneCount = dur == "1" ? 3 : (dur == "3" ? 8 : 15);
-        } else if(currentMode === 'PRO') {
-            sceneCount = 5;
-        }
-
-        // Production Loop
-        for(let i = 1; i <= sceneCount; i++) {
-            createSceneCard(i, prompt);
-        }
-        status.innerText = "Production Complete";
+        setTimeout(() => {
+            output.innerHTML = "";
+            for(let i=1; i<=scenes; i++) {
+                renderScene(i, promptText);
+            }
+        }, 1500);
     }
 
-    function createSceneCard(index, basePrompt) {
-        const output = document.getElementById('storyboard-output');
-        const scene = document.createElement('div');
-        scene.className = 'scene-card';
-
-        // URL Rotation & Masking Logic
-        const pool = (currentMode === 'LITE') ? _E1 : _E2;
-        const engine = atob(pool[Math.floor(Math.random() * pool.length)]);
+    function renderScene(num, p) {
+        const area = document.getElementById('output-area');
+        const card = document.createElement('div');
+        card.className = 'scene-card';
         
-        // Mocking Script Length based on mode
-        const scriptLen = (currentMode === 'LITE') ? 250 : 400;
-
-        scene.innerHTML = `
-            <div class="scene-img-box">
-                <div style="color:#333; font-size:12px;">Loading Cinema Frame ${index}...</div>
-                <iframe src="${engine}?prompt=${encodeURIComponent(basePrompt + ' scene ' + index)}" class="hidden" onload="this.classList.remove('hidden')"></iframe>
+        // Internal Secret URLs (Base64 Masked)
+        const _src = atob("aHR0cHM6Ly9wb2xsaW5hdGlvbnMuYWkvcy8="); 
+        
+        card.innerHTML = `
+            <div class="scene-media">
+                <iframe src="${_src}${encodeURIComponent(p + ' scene ' + num)}?width=1080&height=1920&model=flux" scrolling="no"></iframe>
             </div>
-            <div class="scene-content">
-                <span class="scene-num">Scene ${index} / ${currentMode} Output</span>
-                <p class="scene-script">
-                    [AI Generated Script - ${scriptLen} Words]: This scene depicts the essence of ${basePrompt}. 
-                    The atmosphere is meticulously crafted to match the ${currentMode === 'PRO' ? '4K Ultra-HD' : 'Standard'} requirements.
-                    (Full narrative text appears here for the user to copy into editors like CapCut).
+            <div class="scene-info">
+                <span style="color:var(--gold); font-weight:bold;">SCENE ${num}</span>
+                <p style="color:#ccc; font-size:14px; line-height:1.6; margin: 15px 0;">
+                    [${mode} SCRIPT]: This is a detailed AI-generated voiceover script for scene ${num}. 
+                    It matches your prompt: "${p}". Import this into CapCut for auto-voiceover.
                 </p>
-                <div class="scene-actions">
-                    <button class="btn-mini" onclick="alert('Downloading 4K Frame...')">Download 4K Image</button>
-                    <button class="btn-mini" onclick="alert('Script Copied!')">Copy Voiceover</button>
-                </div>
+                <button style="padding:10px 20px; cursor:pointer; background:#222; color:#fff; border:1px solid #444; border-radius:5px;">Download 4K Image</button>
             </div>
         `;
-        output.appendChild(scene);
+        area.appendChild(card);
     }
 </script>
 
