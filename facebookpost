@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Social Poster - Working</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 450px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        button { background: #1a73e8; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; }
+        #result { margin-top: 25px; text-align: left; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid #1a73e8; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🚀 AI Social Poster</h2>
+    <input type="text" id="topicInput" placeholder="Enter topic (e.g. Cricket Match)">
+    <button id="genBtn">Generate Post</button>
+    <div id="status" style="margin-top:10px; color:#666;"></div>
+
+    <div id="result">
+        <strong>Caption:</strong> <p id="captionText"></p>
+        <hr>
+        <strong>Image Prompt:</strong> <p id="imagePromptText"></p>
+    </div>
+</div>
+
+<script type="module">
+    // Yahan hum browser ke liye sahi library use kar rahe hain
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+    // Aapki working API key jo humne screenshots mein dekhi
+    const API_KEY = "AIzaSyCjK0Nxt6k9Ee_1orJ4Ftba1N0vkMx-iT0"; 
+    const genAI = new GoogleGenerativeAI(API_KEY);
+
+    document.getElementById('genBtn').addEventListener('click', async () => {
+        const topic = document.getElementById('topicInput').value;
+        const resultDiv = document.getElementById('result');
+        const status = document.getElementById('status');
+
+        if(!topic) return alert("Kuch likhen!");
+
+        status.innerText = "Connecting to Gemini... 🧠";
+        resultDiv.style.display = "none";
+
+        try {
+            // Model selection (v1 stable version)
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            
+            const prompt = `Topic: ${topic}. Act as a Social Media Expert. Generate a viral Instagram caption and a detailed image generation prompt. Respond in plain text.`;
+
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+
+            // Simple display
+            document.getElementById('captionText').innerText = text;
+            document.getElementById('imagePromptText').innerText = "Generating prompt based on your topic...";
+
+            status.innerText = "";
+            resultDiv.style.display = "block";
+        } catch (e) {
+            status.innerText = "";
+            alert("Error: " + e.message + "\nTip: Make sure you are connected to the internet.");
+            console.error(e);
+        }
+    });
+</script>
+
+</body>
+</html>
