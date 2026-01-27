@@ -3,59 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Social Poster - Final Fix</title>
+    <title>AI Social Poster - Live</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 450px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        button { background: #1a73e8; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; }
-        #result { margin-top: 25px; text-align: left; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid #1a73e8; display: none; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 400px; text-align: center; }
+        h2 { color: #333; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; outline: none; box-sizing: border-box; }
+        input:focus { border-color: #667eea; }
+        button { background: #667eea; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; transition: 0.3s; }
+        button:hover { background: #764ba2; }
+        #result { margin-top: 30px; text-align: left; padding: 15px; background: #f9f9f9; border-radius: 10px; display: none; border-left: 5px solid #667eea; }
+        .loading { color: #555; font-style: italic; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>🚀 AI Social Poster</h2>
-    <input type="text" id="topicInput" placeholder="Enter topic (e.g. Cricket Match)">
+    <input type="text" id="topicInput" placeholder="Topic likhein (e.g. Biryani in Sialkot)">
     <button id="genBtn">Generate Post</button>
-    <div id="status" style="margin-top:10px; color:#666;"></div>
+    <div id="status" class="loading"></div>
 
     <div id="result">
-        <strong>Caption:</strong> <p id="captionText"></p>
+        <strong>✨ Your Caption:</strong>
+        <p id="captionText" style="white-space: pre-wrap;"></p>
     </div>
 </div>
 
 <script type="module">
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-    // Aapki Key (image_0893db.png se confirm)
+    // Confirm API Key from your screenshot
     const genAI = new GoogleGenerativeAI("AIzaSyCjK0Nxt6k9Ee_1orJ4Ftba1N0vkMx-iT0");
 
     document.getElementById('genBtn').addEventListener('click', async () => {
         const topic = document.getElementById('topicInput').value;
         const resultDiv = document.getElementById('result');
         const status = document.getElementById('status');
+        const captionText = document.getElementById('captionText');
 
-        if(!topic) return alert("Topic likhen!");
+        if(!topic) return alert("Kuch likhna zaroori hai!");
 
-        status.innerText = "Gemini is thinking... 🧠";
+        status.innerText = "Gemini soch raha hai... 🧠";
         resultDiv.style.display = "none";
 
         try {
-            // Humne yahan model name aur version ko stable kar diya hai
+            // Using the most stable model name
             const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
             
-            const result = await model.generateContent("Create a short catchy Instagram caption for: " + topic);
+            const prompt = `Act as a viral social media manager. Create a highly engaging Instagram caption with emojis for this topic: ${topic}.`;
+
+            const result = await model.generateContent(prompt);
             const response = await result.response;
             const text = response.text();
 
-            document.getElementById('captionText').innerText = text;
+            captionText.innerText = text;
             status.innerText = "";
             resultDiv.style.display = "block";
         } catch (e) {
             status.innerText = "";
             console.error(e);
-            alert("Error: " + e.message);
+            alert("API Error: " + e.message);
         }
     });
 </script>
