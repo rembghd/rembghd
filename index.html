@@ -3,113 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RembgHD - Premium AI Photo Tools (Free Forever)</title>
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
-    
+    <title>HD Background Remover - RembgHD</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Client-Side Background Removal Engine -->
+    <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/index.js"></script>
     <style>
         :root { --gold: #FFD700; --dark-bg: #0b0f19; --card-bg: #111827; }
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; line-height: 1.6; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: var(--dark-bg); color: #fff; text-align: center; }
         
-        header { padding: 40px 20px; text-align: center; background: linear-gradient(180deg, #111827 0%, #0b0f19 100%); }
-        .logo { font-size: 48px; font-weight: 800; color: var(--gold); margin-bottom: 10px; letter-spacing: -1px; }
-        .slogan { font-size: 18px; color: #9ca3af; font-weight: 400; margin-bottom: 20px; }
-        .badge { background: rgba(255, 215, 0, 0.1); color: var(--gold); padding: 5px 15px; border-radius: 50px; font-size: 14px; font-weight: 600; border: 1px solid rgba(255, 215, 0, 0.3); }
-
-        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-
-        .tool-card { 
-            background: var(--card-bg); 
-            border-radius: 24px; 
-            padding: 30px; 
-            text-decoration: none; 
-            color: white; 
-            transition: all 0.3s ease; 
-            border: 1px solid #1f2937;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        header { padding: 30px 20px; }
+        .logo { font-size: 36px; font-weight: 800; color: var(--gold); text-decoration: none; }
+        
+        .container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
+        
+        .upload-area {
+            background: var(--card-bg);
+            border: 2px dashed #1f2937;
+            border-radius: 20px;
+            padding: 40px 20px;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .tool-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .icon-box { font-size: 40px; margin-bottom: 20px; }
-        .tool-card h3 { font-size: 22px; margin: 0 0 10px 0; color: var(--gold); }
-        .tool-card p { font-size: 15px; color: #9ca3af; margin: 0; }
+        .upload-area:hover { border-color: var(--gold); }
         
-        .action-text { margin-top: 20px; font-weight: 800; font-size: 14px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
-
-        footer { margin-top: 80px; padding: 40px; text-align: center; border-top: 1px solid #1f2937; color: #666; font-style: italic; }
-        .sadsha { color: var(--gold); font-weight: 800; }
+        .preview-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .img-box {
+            background: #111;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 10px;
+            max-width: 400px;
+            width: 100%;
+        }
+        .img-box img { max-width: 100%; height: auto; border-radius: 8px; }
+        
+        .status { margin-top: 20px; font-weight: 600; color: var(--gold); font-size: 18px; }
+        
+        .btn-download {
+            background: var(--gold);
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">RembgHD</div>
-        <div class="slogan">Premium AI Image processing tools for Everyone</div>
-        <span class="badge">It's free & always will be</span>
+        <a href="index.html" class="logo">RembgHD</a>
     </header>
 
     <div class="container">
-        <div class="grid">
-            <a href="remover.html" class="tool-card">
-                <div>
-                    <div class="icon-box">🖼️</div>
-                    <h3>HD BG Remover</h3>
-                    <p>Remove backgrounds with AI precision. No quality loss, instant download.</p>
-                </div>
-                <div class="action-text">Try Now →</div>
-            </a>
-
-            <a href="webp-converter.html" class="tool-card">
-                <div>
-                    <div class="icon-box">⚡</div>
-                    <h3>Image to WebP</h3>
-                    <p>Convert PNG/JPG to WebP format to speed up your website.</p>
-                </div>
-                <div class="action-text">Try Now →</div>
-            </a>
-
-            <a href="compressor.html" class="tool-card">
-                <div>
-                    <div class="icon-box">📉</div>
-                    <h3>Image Compressor</h3>
-                    <p>Reduce file size by up to 90% while maintaining HD quality.</p>
-                </div>
-                <div class="action-text">Try Now →</div>
-            </a>
-
-            <a href="resizer.html" class="tool-card">
-                <div>
-                    <div class="icon-box">📏</div>
-                    <h3>Smart Resizer</h3>
-                    <p>Change image dimensions for Instagram, YouTube, and more.</p>
-                </div>
-                <div class="action-text">Try Now →</div>
-            </a>
-
-            <a href="filters.html" class="tool-card">
-                <div>
-                    <div class="icon-box">🎨</div>
-                    <h3>Artistic Filters</h3>
-                    <p>Apply stunning filters and effects to your photos instantly.</p>
-                </div>
-                <div class="action-text">Try Now →</div>
-            </a>
-            
-            <a href="3d-motion.html" class="tool-card">
-                <div>
-                    <div class="icon-box">🎬</div>
-                    <h3>AI 3D Motion</h3>
-                    <p>Convert your static product photos into cinematic 3D motion videos instantly.</p>
-                </div>
-                <div class="action-text">Create Video →</div>
-            </a>
+        <h2>Upload Image to Remove Background</h2>
+        
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <div style="font-size: 40px;">📂</div>
+            <p>Click here to select an image (JPG, PNG)</p>
+            <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="processImage(this.files[0])">
         </div>
 
-        <footer>Powered by <span class="sadsha">SadSha</span> ❤️ | Designed for the Community</footer>
+        <div id="status" class="status"></div>
+
+        <div class="preview-container" id="previewArea" style="display:none;">
+            <div class="img-box">
+                <h4>Original HD Image</h4>
+                <img id="originalImg">
+            </div>
+            <div class="img-box">
+                <h4>Removed Background (HD)</h4>
+                <img id="outputImg">
+                <a id="downloadBtn" class="btn-download" download="rembghd_output.png">Download HD Image</a>
+            </div>
+        </div>
     </div>
 
+    <script>
+        async function processImage(file) {
+            if (!file) return;
+            
+            const statusDiv = document.getElementById('status');
+            const previewArea = document.getElementById('previewArea');
+            const originalImg = document.getElementById('originalImg');
+            const outputImg = document.getElementById('outputImg');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            // Show Original Preview
+            originalImg.src = URL.createObjectURL(file);
+            previewArea.style.display = 'flex';
+            statusDiv.innerText = "⏳ Processing HD Image... Please wait a few seconds.";
+
+            try {
+                // Run background removal engine on client side
+                const blob = await imglyRemoveBackground(file);
+                const resultUrl = URL.createObjectURL(blob);
+                
+                outputImg.src = resultUrl;
+                downloadBtn.href = resultUrl;
+                statusDiv.innerText = "✅ Background Removed Successfully!";
+            } catch (error) {
+                console.error(error);
+                statusDiv.innerText = "❌ Something went wrong. Please try another image.";
+            }
+        }
+    </script>
 </body>
 </html>
