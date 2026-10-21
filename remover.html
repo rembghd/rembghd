@@ -207,7 +207,7 @@
             <h3>Is it really free?</h3>
             <p>Yes. There is no account, no watermark and no per-image fee. The AI runs in your browser, so it costs us nothing per image — and that saving is yours.</p>
             <h3>Are my images uploaded anywhere?</h3>
-            <p>No. Your photo is processed entirely on your device. That is also why the first removal takes a little longer: the AI engine (about 40&nbsp;MB) downloads once and is then cached by your browser.</p>
+            <p>No. Your photo is processed entirely on your device. That is also why the first removal takes a little longer: the AI engine (about 85&nbsp;MB) downloads once and is then cached by your browser.</p>
             <h3>What quality do I get?</h3>
             <p>You get a full-resolution transparent PNG at the same size as your original image — ready for products, profiles, documents and designs.</p>
         </div>
@@ -252,7 +252,7 @@
         }
         // Warm up the engine download as soon as the visitor shows intent.
         ["pointerdown", "dragover"].forEach(ev =>
-            window.addEventListener(ev, () => { loadEngine().then(() => preloadFn && preloadFn(config("isnet_quint8"))).catch(() => {}); }, { once: true }));
+            window.addEventListener(ev, () => { loadEngine().then(() => preloadFn && preloadFn(config("isnet_fp16"))).catch(() => {}); }, { once: true }));
 
         function config(modelName) {
             return {
@@ -287,20 +287,43 @@
             return total ? transparent / total : 0;
         }
 
-        // Try engine modes in order. The first mode is the light quantized
+        // Gentle alpha cleanup: faint leftover haze (very low alpha) goes
+        // fully transparent, near-solid goes solid, edges stay smooth.
+        async function cleanAlpha(blob) {
+            try {
+                const bmp = await createImageBitmap(blob);
+                const c = document.createElement("canvas");
+                c.width = bmp.width; c.height = bmp.height;
+                const ctx = c.getContext("2d", { willReadFrequently: true });
+                ctx.drawImage(bmp, 0, 0);
+                const img = ctx.getImageData(0, 0, c.width, c.height);
+                const d = img.data;
+                for (let i = 3; i < d.length; i += 4) {
+                    const a = d[i];
+                    if (a < 28) d[i] = 0;
+                    else if (a > 227) d[i] = 255;
+                    else d[i] = Math.round((a - 28) / 199 * 255);
+                }
+                ctx.putImageData(img, 0, 0);
+                const out = await new Promise(r => c.toBlob(r, "image/png"));
+                return out || blob;
+            } catch (e) { return blob; }
+        }
+
+        // Try engine modes in order. The first mode is the full-quality
         // model that works reliably on phones; if a mode returns an empty
         // (all-foreground) mask — a known failure on some Android browsers
         // with the fp16 model — fall through to the next mode instead of
         // showing the visitor a fake "after" photo.
         async function runRemoval(file) {
-            const modes = ["isnet_quint8", "small", undefined];
+            const modes = ["isnet_fp16", "isnet_quint8", "small", undefined];
             let lastErr = null;
             for (let i = 0; i < modes.length; i++) {
                 try {
                     if (i > 0) { statusText.textContent = "Trying a more compatible mode…"; progressMap.clear(); }
-                    const blob = await removeBackgroundFn(file, config(modes[i]));
-                    const share = await transparentShare(blob);
-                    if (share > 0.02 && share < 0.98) return blob;
+                    const raw = await removeBackgroundFn(file, config(modes[i]));
+                    const share = await transparentShare(raw);
+                    if (share > 0.02 && share < 0.98) return await cleanAlpha(raw);
                     lastErr = new Error("empty mask from mode " + modes[i]);
                 } catch (e) { lastErr = e; }
             }
