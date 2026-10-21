@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free HD Background Remover Online | RembgHD</title>
-    <meta name="description" content="Remove image backgrounds in seconds — free, HD and 100% automatic. Server-powered AI, nothing big to download. No sign-up.">
+    <meta name="description" content="Remove image backgrounds in seconds — free, HD and 100% automatic. AI runs in your browser, so your images never leave your device. No sign-up.">
     <meta property="og:title" content="RembgHD — Free HD Background Remover">
-    <meta property="og:description" content="Remove backgrounds in seconds. Free, HD, no sign-up — server-powered AI.">
+    <meta property="og:description" content="Remove backgrounds in seconds. Free, HD, private — powered by on-device AI.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://rembghd.com/logo.png">
     <meta name="theme-color" content="#0b0f19">
@@ -119,9 +119,9 @@
 
     <div class="hero">
         <h1>Remove Image <span class="gold">Background</span></h1>
-        <p>Free, HD and 100% automatic. The AI runs on fast servers — nothing big to download, works on any phone.</p>
+        <p>Free, HD and 100% automatic. The AI runs right in your browser — your images never leave your device.</p>
         <div class="badges">
-            <span>✅ 100% Free</span><span>🖥️ Server-powered AI</span><span>🖼️ Full HD output</span><span>⚡ No sign-up</span>
+            <span>✅ 100% Free</span><span>🔒 Private — on-device AI</span><span>🖼️ Full HD output</span><span>⚡ No sign-up</span>
         </div>
         <div class="slogan-line">&ldquo;It&rsquo;s free and always will be.&rdquo;</div>
     </div>
@@ -207,7 +207,7 @@
             <h3>Is it really free?</h3>
             <p>Yes. There is no account, no watermark and no per-image fee. The AI runs in your browser, so it costs us nothing per image — and that saving is yours.</p>
             <h3>Are my images uploaded anywhere?</h3>
-            <p>Yes — to remove the background, your photo is sent securely to our AI provider (Hugging Face) and processed there automatically. We never store, view or share your images. Because the server is a free community resource, a removal can take a little longer when it is busy.</p>
+            <p>No. Your photo is processed entirely on your device. That is also why the first removal takes a little longer: the AI engine (about 85&nbsp;MB) downloads once and is then cached by your browser.</p>
             <h3>What quality do I get?</h3>
             <p>You get a full-resolution transparent PNG at the same size as your original image — ready for products, profiles, documents and designs.</p>
         </div>
@@ -222,12 +222,8 @@
     </footer>
 
     <script type="module">
-        // Removal runs on free community AI servers (Hugging Face Spaces)
-        // through their public API — no model download for the visitor.
-        const HF_SPACES = [
-            "https://briaai-bria-rmbg-2-0.hf.space",
-            "https://not-lain-background-removal.hf.space"
-        ];
+        const CDN = "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.3/+esm";
+        let removeBackgroundFn = null, preloadFn = null, enginePromise = null;
 
         const $ = (id) => document.getElementById(id);
         const dropzone = $("dropzone"), fileInput = $("fileInput"),
@@ -240,69 +236,39 @@
         let currentFile = null, resultBlob = null, resultURL = null, origURL = null;
         let chosenBg = "transparent";   // 'transparent' | '#rrggbb' | 'image'
         let bgImageURL = null;
+        const progressMap = new Map();
+        let lastProgressAt = 0;
 
-        async function fetchT(url, opts, ms) {
-            const ctl = new AbortController();
-            const t = setTimeout(() => ctl.abort(), ms);
-            try { return await fetch(url, Object.assign({}, opts, { signal: ctl.signal })); }
-            finally { clearTimeout(t); }
-        }
-
-        // One removal against one Space: upload (or inline base64 fallback),
-        // queue the job, read the streamed result, fetch the output image.
-        async function hfRemove(host, file, stage) {
-            stage("Uploading your image to the AI server…");
-            let fileData = null;
-            try {
-                const fd = new FormData();
-                fd.append("files", file);
-                const up = await fetchT(host + "/gradio_api/upload", { method: "POST", body: fd }, 60000);
-                if (!up.ok) throw new Error("upload " + up.status);
-                const paths = await up.json();
-                if (!paths || !paths[0]) throw new Error("upload empty");
-                fileData = { path: paths[0], meta: { _type: "gradio.FileData" } };
-            } catch (e) {
-                const dataUrl = await new Promise((res, rej) => {
-                    const r = new FileReader();
-                    r.onload = () => res(r.result);
-                    r.onerror = rej;
-                    r.readAsDataURL(file);
+        function loadEngine() {
+            if (!enginePromise) {
+                enginePromise = import(CDN).then((ns) => {
+                    removeBackgroundFn = ns.removeBackground || ns.default || (ns.default && ns.default.removeBackground);
+                    preloadFn = ns.preload || (ns.default && ns.default.preload);
+                    if (!removeBackgroundFn) throw new Error("engine export missing");
+                    return true;
                 });
-                fileData = { url: dataUrl, meta: { _type: "gradio.FileData" } };
             }
-            stage("In the AI queue — free servers can take a little while…");
-            const call = await fetchT(host + "/gradio_api/call/image", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ data: [fileData] })
-            }, 60000);
-            if (!call.ok) throw new Error("call " + call.status);
-            const cj = await call.json();
-            if (!cj.event_id) throw new Error("no event id");
-            const resp = await fetchT(host + "/gradio_api/call/image/" + cj.event_id, {}, 240000);
-            if (!resp.ok || !resp.body) throw new Error("poll " + resp.status);
-            const reader = resp.body.getReader();
-            const dec = new TextDecoder();
-            let buf = "";
-            while (true) {
-                const chunk = await reader.read();
-                if (chunk.done) break;
-                buf += dec.decode(chunk.value, { stream: true });
-                if (buf.indexOf("event: error") >= 0) throw new Error("space error");
-                const m = buf.match(/event: complete\s*\ndata: (\[[^\n]*)/);
-                if (m) {
-                    const data = JSON.parse(m[1]);
-                    const out = data && data[0];
-                    if (!out) throw new Error("empty result");
-                    const url = out.url || (out.path ? host + "/gradio_api/file=" + out.path : null);
-                    if (!url) throw new Error("no result url");
-                    stage("Getting your result…");
-                    const ir = await fetchT(url, {}, 60000);
-                    if (!ir.ok) throw new Error("result fetch " + ir.status);
-                    return await ir.blob();
+            return enginePromise;
+        }
+        // Warm up the engine download as soon as the visitor shows intent.
+        ["pointerdown", "dragover"].forEach(ev =>
+            window.addEventListener(ev, () => { loadEngine().then(() => preloadFn && preloadFn(config("isnet_fp16"))).catch(() => {}); }, { once: true }));
+
+        function config(modelName) {
+            return {
+                model: modelName,
+                output: { format: "image/png" },
+                progress: (key, current, total) => {
+                    if (total > 0) progressMap.set(key, current / total);
+                    lastProgressAt = Date.now();
+                    let sum = 0; progressMap.forEach(v => sum += v);
+                    const pct = Math.round(100 * sum / Math.max(progressMap.size, 1));
+                    barInner.classList.remove("indet");
+                    barInner.style.width = pct + "%";
+                    statusText.textContent = "Downloading AI engine — " + pct + "%";
+                    statusHint.textContent = "First time only. After this, removals are fast and fully offline-capable.";
                 }
-            }
-            throw new Error("stream ended without result");
+            };
         }
 
         // Measure how much of the result is transparent. A healthy removal
@@ -344,15 +310,21 @@
             } catch (e) { return blob; }
         }
 
-        // Try the AI servers in order; reject empty (all-foreground) results.
+        // Try engine modes in order. The first mode is the full-quality
+        // model that works reliably on phones; if a mode returns an empty
+        // (all-foreground) mask — a known failure on some Android browsers
+        // with the fp16 model — fall through to the next mode instead of
+        // showing the visitor a fake "after" photo.
         async function runRemoval(file) {
+            const modes = ["isnet_fp16", "isnet_quint8", "small", undefined];
             let lastErr = null;
-            for (let i = 0; i < HF_SPACES.length; i++) {
+            for (let i = 0; i < modes.length; i++) {
                 try {
-                    const raw = await hfRemove(HF_SPACES[i], file, (t) => { statusText.textContent = t; });
+                    if (i > 0) { statusText.textContent = "Trying a more compatible mode…"; progressMap.clear(); }
+                    const raw = await removeBackgroundFn(file, config(modes[i]));
                     const share = await transparentShare(raw);
                     if (share > 0.02 && share < 0.98) return await cleanAlpha(raw);
-                    lastErr = new Error("empty result from server " + i);
+                    lastErr = new Error("empty mask from mode " + modes[i]);
                 } catch (e) { lastErr = e; }
             }
             throw lastErr || new Error("removal failed");
@@ -376,10 +348,10 @@
             resultBox.style.display = "none";
             dropzone.style.display = "none";
             processing.style.display = "block";
-            barInner.classList.add("indet");
-            barInner.style.width = "";
-            statusText.textContent = "Uploading your image to the AI server…";
-            statusHint.textContent = "The AI runs on a free community server (Hugging Face). If it is busy this can take a minute or two — please keep this tab open.";
+            progressMap.clear();
+            barInner.style.width = "0%";
+            statusText.textContent = "Loading AI engine…";
+            statusHint.textContent = "";
             if (origURL) URL.revokeObjectURL(origURL);
             origURL = URL.createObjectURL(file);
             const probe = new Image();
@@ -388,9 +360,19 @@
             $("procThumb").src = origURL;
             origLayer.src = origURL;
 
+            // If downloads finish and compute starts, switch to indeterminate bar.
+            const watcher = setInterval(() => {
+                if (lastProgressAt && Date.now() - lastProgressAt > 1600 && processing.style.display === "block") {
+                    barInner.classList.add("indet");
+                    statusText.textContent = "Removing background…";
+                    statusHint.textContent = "AI is working on your device — big photos can take a little while.";
+                }
+            }, 700);
+
             try {
+                await loadEngine();
                 const blob = await runRemoval(file);
-                barInner.classList.remove("indet");
+                clearInterval(watcher);
                 if (resultURL) URL.revokeObjectURL(resultURL);
                 resultBlob = blob;
                 resultURL = URL.createObjectURL(blob);
@@ -406,9 +388,9 @@
                 processing.style.display = "none";
                 resultBox.style.display = "block";
             } catch (err) {
-                barInner.classList.remove("indet");
+                clearInterval(watcher);
                 console.error(err);
-                showError("The free AI server is busy or could not finish this time. Please wait a little and try again — or use the same AI directly at briaai-bria-rmbg-2-0.hf.space. We never store your images.");
+                showError("The AI engine could not finish. Please check your internet connection for the first download, and try Chrome or Edge on a recent device. Your image was not uploaded anywhere.");
                 dropzone.style.display = "block";
             }
         }
@@ -421,7 +403,7 @@
 
         function setBg(kind, value) {
             chosenBg = kind === "image" ? "image" : (value || "transparent");
-            document.querySelectorAll(".swatch").forEach(sw => sw.classList.toggle("sel", sw.dataset.bg === chosenBg));
+            document.querySelectorAll(".swatch").forEach(s => s.classList.toggle("sel", s.dataset.bg === chosenBg));
             stage.classList.toggle("checker", chosenBg === "transparent");
             if (chosenBg === "transparent") { stage.style.background = ""; stage.style.backgroundImage = ""; }
             else if (chosenBg === "image") { stage.style.background = ""; stage.style.backgroundImage = "url(" + bgImageURL + ")"; stage.style.backgroundSize = "cover"; stage.style.backgroundPosition = "center"; }
@@ -445,6 +427,7 @@
             if (!resultBlob) return;
             const name = (currentFile ? currentFile.name.replace(/\.[^.]+$/, "") : "image") + "-no-bg.png";
             if (chosenBg === "transparent") return triggerDownload(resultURL, name);
+            // Composite the chosen background at full resolution.
             const fg = await loadImg(resultURL);
             const canvas = document.createElement("canvas");
             canvas.width = fg.naturalWidth; canvas.height = fg.naturalHeight;
