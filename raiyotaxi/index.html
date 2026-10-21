@@ -363,6 +363,8 @@ footer.site{border-top:1px solid var(--line);padding:46px 0 110px;background:#0c
 .gallery-grid{display:grid;gap:18px;grid-template-columns:1fr}
 .g-item{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--panel);margin:0}
 .g-item img{width:100%;height:290px;object-fit:cover}
+.g-item.cutout{background:radial-gradient(120% 130% at 50% 0%,#26303d,#0e1218 72%)}
+.g-item.cutout img{object-fit:contain;padding:30px 20px 6px;filter:drop-shadow(0 20px 24px rgba(0,0,0,.6))}
 .g-item figcaption{padding:17px 19px;font-weight:800;font-size:1.02rem}
 .g-item figcaption small{display:block;color:var(--muted);font-weight:500;font-size:.9rem;margin-top:3px}
 @media (min-width:640px){.gallery-grid{grid-template-columns:repeat(3,1fr)}}
@@ -538,9 +540,9 @@ input[type="range"]{width:100%;accent-color:var(--yellow);height:30px;cursor:poi
           <img src="car1.jpg" alt="Toyota RAV4 Hybrid" loading="lazy">
           <figcaption>Toyota RAV4 Hybrid<small>Bequem &amp; sparsam – auch auf langen Strecken.</small></figcaption>
         </figure>
-        <figure class="g-item reveal">
-          <img src="car2.jpg" alt="Mercedes-Benz C-Klasse" loading="lazy">
-          <figcaption>Mercedes-Benz C-Klasse<small>Gepflegt &amp; sauber – bei jeder Fahrt.</small></figcaption>
+        <figure class="g-item cutout reveal">
+          <img src="car-mercedes.webp" alt="Mercedes-Benz Taxi von Rai yo Taxi" loading="lazy">
+          <figcaption>Mercedes-Benz<small>Gepflegt &amp; sauber – bei jeder Fahrt.</small></figcaption>
         </figure>
         <figure class="g-item reveal">
           <img src="car3.jpg" alt="VW Touran" loading="lazy">
