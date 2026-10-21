@@ -61,10 +61,10 @@
         #result { display: none; }
         .stage { position: relative; max-width: 680px; margin: 0 auto; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background-color: #202020; }
         .stage.checker { background-image: linear-gradient(45deg, #2c2c2c 25%, transparent 25%), linear-gradient(-45deg, #2c2c2c 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #2c2c2c 75%), linear-gradient(-45deg, transparent 75%, #2c2c2c 75%); background-size: 22px 22px; background-position: 0 0, 0 11px, 11px -11px, -11px 0; background-color: #3a3a3a; }
-        .stage img.layer { display: block; width: 100%; height: auto; }
+        .stage { min-height: 220px; }
+        .stage .layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
         .stage .top-wrap { position: absolute; inset: 0; }
-        .stage .top-wrap img { width: 100%; height: 100%; object-fit: contain; }
-        .stage img.base { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .stage .top-wrap .layer { position: absolute; }
         .compare-row { max-width: 680px; margin: 12px auto 0; display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 13px; }
         .compare-row input[type="range"] { flex: 1; accent-color: var(--gold); }
 
@@ -147,8 +147,8 @@
         <!-- RESULT -->
         <div id="result">
             <div class="stage checker" id="stage">
-                <img class="base" id="origLayer" alt="Original">
-                <div class="top-wrap" id="topWrap"><img id="resultImg" alt="Background removed"></div>
+                <img class="layer" id="resultImg" alt="Background removed">
+                <div class="top-wrap" id="topWrap"><img class="layer" id="origLayer" alt="Original"></div>
             </div>
             <div class="compare-row">
                 <span>Before</span>
@@ -331,6 +331,9 @@
             statusHint.textContent = "";
             if (origURL) URL.revokeObjectURL(origURL);
             origURL = URL.createObjectURL(file);
+            const probe = new Image();
+            probe.onload = () => { stage.style.aspectRatio = probe.naturalWidth + " / " + probe.naturalHeight; };
+            probe.src = origURL;
             $("procThumb").src = origURL;
             origLayer.src = origURL;
 
@@ -371,7 +374,7 @@
 
         function applyCompare() {
             const v = Number(compareRange.value);
-            topWrap.style.clipPath = "inset(0 " + (100 - v) + "% 0 0)";
+            topWrap.style.clipPath = "inset(0 " + v + "% 0 0)";
         }
         compareRange.addEventListener("input", applyCompare);
 
