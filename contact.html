@@ -1,15 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>Contact Us - RembgHD</title>
-    <style>body{font-family:sans-serif; background:#0b0f19; color:#ccc; padding:50px; text-align:center;} h1{color:#FFD700; margin-top:100px;}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | RembgHD</title>
+<meta name="description" content="Contact RembgHD — questions, feedback and suggestions are welcome.">
+<meta name="theme-color" content="#0b0f19">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root { --gold:#FFD700; --dark-bg:#0b0f19; --card-bg:#111827; --line:#1f2937; --muted:#9ca3af; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:'Inter',sans-serif; background:var(--dark-bg); color:#e5e7eb; }
+header { padding:15px 20px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; max-width:1100px; margin:0 auto; gap:12px; flex-wrap:wrap; }
+.brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.brand img { width:34px; height:34px; border-radius:9px; }
+.brand span { font-size:24px; font-weight:800; color:var(--gold); }
+nav.tools { display:flex; gap:6px; flex-wrap:wrap; }
+nav.tools a { color:#ccc; text-decoration:none; font-size:13px; padding:7px 11px; border:1px solid #333; border-radius:999px; }
+nav.tools a:hover { border-color:var(--gold); color:var(--gold); }
+.doc { max-width:820px; margin:36px auto 0; padding:0 20px 10px; text-align:left; }
+.doc h1 { font-size:30px; margin:0 0 6px; }
+.doc .updated { color:var(--muted); font-size:13.5px; margin-bottom:22px; }
+.doc h2 { color:var(--gold); font-size:19px; margin:26px 0 8px; }
+.doc p, .doc li { color:#c9d1d9; font-size:15px; line-height:1.65; }
+.doc ul { padding-left:20px; }
+.doc a { color:var(--gold); }
+.card { background:var(--card-bg); border:1px solid var(--line); border-radius:18px; padding:22px; margin:18px 0; }
+.slogan-big { font-size:22px; font-style:italic; color:var(--gold); font-weight:600; text-align:center; margin:26px 0 6px; }
+.btn-gold { background:var(--gold); color:#000; border:none; padding:12px 26px; border-radius:999px; font-weight:800; font-size:15px; cursor:pointer; display:inline-block; text-decoration:none; }
+label.f { display:block; color:var(--muted); font-size:13.5px; margin:14px 0 6px; }
+input.in, textarea.in { width:100%; background:#0b0f19; border:1px solid var(--line); border-radius:12px; color:#fff; padding:12px 14px; font-family:inherit; font-size:15px; }
+footer { margin-top:56px; padding:22px; color:#666; font-size:14px; font-style:italic; border-top:1px solid var(--line); text-align:center; }
+.sadsha { color:var(--gold); font-weight:800; font-style:normal; }
+footer .slogan { color:#a3a3a3; margin-bottom:6px; }
+footer .flinks { margin-top:8px; font-style:normal; }
+footer .flinks a { color:#888; text-decoration:none; margin:0 8px; font-size:13px; }
+footer .flinks a:hover { color:var(--gold); }
+</style>
 </head>
 <body>
-    <h1>Contact Us</h1>
-    <p>Have questions or feedback about RembgHD? We would love to hear from you!</p>
-    <p>You can reach us at our official email address:</p>
-    <h2 style="color:#fff;">contact@rembghd.com</h2>
-    <p>Powered by <strong>SadSha</strong></p>
-    <br><a href="index.html" style="color:#FFD700;">Back to Home</a>
+<header>
+<a class="brand" href="index.html"><img src="logo.png" alt="RembgHD logo"><span>RembgHD</span></a>
+<nav class="tools">
+<a href="index.html">BG Remover</a>
+<a href="compressor.html">Compressor</a>
+<a href="resizer.html">Resizer</a>
+<a href="filters.html">Filters</a>
+<a href="webp-converter.html">WebP Converter</a>
+</nav>
+</header>
+
+<div class="doc">
+<h1>Contact Us</h1>
+<p>Questions, feedback, a bug to report, or an idea for a new tool? We read every message.</p>
+<div class="card" style="text-align:center;">
+<p style="margin:0 0 6px; color:var(--muted);">Write to us at</p>
+<p style="font-size:20px; font-weight:800; margin:0;"><a href="mailto:qs62765@gmail.com">qs62765@gmail.com</a></p>
+</div>
+<div class="card">
+<label class="f" for="cname">Your name</label>
+<input class="in" id="cname" type="text" placeholder="Your name">
+<label class="f" for="csubject">Subject</label>
+<input class="in" id="csubject" type="text" placeholder="What is this about?">
+<label class="f" for="cmsg">Message</label>
+<textarea class="in" id="cmsg" rows="5" placeholder="Write your message..."></textarea>
+<div style="margin-top:18px; text-align:center;">
+<button class="btn-gold" id="sendBtn" type="button">Send via Email</button>
+</div>
+<p style="color:var(--muted); font-size:13px; text-align:center; margin-bottom:0;">The button opens your own email app with the message ready to send — nothing is stored on this website.</p>
+</div>
+<script>
+document.getElementById("sendBtn").addEventListener("click", function () {
+    var name = document.getElementById("cname").value.trim();
+    var subject = document.getElementById("csubject").value.trim() || "Message from RembgHD visitor";
+    var msg = document.getElementById("cmsg").value.trim();
+    var body = encodeURIComponent((name ? "From: " + name + "\n\n" : "") + msg);
+    window.location.href = "mailto:qs62765@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + body;
+});
+</script>
+</div>
+
+<footer>
+<div class="slogan">&ldquo;It&rsquo;s free and always will be.&rdquo;</div>
+Powered by <span class="sadsha">SadSha</span> ❤️
+<div class="flinks">
+<a href="about.html">About</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="disclaimer.html">Disclaimer</a> · <a href="contact.html">Contact</a>
+</div>
+</footer>
 </body>
 </html>
