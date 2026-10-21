@@ -207,7 +207,7 @@
             <h3>Is it really free?</h3>
             <p>Yes. There is no account, no watermark and no per-image fee. The AI runs in your browser, so it costs us nothing per image — and that saving is yours.</p>
             <h3>Are my images uploaded anywhere?</h3>
-            <p>No. Your photo is processed entirely on your device. That is also why the first removal takes a little longer: the AI engine (about 80&nbsp;MB) downloads once and is then cached by your browser.</p>
+            <p>No. Your photo is processed entirely on your device. That is also why the first removal takes a little longer: the AI engine (about 40&nbsp;MB) downloads once and is then cached by your browser.</p>
             <h3>What quality do I get?</h3>
             <p>You get a full-resolution transparent PNG at the same size as your original image — ready for products, profiles, documents and designs.</p>
         </div>
@@ -252,11 +252,11 @@
         }
         // Warm up the engine download as soon as the visitor shows intent.
         ["pointerdown", "dragover"].forEach(ev =>
-            window.addEventListener(ev, () => { loadEngine().then(() => preloadFn && preloadFn(config())).catch(() => {}); }, { once: true }));
+            window.addEventListener(ev, () => { loadEngine().then(() => preloadFn && preloadFn(config("isnet_quint8"))).catch(() => {}); }, { once: true }));
 
-        function config() {
+        function config(modelName) {
             return {
-                model: "medium",
+                model: modelName,
                 output: { format: "image/png" },
                 progress: (key, current, total) => {
                     if (total > 0) progressMap.set(key, current / total);
@@ -269,6 +269,42 @@
                     statusHint.textContent = "First time only. After this, removals are fast and fully offline-capable.";
                 }
             };
+        }
+
+        // Measure how much of the result is transparent. A healthy removal
+        // removes something but keeps the subject: roughly 2%..98%.
+        async function transparentShare(blob) {
+            const bmp = await createImageBitmap(blob);
+            const scale = Math.min(1, 256 / bmp.width);
+            const c = document.createElement("canvas");
+            c.width = Math.max(1, Math.round(bmp.width * scale));
+            c.height = Math.max(1, Math.round(bmp.height * scale));
+            const ctx = c.getContext("2d", { willReadFrequently: true });
+            ctx.drawImage(bmp, 0, 0, c.width, c.height);
+            const data = ctx.getImageData(0, 0, c.width, c.height).data;
+            let transparent = 0, total = 0;
+            for (let i = 3; i < data.length; i += 16) { total++; if (data[i] < 10) transparent++; }
+            return total ? transparent / total : 0;
+        }
+
+        // Try engine modes in order. The first mode is the light quantized
+        // model that works reliably on phones; if a mode returns an empty
+        // (all-foreground) mask — a known failure on some Android browsers
+        // with the fp16 model — fall through to the next mode instead of
+        // showing the visitor a fake "after" photo.
+        async function runRemoval(file) {
+            const modes = ["isnet_quint8", "small", undefined];
+            let lastErr = null;
+            for (let i = 0; i < modes.length; i++) {
+                try {
+                    if (i > 0) { statusText.textContent = "Trying a more compatible mode…"; progressMap.clear(); }
+                    const blob = await removeBackgroundFn(file, config(modes[i]));
+                    const share = await transparentShare(blob);
+                    if (share > 0.02 && share < 0.98) return blob;
+                    lastErr = new Error("empty mask from mode " + modes[i]);
+                } catch (e) { lastErr = e; }
+            }
+            throw lastErr || new Error("removal failed");
         }
 
         function showError(msg) {
@@ -309,7 +345,7 @@
 
             try {
                 await loadEngine();
-                const blob = await removeBackgroundFn(file, config());
+                const blob = await runRemoval(file);
                 clearInterval(watcher);
                 if (resultURL) URL.revokeObjectURL(resultURL);
                 resultBlob = blob;
