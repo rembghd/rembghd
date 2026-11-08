@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free HD Background Remover Online | RembgHD</title>
-    <meta name="description" content="Remove image backgrounds in seconds — free, HD and 100% automatic. AI runs in your browser, so your images never leave your device. No sign-up.">
-    <meta property="og:title" content="RembgHD — Free HD Background Remover">
-    <meta property="og:description" content="Remove backgrounds in seconds. Free, HD, private — powered by on-device AI.">
+    <title>Background Remover Online — Free Daily, HD Pro | RembgHD</title>
+    <meta name="description" content="Remove image backgrounds in seconds. Free: 3 low-res removals a day, no sign-up. Pro: $12/month for 100 full-HD images. Batch, erase/restore brush, new backgrounds.">
+    <meta property="og:title" content="RembgHD — Background Remover">
+    <meta property="og:description" content="Free low-res removal every day. Full HD with Pro — $12/month, 100 HD images.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://rembghd.com/logo.png">
     <meta name="theme-color" content="#0b0f19">
@@ -37,6 +37,16 @@
         .hero p { color: var(--muted); font-size: 17px; margin: 0 auto; max-width: 640px; }
         .badges { margin-top: 16px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
         .badges span { font-size: 12.5px; color: #e5e7eb; background: #111827; border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; }
+        #freeCounter { margin-top: 14px; font-size: 14px; color: var(--gold); font-weight: 600; min-height: 20px; }
+
+        .pricing { max-width: 820px; margin: 22px auto 0; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .plan { background: var(--card-bg); border: 1px solid var(--line); border-radius: 18px; padding: 20px 18px; text-align: left; }
+        .plan.pro { border-color: var(--gold); }
+        .plan h3 { margin: 0 0 4px; font-size: 17px; }
+        .plan .price { font-size: 26px; font-weight: 800; margin: 2px 0 8px; }
+        .plan .price small { font-size: 13px; color: var(--muted); font-weight: 600; }
+        .plan ul { margin: 0 0 14px; padding-left: 18px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+        .plan .tag { display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: .5px; color: #000; background: var(--gold); border-radius: 999px; padding: 3px 9px; margin-bottom: 8px; }
 
         .tool-wrap { max-width: 820px; margin: 26px auto 0; padding: 0 20px; }
         .dropzone { background: var(--card-bg); border: 2px dashed #2b3648; border-radius: 24px; padding: 46px 22px; cursor: pointer; transition: 0.25s; }
@@ -46,8 +56,34 @@
         .dropzone .small { color: var(--muted); font-size: 14px; margin-top: 6px; }
         .btn-gold { background: var(--gold); color: #000; border: none; padding: 13px 30px; border-radius: 999px; font-weight: 800; font-size: 15.5px; cursor: pointer; display: inline-block; text-decoration: none; transition: 0.2s; }
         .btn-gold:hover { filter: brightness(1.08); }
+        .btn-gold:disabled { opacity: .45; cursor: not-allowed; }
         .btn-ghost { background: transparent; color: #ccc; border: 1px solid #374151; padding: 12px 24px; border-radius: 999px; font-weight: 600; font-size: 15px; cursor: pointer; }
         .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+        .tier-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0 0; text-align: left; }
+        .tier { background: var(--card-bg); border: 2px solid var(--line); border-radius: 16px; padding: 14px 16px; cursor: pointer; }
+        .tier.sel { border-color: var(--gold); }
+        .tier b { font-size: 15.5px; }
+        .tier span { display: block; color: var(--muted); font-size: 13px; margin-top: 4px; line-height: 1.45; }
+        .tier .pill { display: inline-block; font-size: 11px; font-weight: 800; background: #7f1d1d; color: #fecaca; border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: 2px; }
+        .tier .pill.ok { background: #14532d; color: #bbf7d0; }
+
+        #licenceBox { display: none; margin-top: 16px; background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px; padding: 16px; text-align: left; }
+        #licenceBox input { width: 100%; background: #0b0f19; border: 1px solid #374151; color: #fff; border-radius: 10px; padding: 11px 12px; font-size: 14.5px; margin: 8px 0; }
+        #licenceBox .hint { color: var(--muted); font-size: 13px; line-height: 1.5; }
+        #licenceStatus { font-size: 14px; font-weight: 600; margin-top: 8px; min-height: 20px; }
+        #hdNotice { display: none; margin-top: 14px; background: #1c1917; border: 1px solid #a16207; color: #fde68a; border-radius: 14px; padding: 12px 14px; font-size: 14px; line-height: 1.5; }
+
+        #queue { margin-top: 18px; text-align: left; }
+        .q-row { display: flex; align-items: center; gap: 12px; background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
+        .q-row.sel { border-color: var(--gold); }
+        .q-row img { width: 52px; height: 52px; object-fit: cover; border-radius: 9px; border: 1px solid var(--line); }
+        .q-row .nm { flex: 1; min-width: 0; }
+        .q-row .nm b { display: block; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .q-row .nm span { font-size: 12.5px; color: var(--muted); }
+        .q-row .st { font-size: 13px; font-weight: 700; white-space: nowrap; }
+        .q-row .st.done { color: #4ade80; } .q-row .st.busy { color: var(--gold); } .q-row .st.err { color: #f87171; }
+        .q-row .mini { font-size: 12.5px; color: var(--gold); background: transparent; border: 1px solid #374151; border-radius: 999px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
 
         #processing { display: none; background: var(--card-bg); border: 1px solid var(--line); border-radius: 24px; padding: 30px 24px; }
         #processing img.thumb { max-width: 220px; max-height: 220px; border-radius: 14px; border: 1px solid var(--line); }
@@ -62,11 +98,18 @@
         .stage { position: relative; max-width: 680px; margin: 0 auto; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background-color: #202020; }
         .stage.checker { background-image: linear-gradient(45deg, #2c2c2c 25%, transparent 25%), linear-gradient(-45deg, #2c2c2c 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #2c2c2c 75%), linear-gradient(-45deg, transparent 75%, #2c2c2c 75%); background-size: 22px 22px; background-position: 0 0, 0 11px, 11px -11px, -11px 0; background-color: #3a3a3a; }
         .stage { min-height: 220px; }
-        .stage .layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+        .stage canvas.layer, .stage img.layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
         .stage .top-wrap { position: absolute; inset: 0; }
         .stage .top-wrap .layer { position: absolute; }
         .compare-row { max-width: 680px; margin: 12px auto 0; display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 13px; }
         .compare-row input[type="range"] { flex: 1; accent-color: var(--gold); }
+
+        .brush-bar { max-width: 680px; margin: 16px auto 0; background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+        .brush-bar .lbl { font-size: 13.5px; font-weight: 700; }
+        .brush-bar button { background: transparent; color: #ccc; border: 1px solid #374151; border-radius: 999px; padding: 8px 16px; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+        .brush-bar button.sel { border-color: var(--gold); color: var(--gold); }
+        .brush-bar input[type="range"] { accent-color: var(--gold); }
+        .brush-bar .hint { width: 100%; font-size: 12.5px; color: var(--muted); }
 
         .bg-options { margin: 20px auto 4px; max-width: 680px; }
         .bg-options .lbl { color: var(--muted); font-size: 13.5px; margin-bottom: 9px; }
@@ -101,7 +144,7 @@
         footer .flinks a { color: #888; text-decoration: none; margin: 0 8px; font-size: 13px; }
         footer .flinks a:hover { color: var(--gold); }
 
-        @media (max-width: 640px) { .hero h1 { font-size: 29px; } .dropzone { padding: 34px 14px; } }
+        @media (max-width: 640px) { .hero h1 { font-size: 29px; } .dropzone { padding: 34px 14px; } .pricing, .tier-pick { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -119,21 +162,74 @@
 
     <div class="hero">
         <h1>Remove Image <span class="gold">Background</span></h1>
-        <p>Free, HD and 100% automatic. The AI runs right in your browser — your images never leave your device.</p>
+        <p>Free low-res removal every day — no sign-up. Need full HD? Pro is $12/month for 100 HD images.</p>
         <div class="badges">
-            <span>✅ 100% Free</span><span>🔒 Private — on-device AI</span><span>🖼️ Full HD output</span><span>⚡ No sign-up</span>
+            <span>🆓 Free — 3 low-res / day</span><span>✨ HD Pro — $12 / month</span><span>🔒 Free tier runs on-device</span><span>⚡ Batch + brush included</span>
         </div>
+        <div id="freeCounter"></div>
         <div class="slogan-line">&ldquo;It&rsquo;s free and always will be.&rdquo;</div>
+    </div>
+
+    <div class="pricing">
+        <div class="plan">
+            <h3>Free</h3>
+            <div class="price">$0 <small>forever</small></div>
+            <ul>
+                <li>3 low-res removals every day</li>
+                <li>Up to 1024 px output</li>
+                <li>Batch, new backgrounds, erase / restore brush</li>
+                <li>No account needed</li>
+            </ul>
+        </div>
+        <div class="plan pro">
+            <span class="tag">PRO</span>
+            <h3>HD Pro</h3>
+            <div class="price">$12 <small>/ month</small></div>
+            <ul>
+                <li>100 full-HD images every month</li>
+                <li>Full-resolution transparent PNG</li>
+                <li>Batch HD, brush, new backgrounds</li>
+                <li>Licence key — works on any device</li>
+            </ul>
+            <a class="btn-gold" href="mailto:info@toolzo.app?subject=Buy%3A%20RembgHD%20Pro%20—%20%2412%2Fmonth&body=Hi%2C%20I%20would%20like%20to%20buy%20RembgHD%20Pro%20(%2412%20per%20month%2C%20100%20HD%20images).%20Please%20send%20me%20the%20secure%20payment%20link%20and%20my%20licence%20key.">Buy Pro — $12 / month</a>
+        </div>
     </div>
 
     <div class="tool-wrap">
         <!-- IDLE -->
-        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload an image">
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload images">
             <span class="icon">🖼️</span>
-            <div class="big">Drop an image here, or click to upload</div>
-            <div class="small">JPG, PNG or WebP — you can also paste an image (Ctrl+V)</div>
-            <div style="margin-top:18px;"><span class="btn-gold">Upload Image</span></div>
-            <input type="file" id="fileInput" accept="image/*" hidden>
+            <div class="big">Drop images here, or click to upload</div>
+            <div class="small">JPG, PNG or WebP — one or many at once. You can also paste an image (Ctrl+V)</div>
+            <div style="margin-top:18px;"><span class="btn-gold">Upload Images</span></div>
+            <input type="file" id="fileInput" accept="image/*" multiple hidden>
+        </div>
+
+        <div class="tier-pick" id="tierPick">
+            <div class="tier sel" id="tierFree" role="button" tabindex="0">
+                <b>🆓 Free — Low-res</b>
+                <span>On-device AI, up to 1024 px. 3 free every day, no account. Your image never leaves your device.</span>
+            </div>
+            <div class="tier" id="tierHd" role="button" tabindex="0">
+                <b>✨ HD — Pro <span class="pill" id="hdPill">SET UP</span></b>
+                <span>Server AI (Bria RMBG-2.0). Full-resolution transparent PNG. $12/month, 100 HD images.</span>
+            </div>
+        </div>
+        <div id="hdNotice"></div>
+
+        <div id="licenceBox">
+            <b>Pro licence</b>
+            <div class="hint">Bought Pro? Paste your licence key here to unlock HD. Your key is stored only in this browser.</div>
+            <input type="text" id="licenceInput" placeholder="RBHD-XXXXXXXXXXXXXXXX" autocomplete="off">
+            <button class="btn-gold" id="activateBtn" style="padding:11px 24px;">Activate Pro</button>
+            <div id="licenceStatus"></div>
+        </div>
+
+        <div id="queue"></div>
+
+        <div style="margin-top:18px;" id="processRow" hidden>
+            <button class="btn-gold" id="processBtn">Remove backgrounds</button>
+            <button class="btn-ghost" id="clearBtn">Clear list</button>
         </div>
 
         <!-- PROCESSING -->
@@ -147,13 +243,21 @@
         <!-- RESULT -->
         <div id="result">
             <div class="stage checker" id="stage">
-                <img class="layer" id="resultImg" alt="Background removed">
+                <canvas class="layer" id="resultCanvas"></canvas>
                 <div class="top-wrap" id="topWrap"><img class="layer" id="origLayer" alt="Original"></div>
             </div>
             <div class="compare-row">
                 <span>Before</span>
                 <input type="range" id="compareRange" min="0" max="100" value="100">
                 <span>After</span>
+            </div>
+
+            <div class="brush-bar">
+                <span class="lbl">🖌️ Brush:</span>
+                <button id="brushErase" class="sel">Erase</button>
+                <button id="brushRestore">Restore</button>
+                <label style="font-size:13px;color:var(--muted)">Size <input type="range" id="brushSize" min="6" max="120" value="36"></label>
+                <span class="hint">Erase removes stray background. Restore brings back parts of the subject. Works on the full-resolution result.</span>
             </div>
 
             <div class="bg-options">
@@ -173,7 +277,7 @@
             </div>
 
             <div class="dl-row">
-                <button class="btn-gold" id="downloadBtn">⬇️ Download HD PNG</button>
+                <button class="btn-gold" id="downloadBtn">⬇️ Download PNG</button>
                 <button class="btn-ghost" id="againBtn">Remove another</button>
             </div>
             <div id="metaLine"></div>
@@ -185,9 +289,9 @@
     <section class="info">
         <h2>How it works</h2>
         <div class="cards">
-            <div class="card"><div class="ic">1️⃣</div><h3>Upload your image</h3><p>Drag &amp; drop, browse, or paste any JPG, PNG or WebP photo.</p></div>
-            <div class="card"><div class="ic">2️⃣</div><h3>AI removes the background</h3><p>Our AI model runs on your own device and cuts out the subject in seconds — nothing is uploaded to a server.</p></div>
-            <div class="card"><div class="ic">3️⃣</div><h3>Download in HD</h3><p>Keep it transparent, or place your subject on a color or a new photo background, then download the full-size PNG.</p></div>
+            <div class="card"><div class="ic">1️⃣</div><h3>Upload — one or many</h3><p>Drag &amp; drop, browse, or paste any JPG, PNG or WebP photo. Batch is free on both plans.</p></div>
+            <div class="card"><div class="ic">2️⃣</div><h3>Pick Free or HD Pro</h3><p>Free runs the AI on your device (low-res, 3 a day). Pro runs Bria RMBG-2.0 on our server at full resolution.</p></div>
+            <div class="card"><div class="ic">3️⃣</div><h3>Edit &amp; download</h3><p>Erase stray bits, restore the subject, place it on a color or a new photo — then download the PNG.</p></div>
         </div>
     </section>
 
@@ -205,11 +309,15 @@
         <h2>Questions</h2>
         <div class="faq">
             <h3>Is it really free?</h3>
-            <p>Yes. There is no account, no watermark and no per-image fee. The AI runs in your browser, so it costs us nothing per image — and that saving is yours.</p>
+            <p>Yes — 3 low-resolution removals free every day, no account, no watermark. Full HD is Pro: $12/month for 100 HD images.</p>
             <h3>Are my images uploaded anywhere?</h3>
-            <p>No. Your photo is processed entirely on your device. That is also why the first removal takes a little longer: the AI engine (about 85&nbsp;MB) downloads once and is then cached by your browser.</p>
+            <p>Free removals run entirely on your device — nothing is uploaded. HD Pro images are sent to our server only to remove the background (Bria RMBG-2.0 via fal.ai) and are not stored.</p>
             <h3>What quality do I get?</h3>
-            <p>You get a full-resolution transparent PNG at the same size as your original image — ready for products, profiles, documents and designs.</p>
+            <p>Free gives you a low-resolution PNG (up to 1024 px on the long side). Pro gives you the full-resolution transparent PNG at your original size.</p>
+            <h3>How do I get Pro?</h3>
+            <p>Click “Buy Pro — $12 / month” above and email us. We send you a licence key; paste it in the Pro licence box on this page and HD unlocks on any device.</p>
+            <h3>What do the erase and restore brushes do?</h3>
+            <p>Erase paints away leftover background. Restore paints the subject back where the AI cut too much. Both work on the full-resolution result before you download.</p>
         </div>
     </section>
 
@@ -222,20 +330,37 @@
     </footer>
 
     <script type="module">
+        const API = "https://rembghd-api.qs62765.workers.dev";
         const CDN = "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.3/+esm";
-        let removeBackgroundFn = null, preloadFn = null, enginePromise = null;
+        const FREE_LIMIT = 3, LOWRES_MAX = 1024;
+        const HD_PRICE = "$12/month", HD_LIMIT = 100;
 
         const $ = (id) => document.getElementById(id);
         const dropzone = $("dropzone"), fileInput = $("fileInput"),
               processing = $("processing"), resultBox = $("result"),
               barInner = $("barInner"), statusText = $("statusText"), statusHint = $("statusHint"),
               errorBox = $("errorBox"), stage = $("stage"),
-              origLayer = $("origLayer"), topWrap = $("topWrap"), resultImg = $("resultImg"),
-              compareRange = $("compareRange"), metaLine = $("metaLine");
+              origLayer = $("origLayer"), topWrap = $("topWrap"),
+              resultCanvas = $("resultCanvas"), compareRange = $("compareRange"),
+              metaLine = $("metaLine"), queueBox = $("queue"),
+              processRow = $("processRow"), processBtn = $("processBtn");
 
-        let currentFile = null, resultBlob = null, resultURL = null, origURL = null;
-        let chosenBg = "transparent";   // 'transparent' | '#rrggbb' | 'image'
+        // ---- state ---------------------------------------------------------
+        let items = [];            // {id, file, name, thumbURL, origURL, status, tier, resultBlob, resultURL, restoreImg, error}
+        let currentId = null;
+        let chosenTier = "free";   // 'free' | 'hd'
+        let hdAvailable = false;
+        let freeRemaining = FREE_LIMIT;
+        let paidInfo = null;       // {active, used, remaining}
+        let licenceKey = localStorage.getItem("rembghd_licence") || "";
+        let chosenBg = "transparent";
         let bgImageURL = null;
+        let brushMode = "erase";
+        let drawing = false, lastPt = null;
+        let seq = 0;
+
+        // ---- on-device engine (free tier) ----------------------------------
+        let removeBackgroundFn = null, preloadFn = null, enginePromise = null;
         const progressMap = new Map();
         let lastProgressAt = 0;
 
@@ -250,7 +375,6 @@
             }
             return enginePromise;
         }
-        // Warm up the engine download as soon as the visitor shows intent.
         ["pointerdown", "dragover"].forEach(ev =>
             window.addEventListener(ev, () => { loadEngine().then(() => preloadFn && preloadFn(config("isnet_fp16"))).catch(() => {}); }, { once: true }));
 
@@ -271,8 +395,6 @@
             };
         }
 
-        // Measure how much of the result is transparent. A healthy removal
-        // removes something but keeps the subject: roughly 2%..98%.
         async function transparentShare(blob) {
             const bmp = await createImageBitmap(blob);
             const scale = Math.min(1, 256 / bmp.width);
@@ -287,8 +409,6 @@
             return total ? transparent / total : 0;
         }
 
-        // Gentle alpha cleanup: faint leftover haze (very low alpha) goes
-        // fully transparent, near-solid goes solid, edges stay smooth.
         async function cleanAlpha(blob) {
             try {
                 const bmp = await createImageBitmap(blob);
@@ -310,11 +430,6 @@
             } catch (e) { return blob; }
         }
 
-        // Try engine modes in order. The first mode is the full-quality
-        // model that works reliably on phones; if a mode returns an empty
-        // (all-foreground) mask — a known failure on some Android browsers
-        // with the fp16 model — fall through to the next mode instead of
-        // showing the visitor a fake "after" photo.
         async function runRemoval(file) {
             const modes = ["isnet_fp16", "isnet_quint8", "small", undefined];
             let lastErr = null;
@@ -330,71 +445,246 @@
             throw lastErr || new Error("removal failed");
         }
 
+        // Downscale to the free low-res ceiling (max 1024 px long side).
+        async function downscaleImage(file, maxDim) {
+            const bmp = await createImageBitmap(file);
+            const scale = Math.min(1, maxDim / Math.max(bmp.width, bmp.height));
+            if (scale >= 1) return file;
+            const c = document.createElement("canvas");
+            c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+            const ctx = c.getContext("2d");
+            ctx.drawImage(bmp, 0, 0, c.width, c.height);
+            return await new Promise(r => c.toBlob(r, "image/png"));
+        }
+
+        function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+
+        // ---- server status / free counter / licence -------------------------
+        function localFreeKey() { return "rembghd_free_" + new Date().toISOString().slice(0, 10); }
+        function localFreeUsed() { return parseInt(localStorage.getItem(localFreeKey()) || "0", 10) || 0; }
+        function bumpLocalFree() { localStorage.setItem(localFreeKey(), String(localFreeUsed() + 1)); }
+
+        function updateCounter() {
+            const el = $("freeCounter");
+            if (paidInfo && paidInfo.active) {
+                el.textContent = "⭐ Pro active — " + paidInfo.remaining + " of " + HD_LIMIT + " HD images left this month";
+            } else if (freeRemaining > 0) {
+                el.textContent = "Free today: " + freeRemaining + " of " + FREE_LIMIT + " low-res removals left";
+            } else {
+                el.textContent = "You have used today's " + FREE_LIMIT + " free removals — come back tomorrow, or get Pro (" + HD_PRICE + ", " + HD_LIMIT + " HD images).";
+            }
+        }
+
+        async function loadStatus() {
+            try {
+                const q = licenceKey ? "?licence=" + encodeURIComponent(licenceKey) : "";
+                const res = await fetch(API + "/api/status" + q);
+                if (!res.ok) throw new Error("status " + res.status);
+                const j = await res.json();
+                hdAvailable = !!j.hdAvailable;
+                freeRemaining = Math.max(0, Math.min(j.free.remaining, FREE_LIMIT - localFreeUsed()));
+                paidInfo = j.paid;
+            } catch (e) {
+                hdAvailable = false;
+                freeRemaining = Math.max(0, FREE_LIMIT - localFreeUsed());
+                paidInfo = null;
+            }
+            const pill = $("hdPill");
+            if (hdAvailable) { pill.textContent = "READY"; pill.classList.add("ok"); }
+            else { pill.textContent = "SET UP"; pill.classList.remove("ok"); }
+            if (licenceKey) { $("licenceBox").style.display = "block"; $("licenceInput").value = licenceKey; }
+            updateCounter();
+            refreshHdNotice();
+        }
+
+        function refreshHdNotice() {
+            const n = $("hdNotice");
+            if (chosenTier === "hd" && !hdAvailable) {
+                n.style.display = "block";
+                n.textContent = "⏳ HD removal is being set up — the server key is being connected. Free low-res works right now; HD unlocks as soon as setup finishes.";
+            } else if (chosenTier === "hd" && hdAvailable && !(paidInfo && paidInfo.active)) {
+                n.style.display = "block";
+                n.textContent = "🔑 HD is a Pro feature (" + HD_PRICE + ", " + HD_LIMIT + " HD images/month). Paste your licence key below, or buy Pro and we will email you one.";
+            } else {
+                n.style.display = "none";
+            }
+        }
+
+        async function reportFreeUse() {
+            try {
+                const res = await fetch(API + "/api/free-use", { method: "POST" });
+                if (res.ok) { const j = await res.json(); freeRemaining = j.remaining; updateCounter(); return true; }
+                if (res.status === 429) { freeRemaining = 0; updateCounter(); return false; }
+            } catch (e) { /* offline: local counter below */ }
+            bumpLocalFree();
+            freeRemaining = Math.max(0, FREE_LIMIT - localFreeUsed());
+            updateCounter();
+            return freeRemaining >= 0;
+        }
+
+        async function serverRemove(file) {
+            const fd = new FormData();
+            fd.append("image", file);
+            fd.append("licence", licenceKey);
+            const res = await fetch(API + "/api/remove", { method: "POST", body: fd });
+            if (!res.ok) {
+                const j = await res.json().catch(() => ({}));
+                throw new Error(j.message || ("HD removal failed (" + res.status + ")"));
+            }
+            const used = res.headers.get("X-HD-Remaining");
+            if (used !== null && paidInfo) { paidInfo.remaining = parseInt(used, 10); updateCounter(); }
+            return await res.blob();
+        }
+
+        // ---- queue -----------------------------------------------------------
         function showError(msg) {
             processing.style.display = "none";
             errorBox.style.display = "block";
             errorBox.textContent = "❌ " + msg;
         }
 
-        function pickFile(file) {
-            if (!file) return;
-            if (!/^image\//.test(file.type)) { showError("That file is not an image. Please choose a JPG, PNG or WebP."); return; }
-            currentFile = file;
-            processFile(file);
+        function addFiles(files) {
+            let added = 0;
+            for (const f of files) {
+                if (!/^image\//.test(f.type)) continue;
+                const id = ++seq;
+                items.push({ id, file: f, name: f.name, thumbURL: URL.createObjectURL(f),
+                    origURL: URL.createObjectURL(f), status: "queued", tier: chosenTier,
+                    resultBlob: null, resultURL: null, restoreImg: null, error: null });
+                added++;
+            }
+            if (added) { renderQueue(); processRow.hidden = false; }
         }
 
-        async function processFile(file) {
+        function renderQueue() {
+            queueBox.innerHTML = "";
+            for (const it of items) {
+                const row = document.createElement("div");
+                row.className = "q-row" + (it.id === currentId ? " sel" : "");
+                row.onclick = () => { if (it.status === "done") showItem(it.id); };
+                const stCls = it.status === "done" ? "done" : it.status === "error" ? "err" : (it.status === "busy" ? "busy" : "");
+                const stTxt = it.status === "done" ? "Done ✓" : it.status === "error" ? "Failed" : it.status === "busy" ? "Working…" : "Queued";
+                row.innerHTML = '<img alt=""><div class="nm"><b></b><span></span></div><span class="st ' + stCls + '">' + stTxt + '</span>' +
+                    (it.status === "done" ? '<button class="mini">Download</button>' : '');
+                row.querySelector("img").src = it.thumbURL;
+                row.querySelector("b").textContent = it.name;
+                row.querySelector("span").textContent = (it.tier === "hd" ? "HD Pro" : "Free low-res") + (it.resultBlob ? " · " + Math.round(it.resultBlob.size / 1024) + " KB" : "");
+                const dl = row.querySelector(".mini");
+                if (dl) dl.onclick = (e) => { e.stopPropagation(); downloadItem(it); };
+                queueBox.appendChild(row);
+            }
+        }
+
+        async function processQueue() {
             errorBox.style.display = "none";
-            resultBox.style.display = "none";
+            const todo = items.filter(i => i.status === "queued");
+            if (!todo.length) return;
+            if (chosenTier === "hd") {
+                if (!hdAvailable) { showError("HD removal is being set up — the server key is being connected. Switch to Free low-res for now, or try HD again later."); return; }
+                if (!(paidInfo && paidInfo.active)) {
+                    showError("HD needs an active Pro licence. Paste your licence key in the Pro licence box below, or buy Pro (" + HD_PRICE + ").");
+                    $("licenceBox").style.display = "block";
+                    $("licenceBox").scrollIntoView({ behavior: "smooth", block: "center" });
+                    return;
+                }
+            }
+            const freeNeeded = todo.filter(i => i.tier === "free").length;
+            if (freeNeeded > freeRemaining) {
+                showError("You have " + freeRemaining + " free removal" + (freeRemaining === 1 ? "" : "s") + " left today, but " + freeNeeded + " image" + (freeNeeded === 1 ? " is" : "s are") + " queued. Remove some, come back tomorrow, or get Pro (" + HD_PRICE + ").");
+                return;
+            }
             dropzone.style.display = "none";
+            for (const it of todo) {
+                it.status = "busy"; renderQueue();
+                try {
+                    await processItem(it);
+                    it.status = "done";
+                } catch (err) {
+                    console.error(err);
+                    it.status = "error"; it.error = err.message || String(err);
+                }
+                renderQueue();
+            }
+            processing.style.display = "none";
+            const done = items.filter(i => i.status === "done");
+            if (done.length) showItem(done[done.length - 1].id);
+            else { dropzone.style.display = "block"; showError("Nothing could be processed. Please try again."); }
+        }
+
+        async function processItem(it) {
             processing.style.display = "block";
+            resultBox.style.display = "none";
             progressMap.clear();
             barInner.style.width = "0%";
-            statusText.textContent = "Loading AI engine…";
-            statusHint.textContent = "";
-            if (origURL) URL.revokeObjectURL(origURL);
-            origURL = URL.createObjectURL(file);
+            barInner.classList.remove("indet");
+            $("procThumb").src = it.thumbURL;
+            origLayer.src = it.origURL;
             const probe = new Image();
             probe.onload = () => { stage.style.aspectRatio = probe.naturalWidth + " / " + probe.naturalHeight; };
-            probe.src = origURL;
-            $("procThumb").src = origURL;
-            origLayer.src = origURL;
-
-            // If downloads finish and compute starts, switch to indeterminate bar.
+            probe.src = it.origURL;
+            lastProgressAt = 0;
             const watcher = setInterval(() => {
                 if (lastProgressAt && Date.now() - lastProgressAt > 1600 && processing.style.display === "block") {
                     barInner.classList.add("indet");
                     statusText.textContent = "Removing background…";
-                    statusHint.textContent = "AI is working on your device — big photos can take a little while.";
+                    statusHint.textContent = it.tier === "hd" ? "Server AI is working — full resolution." : "AI is working on your device — big photos can take a little while.";
                 }
             }, 700);
-
             try {
-                await loadEngine();
-                const blob = await runRemoval(file);
+                let blob;
+                if (it.tier === "hd") {
+                    statusText.textContent = "Removing background in HD…";
+                    statusHint.textContent = "Server AI (Bria RMBG-2.0) — full resolution.";
+                    blob = await serverRemove(it.file);
+                    it.restoreImg = await loadImg(it.origURL);
+                } else {
+                    statusText.textContent = "Loading AI engine…";
+                    statusHint.textContent = "";
+                    await loadEngine();
+                    const small = await downscaleImage(it.file, LOWRES_MAX);
+                    it.restoreImg = await loadImg(URL.createObjectURL(small));
+                    blob = await runRemoval(small);
+                    await reportFreeUse();
+                }
                 clearInterval(watcher);
-                if (resultURL) URL.revokeObjectURL(resultURL);
-                resultBlob = blob;
-                resultURL = URL.createObjectURL(blob);
-                resultImg.src = resultURL;
-                compareRange.value = 100;
-                applyCompare();
-                setBg("transparent");
-                const img = new Image();
-                img.onload = () => {
-                    metaLine.textContent = "Output: " + img.naturalWidth + " × " + img.naturalHeight + " px · " + (blob.size / 1024).toFixed(0) + " KB PNG";
-                };
-                img.src = resultURL;
-                processing.style.display = "none";
-                resultBox.style.display = "block";
+                it.resultBlob = blob;
+                if (it.resultURL) URL.revokeObjectURL(it.resultURL);
+                it.resultURL = URL.createObjectURL(blob);
             } catch (err) {
                 clearInterval(watcher);
-                console.error(err);
-                showError("The AI engine could not finish. Please check your internet connection for the first download, and try Chrome or Edge on a recent device. Your image was not uploaded anywhere.");
-                dropzone.style.display = "block";
+                throw err;
             }
         }
 
+        function showItem(id) {
+            const it = items.find(i => i.id === id);
+            if (!it || !it.resultBlob) return;
+            currentId = id;
+            processing.style.display = "none";
+            errorBox.style.display = "none";
+            dropzone.style.display = "none";
+            const img = new Image();
+            img.onload = () => {
+                resultCanvas.width = img.naturalWidth;
+                resultCanvas.height = img.naturalHeight;
+                const ctx = resultCanvas.getContext("2d");
+                ctx.clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+                ctx.drawImage(img, 0, 0);
+                stage.style.aspectRatio = img.naturalWidth + " / " + img.naturalHeight;
+                origLayer.src = it.origURL;
+                compareRange.value = 100;
+                applyCompare();
+                setBg("transparent");
+                metaLine.textContent = "Output: " + img.naturalWidth + " × " + img.naturalHeight + " px · " +
+                    (it.resultBlob.size / 1024).toFixed(0) + " KB PNG · " + (it.tier === "hd" ? "HD Pro" : "Free low-res (max 1024 px)");
+                $("downloadBtn").textContent = it.tier === "hd" ? "⬇️ Download HD PNG" : "⬇️ Download low-res PNG";
+            };
+            img.src = it.resultURL;
+            resultBox.style.display = "block";
+            renderQueue();
+        }
+
+        // ---- compare + background --------------------------------------------
         function applyCompare() {
             const v = Number(compareRange.value);
             topWrap.style.clipPath = "inset(0 " + v + "% 0 0)";
@@ -423,12 +713,81 @@
             setBg("image");
         });
 
-        $("downloadBtn").addEventListener("click", async () => {
-            if (!resultBlob) return;
-            const name = (currentFile ? currentFile.name.replace(/\.[^.]+$/, "") : "image") + "-no-bg.png";
-            if (chosenBg === "transparent") return triggerDownload(resultURL, name);
-            // Composite the chosen background at full resolution.
-            const fg = await loadImg(resultURL);
+        // ---- erase / restore brush -------------------------------------------
+        function brushPos(e) {
+            const r = resultCanvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - r.left) * (resultCanvas.width / r.width),
+                y: (e.clientY - r.top) * (resultCanvas.height / r.height),
+            };
+        }
+        function brushStamp(p) {
+            const it = items.find(i => i.id === currentId);
+            if (!it) return;
+            const ctx = resultCanvas.getContext("2d");
+            const r = Number($("brushSize").value) * (resultCanvas.width / Math.max(resultCanvas.getBoundingClientRect().width, 1));
+            if (brushMode === "erase") {
+                ctx.save();
+                ctx.globalCompositeOperation = "destination-out";
+                ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.fill();
+                ctx.restore();
+            } else if (it.restoreImg) {
+                ctx.save();
+                ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.clip();
+                ctx.drawImage(it.restoreImg, 0, 0, resultCanvas.width, resultCanvas.height);
+                ctx.restore();
+            }
+        }
+        function brushLine(a, b) {
+            const dist = Math.hypot(b.x - a.x, b.y - a.y);
+            const r = Number($("brushSize").value);
+            const steps = Math.max(1, Math.ceil(dist / (r / 2)));
+            for (let i = 0; i <= steps; i++) {
+                brushStamp({ x: a.x + (b.x - a.x) * i / steps, y: a.y + (b.y - a.y) * i / steps });
+            }
+        }
+        resultCanvas.addEventListener("pointerdown", (e) => {
+            if (!currentId) return;
+            drawing = true; lastPt = brushPos(e);
+            resultCanvas.setPointerCapture(e.pointerId);
+            brushStamp(lastPt);
+            e.preventDefault();
+        });
+        resultCanvas.addEventListener("pointermove", (e) => {
+            if (!drawing || !lastPt) return;
+            const p = brushPos(e);
+            brushLine(lastPt, p);
+            lastPt = p;
+        });
+        ["pointerup", "pointercancel", "pointerleave"].forEach(ev =>
+            resultCanvas.addEventListener(ev, () => { drawing = false; lastPt = null; }));
+        $("brushErase").addEventListener("click", () => { brushMode = "erase"; $("brushErase").classList.add("sel"); $("brushRestore").classList.remove("sel"); });
+        $("brushRestore").addEventListener("click", () => { brushMode = "restore"; $("brushRestore").classList.add("sel"); $("brushErase").classList.remove("sel"); });
+
+        // ---- download ----------------------------------------------------------
+        function canvasBlob(canvas) { return new Promise(r => canvas.toBlob(r, "image/png")); }
+        function triggerDownload(url, name) { const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+
+        async function downloadItem(it) {
+            if (!it || !it.resultBlob) return;
+            const base = it.name.replace(/\.[^.]+$/, "") || "image";
+            const suffix = it.tier === "hd" ? "-no-bg-hd.png" : "-no-bg.png";
+            // Re-read the (possibly brush-edited) canvas when this is the shown item.
+            let fgURL = it.resultURL, fgW = 0, fgH = 0;
+            if (it.id === currentId) {
+                const b = await canvasBlob(resultCanvas);
+                if (b) { fgURL = URL.createObjectURL(b); fgW = resultCanvas.width; fgH = resultCanvas.height; }
+            } else {
+                const img = await loadImg(it.resultURL);
+                fgW = img.naturalWidth; fgH = img.naturalHeight;
+            }
+            if (chosenBg === "transparent" && it.id === currentId) {
+                const b = await canvasBlob(resultCanvas);
+                triggerDownload(URL.createObjectURL(b), base + suffix);
+                return;
+            }
+            if (chosenBg === "transparent") { triggerDownload(it.resultURL, base + suffix); return; }
+            const fg = await loadImg(fgURL);
             const canvas = document.createElement("canvas");
             canvas.width = fg.naturalWidth; canvas.height = fg.naturalHeight;
             const ctx = canvas.getContext("2d");
@@ -441,10 +800,9 @@
                 ctx.fillStyle = chosenBg; ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
             ctx.drawImage(fg, 0, 0);
-            canvas.toBlob((b) => triggerDownload(URL.createObjectURL(b), name), "image/png");
-        });
-        function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
-        function triggerDownload(url, name) { const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+            canvas.toBlob((b) => triggerDownload(URL.createObjectURL(b), base + suffix), "image/png");
+        }
+        $("downloadBtn").addEventListener("click", () => downloadItem(items.find(i => i.id === currentId)));
 
         $("againBtn").addEventListener("click", () => {
             resultBox.style.display = "none";
@@ -453,16 +811,64 @@
             fileInput.value = "";
         });
 
+        // ---- tier pick + licence ----------------------------------------------
+        function selectTier(t) {
+            chosenTier = t;
+            $("tierFree").classList.toggle("sel", t === "free");
+            $("tierHd").classList.toggle("sel", t === "hd");
+            $("licenceBox").style.display = (t === "hd") ? "block" : (licenceKey ? "block" : "none");
+            refreshHdNotice();
+        }
+        $("tierFree").addEventListener("click", () => selectTier("free"));
+        $("tierHd").addEventListener("click", () => selectTier("hd"));
+        $("activateBtn").addEventListener("click", async () => {
+            const key = $("licenceInput").value.trim();
+            if (!key) { $("licenceStatus").textContent = "Paste your licence key first."; return; }
+            $("licenceStatus").textContent = "Checking…";
+            try {
+                const res = await fetch(API + "/api/licence-check", {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ licence: key }),
+                });
+                const j = await res.json();
+                if (j.active) {
+                    licenceKey = key;
+                    localStorage.setItem("rembghd_licence", key);
+                    paidInfo = j;
+                    $("licenceStatus").textContent = "✅ Pro active — " + j.remaining + " of " + HD_LIMIT + " HD images left this month.";
+                    $("licenceStatus").style.color = "#4ade80";
+                    updateCounter();
+                    refreshHdNotice();
+                } else {
+                    $("licenceStatus").textContent = "❌ That licence key is not valid. Check it and try again, or buy Pro.";
+                    $("licenceStatus").style.color = "#f87171";
+                }
+            } catch (e) {
+                $("licenceStatus").textContent = "Could not reach the server. Check your connection and try again.";
+            }
+        });
+
+        // ---- input wiring -------------------------------------------------------
+        processBtn.addEventListener("click", processQueue);
+        $("clearBtn").addEventListener("click", () => {
+            items = []; currentId = null;
+            queueBox.innerHTML = "";
+            processRow.hidden = true;
+            resultBox.style.display = "none";
+            dropzone.style.display = "block";
+        });
         dropzone.addEventListener("click", () => fileInput.click());
         dropzone.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInput.click(); } });
-        fileInput.addEventListener("change", () => pickFile(fileInput.files[0]));
+        fileInput.addEventListener("change", () => { addFiles(fileInput.files); fileInput.value = ""; });
         ["dragover", "dragenter"].forEach(ev => dropzone.addEventListener(ev, (e) => { e.preventDefault(); dropzone.classList.add("drag"); }));
         ["dragleave", "drop"].forEach(ev => dropzone.addEventListener(ev, (e) => { e.preventDefault(); dropzone.classList.remove("drag"); }));
-        dropzone.addEventListener("drop", (e) => pickFile(e.dataTransfer.files[0]));
+        dropzone.addEventListener("drop", (e) => addFiles(e.dataTransfer.files));
         document.addEventListener("paste", (e) => {
-            const item = [...(e.clipboardData || {}).items || []].find(i => /^image\//.test(i.type));
-            if (item) pickFile(item.getAsFile());
+            const files = [...(e.clipboardData || {}).items || []].filter(i => /^image\//.test(i.type)).map(i => i.getAsFile());
+            if (files.length) addFiles(files);
         });
+
+        loadStatus();
     </script>
 </body>
 </html>
