@@ -176,7 +176,7 @@
             <div class="price">$0 <small>forever</small></div>
             <ul>
                 <li>3 low-res removals every day</li>
-                <li>Up to 1024 px output</li>
+                <li>Up to 512 px output</li>
                 <li>Batch, new backgrounds, erase / restore brush</li>
                 <li>No account needed</li>
             </ul>
@@ -208,7 +208,7 @@
         <div class="tier-pick" id="tierPick">
             <div class="tier sel" id="tierFree" role="button" tabindex="0">
                 <b>🆓 Free — Low-res</b>
-                <span>On-device AI, up to 1024 px. 3 free every day, no account. Your image never leaves your device.</span>
+                <span>On-device AI, up to 512 px. 3 free every day, no account. Your image never leaves your device.</span>
             </div>
             <div class="tier" id="tierHd" role="button" tabindex="0">
                 <b>✨ HD — Pro <span class="pill" id="hdPill">SET UP</span></b>
@@ -313,7 +313,7 @@
             <h3>Are my images uploaded anywhere?</h3>
             <p>Free removals run entirely on your device — nothing is uploaded. HD Pro images are sent to our server only to remove the background (Bria RMBG-2.0 via fal.ai) and are not stored.</p>
             <h3>What quality do I get?</h3>
-            <p>Free gives you a low-resolution PNG (up to 1024 px on the long side). Pro gives you the full-resolution transparent PNG at your original size.</p>
+            <p>Free gives you a low-resolution PNG (up to 512 px on the long side). Pro gives you the full-resolution transparent PNG at your original size.</p>
             <h3>How do I get Pro?</h3>
             <p>Click “Buy Pro — $12 / month” above and email us. We send you a licence key; paste it in the Pro licence box on this page and HD unlocks on any device.</p>
             <h3>What do the erase and restore brushes do?</h3>
@@ -332,7 +332,7 @@
     <script type="module">
         const API = "https://rembghd-api.qs62765.workers.dev";
         const CDN = "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.3/+esm";
-        const FREE_LIMIT = 3, LOWRES_MAX = 1024;
+        const FREE_LIMIT = 3, LOWRES_MAX = 512;
         const HD_PRICE = "$12/month", HD_LIMIT = 100;
 
         const $ = (id) => document.getElementById(id);
@@ -445,7 +445,7 @@
             throw lastErr || new Error("removal failed");
         }
 
-        // Downscale to the free low-res ceiling (max 1024 px long side).
+        // Downscale to the free low-res ceiling (max 512 px long side).
         async function downscaleImage(file, maxDim) {
             const bmp = await createImageBitmap(file);
             const scale = Math.min(1, maxDim / Math.max(bmp.width, bmp.height));
@@ -676,7 +676,7 @@
                 applyCompare();
                 setBg("transparent");
                 metaLine.textContent = "Output: " + img.naturalWidth + " × " + img.naturalHeight + " px · " +
-                    (it.resultBlob.size / 1024).toFixed(0) + " KB PNG · " + (it.tier === "hd" ? "HD Pro" : "Free low-res (max 1024 px)");
+                    (it.resultBlob.size / 1024).toFixed(0) + " KB PNG · " + (it.tier === "hd" ? "HD Pro" : "Free low-res (max 512 px)");
                 $("downloadBtn").textContent = it.tier === "hd" ? "⬇️ Download HD PNG" : "⬇️ Download low-res PNG";
             };
             img.src = it.resultURL;
