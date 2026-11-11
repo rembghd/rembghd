@@ -17,6 +17,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+  .faq-list{max-width:820px;margin:40px auto 0;text-align:left}
+  .faq-list details{background:#fff;border:1px solid #edf0f5;border-radius:14px;padding:18px 20px;margin:12px 0}
+  .faq-list summary{font:700 16px Manrope,sans-serif;cursor:pointer;color:#172233}
+  .faq-list p{font-size:14px;color:#667085;line-height:1.65;margin:10px 0 0}
+  .cookie-banner{position:fixed;left:0;right:0;bottom:0;z-index:50;background:#172233;color:#fff;padding:14px 20px;display:none;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-size:14px}
+  .cookie-banner.show{display:flex}
+  .cookie-banner a{color:#9db1ff;text-decoration:underline}
+  .cookie-banner button{padding:8px 18px;font-size:14px;font-weight:700;color:#fff;background:#4169f5;border:none;border-radius:9px;cursor:pointer;white-space:nowrap}
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -27,6 +37,7 @@
     <nav class="desktop-nav" aria-label="Main navigation">
       <a href="#how-it-works">How it works</a>
       <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
     </nav>
     <a class="header-cta" href="#upload">Remove background <span>↗</span></a>
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false"><i></i><i></i></button>
@@ -158,10 +169,24 @@
       </div>
       <p class="pricing-footnote">No hidden fees. Upgrade when you need more.</p>
     </section>
+
+    <section class="steps-section" id="faq">
+      <div class="section-heading centered"><div class="eyebrow">QUESTIONS, ANSWERED</div><h2>Frequently asked questions</h2><p>Everything people usually ask before removing their first background.</p></div>
+      <div class="faq-list">
+        <details><summary>Is the background remover really free?</summary><p>Yes. The Free plan gives you 3 low-resolution removals every day, up to 512&nbsp;px, with no account and no sign-up. The free tier runs its AI right in your browser, so your image never leaves your device.</p></details>
+        <details><summary>What image formats can I upload?</summary><p>JPG, PNG and WEBP, up to 25&nbsp;MB per image. Your result downloads as a transparent PNG you can use anywhere — product listings, profile photos, thumbnails, presentations and social posts.</p></details>
+        <details><summary>Do my images leave my device?</summary><p>On the Free plan, no — the AI runs on your device and nothing is uploaded. HD images with Pro are processed by server AI (Bria RMBG-2.0) so they can be delivered at full resolution. We never view, keep or share your photos; see our <a href="privacy.html">Privacy Policy</a>.</p></details>
+        <details><summary>What do I get with Pro?</summary><p>Pro is $12 a month for 100 full-HD images: full-resolution transparent PNG downloads instead of the free 512&nbsp;px limit. Everything else — the remover, the brush and background tools — is the same.</p></details>
+        <details><summary>Can I fix the edges or change the background?</summary><p>Yes. After the cutout you can erase or restore parts with the brush, pick a colour background, or upload your own background photo. Drag the before/after slider to compare the original with your edit.</p></details>
+        <details><summary>Can I remove backgrounds from several images at once?</summary><p>Yes — use “Add multiple images” to queue several photos and process them together, instead of uploading them one by one.</p></details>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer"><a class="brand footer-brand" href="index.html"><span class="brand-mark"><span></span><span></span><span></span><span></span></span><span>rembghd<span class="brand-dot">.</span></span></a><span>Simple edits. Beautiful results.</span><span class="flinks"><a href="about.html">About</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="disclaimer.html">Disclaimer</a> · <a href="contact.html">Contact</a></span><span>© <span id="year"></span> Rembghd</span></footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="cookie-banner" id="cookieBanner" role="dialog" aria-label="Cookie notice"><span>We use cookies for analytics and advertising. See our <a href="privacy.html">Privacy Policy</a>.</span><button type="button" id="cookieOk">Accept</button></div>
   <script src="script.js"></script>
+  <script>(function(){try{if(!localStorage.getItem("rembghd-cookie-ok")){document.getElementById("cookieBanner").classList.add("show");}document.getElementById("cookieOk").addEventListener("click",function(){try{localStorage.setItem("rembghd-cookie-ok","1");}catch(e){}document.getElementById("cookieBanner").classList.remove("show");});}catch(e){}})();</script>
 </body>
 </html>
